@@ -1,0 +1,60 @@
+.antiflash-video, .antiflash-gif {
+  display: inline-block;
+  position: relative; }
+
+.antiflash-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 4000009;
+  background: rgba(0, 0, 0, 0.8); }
+
+.antiflash-gif-overlay-clone {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 4000005; }
+
+.antiflash-overlay-show {
+  animation: show-overlay 300ms forwards; }
+
+.antiflash-overlay-hide {
+  animation: hide-overlay 300ms forwards; }
+
+@keyframes show-overlay {
+  0% {
+    height: 0;
+    opacity: 0; }
+  1% {
+    height: 100%; }
+  100% {
+    opacity: 1; } }
+
+@keyframes hide-overlay {
+  0% {
+    opacity: 1;
+    height: 100%; }
+  99% {
+    opacity: 0;
+    height: 100%; }
+  100% {
+    height: 0; } }
+
+.antiflash-overlay-buttons {
+  width: 90px;
+  height: 50px;
+  z-index: 4000011;
+  position: absolute;
+  bottom: 0;
+  right: 0; }
+
+.antiflash-overlay-button {
+  width: 40px;
+  padding: 5px 5px 5px 0px; }
+
+.test {
+  margin: 30px; }

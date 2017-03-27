@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <!--build:remove-->
+    <!--
+        This file uses variables wrapped in triple curly braces.
+
+        All variable names are keys to an entry in _locales/en/messages.json and
+        are replaced with the corresponding values by Gulp at build time.
+    -->
+    <!--endbuild-->
+
+    <head>
+        <title>{{{popup_title}}}</title>
+        <link id="theme" rel="stylesheet" href=""/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Mono"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!--build:css css/popup.min.css-->
+        <link rel="stylesheet" href="css/base.css" />
+        <!--endbuild-->
+
+        <!--build:js js/popup.min.js-->
+        <script src="js/lib/jquery-3.1.1.min.js"></script>
+        <script src="js/lib/material.min.js"></script>
+        <script src="js/lib/microformat-shiv.js"></script>
+        <script src="js/svg.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/microformats-map.js"></script>
+        <script src="js/tagbuilder.js"></script>
+        <script src="js/dropdown.js"></script>
+        <script src="js/h-item-factory.js"></script>
+        <script src="js/hcard.js"></script>
+        <script src="js/hentry.js"></script>
+        <script src="js/related-links.js"></script>
+        <script src="js/popup.js"></script>
+        <script src="js/theme.js"></script>
+        <!--endbuild-->
+
+    </head>
+
+    <body>
+        <main>
+            <div id="content">
+                <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            </div>
+        </main>
+    </body>
+
+</html>

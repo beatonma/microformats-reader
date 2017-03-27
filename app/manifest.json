@@ -1,0 +1,43 @@
+{
+    "manifest_version": 2,
+    "name": "Redux Microformats reader",
+    "version": "0.2",
+
+    "description": "Displays microformat-compatible data from the active page",
+
+    "author": "Michael Beaton",
+    
+    "default_locale": "en",
+
+    "permissions": [
+        "tabs",
+        "storage",
+        "http://*/",
+        "https://*/"
+    ],
+    "web_accessible_resources": [
+
+    ],
+
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+
+    "options_page": "options.html",
+
+    "background": {
+        "scripts": ["js/background.js"]
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "all_frames": true,
+            "js": [
+                "js/lib/microformat-shiv.js",
+                "js/contentscript.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "homepage_url": "https://beatonma.org"
+}

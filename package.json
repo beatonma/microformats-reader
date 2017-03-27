@@ -1,0 +1,34 @@
+{
+  "name": "microformats",
+  "version": "1.0.0",
+  "description": "Parser for microformat-compliant content",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "microformat"
+  ],
+  "author": "Michael Beaton",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-babel-minify": "^0.1.12",
+    "gulp-bower-files": "^0.2.7",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-if": "^2.0.2",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^3.1.0",
+    "gulp-shell": "^0.6.1",
+    "gulp-useref": "^3.1.2",
+    "pump": "^1.0.2",
+    "run-sequence": "^1.2.2"
+  }
+}

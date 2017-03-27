@@ -1,0 +1,36 @@
+:root {
+    --text-light-primary: rgba(255, 255, 255, 0.83);
+    --text-light-secondary: rgba(255, 255, 255, 0.54);
+    --text-light-tertiary: rgba(255, 255, 255, 0.25);
+    --text-dark-primary: rgba(0, 0, 0, 0.83);
+    --text-dark-secondary: rgba(0, 0, 0, 0.54);
+    --text-dark-tertiary: rgba(0, 0, 0, 0.25);
+    
+    --text-primary: var(--text-light-primary);
+    --text-secondary: var(--text-light-secondary);
+    --text-tertiary: var(--text-light-tertiary);
+    
+//    --primary-color: #2196F3;
+//    --primary-color-highlight: #bababa;
+    --primary-color: var(--text-secondary);
+    --primary-color-hightlight: var(--text-primary);
+    
+    --accent-color: #F06292;
+    --accent-color-highlight: #F50057;
+    
+    --selected: #aaaaaa;
+    
+    --backsheet: #111111;
+    --tabletop: #070707;
+    
+//    --header-background-color:var(--primary-color);
+//    --header-background-color-hover: var(--primary-color-highlight);
+    --header-background-color: #070707;
+    --header-background-color-hover: #111111;
+    --header-text-color: var(--text-light-primary);
+    
+    --card-background: #222222;
+    --card-background-hover: #555555;
+    --card-separator: rgba(255, 255, 255, .1);
+    --card-header-color: var(--primary_color);
+}

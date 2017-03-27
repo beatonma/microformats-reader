@@ -1,0 +1,26 @@
+{
+  "name": "microformats",
+  "description": "Parser for microformat-compliant content",
+  "main": "gulpfile.js",
+  "authors": [
+    "Michael Beaton"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "chrome",
+    "extension",
+    "microformat"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "microformat-shiv": "^2.0.3"
+  }
+}

@@ -1,0 +1,230 @@
+@import 'variables';
+@import 'card';
+@import 'hcard';
+@import 'my-mdl';
+@import 'mdl-overrides';
+@import 'dropdown';
+
+::selection {
+    background: var(--selected);
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-button {
+    background: transparent;
+}
+::-webkit-scrollbar-track-piece {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+}​
+
+// Objects
+
+html, body, main {
+    width: 450px;
+}
+html, body {
+    background: var(--tabletop);
+    color: var(--text-primary);
+    transition: background 300ms;
+}
+body {
+    margin: 0px !important;
+    font-family: $font !important;
+    font-size: 14px;
+    transition: font-size $transition_duration;
+    line-height: 1.7em !important;
+}
+main {
+    flex-direction:column;
+    margin:0;
+    padding:0;
+}
+h1 {
+    margin: 8px 12px;
+    font-family: $font;
+    text-align: center;
+    font-size: 2em;
+    color: var(--text-primary);
+    width: 100%;
+    transition: 
+        margin $transition_duration ease-in-out,
+        width $transition_duration ease-in-out,
+        font-size $transition_duration;
+}
+p {
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+a {
+    text-decoration: none;
+}
+a p {
+    color: var(--text-primary);
+}
+button {
+    font-family: $font !important;
+}
+textarea {
+    font-family: $font !important;
+    font-size: 1em;
+}
+input {
+    font-family: $font !important;
+    font-size: 1em;
+}
+li {
+    font-size: 1em;
+}
+pre {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8em;
+    overflow: scroll;
+    margin: 0;
+}
+
+// Classes
+.flex-box-col {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    // justify-content: center;
+}
+.flex-box-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    // justify-content: center;
+}
+
+// .flex-container {
+//     display: flex;
+// }
+.flex-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+.flex-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 2em;
+    color: var(--header-text-color);
+}
+.header_item {
+    color: var(--header-text-color);
+}
+.header_row_primary {
+    padding-left: $header_padding_left;
+}
+.header_row_secondary {
+    height: $header_second_row_height !important;
+    padding-left: 0px;
+    padding-right: 16px;
+}
+.accent {
+    color: var(--accent-color);
+}
+.container {
+    max-width: $main_content_max_width;
+    padding: 16px 0 8px 0;
+    transition: width 300ms;
+}
+// .icon {
+//     font-family: 'Material Icons';
+//     font-style: normal;
+    // width: 24px;
+    // height: 24px;
+// }
+p.synopsis {
+    flex-grow: 2;
+}
+
+.text-primary {
+    color: var(--text-primary);
+    font-size: 1em;
+}
+.text-secondary {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+.text-larger {
+    font-size: 1.2em;
+}
+
+.single-line {
+    text-overflow: ellipsis;
+    width: 418px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.label {
+    font-family: $font !important;
+}
+
+.textfield {
+    font-family: $font !important;
+}
+
+.shadow--1dp {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -2px rgba(0, 0, 0, .2), 0 1px 3px 0 rgba(0, 0, 0, .12);
+}
+
+.shadow--2dp {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+.shadow--3dp {
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12);
+}
+.shadow--4dp {
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2);
+}
+
+// Specific objects
+#main_header {
+    transition: all 600ms;
+}
+
+
+@media only screen and (min-width:480px) {
+    body {
+        font-size: 14px;
+        margin:8px;
+        transition: font-size $transition_duration;
+    }
+    h1 {
+        text-align: left;
+        margin:0px 0px 16px 0px;
+        width: 0px;
+        transition:
+            margin $transition_duration ease-in-out,
+            width $transition_duration ease-in-out,
+            font-size $transition_duration;
+    }
+    .container {
+        width: 90vw;
+        max-width: 672px;
+        margin: auto;
+    }
+}
+//@media only screen and (min-width:1120px) {
+@media only screen and (min-width:747px) {
+    .flex_box_row {
+        justify-content:flex-start;
+    }
+}
+
+@media only screen and (min-width:1120px) {
+    .container {
+        max-width: 1008px;
+    }
+}
