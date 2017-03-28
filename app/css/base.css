@@ -159,7 +159,7 @@
   height: 20px;
   fill: var(--text-secondary); }
 
-.h-item-icon.brand {
+.h-item-icon.nofill {
   fill: none;
   stroke: var(--text-secondary);
   stroke-width: 3px; }
