@@ -1,26 +1,3 @@
-// function dropdown(id, content) {
-//     if (!content || content == '') {
-//         return null;
-//     }
-
-//     const icon_id = id + '_icon';
-//     const dropdown_id = id + '_dropdown';
-
-//     let buttonBuilder = new SpanBuilder({});
-//     buttonBuilder.id = id;
-//     buttonBuilder.classes = 'dropdown';
-//     // buttonBuilder.content = format('<i id="{}" class="dropdown-icon">arrow_drop_down</i>', icon_id);
-//     buttonBuilder.content = new SvgBuilder({'classes': 'dropdown-icon'}, 'svg_icon_action_arrow_down').build();
-//     buttonBuilder.allow_separators = false;
-
-//     let dropdownBuilder = new DivBuilder();
-//     dropdownBuilder.id = dropdown_id;
-//     dropdownBuilder.classes = 'dropdown-content';
-//     dropdownBuilder.content = content;
-
-//     return [buttonBuilder, dropdownBuilder];
-// }
-
 function dropdown(id, content) {
     if (!content || content == '') {
         return null;
@@ -46,9 +23,8 @@ function dropdown(id, content) {
 }
 
 function toggleDropdown(id) {
-    console.log(format('toggleDropdown({})', id));
-    $('#' + id + '_icon').toggleClass('showdrop');
-    $('#' + id + '_dropdown').toggleClass('showdrop');
+    document.getElementById(id + '_icon').classList.toggle('showdrop');
+    document.getElementById(id + '_dropdown').classList.toggle('showdrop');
 }
 
 function setupDropdownListeners() {

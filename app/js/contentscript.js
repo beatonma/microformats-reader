@@ -1,10 +1,10 @@
 console.log('microformats is running')
 
 let microformats = Microformats.get();
-let webmention_endpoint = getWebmentionEndpoint();
+let webmentionEndpoint = getWebmentionEndpoint();
 
 let badgeText = '';
-if (webmention_endpoint) {
+if (webmentionEndpoint) {
     badgeText += '<';
 }
 if (microformats && microformats.items.length > 0) {
@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(
         if (request.action == 'getMicroformats') {
             let params = {
                 'microformats': [],
-                'webmention_endpoint': webmention_endpoint
+                'webmentionEndpoint': webmentionEndpoint
             }
 
             if (microformats && microformats.items.length > 0) {

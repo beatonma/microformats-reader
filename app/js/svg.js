@@ -1,5 +1,5 @@
-function getSvgViewbox(svg_id) {
-    switch (svg_id) {
+function getSvgViewbox(svgID) {
+    switch (svgID) {
         case 'svg_icon_facebook':
         case 'svg_icon_google':
         case 'svg_icon_google_play':
@@ -32,11 +32,11 @@ function getIcon(key, classes='icon', raw=false) {
 function getIconForLink(link) {
     let icon = new SvgBuilder('h-item-icon');
     let id = null;
-    let brand = false;
+    let noFill = false;
 
     if (link.match(/^http[s]?:\/\/.*/)) {
         link = link.replace(/^http[s]?:\/\/(www\.)?/, '');
-        brand = true;
+        noFill = true;
         if (link.match(/^twitter\.com\/.*/)) {
             id = 'svg_icon_twitter';
         }
@@ -66,7 +66,7 @@ function getIconForLink(link) {
         }
         else {
             id = 'svg_icon_link';
-            brand = false;
+            noFill = false;
         }
     }
     else if (link.match(/^mailto:/)) {
@@ -79,8 +79,8 @@ function getIconForLink(link) {
     if (id) {
         icon.setIcon(id);
     }
-    if (brand) {
-        icon.addClass('brand');
+    if (noFill) {
+        icon.addClass('nofill');
     }
 
     return icon;

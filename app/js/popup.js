@@ -6,15 +6,17 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
 function render(response) {
     const microformats = response.microformats;
-    const webmention_endpoint = response.webmention_endpoint;
+    const webmentionEndpoint = response.webmentionEndpoint;
+
+    const contentContainer = document.querySelector('#content');
 
     let webmention = '';
-    if (webmention_endpoint) {
-        webmention = new DivBuilder('card').add(new ABuilder().setHref(webmention_endpoint).add(getMessage('webmentions_supported')));
+    if (webmentionEndpoint) {
+        webmention = new DivBuilder('card').add(new ABuilder().setHref(webmentionEndpoint).add(getMessage('webmentions_supported')));
     }
 
     if (microformats == '') {
-        renderEmpty(webmention);
+        contentContainer.innerHTML = format('{}{}', webmention, new DivBuilder('card').add(new DivBuilder('card_content').add(getMessage('nothing_to_show'))).render());
         return;
     }
 
@@ -43,25 +45,16 @@ function render(response) {
         }
     }
 
-
-
-
-    // let relmeLinks = buildRelatedLinks(microformats);
     const relmeLinks = new RelatedLinks(microformats).build();
-    console.log(relmeLinks.render('no related links!'));
 
-    $('#content').html('')
-        .append(webmention.render(null))
-        .append(hCards.render(null))
-        .append(hEntries.render(null))
-        .append(relmeLinks.render(null));
-    $('#content').append('<div class="card"><pre>' + JSON.stringify(microformats, null, 4) + '</pre></div>');
+    contentContainer.innerHTML = (
+        webmention.render()
+        + hCards.render()
+        + hEntries.render()
+        + relmeLinks.render()
+    );
 
     updateEventListeners();
-}
-
-function renderEmpty(prefix) {
-    $('#content').html('').append(prefix).append('<div class="card"><div class="card_content">No microformats found.</div></div>');
 }
 
 function updateEventListeners() {
@@ -69,10 +62,16 @@ function updateEventListeners() {
     setupDropdownListeners();
 
     // Make links in the popup left-clickable
-    $('body').on('click', 'a', function(){
-        chrome.tabs.create({url: $(this).attr('href')});
-        return false;
-    });
+    const links = document.querySelectorAll('a');
+    for (let i = 0; i < links.length; i++) {
+        const link = links[i];
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            chrome.tabs.create({url: this.href});
+            return false;
+        });
+    }
+
 
     try {
         // Notify mdl scripts that the DOM has changed (so that stuff like tooltips will work)

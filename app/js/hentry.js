@@ -80,14 +80,14 @@ class HEntry extends HObject {
         const subLine = new DivBuilder().addClass('flex-box-row hentry-subtitle');
         subLine.add(factory.make('span', 'author').addClass('hentry-author'));
 
-        const category_template =
+        const categoryTemplate =
             new SpanBuilder()
                     .addPrefix('#')
                     .addClass('hentry-category');
 
         subLine.add(
             factory
-                    .make('span', 'category', null, category_template)
+                    .make('span', 'category', null, categoryTemplate)
                     .addPrefix(new SpanBuilder().add(' - '))
                     .setSeparator(', ')
                     .render('', true)); // Render children only - discard parent wrapper

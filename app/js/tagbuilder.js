@@ -1,3 +1,6 @@
+/**
+ * A class to simplify the construction of well-formatted HTML tags.
+ */
 class TagBuilder {
     constructor(tagname, classname=null) {
         // The type of tag e.g. 'span', 'div'
@@ -139,7 +142,9 @@ class TagBuilder {
         return ''
     }
 
-    // Make a copy of another TagBuilder instance
+    /**
+     * Make a copy of another TagBuilder instance
+     */
     clone(other) {
         function copyArray(arr) {
             const a = [];
@@ -165,7 +170,10 @@ class TagBuilder {
         return this.render(empty);
     }
 
-    // @param {object} empty Value to return if this TagBuilder has no content
+    /**
+     * @param  {object} Empty value to return if this TagBuilder has no content
+     * @return {string} String representation of this tag, or the value of empty
+     */
     render(empty='') {
         if (this.hideIfEmpty && this.children.length == 0) {
             return empty;
@@ -270,6 +278,9 @@ class SvgBuilder extends TagBuilder {
         return this;
     }
 
+    /**
+     * @override
+     */
     getFormattedSpecialAttributes() {
         return formatOrEmpty(' viewBox="{}"', this.viewbox);
     }
@@ -292,6 +303,9 @@ class ABuilder extends TagBuilder {
         return this;
     }
 
+    /**
+     * @override
+     */
     getFormattedSpecialAttributes() {
         return formatOrEmpty(' href="{}"', this.href)
                 + formatOrEmpty(' rel="{}"', this.rel);
@@ -309,6 +323,9 @@ class Tooltip extends TagBuilder {
         return this;
     }
 
+    /**
+     * @override
+     */
     getFormattedSpecialAttributes() {
         return formatOrEmpty(' for="{}"', this.for_id);
     }
