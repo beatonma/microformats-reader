@@ -4,6 +4,10 @@
         "message": "Microformats"
     },
 
+    "nothing_to_show": {
+        "message": "No microformat content found"
+    },
+
     "webmentions_supported": {
         "message": "This site supports Webmentions"
     },
