@@ -1,7 +1,5 @@
-console.log('microformats is running')
-
-let microformats = Microformats.get();
-let webmentionEndpoint = getWebmentionEndpoint();
+const microformats = Microformats.get();
+const webmentionEndpoint = getWebmentionEndpoint();
 
 let badgeText = '';
 if (webmentionEndpoint) {
@@ -31,6 +29,6 @@ chrome.runtime.onMessage.addListener(
     });
 
 function getWebmentionEndpoint() {
-    let matches = document.documentElement.innerHTML.match(/<(?=.*rel="webmention").*href="(.*?)".*>/);
+    const matches = document.documentElement.innerHTML.match(/<(?=.*rel="webmention").*href="(.*?)".*>/);
     return matches ? matches[1] : null;
 }

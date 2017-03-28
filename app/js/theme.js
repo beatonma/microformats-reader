@@ -1,11 +1,12 @@
-var theme = 'day';
-var accentColor = '';
-var accentTextColor = ''
-var accentApplied = false;
+let theme = 'day';
+let accentColor = '';
+let accentTextColor = ''
+let accentApplied = false;
 
 // Automatically change basic color themes depending on time of day
+// Dark theme between 8pm - 8am
 function setDayNightAutoTheme() {
-    var h = new Date().getHours();
+    const h = new Date().getHours();
     if (h > 8 && h < 20) {
         theme = 'day';
         setTheme(theme);
@@ -18,7 +19,7 @@ function setDayNightAutoTheme() {
 
 function setTheme(newtheme, args) {
     console.log('theme:' + newtheme);
-    var stylesheet = document.getElementById('theme');
+    const stylesheet = document.getElementById('theme');
     if (newtheme == 'day') {
         stylesheet.setAttribute('href', chrome.extension.getURL('css/colors-day.css'));
         theme = newtheme;
