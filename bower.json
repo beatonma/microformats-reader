@@ -1,6 +1,6 @@
 {
   "name": "microformats",
-  "description": "Parser for microformat-compliant content",
+  "description": "Reader for microformat-compliant content",
   "main": "gulpfile.js",
   "authors": [
     "Michael Beaton"

@@ -1,7 +1,7 @@
 {
   "name": "microformats",
   "version": "1.0.0",
-  "description": "Parser for microformat-compliant content",
+  "description": "Reader for microformat-compliant content",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,7 @@
     "microformat"
   ],
   "author": "Michael Beaton",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "del": "^2.2.2",
     "fs": "0.0.1-security",
@@ -27,6 +27,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^3.1.0",
     "gulp-shell": "^0.6.1",
+    "gulp-svg2png": "^2.0.2",
     "gulp-useref": "^3.1.2",
     "pump": "^1.0.2",
     "run-sequence": "^1.2.2"
