@@ -1,6 +1,3 @@
-// Run the following command in the terminal to get started:
-// npm install --save-dev gulp gulp-sass gulp-useref gulp-if gulp-babel-minify gulp-cssnano run-sequence gulp-replace pump del fs gulp-shell gulp-concat gulp-json-editor gulp-rename
-
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const useref = require('gulp-useref');
