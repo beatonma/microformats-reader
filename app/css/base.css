@@ -148,6 +148,9 @@
   font-weight: 900;
   font-size: 0.75em; }
 
+.h-title {
+  padding-bottom: 4px; }
+
 .h-item-label {
   color: var(--primary-color);
   font-size: 0.75em;
@@ -187,7 +190,8 @@
 
 .hentry-subtitle {
   font-size: 0.8em;
-  line-height: normal; }
+  line-height: normal;
+  width: 370px; }
 
 .hentry-author {
   color: var(--text-secondary); }
