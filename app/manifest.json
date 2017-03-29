@@ -8,7 +8,7 @@
     "author": "Michael Beaton",
 
     "icons": {
-
+        "comment": "icon declarations are inserted at production build time"
     },
     
     "default_locale": "en",
@@ -43,5 +43,5 @@
             "run_at": "document_end"
         }
     ],
-    "homepage_url": "https://beatonma.org"
+    "homepage_url": "https://beatonma.org/app/org-beatonma-ext-microformats-reader"
 }
