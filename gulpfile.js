@@ -22,6 +22,7 @@ const svg2png = require('gulp-svg2png');
 
 // Size in pixels in which to generate app icon PNG files
 const mainIconBaseFilename = 'ext_icon';
+const primaryIconSize = 48;
 const iconSizes = [16, 32, 48, 96, 128];
 let messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
 const manifest = JSON.parse(fs.readFileSync('./app/manifest.json'));
@@ -96,18 +97,26 @@ gulp.task('production:clean', function() {
 });
 
 // Generate png versions of the app icon in various sizes
-gulp.task('production:appicon_svg2png', function() {
+gulp.task('production:svg2png_ext_icon', function() {
     for (let i = 0; i < iconSizes.length; i++) {
         const size = iconSizes[i];
         pump([
-            gulp.src('app/images/**/' + mainIconBaseFilename + '.svg'),
-            svg2png({width:size,height:size}, true, null),
+            gulp.src('app/images/branding/' + mainIconBaseFilename + '.svg'),
+            svg2png({width:size, height:size}, true, null),
             rename(function(path) {
                 path.basename += '-' + size;
             }),
-            gulp.dest('production/images/')
+            gulp.dest('production/images/branding')
         ]);
     }
+});
+
+gulp.task('production:svg2png_other_icons', function() {
+    pump([
+        gulp.src('app/images/icons/**/*.svg'),
+        svg2png({width: primaryIconSize, height:primaryIconSize}),
+        gulp.dest('production/images/icons')
+    ])
 });
 
 // Compress content scripts into a single minified file
@@ -164,7 +173,7 @@ gulp.task('production:languages', function(cb) {
 // Minify manifest and change the content_scripts list
 // to reflect the changes from production:content_js
 // (Replaces the list of files with the single minified filename)
-gulp.task('production:manifest', ['production:appicon_svg2png'], function(cb) {
+gulp.task('production:manifest', function(cb) {
     pump([
         gulp.src('app/manifest.json'),
         jsonEdit(function(json) {
@@ -174,7 +183,7 @@ gulp.task('production:manifest', ['production:appicon_svg2png'], function(cb) {
             const icons = {};
             for (let i = 0; i < iconSizes.length; i++) {
                 const size = iconSizes[i];
-                icons['' + size] = 'images/' + mainIconBaseFilename + '-' + size + '.png';
+                icons['' + size] = 'images/branding/' + mainIconBaseFilename + '-' + size + '.png';
             }
             json.icons = icons;
             
@@ -194,8 +203,9 @@ gulp.task('production', function(cb) {
             'sass',
             'bower'
         ],
-        'production:appicon_svg2png',
         [
+            'production:svg2png_ext_icon',
+            'production:svg2png_other_icons',
             'production:content_js',
             'production:background_js',
             'production:css',
