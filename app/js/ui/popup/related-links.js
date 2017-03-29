@@ -35,7 +35,7 @@ class RelatedLinks {
             card.add(a);
         }
 
-        card.addPrefix(new DivBuilder('h-section-label').add(getMessage('section_related_links')))
+        card.addPrefix(new DivBuilder('h-section-label h-title').add(getMessage('section_related_links')))
 
         return card;
     }

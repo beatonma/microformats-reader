@@ -1,7 +1,7 @@
 function getCardIcon(elementId, iconId, tooltipId, title=null) {
     elementId = makeHtmlId(elementId) + '_type_icon';
 
-    const typeIcon = new TagBuilder().addClass('flex-box-row').allowEmpty();
+    const typeIcon = new DivBuilder().addClass('h-title flex-box-row').allowEmpty();
     if (title) {
         typeIcon.add(new DivBuilder().addClass('h-section-label').add(title));
     }
