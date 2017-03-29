@@ -17,9 +17,10 @@ const rename = require('gulp-rename');
 const concat = require('gulp-concat');
 const jsonEdit = require('gulp-json-editor');
 const bower = require('main-bower-files');
+const svg2png = require('gulp-svg2png');
 
-var messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
-var manifest = JSON.parse(fs.readFileSync('./app/manifest.json'));
+let messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
+const manifest = JSON.parse(fs.readFileSync('./app/manifest.json'));
 
 
 gulp.task('default', function() {
@@ -37,10 +38,6 @@ gulp.task('sass', function(cb) {
         sass(),
         gulp.dest('app/css')
     ], cb);
-});
-
-gulp.task('clean', function() {
-   return del.sync(['production']);
 });
 
 gulp.task('debug:clean', function() {
@@ -68,7 +65,7 @@ gulp.task('build:json', function() {
 });
 
 gulp.task('build:js', function() {
-    var paths = manifest.content_scripts[0].js;
+    const paths = manifest.content_scripts[0].js;
     for (let i = 0; i < paths.length; i++) {
         paths[i] = 'app/' + paths[i];
     }
@@ -80,14 +77,14 @@ gulp.task('build:js', function() {
     ])
 });
 
-gulp.task('build:bower', function() {
-    pump([
-        gulp.src(bower()),
-        gulp.dest('production/js/lib/')
-    ]);
-});
+// gulp.task('build:bower', function() {
+//     pump([
+//         gulp.src(bower()),
+//         gulp.dest('production/js/lib/')
+//     ]);
+// });
 
-gulp.task('debug:bower', function() {
+gulp.task('bower', function() {
     pump([
         gulp.src(bower()),
         gulp.dest('app/js/lib/')
@@ -96,7 +93,7 @@ gulp.task('debug:bower', function() {
 
 gulp.task('build:css', function() {
     pump([
-        gulp.src(['app/css/overlay.css', 'app/css/colors-day.css', 'app/css/colors-night.css']),
+        gulp.src(['app/css/colors-day.css', 'app/css/colors-night.css']),
         cssnano(),
         rename(function(path) {
             path.extname = '.min.css'
@@ -105,24 +102,24 @@ gulp.task('build:css', function() {
     ]);
 });
 
-gulp.task('build:image', function() {
-    pump([
-        gulp.src('app/image/**.*'),
-        gulp.dest('production/image/')
-    ]);
-});
+// gulp.task('build:image', function() {
+//     pump([
+//         gulp.src('app/image/**.*'),
+//         gulp.dest('production/image/')
+//     ]);
+// });
 
-gulp.task('build:manifest', function() {
-    pump([
-        gulp.src('app/manifest.json'),
-        jsonEdit(function(json) {
-            json.content_scripts[0].js = ['js/app.min.js'];
-            json.content_scripts[0].css = ['css/overlay.min.css'];
-            return json;
-        }),
-        gulp.dest('production/')
-    ])
-});
+// gulp.task('build:manifest', function() {
+//     pump([
+//         gulp.src('app/manifest.json'),
+//         jsonEdit(function(json) {
+//             json.content_scripts[0].js = ['js/app.min.js'];
+//             json.content_scripts[0].css = ['css/overlay.min.css'];
+//             return json;
+//         }),
+//         gulp.dest('production/')
+//     ])
+// });
 
 gulp.task('build', function() {
     runSequence(
@@ -134,7 +131,7 @@ gulp.task('build', function() {
 
 gulp.task('debug:build', function(cb) {
     messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
-    runSequence('debug:bower');
+    runSequence('bower');
     pump([
         gulp.src(['app/**/*', '!app/scss/', '!app/scss/**']),
         gulpIf('*.html', replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage)),
@@ -145,12 +142,161 @@ gulp.task('debug:build', function(cb) {
 
 gulp.task('debug', function() {
     runSequence('debug:clean', 'debug:build');
-})
+});
 
 // Reloads the extension in Chrome
 gulp.task('reloadChrome', shell.task([
     '"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" http://reload.extensions/'
 ]));
+
+
+
+
+/**
+ * PRODUCTION
+ */
+
+
+
+gulp.task('production:clean', function() {
+   return del.sync(['production']);
+});
+
+// Generate png versions of the app icon in various sizes
+gulp.task('production:appicon_svg2png', function() {
+    const targetSizes = [16, 32, 48, 96, 128];
+    
+    for (let i = 0; i < targetSizes.length; i++) {
+        const size = targetSizes[i];
+        pump([
+            gulp.src('app/images/**/*.svg'),
+            svg2png({width:size,height:size}, true, null),
+            rename(function(path) {
+                path.basename += '-' + size;
+            }),
+            gulp.dest('production/images/')
+        ]);
+    }
+});
+
+// Compress content scripts into a single minified file
+gulp.task('production:content_js', function() {
+    const paths = manifest.content_scripts[0].js;
+    for (let i = 0; i < paths.length; i++) {
+        paths[i] = 'app/' + paths[i];
+    }
+    pump([
+        gulp.src(paths),
+        concat('content.min.js'),
+        minify(),
+        gulp.dest('production/js/')
+    ])
+});
+
+// Compress background scripts into a single minified file
+gulp.task('production:background_js', function() {
+    const paths = manifest.background.scripts;
+    for (let i = 0; i < paths.length; i++) {
+        paths[i] = 'app/' + paths[i];
+    }
+    pump([
+        gulp.src(paths),
+        concat('background.min.js'),
+        minify(),
+        gulp.dest('production/js/')
+    ])
+});
+
+// Minify additional scripts that aren't referenced
+// in HTML so aren't already handled by useref()
+gulp.task('production:css', function() {
+    pump([
+        gulp.src(['app/css/colors-day.css', 'app/css/colors-night.css']),
+        cssnano(),
+        rename(function(path) {
+            path.extname = '.min.css'
+        }),
+        gulp.dest('production/css/')
+    ]);
+});
+
+// Minify language resource JSON files
+gulp.task('production:languages', function() {
+    pump([
+        gulp.src('app/_locales/*/**.json'),
+        replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+        replace(/([\r\n]+)/g, ''), // Remove empty lines
+        gulp.dest('production/_locales/')
+    ]);
+});
+
+// Minify manifest and change the content_scripts list
+// to reflect the changes from production:content_js
+// (Replaces the list of files with the single minified filename)
+gulp.task('production:manifest', function() {
+    pump([
+        gulp.src('app/manifest.json'),
+        jsonEdit(function(json) {
+            json.background.scripts = ['js/background.min.js'];
+            json.content_scripts[0].js = ['js/content.min.js'];
+            return json;
+        }),
+        replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+        replace(/([\r\n]+)/g, ''), // Remove empty lines
+        gulp.dest('production/')
+    ]);
+});
+
+gulp.task('production', function(cb) {
+    messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
+    runSequence(
+        [
+            'production:clean',
+            'sass',
+            'bower'
+        ],
+        [
+            'production:content_js',
+            'production:background_js',
+            'production:css',
+            'production:appicon_svg2png',
+            'production:languages',
+            'production:manifest'
+        ]
+    );
+
+    // Construct and minify HTML and related files
+    // This includes any JS and CSS that are referenced
+    // from those files.
+    // HTML files have most whitespace stripped but new
+    // lines are maintained while removing empty lines
+    pump([
+        gulp.src('app/**/*.html'),
+        useref(),
+        gulpIf('*.js', replace(/css\/colors-(day|night)\.css+/g, 'css/colors-$1.min.css')),
+        gulpIf('*.js', minify()),
+        gulpIf('*.css', cssnano()),
+        replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+        replace(/(\r\n){2,}/g, '\r\n'), // Remove empty lines
+        replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage), // Insert messages from resource file
+        gulp.dest('production/')
+    ], cb);
+
+    // Minify JSON files - namely the manifest and language resources
+    // pump([
+    //     gulp.src('app/**/*.json'),
+    //     replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+    //     replace(/(\r\n){2,}/g, ''), // Remove empty lines
+    //     gulp.dest('production/')
+    // ]);
+
+
+});
+
+
+/**
+ * UTILITY FUNCTIONS
+ */
 
 function getMessage(match, key) {
     try {
@@ -158,6 +304,5 @@ function getMessage(match, key) {
     }
     catch (e) {
         console.log('ERROR: Incorrect key "' + key + '". Please check messages.json and html files to verify variable formatting.');
-//        throw e;
     }
 }
