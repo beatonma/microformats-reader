@@ -19,17 +19,17 @@ const jsonEdit = require('gulp-json-editor');
 const bower = require('main-bower-files');
 const svg2png = require('gulp-svg2png');
 
+
+// Size in pixels in which to generate app icon PNG files
+const mainIconBaseFilename = 'ext_icon';
+const iconSizes = [16, 32, 48, 96, 128];
 let messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
 const manifest = JSON.parse(fs.readFileSync('./app/manifest.json'));
 
 
+
 gulp.task('default', function() {
     runSequence('sass', 'debug:clean', 'debug:build', 'watch');
-});
-
-gulp.task('watch', ['sass'], function() {
-    gulp.watch('app/scss/**/*.scss', ['sass']);
-    gulp.watch(['app/**/*', '!app/scss/**/*.scss', '!app/scss', '!gulpfile.js'], ['debug:build']);
 });
 
 gulp.task('sass', function(cb) {
@@ -40,50 +40,6 @@ gulp.task('sass', function(cb) {
     ], cb);
 });
 
-gulp.task('debug:clean', function() {
-    return del.sync(['debug']);
-});
-
-gulp.task('build:options', function() {
-    pump([
-        gulp.src('app/**/*.html'),
-        useref(),
-        gulpIf('*.js', minify()),
-        gulpIf('*.css', cssnano()),
-        replace(/[ ]{2,}/g, ''),
-        replace(/(\r\n){2,}/g, '\r\n'),
-        replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage),
-        gulp.dest('production/')
-    ]);
-});
-
-gulp.task('build:json', function() {
-    pump([
-        gulp.src(['app/_locales/**/*.json']),
-        gulp.dest('production/_locales')
-    ])
-});
-
-gulp.task('build:js', function() {
-    const paths = manifest.content_scripts[0].js;
-    for (let i = 0; i < paths.length; i++) {
-        paths[i] = 'app/' + paths[i];
-    }
-    pump([
-        gulp.src(paths),
-        concat('app.min.js'),
-        minify(),
-        gulp.dest('production/js/')
-    ])
-});
-
-// gulp.task('build:bower', function() {
-//     pump([
-//         gulp.src(bower()),
-//         gulp.dest('production/js/lib/')
-//     ]);
-// });
-
 gulp.task('bower', function() {
     pump([
         gulp.src(bower()),
@@ -91,42 +47,20 @@ gulp.task('bower', function() {
     ]);
 });
 
-gulp.task('build:css', function() {
-    pump([
-        gulp.src(['app/css/colors-day.css', 'app/css/colors-night.css']),
-        cssnano(),
-        rename(function(path) {
-            path.extname = '.min.css'
-        }),
-        gulp.dest('production/css/')
-    ]);
+
+
+
+/**
+ * DEBUGGING
+ */
+
+gulp.task('watch', ['sass'], function() {
+    gulp.watch('app/scss/**/*.scss', ['sass']);
+    gulp.watch(['app/**/*', '!app/scss/**/*.scss', '!app/scss', '!gulpfile.js'], ['debug:build']);
 });
 
-// gulp.task('build:image', function() {
-//     pump([
-//         gulp.src('app/image/**.*'),
-//         gulp.dest('production/image/')
-//     ]);
-// });
-
-// gulp.task('build:manifest', function() {
-//     pump([
-//         gulp.src('app/manifest.json'),
-//         jsonEdit(function(json) {
-//             json.content_scripts[0].js = ['js/app.min.js'];
-//             json.content_scripts[0].css = ['css/overlay.min.css'];
-//             return json;
-//         }),
-//         gulp.dest('production/')
-//     ])
-// });
-
-gulp.task('build', function() {
-    runSequence(
-        'clean',
-        'build:options',
-        ['build:json', 'build:image', 'build:js', 'build:css'],
-        'build:manifest');
+gulp.task('debug:clean', function() {
+    return del.sync(['debug']);
 });
 
 gulp.task('debug:build', function(cb) {
@@ -156,20 +90,17 @@ gulp.task('reloadChrome', shell.task([
  * PRODUCTION
  */
 
-
-
+// Delete any existing files from a previous build
 gulp.task('production:clean', function() {
    return del.sync(['production']);
 });
 
 // Generate png versions of the app icon in various sizes
 gulp.task('production:appicon_svg2png', function() {
-    const targetSizes = [16, 32, 48, 96, 128];
-    
-    for (let i = 0; i < targetSizes.length; i++) {
-        const size = targetSizes[i];
+    for (let i = 0; i < iconSizes.length; i++) {
+        const size = iconSizes[i];
         pump([
-            gulp.src('app/images/**/*.svg'),
+            gulp.src('app/images/**/' + mainIconBaseFilename + '.svg'),
             svg2png({width:size,height:size}, true, null),
             rename(function(path) {
                 path.basename += '-' + size;
@@ -180,7 +111,7 @@ gulp.task('production:appicon_svg2png', function() {
 });
 
 // Compress content scripts into a single minified file
-gulp.task('production:content_js', function() {
+gulp.task('production:content_js', function(cb) {
     const paths = manifest.content_scripts[0].js;
     for (let i = 0; i < paths.length; i++) {
         paths[i] = 'app/' + paths[i];
@@ -190,11 +121,11 @@ gulp.task('production:content_js', function() {
         concat('content.min.js'),
         minify(),
         gulp.dest('production/js/')
-    ])
+    ], cb)
 });
 
 // Compress background scripts into a single minified file
-gulp.task('production:background_js', function() {
+gulp.task('production:background_js', function(cb) {
     const paths = manifest.background.scripts;
     for (let i = 0; i < paths.length; i++) {
         paths[i] = 'app/' + paths[i];
@@ -204,12 +135,12 @@ gulp.task('production:background_js', function() {
         concat('background.min.js'),
         minify(),
         gulp.dest('production/js/')
-    ])
+    ], cb)
 });
 
 // Minify additional scripts that aren't referenced
 // in HTML so aren't already handled by useref()
-gulp.task('production:css', function() {
+gulp.task('production:css', function(cb) {
     pump([
         gulp.src(['app/css/colors-day.css', 'app/css/colors-night.css']),
         cssnano(),
@@ -217,34 +148,42 @@ gulp.task('production:css', function() {
             path.extname = '.min.css'
         }),
         gulp.dest('production/css/')
-    ]);
+    ], cb);
 });
 
 // Minify language resource JSON files
-gulp.task('production:languages', function() {
+gulp.task('production:languages', function(cb) {
     pump([
         gulp.src('app/_locales/*/**.json'),
         replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
         replace(/([\r\n]+)/g, ''), // Remove empty lines
         gulp.dest('production/_locales/')
-    ]);
+    ], cb);
 });
 
 // Minify manifest and change the content_scripts list
 // to reflect the changes from production:content_js
 // (Replaces the list of files with the single minified filename)
-gulp.task('production:manifest', function() {
+gulp.task('production:manifest', ['production:appicon_svg2png'], function(cb) {
     pump([
         gulp.src('app/manifest.json'),
         jsonEdit(function(json) {
             json.background.scripts = ['js/background.min.js'];
             json.content_scripts[0].js = ['js/content.min.js'];
+
+            const icons = {};
+            for (let i = 0; i < iconSizes.length; i++) {
+                const size = iconSizes[i];
+                icons['' + size] = 'images/' + mainIconBaseFilename + '-' + size + '.png';
+            }
+            json.icons = icons;
+            
             return json;
         }),
         replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
         replace(/([\r\n]+)/g, ''), // Remove empty lines
         gulp.dest('production/')
-    ]);
+    ], cb);
 });
 
 gulp.task('production', function(cb) {
@@ -255,11 +194,11 @@ gulp.task('production', function(cb) {
             'sass',
             'bower'
         ],
+        'production:appicon_svg2png',
         [
             'production:content_js',
             'production:background_js',
             'production:css',
-            'production:appicon_svg2png',
             'production:languages',
             'production:manifest'
         ]
@@ -281,16 +220,6 @@ gulp.task('production', function(cb) {
         replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage), // Insert messages from resource file
         gulp.dest('production/')
     ], cb);
-
-    // Minify JSON files - namely the manifest and language resources
-    // pump([
-    //     gulp.src('app/**/*.json'),
-    //     replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
-    //     replace(/(\r\n){2,}/g, ''), // Remove empty lines
-    //     gulp.dest('production/')
-    // ]);
-
-
 });
 
 
