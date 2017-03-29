@@ -90,7 +90,7 @@ class HEntry extends HObject {
                     .make('span', 'category', null, categoryTemplate)
                     .addPrefix(new SpanBuilder().add(' - '))
                     .setSeparator(', ')
-                    .render('', true)); // Render children only - discard parent wrapper
+                    .renderChildren('')); // Render children only - discard parent wrapper
         display.add(subLine);
 
         return display;
