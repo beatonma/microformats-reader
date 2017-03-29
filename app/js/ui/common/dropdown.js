@@ -12,6 +12,7 @@ function dropdown(id, content) {
             .add(new SvgBuilder('dropdown-icon')
                     .setId(icon_id)
                     .setIcon('svg_icon_action_arrow_down'));
+                    // .add(new Tooltip().setFor(icon_id).add(getMessage('dropdown_tooltip_default'))));
 
     const dropdown =
         new DivBuilder('dropdown-content')
