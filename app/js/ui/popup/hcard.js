@@ -129,7 +129,8 @@ class HCard extends HObject {
     getNote(factory) {
         const display =
             new DivBuilder('card-section')
-                .addPrefix(new DivBuilder('h-section-label').add(getMessage('hcard_section_note')));
+                .addPrefix(new DivBuilder('h-section-label').add(getMessage('hcard_section_note')))
+                .add(factory.make('div', 'note'));
 
         return display;
     }
