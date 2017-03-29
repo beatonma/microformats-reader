@@ -89,6 +89,10 @@
         "message": "Show in Google Maps"
     },
 
+    "dropdown_tooltip_default": {
+        "message": "This section has some additional items. Click here to show everything."
+    },
+
 
 
     "comment_icons": {

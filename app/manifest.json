@@ -1,11 +1,15 @@
 {
     "manifest_version": 2,
-    "name": "Redux Microformats reader",
-    "version": "0.2",
+    "name": "P Microformats Reader",
+    "version": "0.3",
 
-    "description": "Displays microformat-compatible data from the active page",
+    "description": "Displays microformat data from the active page",
 
     "author": "Michael Beaton",
+
+    "icons": {
+
+    },
     
     "default_locale": "en",
 
@@ -26,7 +30,7 @@
     "options_page": "options.html",
 
     "background": {
-        "scripts": ["js/background.js"]
+        "scripts": ["js/background/background.js"]
     },
 
     "content_scripts": [
@@ -35,7 +39,7 @@
             "all_frames": true,
             "js": [
                 "js/lib/microformat-shiv.js",
-                "js/contentscript.js"],
+                "js/content/contentscript.js"],
             "run_at": "document_end"
         }
     ],
