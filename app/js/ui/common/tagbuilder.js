@@ -216,6 +216,8 @@ class TagBuilder {
             return formatted;
         }
 
+        const formattedPrefix = renderContent(this.prefix);
+        const formattedSuffix = renderContent(this.suffix);
         const formattedChildren = renderContent(this.children);
 
         if (!this.renderContainer) {
@@ -225,8 +227,6 @@ class TagBuilder {
             )
         }
 
-        const formattedPrefix = renderContent(this.prefix);
-        const formattedSuffix = renderContent(this.suffix);
         const formattedBefore = renderContent(this.before);
         const formattedAfter = renderContent(this.after);
 
