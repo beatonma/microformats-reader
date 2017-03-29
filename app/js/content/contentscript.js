@@ -9,7 +9,11 @@ if (microformats && microformats.items.length > 0) {
     badgeText += '>';
 }
 if (badgeText != '') {
+    chrome.runtime.sendMessage({"action": "setIcon", "has_content": true}, null);
     chrome.runtime.sendMessage({"action": "setBadgeText", "text": badgeText}, null);
+}
+else {
+    chrome.runtime.sendMessage({"action": "setIcon", "has_content": false}, null);
 }
 
 
