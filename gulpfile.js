@@ -15,6 +15,7 @@ const concat = require('gulp-concat');
 const jsonEdit = require('gulp-json-editor');
 const bower = require('main-bower-files');
 const svg2png = require('gulp-svg2png');
+const zip = require('gulp-zip');
 
 
 // Size in pixels in which to generate app icon PNG files
@@ -192,6 +193,42 @@ gulp.task('production:manifest', function(cb) {
     ], cb);
 });
 
+// Construct and minify HTML and related files
+// This includes any JS and CSS that are referenced
+// from those files.
+// HTML files have most whitespace stripped but new
+// lines are maintained while removing empty lines
+gulp.task('production:main', function(cb) {
+    pump([
+        gulp.src('app/**/*.html'),
+        useref(),
+        gulpIf('*.js', replace(/css\/colors-(day|night)\.css+/g, 'css/colors-$1.min.css')),
+        gulpIf('*.js', minify()),
+        gulpIf('*.css', cssnano()),
+        replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+        replace(/(\r\n){2,}/g, '\r\n'), // Remove empty lines
+        replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage), // Insert messages from resource file
+        gulp.dest('production/')
+    ], cb);
+});
+
+gulp.task('production:zip', function(cb) {
+    const date = new Date();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const formattedDate = (
+        date.getFullYear() + '-'
+        + (month < 10 ? '0' : '') + month
+        + '-'
+        + (day < 10 ? '0' : '') + day
+    );
+    pump([
+        gulp.src('production/**/*'),
+        zip(formattedDate + '_microformats-reader-' + manifest.version + '.zip'),
+        gulp.dest('zip/')
+    ], cb);
+});
+
 gulp.task('production', function(cb) {
     messages = JSON.parse(fs.readFileSync('./app/_locales/en/messages.json', 'utf8'));
     runSequence(
@@ -208,7 +245,9 @@ gulp.task('production', function(cb) {
             'production:css',
             'production:languages',
             'production:manifest'
-        ]
+        ],
+        'production:main',
+        'production:zip'
     );
 
     // Construct and minify HTML and related files
@@ -216,17 +255,17 @@ gulp.task('production', function(cb) {
     // from those files.
     // HTML files have most whitespace stripped but new
     // lines are maintained while removing empty lines
-    pump([
-        gulp.src('app/**/*.html'),
-        useref(),
-        gulpIf('*.js', replace(/css\/colors-(day|night)\.css+/g, 'css/colors-$1.min.css')),
-        gulpIf('*.js', minify()),
-        gulpIf('*.css', cssnano()),
-        replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
-        replace(/(\r\n){2,}/g, '\r\n'), // Remove empty lines
-        replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage), // Insert messages from resource file
-        gulp.dest('production/')
-    ], cb);
+    // pump([
+    //     gulp.src('app/**/*.html'),
+    //     useref(),
+    //     gulpIf('*.js', replace(/css\/colors-(day|night)\.css+/g, 'css/colors-$1.min.css')),
+    //     gulpIf('*.js', minify()),
+    //     gulpIf('*.css', cssnano()),
+    //     replace(/[ ]{2,}/g, ''), // Remove unnecessary spaces
+    //     replace(/(\r\n){2,}/g, '\r\n'), // Remove empty lines
+    //     replace(/[{]{3}([\w]+)[}]{3}/ig, getMessage), // Insert messages from resource file
+    //     gulp.dest('production/')
+    // ], cb);
 });
 
 
