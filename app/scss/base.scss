@@ -23,6 +23,7 @@
     background: var(--text-secondary);
 }​
 
+
 // Objects
 
 html, body, main {
@@ -87,6 +88,9 @@ pre {
     font-size: 0.8em;
     overflow: scroll;
     margin: 0;
+}
+div:active, div:focus, span:active, span:focus {
+    outline: none !important;
 }
 
 // Classes

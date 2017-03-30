@@ -6584,6 +6584,9 @@ pre {
   overflow: scroll;
   margin: 0; }
 
+div:active, div:focus, span:active, span:focus {
+  outline: none !important; }
+
 .flex-box-col {
   display: flex;
   flex-wrap: wrap;
