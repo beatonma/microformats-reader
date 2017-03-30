@@ -93,6 +93,13 @@
         "message": "This section has some additional items. Click here to show everything."
     },
 
+    "option_show_raw_json": {
+        "message": "Show raw JSON"
+    },
+    "option_show_raw_json_tooltip": {
+        "message": "Show the full parsed data in JSON format at the bottom of the popup"
+    },
+
 
 
     "comment_icons": {

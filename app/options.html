@@ -14,18 +14,31 @@
     <link id="theme" rel="stylesheet" href=""/>
     <!--build:css css/options.min.css-->
     <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/popup.css" />
+    <!-- <link rel="stylesheet" href="css/options.css" /> -->
     <!--endbuild-->
 </head>
 
 <body>
     <main>
-        Nothing here yet.
+        <div class="card">
+            <ol class="mdl-list">
+                <li class="mdl-list__item">
+                    <span id="show_raw_json_title" class="mdl-list__item-primary-content">{{{option_show_raw_json}}}</span>
+                    <div class="mdl-tooltip" data-mdl-for="show_raw_json_title">{{{option_show_raw_json_tooltip}}}</div>
+                    <span class="mdl-list__item-secondary-action" style="margin-right:8px;">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="show_raw_json">
+                            <input id="show_raw_json" class="mdl-checkbox__input" type="checkbox">
+                        </label>
+                    </span>
+                </li>
+            </ol>
+        </div>
     </main>
-    <!--build:js js/popup.min.js-->
+    <!--build:js js/options.min.js-->
     <script src="js/ui/common/util.js"></script>
     <script src="js/lib/material.min.js"></script>
     <script src="js/ui/common/theme.js"></script>
+    <script src="js/ui/common/options.js"></script>
     <script src="js/ui/options/options.js"></script>
     <!--endbuild-->
 </body>

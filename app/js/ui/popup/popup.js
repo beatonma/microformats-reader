@@ -4,19 +4,24 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     });
 });
 
+let options = {};
+getOptions(function(items) {
+    options = items;
+});
+
 function render(response) {
     const microformats = response.microformats;
     const webmentionEndpoint = response.webmentionEndpoint;
 
     const contentContainer = document.querySelector('#content');
 
-    let webmention = '';
+    let webmention = new DivBuilder('card');
     if (webmentionEndpoint) {
-        webmention = new DivBuilder('card').add(new ABuilder().setHref(webmentionEndpoint).add(getMessage('webmentions_supported')));
+        webmention.add(new ABuilder().setHref(webmentionEndpoint).add(getMessage('webmentions_supported')));
     }
 
     if (microformats == '') {
-        contentContainer.innerHTML = format('{}{}', webmention, new DivBuilder('card').add(new DivBuilder('card_content').add(getMessage('nothing_to_show'))).render());
+        contentContainer.innerHTML = format('{}{}', webmention.render(), new DivBuilder('card').add(new DivBuilder('card_content').add(getMessage('nothing_to_show'))).render());
         return;
     }
 
@@ -52,7 +57,13 @@ function render(response) {
         + hCards.render()
         + hEntries.render()
         + relmeLinks.render()
+        // + rawJson.render()
     );
+
+    if (getValueOr(options, 'show_raw_json', false)) {
+        const rawJson = new DivBuilder('card').add(new TagBuilder('pre').add(JSON.stringify(microformats, null, 4)));
+        contentContainer.innerHTML += rawJson.render();
+    }
 
     updateEventListeners();
 }
