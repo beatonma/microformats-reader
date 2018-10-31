@@ -16,6 +16,10 @@
         "message": "Related links"
     },
 
+    "section_friend_links": {
+        "message": "XHTML Friends Network (XFN)"
+    },
+
     "section_hentries": {
         "message": "Articles"
     },
