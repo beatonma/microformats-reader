@@ -24,7 +24,7 @@ class RelatedLinks {
 
             const a = new DivBuilder('single-line');
             if (getValueOr(metadata, 'rels', []).indexOf('pgpkey') >= 0) {
-                a.addPrefix('svg_icon_pgpkey', 'h-item-icon');
+                a.addPrefix(getIcon('svg_icon_pgpkey', 'h-item-icon'));
             }
             else {
                 a.addPrefix(getIconForLink(link.url));
