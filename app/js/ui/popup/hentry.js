@@ -15,7 +15,13 @@ class HEntry extends HObject {
     }
 
     getHeader(factory) {
-        const entryTitle = factory.get('name');
+        const entryTitle = factory.get('name') || '(Article without marked-up title.)';
+        const entryUrl = factory.get('url');
+        let titleContent = entryTitle;
+
+        if (entryUrl) {
+            titleContent = new ABuilder().setHref(entryUrl).addContent(entryTitle);
+        }
 
         const display = new DivBuilder().addClass('card-section hentry-header');
         const firstLine =
@@ -24,10 +30,7 @@ class HEntry extends HObject {
                 .addContent(
                     new SpanBuilder()
                         .addClass('p-name hentry-title')
-                        .addContent(
-                            new ABuilder()
-                                    .setHref(factory.get('url'))
-                                    .addContent(entryTitle)))
+                        .addContent(titleContent))
                 .addContent(
                     new DivBuilder()
                         .allowEmpty()
