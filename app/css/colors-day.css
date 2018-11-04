@@ -20,5 +20,5 @@
   --header-text-color: var(--text-dark-primary);
   --card-background: #ffffff;
   --card-background-hover: #eeeeee;
-  --card-separator: rgba(0, 0, 0, 0.1);
+  --card-separator: rgba(0, 0, 0, .1);
   --card-header-color: var(--primary_color); }
