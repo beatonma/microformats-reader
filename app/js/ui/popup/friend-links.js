@@ -1,4 +1,4 @@
-class RelatedLinks {
+class FriendLinks {
     constructor(microformats) {
         this.rels = getValueOr(microformats, 'rels', {});
         this.relurls = getValueOr(microformats, 'rel-urls', {});
@@ -6,12 +6,11 @@ class RelatedLinks {
 
     build() {
         const card = new DivBuilder('card');
-        const links = getValueOr(this.rels, 'me', []);
-        this.rels['pgpkey'] = getValueOr(this.rels, 'pgpkey', []);
+        const friends = getValueOr(this.rels, 'friend', []);
 
         const sortableLinks = [];
-        for (let i = 0; i < links.length; i++) {
-            const link = links[i];
+        for (let i = 0; i < friends.length; i++) {
+            const link = friends[i];
             sortableLinks.push(new SortableLink(link));
         }
         sortableLinks.sort(function(a, b) {
@@ -23,19 +22,15 @@ class RelatedLinks {
             const metadata = this.relurls[link.url];
 
             const a = new DivBuilder('single-line');
-            if (getValueOr(metadata, 'rels', []).indexOf('pgpkey') >= 0) {
-                a.addPrefix(getIcon('svg_icon_pgpkey', 'h-item-icon'));
-            }
-            else {
-                a.addPrefix(getIconForLink(link.url));
-            }
+            a.addPrefix(getIcon('svg_icon_link', 'h-item-icon'));
             a.add(linkify(link.url, link.domain + link.path));
             const alt = getValueOr(metadata, 'text', getValueOr(metadata, ['title']));
-            a.addSuffix(new SpanBuilder().add(alt).addPrefix(' (').addSuffix(')'));
+            const rels = getValueOr(metadata, 'rels', []).join('/');
+            a.addSuffix(new SpanBuilder().add(alt).add(', ').add(rels).addPrefix(' (').addSuffix(')'));
             card.add(a);
         }
 
-        card.addPrefix(new DivBuilder('h-section-label h-title').add(getMessage('section_related_links')))
+        card.addPrefix(new DivBuilder('h-section-label h-title').add(getMessage('section_friend_links')));
 
         return card;
     }

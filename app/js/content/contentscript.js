@@ -72,6 +72,10 @@ function hasUsefulData(mf) {
             console.log('has relme');
             hasUsefulRels = true;
         }
+        if (getValueOr(rels, 'friend')) {
+            console.log('has xfn friend');
+            hasUsefulRels = true;
+        }
     }
 
     return hasUsefulHObjects || hasUsefulRels;
@@ -87,6 +91,6 @@ function getValueOr(dictionary, key, defaultValue=null) {
     }
     catch(e) {
     }
-    
+
     return defaultValue;
 }

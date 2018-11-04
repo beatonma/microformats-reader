@@ -51,12 +51,14 @@ function render(response) {
     }
 
     const relmeLinks = new RelatedLinks(microformats).build();
+    const friendLinks = new FriendLinks(microformats).build();
 
     contentContainer.innerHTML = (
         webmention.render()
         + hCards.render()
         + hEntries.render()
         + relmeLinks.render()
+        + friendLinks.render()
         // + rawJson.render()
     );
 
