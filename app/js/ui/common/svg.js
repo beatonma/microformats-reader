@@ -76,12 +76,11 @@ function getIconForLink(link) {
         id = 'svg_icon_sms';
     }
 
-    if (id) {
-        icon.setIcon(id);
-    }
     if (noFill) {
         icon.addClass('nofill');
     }
+
+    icon.setIcon(id);
 
     return icon;
 }

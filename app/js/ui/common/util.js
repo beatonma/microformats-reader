@@ -16,7 +16,7 @@ function getMessage(key) {
 function linkify(obj, text=null) {
     try {
         return String(obj).replace(
-            /\s*(mailto:([^\s<>]+)|(\w+:\/\/[^\s<>]+)|(\s*(sms:([^\s<>]+))))/g,
+            /\s*(mailto:([^\s<>]+)|(\w+:\/\/[^\s<>]+)|(\s*(sms:([^\s<>]+)))|(\s*(tel:([^\s<>]+))))/g,
             format('<a href="$1">{}</a>', (text || '$2$3$4'))
         );
     }
@@ -66,13 +66,13 @@ function yearsSince(date) {
  * @param  {[type]}
  * @return {[type]}
  */
-function log(text) {    
+function log(text) {
     console.log(format(text));
 }
 
 /**
  * Replicates basic positional string formatting from Python
- * 
+ *
  * @param  {[string,object]} The first argument is the string to be formatted
  *                           Any following arguments are used to replace '{}'
  *                           in the main string.
@@ -126,6 +126,6 @@ function getValueOr(dictionary, key, defaultValue=null) {
     }
     catch(e) {
     }
-    
+
     return defaultValue;
 }
