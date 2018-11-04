@@ -1,6 +1,7 @@
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    const url = new URL(tabs[0].url)
     chrome.tabs.sendMessage(tabs[0].id, {action: "getMicroformats"}, function(response) {
-        render(response);
+        render(url, response);
     });
 });
 
@@ -9,15 +10,18 @@ getOptions(function(items) {
     options = items;
 });
 
-function render(response) {
+function render(url, response) {
     const microformats = response.microformats;
-    const webmentionEndpoint = response.webmentionEndpoint;
+    let webmentionEndpoint = response.webmentionEndpoint;
 
     const contentContainer = document.querySelector('#content');
 
     let webmention = new DivBuilder('card');
     if (webmentionEndpoint) {
-        webmention.add(new ABuilder().setHref(webmentionEndpoint).add(getMessage('webmentions_supported')));
+        let endpoint = coerceToAbsoluteUrl(url, webmentionEndpoint);
+        if (endpoint) {
+            webmention.add(new ABuilder().setHref(endpoint).add(getMessage('webmentions_supported')));
+        }
     }
 
     if (microformats == '') {
@@ -91,4 +95,21 @@ function updateEventListeners() {
         componentHandler.upgradeDom();
     }
     catch(e) {}
+}
+
+/**
+ * 
+ * @param  {URL} base_url        URL for the current tab
+ * @param  {String} target_url   Absolute or relative URL
+ * @return {String}              target_url if it is absolute,
+ *                               else base_url.hostname/target_url
+ */
+function coerceToAbsoluteUrl(base_url, target_url) {
+    let coerced = '';
+    try {
+        coerced = new URL(target_url).toString();
+    } catch (urlParseError) {
+        coerced = base_url.protocol + '//' + base_url.hostname + (target_url[0] == '/' ? '' : '/') + target_url;
+    }
+    return coerced;
 }
