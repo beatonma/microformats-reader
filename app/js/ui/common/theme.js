@@ -1,6 +1,6 @@
-let theme = 'day';
-let accentColor = '';
-let accentTextColor = ''
+let theme = "day";
+let accentColor = "";
+let accentTextColor = "";
 let accentApplied = false;
 
 // Automatically change basic color themes depending on time of day
@@ -8,45 +8,47 @@ let accentApplied = false;
 function setDayNightAutoTheme() {
     const h = new Date().getHours();
     if (h > 8 && h < 20) {
-        theme = 'day';
+        theme = "day";
         setTheme(theme);
-    }
-    else {
-        theme = 'night';
+    } else {
+        theme = "night";
         setTheme(theme);
     }
 }
 
 function setTheme(newtheme, args) {
-    console.log('theme:' + newtheme);
-    const stylesheet = document.getElementById('theme');
-    if (newtheme == 'day') {
-        stylesheet.setAttribute('href', chrome.extension.getURL('css/colors-day.css'));
+    console.log("theme:" + newtheme);
+    const stylesheet = document.getElementById("theme");
+    if (newtheme === "day") {
+        stylesheet.setAttribute(
+            "href",
+            chrome.extension.getURL("css/colors-day.css")
+        );
         theme = newtheme;
-    }
-    else if (newtheme == 'night') {
-        stylesheet.setAttribute('href', chrome.extension.getURL('css/colors-night.css'));
+    } else if (newtheme === "night") {
+        stylesheet.setAttribute(
+            "href",
+            chrome.extension.getURL("css/colors-night.css")
+        );
         theme = newtheme;
-    }
-    else if (newtheme == '') {
-        if (theme == '') {
+    } else if (newtheme === "") {
+        if (theme === "") {
             // This should never happen, but better include it just in case to avoid apocalypse
-            theme = 'day';
+            theme = "day";
         }
         setTheme(theme);
     }
 }
 
 function toggleTheme() {
-    if (theme == 'day') {
-        theme = 'night';
+    if (theme === "day") {
+        theme = "night";
+    } else {
+        theme = "day";
     }
-    else {
-        theme = 'day';
-    }
-    
-    setCookie('theme', theme, 3 * 60 * 60 * 1000); // Remember this theme selection for 3 hours
-    
+
+    setCookie("theme", theme, 3 * 60 * 60 * 1000); // Remember this theme selection for 3 hours
+
     setTheme(theme, true);
 }
 
@@ -57,16 +59,16 @@ function setAccent(color, textColor) {
 }
 
 function applyAccent() {
-    if (theme != 'day') {
+    if (theme !== "day") {
         return;
     }
-    if (accentColor == '' || accentTextColor == '') {
+    if (accentColor === "" || accentTextColor === "") {
         return;
     }
     if (accentApplied) {
         return;
     }
-    
+
     setTheme(accentColor, accentTextColor);
     accentApplied = true;
 }

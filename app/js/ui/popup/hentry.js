@@ -1,8 +1,8 @@
 class HEntry extends HObject {
     constructor(properties) {
         super(properties);
-        this.svgIconId = 'svg_icon_hentry';
-        this.svgIconDescription = 'card_type_hentry';
+        this.svgIconId = "svg_icon_hentry";
+        this.svgIconDescription = "card_type_hentry";
         this.factory = new HItemFactory(properties);
     }
 
@@ -15,49 +15,56 @@ class HEntry extends HObject {
     }
 
     getHeader(factory) {
-        const entryTitle = factory.get('name') || '(Article without marked-up title.)';
-        const entryUrl = factory.get('url');
+        const entryTitle =
+            factory.get("name") || "(Article without marked-up title.)";
+        const entryUrl = factory.get("url");
         let titleContent = entryTitle;
 
         if (entryUrl) {
-            titleContent = new ABuilder().setHref(entryUrl).addContent(entryTitle);
+            titleContent = new ABuilder()
+                .setHref(entryUrl)
+                .addContent(entryTitle);
         }
 
-        const display = new DivBuilder().addClass('card-section hentry-header');
-        const firstLine =
-            new DivBuilder()
-                .addClass('flex-box-row')
-                .addContent(
-                    new SpanBuilder()
-                        .addClass('p-name hentry-title')
-                        .addContent(titleContent))
-                .addContent(
-                    new DivBuilder()
-                        .allowEmpty()
-                        .addClass('mdl-layout-spacer'));
+        const display = new DivBuilder().addClass("card-section hentry-header");
+        const firstLine = new DivBuilder()
+            .addClass("flex-box-row")
+            .addContent(
+                new SpanBuilder()
+                    .addClass("p-name hentry-title")
+                    .addContent(titleContent)
+            )
+            .addContent(
+                new DivBuilder().allowEmpty().addClass("mdl-layout-spacer")
+            );
 
-        const datePublished = factory.get('published');
-        const dateUpdated = factory.get('updated');
+        const datePublished = factory.get("published");
+        const dateUpdated = factory.get("updated");
 
         if (datePublished || dateUpdated) {
-            const dates =
-                new DivBuilder()
-                    .addClass('hentry-dates');
+            const dates = new DivBuilder().addClass("hentry-dates");
 
-            const idRoot = makeHtmlId(entryTitle) + Math.round(Math.random() * 1000) + '_';
-            const idPublished = idRoot + 'published';
-            const idUpdated = idRoot + 'updated';
+            const idRoot =
+                makeHtmlId(entryTitle) + Math.round(Math.random() * 1000) + "_";
+            const idPublished = idRoot + "published";
+            const idUpdated = idRoot + "updated";
 
             if (datePublished) {
                 dates.add(
                     new SvgBuilder()
                         .setId(idPublished)
-                        .setIcon('svg_icon_published')
-                        .addClass('h-item-icon inline')
+                        .setIcon("svg_icon_published")
+                        .addClass("h-item-icon inline")
                         .addSuffix(
                             new Tooltip()
-                                    .setFor(idPublished)
-                                    .add(format('{}: {}', getMessage('hentry_published'), datePublished))
+                                .setFor(idPublished)
+                                .add(
+                                    format(
+                                        "{}: {}",
+                                        getMessage("hentry_published"),
+                                        datePublished
+                                    )
+                                )
                         )
                 );
             }
@@ -66,12 +73,18 @@ class HEntry extends HObject {
                 dates.add(
                     new SvgBuilder()
                         .setId(idUpdated)
-                        .setIcon('svg_icon_updated')
-                        .addClass('h-item-icon inline')
+                        .setIcon("svg_icon_updated")
+                        .addClass("h-item-icon inline")
                         .addSuffix(
                             new Tooltip()
-                                    .setFor(idUpdated)
-                                    .add(format('{}: {}', getMessage('hentry_updated'), dateUpdated))
+                                .setFor(idUpdated)
+                                .add(
+                                    format(
+                                        "{}: {}",
+                                        getMessage("hentry_updated"),
+                                        dateUpdated
+                                    )
+                                )
                         )
                 );
             }
@@ -80,20 +93,22 @@ class HEntry extends HObject {
 
         display.add(firstLine);
 
-        const subLine = new DivBuilder().addClass('flex-box-row hentry-subtitle');
-        subLine.add(factory.make('span', 'author').addClass('hentry-author'));
+        const subLine = new DivBuilder().addClass(
+            "flex-box-row hentry-subtitle"
+        );
+        subLine.add(factory.make("span", "author").addClass("hentry-author"));
 
-        const categoryTemplate =
-            new SpanBuilder()
-                    .addPrefix('#')
-                    .addClass('hentry-category');
+        const categoryTemplate = new SpanBuilder()
+            .addPrefix("#")
+            .addClass("hentry-category");
 
         subLine.add(
             factory
-                    .make('span', 'category', null, categoryTemplate)
-                    .addPrefix(new SpanBuilder().add(' - '))
-                    .setSeparator(', ')
-                    .renderChildren('')); // Render children only - discard parent wrapper
+                .make("span", "category", null, categoryTemplate)
+                .addPrefix(new SpanBuilder().add(" - "))
+                .setSeparator(", ")
+                .renderChildren("")
+        ); // Render children only - discard parent wrapper
         display.add(subLine);
 
         return display;

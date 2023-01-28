@@ -1,12 +1,19 @@
-function getCardIcon(elementId, iconId, tooltipId, title=null) {
-    elementId = makeHtmlId(elementId) + '_type_icon';
+function getCardIcon(elementId, iconId, tooltipId, title = null) {
+    elementId = makeHtmlId(elementId) + "_type_icon";
 
-    const typeIcon = new DivBuilder().addClass('h-title flex-box-row').allowEmpty();
+    const typeIcon = new DivBuilder()
+        .addClass("h-title flex-box-row")
+        .allowEmpty();
     if (title) {
-        typeIcon.add(new DivBuilder().addClass('h-section-label').add(title));
+        typeIcon.add(new DivBuilder().addClass("h-section-label").add(title));
     }
-    typeIcon.add(new DivBuilder().addClass('mdl-layout-spacer').allowEmpty());
-    typeIcon.add(new SvgBuilder().addClass('card-type-icon').setId(elementId).setIcon(iconId));
+    typeIcon.add(new DivBuilder().addClass("mdl-layout-spacer").allowEmpty());
+    typeIcon.add(
+        new SvgBuilder()
+            .addClass("card-type-icon")
+            .setId(elementId)
+            .setIcon(iconId)
+    );
     typeIcon.add(new Tooltip().setFor(elementId).add(getMessage(tooltipId)));
 
     return typeIcon;
@@ -14,8 +21,8 @@ function getCardIcon(elementId, iconId, tooltipId, title=null) {
 
 class HObject {
     constructor(properties) {
-        this.svgIconId = '';
-        this.svgIconDescription = '';
+        this.svgIconId = "";
+        this.svgIconDescription = "";
     }
 
     getCardIcon(name) {
@@ -28,7 +35,7 @@ class HItemFactory {
         this.microformatJson = microformatJson;
     }
 
-    get(key, default_value='') {
+    get(key, default_value = "") {
         return getValueOr(this.microformatJson, key, default_value);
     }
 
@@ -53,17 +60,22 @@ class HItemFactory {
 
         if (value && key) {
             return {
-                'key': key,
-                'value': value,
-                'classes': getValueOr(microformats_map, key)
-            }
+                key: key,
+                value: value,
+                classes: getValueOr(microformats_map, key),
+            };
         }
         return null;
     }
 
     // labelKey is a messages key for either a string or an svg icon
     // itemTemplate is a TagBuilder instance used as a base template for each item view
-    make(tagname, candidateMicroformatKeys, labelKey=null, itemTemplate=null) {
+    make(
+        tagname,
+        candidateMicroformatKeys,
+        labelKey = null,
+        itemTemplate = null
+    ) {
         let content = null;
         let microformatKey = null;
 
@@ -72,7 +84,11 @@ class HItemFactory {
             candidateMicroformatKeys = [candidateMicroformatKeys];
         }
         for (let i = 0; i < candidateMicroformatKeys.length; i++) {
-            content = getValueOr(this.microformatJson, candidateMicroformatKeys[i], null);
+            content = getValueOr(
+                this.microformatJson,
+                candidateMicroformatKeys[i],
+                null
+            );
             if (content) {
                 microformatKey = candidateMicroformatKeys[i];
                 break;
@@ -85,22 +101,26 @@ class HItemFactory {
 
         let classes = getValueOr(microformats_map, microformatKey);
 
-
         function makeItem(item) {
             const builder = new TagBuilder(tagname);
             if (itemTemplate) {
                 builder.clone(itemTemplate);
             }
-            builder
-                .add(linkify(item))
-                .addClass(classes);
+            builder.add(linkify(item)).addClass(classes);
 
             if (labelKey) {
-                if (labelKey.indexOf('svg_icon_') >= 0) {
-                    builder.addPrefix(new SvgBuilder().setIcon(labelKey).addClass('h-item-icon'));
-                }
-                else {
-                    builder.addPrefix(new SpanBuilder().add(format('{}:', getMessage(labelKey))).addClass('h-item-label'));
+                if (labelKey.indexOf("svg_icon_") >= 0) {
+                    builder.addPrefix(
+                        new SvgBuilder()
+                            .setIcon(labelKey)
+                            .addClass("h-item-icon")
+                    );
+                } else {
+                    builder.addPrefix(
+                        new SpanBuilder()
+                            .add(format("{}:", getMessage(labelKey)))
+                            .addClass("h-item-label")
+                    );
                 }
             }
             return builder;

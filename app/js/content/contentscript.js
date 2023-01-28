@@ -9,7 +9,7 @@ const useful = hasUsefulData(microformats);
 if (useful) {
     badgeText += '>';
 }
-if (badgeText != '') {
+if (badgeText !== '') {
     chrome.runtime.sendMessage({"action": "setIcon", "has_content": true}, null);
     chrome.runtime.sendMessage({"action": "setBadgeText", "text": badgeText}, null);
 }
@@ -20,7 +20,7 @@ else {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if (request.action == 'getMicroformats') {
+        if (request.action === 'getMicroformats') {
             let params = {
                 'microformats': [],
                 'webmentionEndpoint': webmentionEndpoint
@@ -84,7 +84,7 @@ function hasUsefulData(mf) {
 function getValueOr(dictionary, key, defaultValue=null) {
     try {
         let val = dictionary[key];
-        if (val == null || val == '' || val == 'undefined') {
+        if (val == null || val === '' || val === 'undefined') {
             return defaultValue;
         }
         return val;

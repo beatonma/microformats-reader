@@ -1,9 +1,9 @@
 class SortableLink {
     constructor(url) {
         this.url = String(url);
-        this.protocol = '';
-        this.domain = '';
-        this.path = '';
+        this.protocol = "";
+        this.domain = "";
+        this.path = "";
 
         this.parse();
     }
@@ -19,11 +19,17 @@ class SortableLink {
         let domain = stub.match(/^(www\.)?([^\/]*)(.*)?/);
         if (domain) {
             this.domain = String(domain[2]);
-            this.path = String(getValueOr(domain, 3, ''));
+            this.path = String(getValueOr(domain, 3, ""));
         }
     }
 
     asString() {
-        return format('{}|{}|{}:{}', this.protocol, this.domain, this.path, this.url);
+        return format(
+            "{}|{}|{}:{}",
+            this.protocol,
+            this.domain,
+            this.path,
+            this.url
+        );
     }
 }

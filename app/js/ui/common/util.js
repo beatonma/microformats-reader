@@ -1,7 +1,7 @@
 function getMessage(key) {
-    let message =  chrome.i18n.getMessage(key);
-    if (message == 'undefined') {
-        console.log('Could not get message for key=' + key);
+    let message = chrome.i18n.getMessage(key);
+    if (message == "undefined") {
+        console.log("Could not get message for key=" + key);
         return key;
     }
     return message;
@@ -13,14 +13,13 @@ function getMessage(key) {
  * @param  {[type]} Text to show instead of the link address
  * @return {[type]} obj, or obj with all links wrapped in <a></a> tags.
  */
-function linkify(obj, text=null) {
+function linkify(obj, text = null) {
     try {
         return String(obj).replace(
             /\s*(mailto:([^\s<>]+)|(\w+:\/\/[^\s<>]+)|(\s*(sms:([^\s<>]+)))|(\s*(tel:([^\s<>]+))))/g,
-            format('<a href="$1">{}</a>', (text || '$2$3$4'))
+            format('<a href="$1">{}</a>', text || "$2$3$4")
         );
-    }
-    catch(e) {
+    } catch (e) {
         // obj is not a String
         return obj;
     }
@@ -31,7 +30,9 @@ function linkify(obj, text=null) {
  * an HTML element.
  */
 function makeHtmlId(text) {
-    return String(text).replace(/[^\w]+/g, '-').slice(0, 15);
+    return String(text)
+        .replace(/[^\w]+/g, "-")
+        .slice(0, 15);
 }
 
 /**
@@ -39,7 +40,9 @@ function makeHtmlId(text) {
  * @return {string} A formatted link for a Google Maps search
  */
 function getMapsUrl(query) {
-    let url = 'https://www.google.com/maps/search/' + String(query).replace(/[\s]+/g, '+');
+    let url =
+        "https://www.google.com/maps/search/" +
+        String(query).replace(/[\s]+/g, "+");
     console.log(format('getMapsUrl("{}") -> "{}"', query, url));
     return url;
 }
@@ -51,10 +54,9 @@ function yearsSince(date) {
         const now = new Date();
 
         const diffMillis = now.getTime() - then.getTime();
-        const years = diffMillis / (1000*60*60*24*365);
+        const years = diffMillis / (1000 * 60 * 60 * 24 * 365);
         return Math.floor(years);
-    }
-    catch(e) {
+    } catch (e) {
         console.log('could not parse date "' + date + '": ' + e);
     }
 
@@ -96,7 +98,7 @@ function formatOrEmpty(text) {
     if (arguments.length > 1) {
         let edited = false;
         for (let i = 1; i < arguments.length; i++) {
-            if (!arguments[i] || arguments[i] == '') {
+            if (!arguments[i] || arguments[i] == "") {
                 continue;
             }
             edited = true;
@@ -106,7 +108,7 @@ function formatOrEmpty(text) {
             return text;
         }
     }
-    return '';
+    return "";
 }
 
 /**
@@ -116,16 +118,14 @@ function formatOrEmpty(text) {
  * @return {[type]}         The value from dictionary that corresponds to key,
  *                          or defaultValue if that value is not found.
  */
-function getValueOr(dictionary, key, defaultValue=null) {
+function getValueOr(dictionary, key, defaultValue = null) {
     try {
         let val = dictionary[key];
-        if (val == null || val == '' || val == 'undefined') {
+        if (val == null || val == "" || val == "undefined") {
             return defaultValue;
         }
         return val;
-    }
-    catch(e) {
-    }
+    } catch (e) {}
 
     return defaultValue;
 }

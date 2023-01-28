@@ -2,7 +2,7 @@
  * A class to simplify the construction of well-formatted HTML tags.
  */
 class TagBuilder {
-    constructor(tagname, classname=null) {
+    constructor(tagname, classname = null) {
         // The type of tag e.g. 'span', 'div'
         this.tagname = tagname;
 
@@ -11,8 +11,8 @@ class TagBuilder {
         this.children = [];
 
         // Separators can be inserted between child items to construct a nice list.
-        this.separator = '';
-        this.finalSeparator = '';
+        this.separator = "";
+        this.finalSeparator = "";
 
         // Conditional elements, constructed in the same way as normal content
         // except these will only be used if content does not render to an
@@ -28,7 +28,7 @@ class TagBuilder {
         this.after = [];
 
         // Stuff defined within the start tag
-        this.id = '';
+        this.id = "";
         this.classes = [];
         this.styles = [];
         this.attrs = [];
@@ -102,13 +102,13 @@ class TagBuilder {
         return this;
     }
 
-    setSeparator(separator, finalSeparator=null) {
+    setSeparator(separator, finalSeparator = null) {
         this.separator = separator;
         this.finalSeparator = finalSeparator || separator;
         return this;
     }
 
-    allowEmpty(allow=true) {
+    allowEmpty(allow = true) {
         this.hideIfEmpty = !allow;
         return this;
     }
@@ -124,9 +124,8 @@ class TagBuilder {
                 const item = children[i];
                 let content = null;
                 if (item instanceof TagBuilder) {
-                    content = item.render('');
-                }
-                else {
+                    content = item.render("");
+                } else {
                     content = item;
                 }
 
@@ -139,7 +138,7 @@ class TagBuilder {
     }
 
     getFormattedSpecialAttributes() {
-        return ''
+        return "";
     }
 
     /**
@@ -165,17 +164,17 @@ class TagBuilder {
     }
 
     // Only render children of this tag, not the tag itself
-    renderChildren(empty='') {
+    renderChildren(empty = "") {
         this.renderContainer = false;
         return this.render(empty);
     }
 
     /**
-     * @param  {object} Empty value to return if this TagBuilder has no content
+     * @param  {object} empty value to return if this TagBuilder has no content
      * @return {string} String representation of this tag, or the value of empty
      */
-    render(empty='') {
-        if (this.hideIfEmpty && this.children.length == 0) {
+    render(empty = "") {
+        if (this.hideIfEmpty && this.children.length === 0) {
             return empty;
         }
 
@@ -186,8 +185,7 @@ class TagBuilder {
                 const item = content_array[i];
                 if (item instanceof TagBuilder) {
                     rendered.push(item.render(empty));
-                }
-                else {
+                } else {
                     rendered.push(item);
                 }
             }
@@ -196,22 +194,19 @@ class TagBuilder {
 
         // Concat a list together using the appropriate item separators
         function joinWithSeparators(content_array, separator, finalSeparator) {
-            if (separator == finalSeparator) {
+            if (separator === finalSeparator) {
                 return content_array.join(separator);
             }
 
-            let formatted = '';
+            let formatted = "";
 
             for (let i = 0; i < content_array.length; i++) {
-                formatted += (
-                    i == 0
-                    ? ''
-                    : (
-                        i == content_array.length - 1
+                formatted +=
+                    (i === 0
+                        ? ""
+                        : i === content_array.length - 1
                         ? finalSeparator
-                        : separator
-                    )
-                ) + content_array[i];
+                        : separator) + content_array[i];
             }
             return formatted;
         }
@@ -222,49 +217,57 @@ class TagBuilder {
 
         if (!this.renderContainer) {
             return formatOrEmpty(
-                formattedPrefix.join('') + '{}' + formattedSuffix.join(''),
-                joinWithSeparators(formattedChildren, this.separator, this.finalSeparator)
-            )
+                formattedPrefix.join("") + "{}" + formattedSuffix.join(""),
+                joinWithSeparators(
+                    formattedChildren,
+                    this.separator,
+                    this.finalSeparator
+                )
+            );
         }
 
         const formattedBefore = renderContent(this.before);
         const formattedAfter = renderContent(this.after);
 
         return (
-            formatOrEmpty('{}', formattedBefore.join(''))
-            + format('<{}', this.tagname)
-            + formatOrEmpty(' id="{}"', this.id)
-            + formatOrEmpty(' class="{}"', this.classes.join(' '))
-            + formatOrEmpty(' style="{}"', this.styles.join(';'))
-            + this.getFormattedSpecialAttributes()  // Include tag-specific attributes like rel and href
-            + formatOrEmpty(' {}', this.attrs.join(' '))
-            + '>'
-            + formatOrEmpty(
-                formattedPrefix.join('') + '{}' + formattedSuffix.join(''),
-                joinWithSeparators(formattedChildren, this.separator, this.finalSeparator)
-            )
-            + format('</{}>', this.tagname)
-            + formatOrEmpty('{}', formattedAfter.join(''))
+            formatOrEmpty("{}", formattedBefore.join("")) +
+            format("<{}", this.tagname) +
+            formatOrEmpty(' id="{}"', this.id) +
+            formatOrEmpty(' class="{}"', this.classes.join(" ")) +
+            formatOrEmpty(' style="{}"', this.styles.join(";")) +
+            this.getFormattedSpecialAttributes() + // Include tag-specific attributes like rel and href
+            formatOrEmpty(" {}", this.attrs.join(" ")) +
+            ">" +
+            formatOrEmpty(
+                formattedPrefix.join("") + "{}" + formattedSuffix.join(""),
+                joinWithSeparators(
+                    formattedChildren,
+                    this.separator,
+                    this.finalSeparator
+                )
+            ) +
+            format("</{}>", this.tagname) +
+            formatOrEmpty("{}", formattedAfter.join(""))
         );
     }
 }
 
 class DivBuilder extends TagBuilder {
-    constructor(classname=null) {
-        super('div', classname);
+    constructor(classname = null) {
+        super("div", classname);
     }
 }
 
 class SpanBuilder extends TagBuilder {
-    constructor(classname=null) {
-        super('span', classname);
+    constructor(classname = null) {
+        super("span", classname);
     }
 }
 
 class SvgBuilder extends TagBuilder {
-    constructor(classname=null) {
-        super('svg', classname);
-        this.viewbox = '';
+    constructor(classname = null) {
+        super("svg", classname);
+        this.viewbox = "";
     }
 
     setIcon(iconId) {
@@ -288,9 +291,9 @@ class SvgBuilder extends TagBuilder {
 
 class ABuilder extends TagBuilder {
     constructor() {
-        super('a');
-        this.href = '';
-        this.rel = '';
+        super("a");
+        this.href = "";
+        this.rel = "";
     }
 
     setHref(target) {
@@ -307,15 +310,17 @@ class ABuilder extends TagBuilder {
      * @override
      */
     getFormattedSpecialAttributes() {
-        return formatOrEmpty(' href="{}"', this.href)
-                + formatOrEmpty(' rel="{}"', this.rel);
+        return (
+            formatOrEmpty(' href="{}"', this.href) +
+            formatOrEmpty(' rel="{}"', this.rel)
+        );
     }
 }
 
 class Tooltip extends TagBuilder {
     constructor() {
-        super('div');
-        this.addClass('mdl-tooltip');
+        super("div");
+        this.addClass("mdl-tooltip");
     }
 
     setFor(targetId) {
