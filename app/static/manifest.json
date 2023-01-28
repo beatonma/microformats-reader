@@ -1,7 +1,7 @@
 {
-    "manifest_version": 2,
-    "name": "Microformats Reader",
-    "version": "0.5",
+    "manifest_version": 3,
+    "name": "DEV Microformats Reader",
+    "version": "1.0",
 
     "description": "Displays microformat data from the active page",
 
@@ -15,37 +15,38 @@
 
     "permissions": [
         "tabs",
-        "storage",
-        "http://*/",
-        "https://*/"
+        "storage"
     ],
     "web_accessible_resources": [
 
     ],
 
-    "browser_action": {
+    "action": {
         "default_popup": "popup.html"
     },
 
     "options_page": "options.html",
     "options_ui": {
-        "chrome_style": true,
         "page": "options.html"
     },
 
     "background": {
-        "scripts": ["js/background/background.js"]
+        "service_worker": "service-worker.js"
     },
 
     "content_scripts": [
         {
-            "matches": ["http://*/*", "https://*/*"],
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
             "all_frames": true,
             "js": [
-                "js/lib/microformat-shiv.js",
-                "js/content/contentscript.js"],
+                "lib/microformat-shiv.js",
+                "content-script.js"
+            ],
             "run_at": "document_end"
         }
     ],
-    "homepage_url": "https://beatonma.org/app/microformats-reader"
+    "homepage_url": "https://beatonma.org/app/browser-microformats-reader/"
 }

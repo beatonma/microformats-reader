@@ -2,39 +2,55 @@
   "name": "microformats",
   "version": "1.0.0",
   "description": "Reader for microformat-compliant content",
-  "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --watch --config webpack.dev.js",
+    "test": "jest"
   },
   "keywords": [
     "chrome",
     "extension",
-    "microformat"
+    "indieweb",
+    "microformat",
+    "webmention"
   ],
   "author": "Michael Beaton",
   "license": "MIT",
   "devDependencies": {
-    "bower": "^1.8.4",
-    "del": "^2.2.2",
-    "fs": "0.0.1-security",
-    "gulp": "^3.9.1",
-    "gulp-babel-minify": "^0.1.12",
-    "gulp-bower-files": "^0.2.7",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.3",
-    "gulp-if": "^2.0.2",
-    "gulp-json-editor": "^2.4.2",
-    "gulp-rename": "^1.4.0",
-    "gulp-replace": "^0.5.4",
-    "gulp-sass": "^3.2.1",
-    "gulp-shell": "^0.6.5",
-    "gulp-svg2png": "^2.0.2",
-    "gulp-useref": "^3.1.6",
-    "gulp-zip": "^4.2.0",
-    "pump": "^1.0.3",
-    "run-sequence": "^1.2.2"
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-transform-modules-commonjs": "^7.20.11",
+    "@babel/plugin-transform-react-constant-elements": "^7.20.2",
+    "@babel/plugin-transform-react-inline-elements": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@babel/runtime": "^7.20.13",
+    "@types/gulp": "^4.0.9",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "babel-loader": "^9.1.2",
+    "chrome-types": "^0.1.167",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "gulp": "^4.0.2",
+    "jest": "~26.6",
+    "jest-chrome": "^0.8.0",
+    "mini-css-extract-plugin": "^2.7.2",
+    "prettier": "^2.6.2",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "tabWidth": 4
   },
   "dependencies": {
-    "main-bower-files": "^2.13.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
