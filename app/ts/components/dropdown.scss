@@ -1,0 +1,39 @@
+@use "../styles";
+@use "../styles/colors";
+@use "../styles/borders";
+
+.dropdown {
+  width: stretch;
+  padding: 1ch;
+  @include borders.bordered;
+
+  &[data-expanded=true] {
+    .dropdown-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  &[data-expanded=false] {
+    .dropdown-content {
+      height: 0;
+      overflow-y:clip;
+    }
+  }
+
+  .dropdown-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: var(--fs-h5);
+  }
+
+  .dropdown-icon {
+    @extend %hover;
+    transition: all 200ms;
+  }
+
+  .dropdown-content {
+    transition: all 200ms;
+    height: max-content;
+  }
+}

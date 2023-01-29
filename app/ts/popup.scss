@@ -1,4 +1,31 @@
+@use "./styles";
+@use "./styles/borders";
+
+/**
+ * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
+ */
+$popup-min-width: 25px;
+$popup-min-height: 25px;
+$popup-max-width: 800px;
+$popup-max-height: 600px;
+
+
 body {
-  width: 120ch;
-  height: 30rem;
+  font-size: var(--fs-400);
+  min-width: $popup-min-width;
+  min-height: $popup-min-height;
+  max-width :$popup-max-width;
+  max-height: $popup-max-height;
+  width: 64ch;
+  height: max-content;
+}
+
+pre {
+  @include borders.bordered();
+  overflow-x: scroll;
+}
+
+a, a:visited {
+  color: var(--accent);
+  text-decoration: none;
 }

@@ -1,0 +1,72 @@
+@use "dark";
+@use "light";
+
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --red: #ee4545;
+    --blue: #0e70b8;
+    --green: #16b06b;
+    --purple: #823dae;
+    --pink: #e13255;
+    --yellow: #fdf472;
+    --orange: #d86900;
+    --grey: #636363;
+
+    --text-light-primary: rgba(255, 255, 255, 0.83);
+    --text-light-secondary: rgba(255, 255, 255, 0.54);
+    --text-light-tertiary: rgba(255, 255, 255, 0.25);
+    --text-dark-primary: rgba(0, 0, 0, 0.83);
+    --text-dark-secondary: rgba(0, 0, 0, 0.54);
+    --text-dark-tertiary: rgba(0, 0, 0, 0.25);
+    --text-light: var(--text-light-primary);
+    --text-dark: var(--text-dark-primary);
+    --on-background: var(--text-primary);
+    --on-surface: var(--text-primary);
+
+    --local-primary-100: var(--primary-100);
+    --local-primary-400: var(--primary-400);
+    --local-primary-900: var(--primary-900);
+    --local-primary: var(--local-primary-400);
+
+    --local-on-primary-100: var(--local-primary-900);
+    --local-on-primary-400: var(--text-light);
+    --local-on-primary-900: var(--local-primary-100);
+    --local-on-primary: var(--local-on-primary-400);
+
+    --local-accent-100: var(--accent-100);
+    --local-accent-400: var(--accent-400);
+    --local-accent-900: var(--accent-900);
+    --local-accent: var(--local-accent-400);
+
+    --local-on-accent-100: var(--local-accent-900);
+    --local-on-accent-400: var(--text-light);
+    --local-on-accent-900: var(--local-accent-100);
+    --local-on-accent: var(--local-on-accent-400);
+
+    --input-text-background: var(--hover);
+
+    accent-color: var(--local-accent);
+}
+
+html {
+    @media (prefers-color-scheme: no-preference) {
+        @include light.light();
+    }
+
+    @media (prefers-color-scheme: dark) {
+        @include dark.dark();
+
+        &.light {
+            @include light.light();
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        @include light.light();
+
+        &.dark {
+            @include dark.dark();
+        }
+    }
+}

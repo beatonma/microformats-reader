@@ -37,12 +37,10 @@
     "content_scripts": [
         {
             "matches": [
-                "http://*/*",
-                "https://*/*"
+                "https://*/*",
+                "http://*/*"
             ],
-            "all_frames": true,
             "js": [
-                "lib/microformat-shiv.js",
                 "content-script.js"
             ],
             "run_at": "document_end"

@@ -1,0 +1,37 @@
+@mixin dark {
+    --text-primary: var(--text-light-primary);
+    --text-secondary: var(--text-light-secondary);
+    --text-tertiary: var(--text-light-tertiary);
+
+    --text-primary-invert: var(--text-dark-primary);
+    --text-secondary-invert: var(--text-dark-secondary);
+    --text-tertiary-invert: var(--text-dark-tertiary);
+
+    --primary-100: #353442;
+    --primary-400: #4b495d;
+    --primary-900: #8783a8;
+    --primary: var(--primary-400);
+    --on-primary: var(--text-light);
+
+    --accent-100: #734343;
+    --accent-400: #f18b8d;
+    --accent-900: #eac2c3;
+    --accent: var(--accent-400);
+    --on-accent: var(--text-light);
+
+    --hover: rgba(255, 255, 255, 0.08);
+
+    // Embedded things that could sort of be a card of their own but are already in a parent card
+    // e.g. tables
+    --embedded-background: #272727;
+    --embedded-background-highlight: #555555;
+    --embedded-text-primary: var(--text-light-primary);
+    --embedded-text-secondary: var(--text-light-secondary);
+    --embedded-text-tertiary: var(--text-light-secondary);
+
+    // v2
+    --background: #252225;
+    --surface: #31303a;
+
+    --warn: #4d2331;
+}

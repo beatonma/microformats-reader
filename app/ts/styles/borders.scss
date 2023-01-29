@@ -1,0 +1,5 @@
+@mixin bordered {
+  border: 1px solid var(--accent);
+  border-radius: 1ch;
+  padding: 1ch;
+}
