@@ -10,8 +10,26 @@ export const RelmeLinks = (props: RelLinkProps) => {
 
     if (!links) return null;
 
+    const onClickVerify = () => {
+        console.log("TODO verify rel=me links");
+    };
+
     return (
-        <Dropdown header={"rel=me"}>
+        <Dropdown
+            header={
+                <>
+                    <span>rel=me</span>
+                </>
+            }
+            defaultIsExpanded={true}
+            className="relme-links"
+        >
+            <button
+                onClick={onClickVerify}
+                title='Check each claimed rel="me" for return links.'
+            >
+                Verify
+            </button>
             {links.map(link => (
                 <div>
                     <ExternalLink href={link.href} title={link.title}>
@@ -25,40 +43,58 @@ export const RelmeLinks = (props: RelLinkProps) => {
 
 interface IconRelLinkProps extends RelLinkProps, HTMLProps<HTMLDivElement> {
     icon: Icons;
+    displayTitle: string;
 }
-const IconLink = (props: IconRelLinkProps) => {
-    const { className, links, title, icon } = props;
-    const link = links?.[0] ?? null;
 
-    if (!link) return null;
+const QuickLinks = (props: IconRelLinkProps) => {
+    const { links, displayTitle, title, icon, ...rest } = props;
+
+    if (!links) return null;
 
     return (
-        <div className={`${className || ""} quick-link`}>
-            <ExternalLink href={link.href} title={title}>
-                <Icon icon={icon} />
-            </ExternalLink>
-        </div>
+        <>
+            {links.map(link => (
+                <div className={`quick-link`} {...rest} key={link.href}>
+                    <ExternalLink
+                        title={link.title ?? title ?? displayTitle}
+                        href={link.href}
+                    >
+                        <Icon icon={icon} />
+                        <div className="link-title">{displayTitle}</div>
+                    </ExternalLink>
+                </div>
+            ))}
+        </>
     );
 };
 
 export const WebmentionEndpoint = (props: RelLinkProps) => {
     return (
-        <IconLink
+        <QuickLinks
             links={props.links}
             icon={Icons.WebmentionEndpoint}
-            className={"webmention-endpoint"}
             title={"Webmention endpoint"}
+            displayTitle={`Webmentions`}
         />
     );
 };
 
 export const PgpKey = (props: RelLinkProps) => {
     return (
-        <IconLink
+        <QuickLinks
             links={props.links}
             icon={Icons.PgpKey}
-            className={"pgp-key"}
-            title={`PGP Key`}
+            displayTitle={`PGP Key`}
+        />
+    );
+};
+
+export const Feeds = (props: RelLinkProps) => {
+    return (
+        <QuickLinks
+            icon={Icons.RssFeed}
+            displayTitle="RSS"
+            links={props.links}
         />
     );
 };

@@ -4,6 +4,7 @@ import "./popup.scss";
 import { Message, MessageResponse } from "./message";
 import { compatBrowser } from "./compat";
 import {
+    Feeds,
     PgpKey,
     RelmeLinks,
     WebmentionEndpoint,
@@ -37,8 +38,9 @@ const PopupUI = () => {
 
     return (
         <div>
-            <Row alignment={HorizontalAlignment.Center}>
+            <Row alignment={HorizontalAlignment.Center} id="quick_links">
                 <WebmentionEndpoint links={relLinks?.webmention} />
+                <Feeds links={relLinks?.feeds} />
                 <PgpKey links={relLinks?.pgp} />
             </Row>
             <RelmeLinks links={relLinks?.relme} />
