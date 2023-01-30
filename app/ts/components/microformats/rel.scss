@@ -1,13 +1,13 @@
 @use "../../styles/hover";
 
-.webmention-endpoint {
+.quick-link {
   @extend %hover;
   display: inline-flex;;
   font-size: var(--fs-h2);
 
   color: var(--accent);
 
-  .material-icons {
+  .material-symbols-outlined {
     cursor: pointer;
     margin: .25ch;
   }

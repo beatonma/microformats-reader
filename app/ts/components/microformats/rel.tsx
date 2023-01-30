@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from "react";
+import React, { HTMLProps } from "react";
 import { RelLinkProps } from "./parsing";
 import { Dropdown } from "../dropdown";
 import { ExternalLink } from "../external-link";
@@ -23,9 +23,7 @@ export const RelmeLinks = (props: RelLinkProps) => {
     );
 };
 
-interface IconRelLinkProps
-    extends RelLinkProps,
-        HTMLAttributes<HTMLDivElement> {
+interface IconRelLinkProps extends RelLinkProps, HTMLProps<HTMLDivElement> {
     icon: Icons;
 }
 const IconLink = (props: IconRelLinkProps) => {
@@ -35,7 +33,7 @@ const IconLink = (props: IconRelLinkProps) => {
     if (!link) return null;
 
     return (
-        <div className={className}>
+        <div className={`${className || ""} quick-link`}>
             <ExternalLink href={link.href} title={title}>
                 <Icon icon={icon} />
             </ExternalLink>
@@ -50,6 +48,17 @@ export const WebmentionEndpoint = (props: RelLinkProps) => {
             icon={Icons.WebmentionEndpoint}
             className={"webmention-endpoint"}
             title={"Webmention endpoint"}
+        />
+    );
+};
+
+export const PgpKey = (props: RelLinkProps) => {
+    return (
+        <IconLink
+            links={props.links}
+            icon={Icons.PgpKey}
+            className={"pgp-key"}
+            title={`PGP Key`}
         />
     );
 };

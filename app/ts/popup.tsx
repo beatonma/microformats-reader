@@ -3,9 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./popup.scss";
 import { Message, MessageResponse } from "./message";
 import { compatBrowser } from "./compat";
-import { RelmeLinks, WebmentionEndpoint } from "./components/microformats/rel";
+import {
+    PgpKey,
+    RelmeLinks,
+    WebmentionEndpoint,
+} from "./components/microformats/rel";
 import { parseRelLinks, RelLinks } from "./components/microformats/parsing";
 import { MicroformatsRaw } from "./components/microformats/raw";
+import { Row, HorizontalAlignment } from "./components/layout";
 
 const PopupUI = () => {
     const [microformats, setMicroformats] = useState(null);
@@ -32,7 +37,10 @@ const PopupUI = () => {
 
     return (
         <div>
-            <WebmentionEndpoint links={relLinks?.webmention} />
+            <Row alignment={HorizontalAlignment.Center}>
+                <WebmentionEndpoint links={relLinks?.webmention} />
+                <PgpKey links={relLinks?.pgp} />
+            </Row>
             <RelmeLinks links={relLinks?.relme} />
             <MicroformatsRaw microformats={microformats} />
         </div>

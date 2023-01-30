@@ -1,9 +1,9 @@
-import React, { HTMLAttributes, ReactNode } from "react";
+import React, { HTMLProps, ReactNode } from "react";
 import { useState } from "react";
 import { Icon, Icons } from "./icons";
 import "./dropdown.scss";
 
-interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
+interface DropdownProps extends HTMLProps<HTMLDivElement> {
     defaultIsExpanded?: boolean;
     header: ReactNode | string;
 }

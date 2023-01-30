@@ -1,4 +1,6 @@
 %hover {
+  transition: background-color 200ms, borderr-radius 200ms;
+
   &:hover {
     background-color: var(--hover);
     border-radius: 6px;
