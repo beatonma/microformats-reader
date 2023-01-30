@@ -14,12 +14,8 @@ export const Dropdown = (props: DropdownProps) => {
     const toggleState = () => setExpanded(!isExpanded);
 
     return (
-        <div
-            className="dropdown"
-            data-expanded={isExpanded}
-            onClick={toggleState}
-        >
-            <div className="dropdown-header">
+        <div className="dropdown" data-expanded={isExpanded}>
+            <div className="dropdown-header" onClick={toggleState}>
                 {header}
                 <Icon className="dropdown-icon" icon={Icons.ExpandMore} />
             </div>

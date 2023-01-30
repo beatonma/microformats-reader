@@ -9,6 +9,5 @@ export interface MessageRequest {
 }
 
 export interface MessageResponse {
-    webmentionEndpoint?: string;
     microformats: ParsedDocument;
 }

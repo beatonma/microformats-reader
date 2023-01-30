@@ -1,0 +1,1 @@
+export { compatBrowser } from "./compat";

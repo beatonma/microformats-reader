@@ -1,0 +1,14 @@
+@use "../../styles/hover";
+
+.webmention-endpoint {
+  @extend %hover;
+  display: inline-flex;;
+  font-size: var(--fs-h2);
+
+  color: var(--accent);
+
+  .material-icons {
+    cursor: pointer;
+    margin: .25ch;
+  }
+}

@@ -3,6 +3,7 @@ import "./icons.scss";
 
 export enum Icons {
     ExpandMore = "expand_more",
+    WebmentionEndpoint = "forum",
 }
 
 interface IconProps extends HTMLAttributes<HTMLSpanElement> {
@@ -10,5 +11,9 @@ interface IconProps extends HTMLAttributes<HTMLSpanElement> {
 }
 export const Icon = (props: IconProps) => {
     const { icon, className } = props;
-    return <span className={`${className} material-icons`}>{icon}</span>;
+    return (
+        <span className={`${className ?? ""} material-symbols-outlined`}>
+            {icon}
+        </span>
+    );
 };

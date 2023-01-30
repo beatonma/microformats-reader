@@ -11,7 +11,7 @@ $popup-max-height: 600px;
 
 
 body {
-  font-size: var(--fs-400);
+  font-size: var(--fs-100);
   min-width: $popup-min-width;
   min-height: $popup-min-height;
   max-width :$popup-max-width;
@@ -28,4 +28,8 @@ pre {
 a, a:visited {
   color: var(--accent);
   text-decoration: none;
+}
+
+section {
+  margin-bottom: 3rem;
 }

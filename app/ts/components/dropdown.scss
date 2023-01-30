@@ -5,6 +5,7 @@
 .dropdown {
   width: stretch;
   padding: 1ch;
+  margin-bottom: 1ch;
   @include borders.bordered;
 
   &[data-expanded=true] {
@@ -15,7 +16,8 @@
 
   &[data-expanded=false] {
     .dropdown-content {
-      height: 0;
+      max-height: 0;
+      opacity: 0;
       overflow-y:clip;
     }
   }
@@ -29,11 +31,14 @@
 
   .dropdown-icon {
     @extend %hover;
+    width: 26px !important;
+    height: 26px !important;
     transition: all 200ms;
   }
 
   .dropdown-content {
-    transition: all 200ms;
+    transition: all 200ms ease-in, opacity 200ms;
+    max-height: 100vh;
     height: max-content;
   }
 }
