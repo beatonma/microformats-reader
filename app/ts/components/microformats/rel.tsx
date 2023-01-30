@@ -1,5 +1,5 @@
 import React, { HTMLProps } from "react";
-import { RelLinkProps } from "./parsing";
+import { RelLinkProps } from "../../data/related-links";
 import { Dropdown } from "../dropdown";
 import { ExternalLink } from "../external-link";
 import { Icon, Icons } from "../icons";
@@ -28,10 +28,10 @@ export const RelmeLinks = (props: RelLinkProps) => {
                 onClick={onClickVerify}
                 title='Check each claimed rel="me" for return links.'
             >
-                Verify
+                TODO Verify
             </button>
             {links.map(link => (
-                <div>
+                <div key={link.href}>
                     <ExternalLink href={link.href} title={link.title}>
                         {link.text}
                     </ExternalLink>
