@@ -3,9 +3,8 @@ import {
     MicroformatProperties,
     ParsedDocument,
 } from "microformats-parser/dist/types";
-import { HGeo } from "./h-geo";
 
-interface HCardNameDetail {
+export interface HCardNameDetail {
     honorificPrefix?: string;
     honorificSuffix?: string;
     givenName?: string;
@@ -13,6 +12,12 @@ interface HCardNameDetail {
     familyName?: string;
     sortBy?: string;
     nickname?: string;
+}
+
+export interface HGeo {
+    latitude?: string;
+    longitude?: string;
+    altitude?: string;
 }
 
 interface HAdr extends HGeo {
@@ -90,7 +95,6 @@ const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
 
         // Return HAdr if at least one field is populated, otherwise null.
         const accepted = Object.values(result).find(it => !!it) != null;
-        console.log(`${accepted} result: ${JSON.stringify(result, null, 2)}`);
         return accepted ? result : null;
     };
 
