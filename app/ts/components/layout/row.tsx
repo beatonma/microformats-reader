@@ -16,10 +16,16 @@ interface RowProps extends HTMLProps<HTMLDivElement> {
     alignment?: HorizontalAlignment;
 }
 export const Row = (props: RowProps) => {
-    const { alignment, style, ...rest } = props;
+    const { alignment, style, className, ...rest } = props;
     const editableStyle: React.CSSProperties = style ?? {};
     if (alignment) {
         editableStyle.justifyContent = alignment;
     }
-    return <div className={`row`} style={editableStyle} {...rest} />;
+    return (
+        <div
+            className={`row ${className ?? ""}`}
+            style={editableStyle}
+            {...rest}
+        />
+    );
 };

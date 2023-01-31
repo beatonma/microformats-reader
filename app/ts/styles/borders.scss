@@ -1,3 +1,8 @@
+:root {
+  --border-radius-small: 6px;
+  --border-radius-medium: 10px;
+}
+
 @mixin bordered {
   border: 1px solid var(--accent);
   border-radius: 1ch;

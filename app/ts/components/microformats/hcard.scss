@@ -1,0 +1,36 @@
+$avatar-size: 128px;
+$pip-size: 24px; // Picture-in-picture size, used for logo if photo and logo both available
+
+
+.h-card {
+  background-color: var(--surface);
+  padding: var(--space-1x);
+  margin-block: var(--space-2x);
+
+  .avatar {
+    display: inline-flex;
+    position: relative;
+    width: $avatar-size;
+    height: $avatar-size;
+    border-radius: var(--border-radius-medium);
+    margin-right: var(--space-1x);
+
+    > img:first-child {
+      width: $avatar-size;
+      height: $avatar-size;
+      border-radius: var(--border-radius-medium);
+    }
+
+    > img:nth-child(2) {
+      position: absolute;
+      object-fit: contain;
+      width: $pip-size;
+      height: $pip-size;
+      bottom: 0;
+      right: 0;
+      margin: var(--border-radius-small);
+      border-radius: var(--border-radius-small);
+      border: 1px solid var(--text-light-secondary);
+    }
+  }
+}
