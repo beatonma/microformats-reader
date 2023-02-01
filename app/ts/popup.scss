@@ -28,6 +28,7 @@ body {
   width: 64ch;
   height: max-content;
   margin-inline: auto;
+  overflow-x: clip;
   overflow-y: scroll;
 }
 

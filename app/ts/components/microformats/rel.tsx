@@ -1,10 +1,14 @@
 import React, { HTMLProps } from "react";
-import { RelLinkProps } from "../../data/related-links";
+import { RelLink } from "../../data/related-links";
 import { Dropdown } from "../dropdown";
 import { ExternalLink } from "../external-link";
 import { Icon, Icons } from "../icons";
 import "./rel.scss";
+import { _ } from "../../compat/compat";
 
+interface RelLinkProps {
+    links: RelLink[];
+}
 export const RelmeLinks = (props: RelLinkProps) => {
     const { links } = props;
 
@@ -73,8 +77,8 @@ export const WebmentionEndpoint = (props: RelLinkProps) => {
         <QuickLinks
             links={props.links}
             icon={Icons.WebmentionEndpoint}
-            title={"Webmention endpoint"}
-            displayTitle={`Webmentions`}
+            title={_("quicklink_webmentions_endpoint_hover")}
+            displayTitle={_("quicklink_webmentions_endpoint")}
         />
     );
 };
@@ -84,7 +88,7 @@ export const PgpKey = (props: RelLinkProps) => {
         <QuickLinks
             links={props.links}
             icon={Icons.PgpKey}
-            displayTitle={`PGP Key`}
+            displayTitle={_("quicklink_pgp")}
         />
     );
 };
@@ -93,7 +97,7 @@ export const Feeds = (props: RelLinkProps) => {
     return (
         <QuickLinks
             icon={Icons.RssFeed}
-            displayTitle="RSS"
+            displayTitle={_("quicklink_rss")}
             links={props.links}
         />
     );

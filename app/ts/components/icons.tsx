@@ -12,10 +12,13 @@ interface IconProps extends HTMLProps<HTMLSpanElement> {
     icon: Icons;
 }
 export const Icon = (props: IconProps) => {
-    const { icon, className } = props;
+    const { icon, className, ...rest } = props;
 
     return (
-        <span className={`${className ?? ""} material-symbols-outlined icon`}>
+        <span
+            className={`${className ?? ""} material-symbols-outlined icon`}
+            {...rest}
+        >
             {icon}
         </span>
     );
