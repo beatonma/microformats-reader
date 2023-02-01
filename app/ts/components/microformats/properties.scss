@@ -1,0 +1,27 @@
+.property {
+  margin-block: var(--space-half);
+  align-items: center;
+
+  .property-name {
+    font-size: var(--fs-caption);
+    letter-spacing: 0.1ch;
+    font-weight: bold;
+    margin-right: var(--space-1x);
+
+    &::after {
+      content: ":"
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .property-value {
+    font-size: var(--fs-100);
+  }
+
+  .property-icon {
+    margin-right: var(--space-half);
+  }
+}

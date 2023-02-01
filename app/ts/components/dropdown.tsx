@@ -10,13 +10,17 @@ interface DropdownProps extends HTMLProps<HTMLDivElement> {
     headerClassName?: string;
 }
 export const Dropdown = (props: DropdownProps) => {
-    const { header, headerClassName, defaultIsExpanded, children } = props;
+    const { header, headerClassName, className, defaultIsExpanded, children } =
+        props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
 
     const toggleState = () => setExpanded(!isExpanded);
 
     return (
-        <div className="dropdown" data-expanded={isExpanded}>
+        <div
+            className={`dropdown ${className ?? ""}`}
+            data-expanded={isExpanded}
+        >
             <div
                 className={`dropdown-header ${headerClassName ?? ""}`}
                 onClick={toggleState}

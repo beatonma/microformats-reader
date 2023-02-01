@@ -13,9 +13,6 @@ export interface RelLinks {
     feeds: RelLink[];
     webmention: RelLink[];
 }
-export interface RelLinkProps {
-    links: RelLink[];
-}
 
 export function parseRelLinks(microformats: ParsedDocument): RelLinks | null {
     const rels = microformats?.rels ?? null;

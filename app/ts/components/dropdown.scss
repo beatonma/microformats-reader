@@ -11,7 +11,7 @@
       transform: rotate(180deg);
     }
 
-    &:not(:empty) {
+    .dropdown-content:not(:empty) {
       padding-bottom: var(--space-2x);
     }
   }
@@ -31,6 +31,7 @@
     font-size: var(--fs-h5);
     vertical-align: middle;
     align-items: center;
+    cursor: pointer;
   }
 
   .dropdown-icon {
@@ -40,6 +41,7 @@
     line-height: 1em !important;
     transition: all 200ms;
     margin-left: var(--space-1x);
+    cursor: pointer;
   }
 
   .dropdown-content {
@@ -53,6 +55,9 @@
   }
 
   &:has(.dropdown-content:empty) {
+    .dropdown-header {
+      cursor: default;
+    }
     .dropdown-icon {
       display: none;
     }

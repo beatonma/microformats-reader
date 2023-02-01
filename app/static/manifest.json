@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "DEV Microformats Reader",
+    "name": "__MSG_extension_name__",
     "version": "1.0",
 
-    "description": "Displays microformat data from the active page",
+    "description": "__MSG_extension_description__",
 
     "author": "Michael Beaton",
 
@@ -11,7 +11,7 @@
 
     },
     
-    "default_locale": "en",
+    "default_locale": "en_GB",
 
     "permissions": [
         "tabs",

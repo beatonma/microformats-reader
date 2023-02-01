@@ -2,11 +2,7 @@ import { describe, expect, test } from "@jest/globals";
 import { HCardData, parseHCards } from "./h-card";
 import { mf2 } from "microformats-parser";
 
-const mf = (html: string) => {
-    const _mf = mf2(html, { baseUrl: "http://sally.example.com" });
-    console.log(`_mf: ${JSON.stringify(_mf, null, 2)}`);
-    return _mf;
-};
+const mf = (html: string) => mf2(html, { baseUrl: "http://sally.example.com" });
 
 const firstHCard = (html: string) => parseHCards(mf(html))[0];
 

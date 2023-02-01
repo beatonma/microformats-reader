@@ -3,9 +3,11 @@ $pip-size: 24px; // Picture-in-picture size, used for logo if photo and logo bot
 
 
 .h-card {
+  color: var(--on-surface);
   background-color: var(--surface);
   padding: var(--space-1x);
   margin-block: var(--space-2x);
+  align-items: start;
 
   .hcard-avatar {
     display: inline-flex;
@@ -39,9 +41,13 @@ $pip-size: 24px; // Picture-in-picture size, used for logo if photo and logo bot
     text-align: left;
     flex-grow: 10;
 
-    .dropdown-header {
+    .dropdown-header.p-name {
       font-size: var(--fs-400);
       font-weight: bold;
+    }
+
+    .dropdown-header.h-adr {
+      font-size: var(--fs-300);
     }
   }
 }

@@ -1,14 +1,16 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLAttributes, HTMLProps } from "react";
 import "./icons.scss";
+import { _ } from "../compat/compat";
 
 export enum Icons {
+    Birthday = "cake",
     ExpandMore = "expand_more",
     PgpKey = "key",
     RssFeed = "rss_feed",
     WebmentionEndpoint = "forum",
 }
 
-interface IconProps extends HTMLProps<HTMLSpanElement> {
+export interface IconProps extends HTMLProps<HTMLSpanElement> {
     icon: Icons;
 }
 export const Icon = (props: IconProps) => {
@@ -21,5 +23,23 @@ export const Icon = (props: IconProps) => {
         >
             {icon}
         </span>
+    );
+};
+
+export interface SvgProps extends HTMLAttributes<SVGElement> {
+    svg: string;
+}
+export const Svg = (props: SvgProps) => {
+    const { svg, className, ...rest } = props;
+    let resolvedSvgData: string = svg;
+    if (svg.startsWith("svg__")) {
+        resolvedSvgData = _(svg);
+    }
+    return (
+        <svg
+            dangerouslySetInnerHTML={{ __html: resolvedSvgData }}
+            className={`icon ${className ?? ""}`}
+            {...rest}
+        />
     );
 };

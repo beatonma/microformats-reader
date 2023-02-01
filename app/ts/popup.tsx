@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import "./popup.scss";
 import { Message, MessageResponse } from "./message";
 import { compatBrowser } from "./compat";
 import {
@@ -8,13 +7,14 @@ import {
     PgpKey,
     RelmeLinks,
     WebmentionEndpoint,
-} from "./components/microformats/rel";
+} from "./components/microformats";
 import { parseRelLinks, RelLinks } from "./data/related-links";
-import { MicroformatsRaw } from "./components/microformats/raw";
+import { MicroformatsRaw } from "./components/microformats";
 import { Row, HorizontalAlignment } from "./components/layout";
 import { SampleData } from "./sampledata";
 import { HCardData, parseHCards } from "./data/h-card";
-import { HCard } from "./components/microformats/h-card";
+import { HCard } from "./components/microformats";
+import "./popup.scss";
 
 const PopupUI = () => {
     const [microformats, setMicroformats] = useState(null);

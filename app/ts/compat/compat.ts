@@ -79,20 +79,17 @@ function getStaticMessage(name: string, substitutions?: any): string {
     const translation = MessagesJson[name];
     if (!translation) return `__nostr:__${name}`;
 
-    const msg = translation.message.replace(/\$(\w+)\$/, "_");
-
-    return `_${msg}`;
+    return translation.message.replace(/\$(\w+)\$/, "_");
 }
 
 export const compatBrowser = getCompatBrowser();
 if (compatBrowser.i18n == null) {
     // Patch translation stuff for in-tab UI dev.
-    console.debug(`Patching browser.i18n (${compatBrowser})...`);
+    console.debug(`[DEBUG] Patching browser.i18n (${compatBrowser})`);
     compatBrowser.i18n = {
         getMessage: getStaticMessage,
         getUILanguage: () => "en-GB",
     };
-    console.debug("[OK] Patched browser.i18n");
 }
 
 export const _ = compatBrowser.i18n.getMessage;
