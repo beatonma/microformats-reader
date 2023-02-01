@@ -12,6 +12,7 @@ export interface HCardNameDetail {
     familyName?: string;
     sortBy?: string;
     nickname?: string;
+    sound?: string;
 }
 
 export interface HGeo {
@@ -20,7 +21,7 @@ export interface HGeo {
     altitude?: string;
 }
 
-interface HAdr extends HGeo {
+export interface HAdr extends HGeo {
     locality?: string;
     region?: string;
     countryName?: string;
@@ -43,30 +44,10 @@ export interface HCardData {
     birthday?: string;
     location: HAdr;
     category?: string;
+    pronouns?: string;
+    genderIdentity?: string;
+    sex?: string;
 }
-
-const valueOf = (obj: any, key: string): string | null => {
-    if (!obj) return null;
-
-    let resolvedObj: any;
-    if (obj.hasOwnProperty(key)) {
-        resolvedObj = obj[key];
-    } else if (obj.hasOwnProperty("properties"))
-        resolvedObj = obj["properties"][key];
-    else {
-        return null;
-    }
-
-    if (resolvedObj == null) return null;
-
-    let value: string;
-    if (typeof resolvedObj === "string") value = resolvedObj;
-    else if (Array.isArray(resolvedObj)) value = resolvedObj[0];
-    else value = resolvedObj.toString();
-
-    return value?.replace(/[\s\n ]+/gm, " ");
-};
-
 const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
     const parseLocation = (obj?: any): HAdr | null => {
         if (obj == null) return null;
@@ -109,9 +90,30 @@ const parseNameDetails = (hcard: MicroformatProperties): HCardNameDetail => ({
     givenName: valueOf(hcard, "given-name"),
     additionalName: valueOf(hcard, "additional-name"),
     familyName: valueOf(hcard, "family-name"),
-    sortBy: valueOf(hcard, "nickname"),
+    sortBy: valueOf(hcard, "sort-string"),
     nickname: valueOf(hcard, "nickname"),
+    sound: valueOf(hcard, "sound"),
 });
+
+/**
+ * Not really standardised at time of writing, try to find any reasonable variant.
+ * - https://microformats.org/wiki/pronouns-brainstorming
+ * @param hcard
+ */
+const parsePronouns = (hcard: MicroformatProperties): string | null => {
+    const pronouns =
+        parseExperimental(hcard, "pronouns") ??
+        parseExperimental(hcard, "pronoun");
+    if (pronouns) return pronouns;
+
+    const nominative = parseExperimental(hcard, "pronoun-nominative");
+    const oblique = parseExperimental(hcard, "pronoun-oblique");
+    const possessive = parseExperimental(hcard, "pronoun-possessive");
+
+    return (
+        [nominative, oblique, possessive].filter(Boolean).join(" | ") || null
+    );
+};
 
 export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
     const hcards: MicroformatProperties[] = microformats.items
@@ -126,5 +128,36 @@ export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
         location: parseLocation(hcard),
         photo: parseImage((hcard.photo as Image[]) ?? []),
         logo: parseImage((hcard.logo as Image[]) ?? []),
+        pronouns: parsePronouns(hcard),
+        genderIdentity: valueOf(hcard, "gender-identity"),
+        sex: valueOf(hcard, "sex"),
     }));
 };
+
+const valueOf = (obj: any, key: string): string | null => {
+    if (!obj) return null;
+
+    let resolvedObj: any;
+    if (obj.hasOwnProperty(key)) {
+        resolvedObj = obj[key];
+    } else if (obj.hasOwnProperty("properties"))
+        resolvedObj = obj["properties"][key];
+    else {
+        return null;
+    }
+
+    if (resolvedObj == null) return null;
+
+    let value: string;
+    if (typeof resolvedObj === "string") value = resolvedObj;
+    else if (Array.isArray(resolvedObj)) value = resolvedObj[0];
+    else value = resolvedObj.toString();
+
+    return value?.replace(/[\s\n ]+/gm, " ");
+};
+
+/**
+ * Try to read 'key' or 'x-key' values for non-standardised properties.
+ */
+const parseExperimental = (hcard: MicroformatProperties, key: string) =>
+    valueOf(hcard, key) ?? valueOf(hcard, `x-${key}`);
