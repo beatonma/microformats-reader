@@ -1,6 +1,8 @@
 @use "styles/typography";
 
 a.maps {
+  @include typography.caption;
   display: block;
-  margin-block: var(--space-half)
+  align-items: center;
+  margin-block: var(--space-1x);
 }

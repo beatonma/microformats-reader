@@ -18,7 +18,7 @@
   }
 
   .property-value {
-    font-size: var(--fs-100);
+    font-size: var(--fs-default);
   }
 
   .property-icon {
@@ -29,4 +29,14 @@
 table.properties {
   border-collapse: collapse;
   margin-bottom: var(--space-1x);
+
+  td:empty {
+    display:none;
+  }
+  td:not(:empty) {
+    padding-right: 1ch;
+  }
+  td {
+    padding-bottom: var(--space-half);
+  }
 }

@@ -1,9 +1,9 @@
 :root {
-  --fs-400: 18px;
-  --fs-300: 16px;
+  --fs-500: 22px;
+  --fs-400: 20px;
+  --fs-300: 18px;
+  --fs-200: 16px;
   --fs-100: 14px;
-
-  --fs-caption: 12px;
 
   --fs-h1: 38px;
   --fs-h2: 34px;
@@ -11,6 +11,9 @@
   --fs-h4: 28px;
   --fs-h5: 26px;
   --fs-h6: 24px;
+
+  --fs-caption: 12px;
+  --fs-default: var(--fs-200);
 }
 
 

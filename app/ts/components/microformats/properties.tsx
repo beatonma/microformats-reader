@@ -62,7 +62,6 @@ export const PropertyRow = (props: MicroformatPropertyProps) => {
     return (
         <tr className="property" {...props} title={cls}>
             <td>
-                {" "}
                 <PropertyIconOrSvg
                     svg={svg}
                     icon={icon}

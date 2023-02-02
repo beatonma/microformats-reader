@@ -9,8 +9,14 @@ interface DropdownProps extends HTMLProps<HTMLDivElement> {
     headerClassName?: string;
 }
 export const Dropdown = (props: DropdownProps) => {
-    const { header, headerClassName, className, defaultIsExpanded, children } =
-        props;
+    const {
+        header,
+        headerClassName,
+        className,
+        defaultIsExpanded,
+        title,
+        children,
+    } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
     const contentID = useId();
 
@@ -32,7 +38,7 @@ export const Dropdown = (props: DropdownProps) => {
                 aria-controls={contentID}
                 tabIndex={0}
             >
-                {header}
+                <span title={title}>{header}</span>
                 <Icon className="dropdown-icon" icon={Icons.ExpandMore} />
             </div>
             <div id={contentID} className="dropdown-content">
