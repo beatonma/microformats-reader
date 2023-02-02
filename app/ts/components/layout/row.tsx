@@ -11,7 +11,7 @@ export enum HorizontalAlignment {
     SpaceAround = "space-around",
     SpaceEvenly = "space-evenly",
 }
-interface RowProps extends HTMLProps<HTMLDivElement> {
+export interface RowProps extends HTMLProps<HTMLDivElement> {
     alignment?: HorizontalAlignment;
 }
 export const Row = (props: RowProps) => {

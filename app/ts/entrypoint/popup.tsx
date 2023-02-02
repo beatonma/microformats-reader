@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { compatBrowser } from "./compat";
-import { HorizontalAlignment, Row } from "./components/layout";
+import { compatBrowser } from "ts/compat";
+import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
     Feeds,
     PgpKey,
     RelmeLinks,
     WebmentionEndpoint,
-} from "./components/microformats";
-import { MicroformatsRaw } from "./components/microformats";
-import { HCard } from "./components/microformats";
-import { HCardData, parseHCards } from "./data/h-card";
-import { RelLinks, parseRelLinks } from "./data/related-links";
-import { Message, MessageResponse } from "./message";
-import { SampleData } from "./sampledata";
-import "./popup.scss";
+} from "ts/components/microformats";
+import { MicroformatsRaw } from "ts/components/microformats";
+import { HCard } from "ts/components/microformats";
+import { HCardData, parseHCards } from "ts/data/h-card";
+import { RelLinks, parseRelLinks } from "ts/data/related-links";
+import { SampleData } from "ts/dev/sampledata";
+import "ts/entrypoint/popup.scss";
+import { Message, MessageResponse } from "ts/message";
 
 const PopupUI = () => {
     const [microformats, setMicroformats] = useState(null);
@@ -57,7 +57,10 @@ const PopupUI = () => {
             </Row>
             <div className="h-cards">
                 {hcards?.map(hcard => (
-                    <HCard hcard={hcard} key={hcard.name ?? hcard.url} />
+                    <HCard
+                        hcard={hcard}
+                        key={hcard.name ?? hcard.contact?.url}
+                    />
                     // <HCard hcard={hcard} key={hcard.url} />
                 ))}
             </div>

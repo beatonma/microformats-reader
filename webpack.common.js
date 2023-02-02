@@ -8,10 +8,10 @@ module.exports = {
         minimize: false,
     },
     entry: {
-        "service-worker": "./app/ts/service-worker.ts",
-        "content-script": "./app/ts/content-script.ts",
-        popup: "./app/ts/popup.tsx",
-        options: "./app/ts/options.ts",
+        "service-worker": "./app/ts/entrypoint/service-worker.ts",
+        "content-script": "./app/ts/entrypoint/content-script.ts",
+        popup: "./app/ts/entrypoint/popup.tsx",
+        options: "./app/ts/entrypoint/options.ts",
     },
     module: {
         rules: [

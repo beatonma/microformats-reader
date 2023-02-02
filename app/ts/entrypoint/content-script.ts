@@ -1,6 +1,7 @@
 import { mf2 } from "microformats-parser";
 import { ParsedDocument } from "microformats-parser/dist/types";
 import { compatBrowser } from "ts/compat";
+import { TODO } from "ts/dev";
 import { Message, MessageRequest, MessageResponse } from "ts/message";
 
 compatBrowser.runtime.onMessage.addListener(
@@ -21,4 +22,8 @@ compatBrowser.runtime.onMessage.addListener(
             });
         }
     }
+);
+
+TODO(
+    "Get colors from theme and/or use `vibrant` on photo/logo: https://github.com/Vibrant-Colors/node-vibrant"
 );

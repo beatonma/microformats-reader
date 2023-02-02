@@ -1,7 +1,8 @@
-import React, { HTMLProps } from "react";
+import React from "react";
+import { Row, RowProps } from "ts/components/layout/row";
 import "./layout.scss";
 
-export const InlineGroup = (props: HTMLProps<HTMLSpanElement>) => {
+export const InlineGroup = (props: RowProps) => {
     const { className, ...rest } = props;
-    return <span className={`${className ?? ""} group`} {...rest} />;
+    return <Row className={`${className ?? ""} group`} {...rest} />;
 };

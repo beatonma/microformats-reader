@@ -160,14 +160,14 @@ describe("HCard parsing", () => {
         const location = hcard.location;
 
         expect(hcard.name).toBe("Sally Ride");
-        expect(hcard.url).toBe("https://beatonma.org");
-        expect(hcard.birthday).toBe("1987-05-16");
+        expect(hcard.contact.url).toBe("https://beatonma.org");
+        expect(hcard.dates.birthday).toBe("1987-05-16");
 
         expect(location.locality).toBe("Los Angeles");
         expect(location.region).toBe("California");
         expect(location.countryName).toBe("U.S.A");
 
-        expect(hcard.photo.value).toBe("http://example.com/sk.jpg");
-        expect(hcard.photo.alt).toBe("Photo of Sally Ride");
+        expect(hcard.images.photo.value).toBe("http://example.com/sk.jpg");
+        expect(hcard.images.photo.alt).toBe("Photo of Sally Ride");
     });
 });

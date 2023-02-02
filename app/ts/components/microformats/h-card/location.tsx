@@ -1,8 +1,8 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { Dropdown } from "ts/components/dropdown";
 import { ExternalLink } from "ts/components/external-link";
 import { Icon, Icons } from "ts/components/icons";
+import { Dropdown } from "ts/components/layout/dropdown";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,

@@ -1,13 +1,20 @@
 import React, { HTMLProps, ReactNode, useId, useState } from "react";
-import { Icon, Icons } from "./icons";
 import { _ } from "ts/compat";
-import "./dropdown.scss";
+import { Icon, Icons } from "ts/components/icons";
+import "ts/components/layout/dropdown.scss";
 
-export interface ExpandableProps {
+export interface ExpandableDefaultProps {
     defaultIsExpanded?: boolean;
 }
 
-interface DropdownProps extends HTMLProps<HTMLDivElement>, ExpandableProps {
+export interface ExpandableProps {
+    isExpanded: boolean;
+    onToggleExpand?: () => void;
+}
+
+interface DropdownProps
+    extends HTMLProps<HTMLDivElement>,
+        ExpandableDefaultProps {
     header: ReactNode;
     headerClassName?: string;
 }
@@ -42,11 +49,27 @@ export const Dropdown = (props: DropdownProps) => {
                 tabIndex={0}
             >
                 <span title={title}>{header}</span>
-                <Icon className="dropdown-icon" icon={Icons.ExpandMore} />
+                <DropdownButton isExpanded={isExpanded} />
             </div>
             <div id={contentID} className="dropdown-content">
                 {children}
             </div>
         </div>
+    );
+};
+
+export const DropdownButton = (
+    props: HTMLProps<HTMLSpanElement> & ExpandableProps
+) => {
+    const { className, isExpanded, onToggleExpand, ...rest } = props;
+    return (
+        <Icon
+            className={`dropdown-icon ${className ?? ""}`}
+            data-expanded={isExpanded}
+            icon={Icons.ExpandMore}
+            onClick={onToggleExpand}
+            title={isExpanded ? _("dropdown_collapse") : _("dropdown_expand")}
+            {...rest}
+        />
     );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { _ } from "ts/compat";
-import { Dropdown } from "ts/components/dropdown";
+import { Dropdown } from "ts/components/layout/dropdown";
 import {
     PropertiesTable,
     PropertyDiv,

@@ -3,6 +3,25 @@ import {
     MicroformatProperties,
     ParsedDocument,
 } from "microformats-parser/dist/types";
+import { noneOf } from "ts/data/arrays";
+
+/*
+ * Structures.
+ */
+
+export interface HCardData {
+    name?: string;
+    nameDetail?: HCardNameDetail;
+    images?: Images;
+    gender?: GenderIdentity;
+    contact?: ContactData;
+    location: HAdr;
+    job?: JobData;
+    dates?: Dates;
+    uid?: string;
+    category?: string;
+    notes?: string;
+}
 
 export interface HCardNameDetail {
     honorificPrefix?: string;
@@ -34,24 +53,68 @@ export interface HAdr extends HGeo {
     value?: string;
 }
 
+export interface Images {
+    photo?: Image;
+    logo?: Image;
+}
+
 export interface GenderIdentity {
     sex?: string;
     genderIdentity?: string;
     pronouns?: string;
 }
 
-export interface HCardData {
-    photo?: Image;
-    logo?: Image;
-    name?: string;
-    nameDetail?: HCardNameDetail;
-    gender: GenderIdentity;
+export interface ContactData {
     url?: string;
     email?: string;
-    birthday?: string;
-    location: HAdr;
-    category?: string;
+    phone?: string;
+    impp?: string;
+    key?: string;
 }
+
+export interface JobData {
+    org?: string | HCardData;
+    jobTitle?: string;
+    role?: string;
+}
+
+export interface Dates {
+    birthday?: string;
+    anniversary?: string;
+}
+
+/*
+ * Parsing.
+ */
+
+export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
+    const hcards: MicroformatProperties[] = microformats.items
+        .filter(item => item.type.includes("h-card"))
+        .map(item => item.properties);
+
+    return hcards.map(hcard => ({
+        name: valueOf(hcard, "name"),
+        nameDetail: parseNameDetails(hcard),
+        gender: parseGender(hcard),
+        location: parseLocation(hcard),
+        contact: parseContact(hcard),
+        job: parseJob(hcard),
+        dates: parseDates(hcard),
+        images: parseImages(hcard),
+    }));
+};
+
+const parseImages = (hcard: MicroformatProperties): Images | null => {
+    const photo = parseImage((hcard.photo as Image[]) ?? []);
+    const logo = parseImage((hcard.logo as Image[]) ?? []);
+
+    if (noneOf([photo, logo])) return null;
+    return {
+        photo: photo,
+        logo: logo,
+    };
+};
+
 const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
     const parseLocation = (obj?: any): HAdr | null => {
         if (obj == null) return null;
@@ -119,25 +182,60 @@ const parsePronouns = (hcard: MicroformatProperties): string | null => {
     );
 };
 
-export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
-    const hcards: MicroformatProperties[] = microformats.items
-        .filter(item => item.type.includes("h-card"))
-        .map(item => item.properties);
+const parseGender = (hcard: MicroformatProperties): GenderIdentity | null => {
+    const pronouns = parsePronouns(hcard);
+    const genderIdentity = valueOf(hcard, "gender-identity");
+    const sex = valueOf(hcard, "sex");
 
-    return hcards.map(hcard => ({
-        name: valueOf(hcard, "name"),
-        nameDetail: parseNameDetails(hcard),
-        gender: {
-            pronouns: parsePronouns(hcard),
-            genderIdentity: valueOf(hcard, "gender-identity"),
-            sex: valueOf(hcard, "sex"),
-        },
-        location: parseLocation(hcard),
-        url: valueOf(hcard, "url"),
-        birthday: valueOf(hcard, "bday"),
-        photo: parseImage((hcard.photo as Image[]) ?? []),
-        logo: parseImage((hcard.logo as Image[]) ?? []),
-    }));
+    if (noneOf([pronouns, genderIdentity, sex])) return null;
+    return {
+        pronouns: pronouns,
+        genderIdentity: genderIdentity,
+        sex: sex,
+    };
+};
+
+const parseDates = (hcard: MicroformatProperties): Dates | null => {
+    const birthday = valueOf(hcard, "bday");
+    const anniversary = valueOf(hcard, "anniversary");
+
+    if (!birthday && !anniversary) return null;
+    return {
+        birthday: birthday,
+        anniversary: anniversary,
+    };
+};
+
+const parseContact = (hcard: MicroformatProperties): ContactData | null => {
+    const url = valueOf(hcard, "url");
+    const email = valueOf(hcard, "email");
+    const phone = valueOf(hcard, "tel");
+    const impp = valueOf(hcard, "impp");
+    const key = valueOf(hcard, "key");
+
+    if (noneOf([url, email, phone, impp, key])) return null;
+
+    return {
+        url: url,
+        email: email,
+        phone: phone,
+        impp: impp,
+        key: key,
+    };
+};
+
+const parseJob = (hcard: MicroformatProperties): JobData | null => {
+    const org: string | HCardData = null; // TODO
+    const jobTitle = valueOf(hcard, "job-title");
+    const role = valueOf(hcard, "role");
+
+    if (noneOf([org, jobTitle, role])) return null;
+
+    return {
+        org: org,
+        jobTitle: jobTitle,
+        role: role,
+    };
 };
 
 const valueOf = (obj: any, key: string): string | null => {
