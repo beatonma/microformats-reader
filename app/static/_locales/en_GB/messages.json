@@ -42,9 +42,6 @@
             }
         }
     },
-    "hcard_url": {
-        "message": "URL"
-    },
     "hcard_name_honorific_prefix": {
         "message": "Honorific prefix"
     },
@@ -71,10 +68,10 @@
         "message": "PO Box"
     },
     "hadr_extended_address": {
-        "message": "Extended address"
+        "message": "Extended"
     },
     "hadr_street_address":  {
-        "message": "Street address"
+        "message": "Street"
     },
     "hadr_locality": {
         "message": "Locality"
@@ -83,7 +80,7 @@
         "message": "Region"
     },
     "hadr_postal_code": {
-        "message": "Post code"
+        "message": "Postcode"
     },
     "hadr_country_name":  {
         "message": "Country"
@@ -116,9 +113,6 @@
 
     "p_name": {
         "message": "Name"
-    },
-    "date_of_birth": {
-        "message": "Date of birth"
     },
 
     "v1__popup_title": {

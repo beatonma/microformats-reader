@@ -1,4 +1,4 @@
-import React, { HTMLProps, ReactNode } from "react";
+import React, { HTMLProps, ReactNode, useId } from "react";
 import { useState } from "react";
 import { Icon, Icons } from "./icons";
 import "./dropdown.scss";
@@ -13,6 +13,7 @@ export const Dropdown = (props: DropdownProps) => {
     const { header, headerClassName, className, defaultIsExpanded, children } =
         props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const contentID = useId();
 
     const toggleState = () => setExpanded(!isExpanded);
 
@@ -27,11 +28,17 @@ export const Dropdown = (props: DropdownProps) => {
                 title={
                     isExpanded ? _("dropdown_collapse") : _("dropdown_expand")
                 }
+                role="button"
+                aria-expanded={isExpanded}
+                aria-controls={contentID}
+                tabIndex={0}
             >
                 {header}
                 <Icon className="dropdown-icon" icon={Icons.ExpandMore} />
             </div>
-            <div className="dropdown-content">{children}</div>
+            <div id={contentID} className="dropdown-content">
+                {children}
+            </div>
         </div>
     );
 };

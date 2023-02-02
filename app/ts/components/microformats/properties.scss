@@ -1,11 +1,11 @@
+@use "../../styles/typography";
+
 .property {
   margin-block: var(--space-half);
   align-items: center;
 
   .property-name {
-    font-size: var(--fs-caption);
-    letter-spacing: 0.1ch;
-    font-weight: bold;
+    @include typography.caption;
     margin-right: var(--space-1x);
 
     &::after {
@@ -24,4 +24,9 @@
   .property-icon {
     margin-right: var(--space-half);
   }
+}
+
+table.properties {
+  border-collapse: collapse;
+  margin-bottom: var(--space-1x);
 }

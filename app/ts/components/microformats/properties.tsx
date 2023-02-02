@@ -1,8 +1,8 @@
-import React, { ReactNode } from "react";
+import React, { HTMLProps, ReactNode } from "react";
 import { Icon, IconProps, Icons, Svg, SvgProps } from "../icons";
-import "./properties.scss";
 import { ExternalLink } from "../external-link";
 import { Row } from "../layout";
+import "./properties.scss";
 
 interface MicroformatPropertyProps {
     cls: string;
@@ -40,11 +40,39 @@ interface MicroformatUriPropertyProps extends MicroformatPropertyProps {
     href: string;
 }
 export const PropertyUriDiv = (props: MicroformatUriPropertyProps) => {
-    const { href, value, ...rest } = props;
+    const { cls, href, value, ...rest } = props;
     let resolvedValue = (
-        <ExternalLink href={href}>{value ?? href}</ExternalLink>
+        <ExternalLink href={href} title={cls}>
+            {value ?? href}
+        </ExternalLink>
     );
-    return <PropertyDiv value={resolvedValue} {...rest} />;
+    return <PropertyDiv value={resolvedValue} cls={cls} {...rest} />;
+};
+
+export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
+    const { className } = props;
+    return <table className={`properties ${className ?? ""}`} {...props} />;
+};
+
+export const PropertyRow = (props: MicroformatPropertyProps) => {
+    const { cls, name, icon, svg, value } = props;
+
+    if (!value) return null;
+
+    return (
+        <tr className="property" {...props} title={cls}>
+            <td>
+                {" "}
+                <PropertyIconOrSvg
+                    svg={svg}
+                    icon={icon}
+                    className="property-icon"
+                />
+            </td>
+            <td className="property-name">{name}</td>
+            <td className={`property-value ${cls ?? ""}`}>{value}</td>
+        </tr>
+    );
 };
 
 const PropertySvg = (props: SvgProps) => {

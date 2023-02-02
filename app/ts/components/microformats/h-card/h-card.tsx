@@ -31,13 +31,12 @@ export const HCard = (props: HCardProps) => {
                 <PropertyUriDiv
                     href={url}
                     cls={Microformats.U_Url}
-                    name={_("hcard_url")}
+                    icon={Icons.Url}
                     value={url}
                 />
                 <PropertyDiv
                     cls={Microformats.Dt_Bday}
                     icon={Icons.Birthday}
-                    // name={_("date_of_birth")}
                     value={<Birthday birthday={birthday} />}
                 />
             </div>

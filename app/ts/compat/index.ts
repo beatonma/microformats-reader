@@ -1,1 +1,1 @@
-export { compatBrowser } from "./compat";
+export { _, compatBrowser } from "./compat";

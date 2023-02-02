@@ -5,8 +5,10 @@ import { _ } from "../compat/compat";
 export enum Icons {
     Birthday = "cake",
     ExpandMore = "expand_more",
+    Map = "map",
     PgpKey = "key",
     RssFeed = "rss_feed",
+    Url = "link",
     WebmentionEndpoint = "forum",
 }
 

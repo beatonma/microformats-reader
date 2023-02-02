@@ -12,3 +12,10 @@
   --fs-h5: 26px;
   --fs-h6: 24px;
 }
+
+
+@mixin caption() {
+  font-size: var(--fs-caption);
+  letter-spacing: 0.1ch;
+  font-weight: bold;
+}

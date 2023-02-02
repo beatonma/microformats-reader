@@ -1,4 +1,5 @@
 @use "../../styles/hover";
+@use "../../styles/typography";
 
 .quick-link {
   @extend %hover;
@@ -16,8 +17,7 @@
   }
 
   .link-title {
-    font-size: var(--fs-caption);
-    font-weight: 600;
+    @include typography.caption;
     text-align: center;
     max-lines: 1;
     max-width: 13ch;
