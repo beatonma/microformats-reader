@@ -1,6 +1,6 @@
-import { formatLongDate } from "../../../formatting";
 import React from "react";
-import { _ } from "../../../compat/compat";
+import { _ } from "ts/compat";
+import { formatLongDate } from "ts/formatting";
 
 interface BirthdayProps {
     birthday: string;

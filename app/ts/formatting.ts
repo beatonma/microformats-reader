@@ -1,5 +1,4 @@
-import { compatBrowser } from "./compat";
-import { _ } from "./compat/compat";
+import { _, compatBrowser } from "ts/compat";
 
 export const formatLongDate = (date: string): string => {
     return new Date(date).toLocaleDateString(

@@ -1,7 +1,7 @@
 import { mf2 } from "microformats-parser";
-import { Message, MessageRequest, MessageResponse } from "./message";
 import { ParsedDocument } from "microformats-parser/dist/types";
-import { compatBrowser } from "./compat";
+import { compatBrowser } from "ts/compat";
+import { Message, MessageRequest, MessageResponse } from "ts/message";
 
 compatBrowser.runtime.onMessage.addListener(
     (

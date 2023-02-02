@@ -1,12 +1,16 @@
 import React, { HTMLProps } from "react";
-import { HAdr } from "../../../data/h-card";
-import { PropertiesTable, PropertyRow } from "../properties";
-import { Microformats } from "../../../data/microformats";
-import { _ } from "../../../compat";
-import { Dropdown } from "../../dropdown";
-import { formatLatLong } from "../../../formatting";
-import { ExternalLink } from "../../external-link";
-import {Icon, Icons} from "../../icons";
+import { _ } from "ts/compat";
+import { Dropdown } from "ts/components/dropdown";
+import { ExternalLink } from "ts/components/external-link";
+import { Icon, Icons } from "ts/components/icons";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/components/microformats/properties";
+import { HAdr } from "ts/data/h-card";
+import { Microformats } from "ts/data/microformats";
+import { formatLatLong } from "ts/formatting";
+import "./location.scss";
 
 interface LocationProps {
     location?: HAdr;

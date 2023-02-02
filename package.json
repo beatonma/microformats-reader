@@ -25,6 +25,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@babel/runtime": "^7.20.13",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/gulp": "^4.0.9",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
@@ -48,7 +49,10 @@
   },
   "prettier": {
     "arrowParens": "avoid",
-    "tabWidth": 4
+    "tabWidth": 4,
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true,
+    "importOrder":["^react.*", "<THIRD_PARTY_MODULES>", "^[a-zA-Z].*", "^ts/", "^[./].*.scss$"]
   },
   "dependencies": {
     "microformats-parser": "^1.4.1",

@@ -1,7 +1,7 @@
 import React, { HTMLProps, ReactNode } from "react";
-import { Icon, IconProps, Icons, Svg, SvgProps } from "../icons";
-import { ExternalLink } from "../external-link";
-import { Row } from "../layout";
+import { ExternalLink } from "ts/components/external-link";
+import { Icon, IconProps, Icons, Svg, SvgProps } from "ts/components/icons";
+import { Row } from "ts/components/layout";
 import "./properties.scss";
 
 interface MicroformatPropertyProps {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ParsedDocument } from "microformats-parser/dist/types";
-import { Dropdown } from "../dropdown";
+import { Dropdown } from "ts/components/dropdown";
 
 interface MicroformatsProps {
     microformats: ParsedDocument;

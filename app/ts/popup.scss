@@ -1,5 +1,4 @@
-@use "./styles";
-@use "./styles/borders";
+@use "styles";
 
 /**
  * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
@@ -35,7 +34,7 @@ body {
 
 
 pre {
-  @include borders.bordered();
+  @include styles.bordered();
   overflow-x: scroll;
 }
 

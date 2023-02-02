@@ -1,10 +1,10 @@
 import React, { HTMLProps } from "react";
-import { RelLink } from "../../data/related-links";
-import { Dropdown } from "../dropdown";
-import { ExternalLink } from "../external-link";
-import { Icon, Icons } from "../icons";
+import { _ } from "ts/compat";
+import { Dropdown } from "ts/components/dropdown";
+import { ExternalLink } from "ts/components/external-link";
+import { Icon, Icons } from "ts/components/icons";
+import { RelLink } from "ts/data/related-links";
 import "./rel.scss";
-import { _ } from "../../compat/compat";
 
 interface RelLinkProps {
     links: RelLink[];

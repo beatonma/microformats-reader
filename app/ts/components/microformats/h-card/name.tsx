@@ -1,9 +1,9 @@
-import { HCardNameDetail } from "../../../data/h-card";
-import { Dropdown } from "../../dropdown";
-import { _ } from "../../../compat/compat";
 import React from "react";
-import { PropertyDiv } from "../properties";
-import { Microformats } from "../../../data/microformats";
+import { _ } from "ts/compat";
+import { Dropdown } from "ts/components/dropdown";
+import { PropertyDiv } from "ts/components/microformats/properties";
+import { HCardNameDetail } from "ts/data/h-card";
+import { Microformats } from "ts/data/microformats";
 
 interface NameProps {
     name?: string;

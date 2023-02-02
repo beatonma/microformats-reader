@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, HTMLProps } from "react";
+import { _ } from "ts/compat";
 import "./icons.scss";
-import { _ } from "../compat/compat";
 
 export enum Icons {
     Birthday = "cake",

@@ -1,5 +1,5 @@
-import { Image } from "microformats-parser/dist/types";
 import React from "react";
+import { Image } from "microformats-parser/dist/types";
 
 enum PrimaryAvatar {
     Photo = "u-photo",

@@ -1,5 +1,5 @@
-@use "../../styles/hover";
-@use "../../styles/typography";
+@use "styles";
+@use "styles/typography";
 
 .quick-link {
   @extend %hover;

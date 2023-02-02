@@ -1,15 +1,17 @@
 import React from "react";
-import { HCardData } from "../../../data/h-card";
-import { HorizontalAlignment, Row } from "../../layout";
-import "./hcard.scss";
-import { _ } from "../../../compat/compat";
-import { Name } from "./name";
-import { PropertyDiv, PropertyUriDiv } from "../properties";
-import { Microformats } from "../../../data/microformats";
 import { Birthday } from "./birthday";
-import { Avatar } from "./primary-avatar";
 import { Location } from "./location";
-import { Icons } from "../../icons";
+import { Name } from "./name";
+import { Avatar } from "./primary-avatar";
+import { Icons } from "ts/components/icons";
+import { HorizontalAlignment, Row } from "ts/components/layout";
+import {
+    PropertyDiv,
+    PropertyUriDiv,
+} from "ts/components/microformats/properties";
+import { HCardData } from "ts/data/h-card";
+import { Microformats } from "ts/data/microformats";
+import "./hcard.scss";
 
 interface HCardProps {
     hcard: HCardData;

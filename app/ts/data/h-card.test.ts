@@ -1,5 +1,5 @@
-import { describe, expect, test } from "@jest/globals";
 import { HCardData, parseHCards } from "./h-card";
+import { describe, expect, test } from "@jest/globals";
 import { mf2 } from "microformats-parser";
 
 const mf = (html: string) => mf2(html, { baseUrl: "http://sally.example.com" });
