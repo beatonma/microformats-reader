@@ -36,6 +36,30 @@ export const PropertyDiv = (props: MicroformatPropertyProps) => {
     );
 };
 
+/**
+ * Display a microformat field with a name and optional icon, but only if
+ * it has a non-empty value.
+ * @param props
+ * @constructor
+ */
+export const PropertySpan = (props: MicroformatPropertyProps) => {
+    const { cls, name, icon, svg, value } = props;
+
+    if (!value) return null;
+
+    return (
+        <span className="property" title={cls}>
+            <PropertyIconOrSvg
+                svg={svg}
+                icon={icon}
+                className="property-icon"
+            />
+            <span className="property-name">{name}</span>
+            <span className={`property-value ${cls ?? ""}`}>{value}</span>
+        </span>
+    );
+};
+
 interface MicroformatUriPropertyProps extends MicroformatPropertyProps {
     href: string;
 }
@@ -47,6 +71,16 @@ export const PropertyUriDiv = (props: MicroformatUriPropertyProps) => {
         </ExternalLink>
     );
     return <PropertyDiv value={resolvedValue} cls={cls} {...rest} />;
+};
+
+export const PropertyUriSpan = (props: MicroformatUriPropertyProps) => {
+    const { cls, href, value, ...rest } = props;
+    let resolvedValue = (
+        <ExternalLink href={href} title={cls}>
+            {value ?? href}
+        </ExternalLink>
+    );
+    return <PropertySpan value={resolvedValue} cls={cls} {...rest} />;
 };
 
 export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {

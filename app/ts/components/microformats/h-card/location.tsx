@@ -3,9 +3,11 @@ import { _ } from "ts/compat";
 import { Dropdown } from "ts/components/dropdown";
 import { ExternalLink } from "ts/components/external-link";
 import { Icon, Icons } from "ts/components/icons";
+import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
     PropertyRow,
+    PropertySpan,
 } from "ts/components/microformats/properties";
 import { HAdr } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
@@ -15,8 +17,28 @@ import "./location.scss";
 interface LocationProps {
     location?: HAdr;
 }
+
 export const Location = (props: LocationProps) => {
-    if (props.location == null) return null;
+    const { location } = props;
+    if (location == null) return null;
+
+    const summary = addressSummary(location);
+
+    return (
+        <InlineGroup className="location" title={_("location")}>
+            {/*{summary}*/}
+            <PropertySpan
+                icon={Icons.Location}
+                cls={_("location")}
+                value={summary}
+            />
+        </InlineGroup>
+    );
+};
+
+export const LocationDetail = (props: LocationProps) => {
+    const { location } = props;
+    if (location == null) return null;
     const {
         countryName,
         extendedAddress,
@@ -30,9 +52,9 @@ export const Location = (props: LocationProps) => {
         longitude,
         altitude,
         value,
-    } = props.location;
+    } = location;
 
-    const summary = addressSummary(props);
+    const summary = addressSummary(location);
 
     return (
         <Dropdown header={summary} headerClassName="h-adr">
@@ -98,18 +120,17 @@ export const Location = (props: LocationProps) => {
     );
 };
 
-function addressSummary(props: LocationProps): string {
-    const { countryName, locality, region, latitude, longitude } =
-        props.location;
-
-    const latLong = formatLatLong(latitude, longitude);
-    if (latLong) {
-        return latLong;
-    }
+function addressSummary(location: HAdr): string {
+    const { countryName, locality, region, latitude, longitude } = location;
 
     let fields: string[] = [locality, region, countryName].filter(Boolean);
     if (fields) {
         return fields.join(", ");
+    }
+
+    const latLong = formatLatLong(latitude, longitude);
+    if (latLong) {
+        return latLong;
     }
 
     return null;

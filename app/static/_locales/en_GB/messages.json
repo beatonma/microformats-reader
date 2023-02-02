@@ -63,6 +63,15 @@
     "hcard_name_sortby": {
         "message": "Sort by"
     },
+    "hcard_gender_identity": {
+        "message": "Gender"
+    },
+    "hcard_sex": {
+        "message": "Sex"
+    },
+    "hcard_pronouns": {
+        "message": "Pronouns"
+    },
 
     "hadr_post_office_box":  {
         "message": "PO Box"
@@ -111,8 +120,9 @@
         "message": "W"
     },
 
-    "p_name": {
-        "message": "Name"
+
+    "location": {
+        "message": "Location"
     },
 
     "v1__popup_title": {

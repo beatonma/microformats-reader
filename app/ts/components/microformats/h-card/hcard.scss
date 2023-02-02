@@ -1,53 +1,66 @@
+@use "styles";
+
 $avatar-size: 128px;
 $pip-size: 24px; // Picture-in-picture size, used for logo if photo and logo both available
 
-
 .h-card {
-  color: var(--on-surface);
-  background-color: var(--surface);
-  padding: var(--space-1x);
-  margin-block: var(--space-2x);
-  align-items: start;
+    color: var(--on-surface);
+    background-color: var(--surface);
+    padding: var(--space-1x);
+    margin-block: var(--space-2x);
+    align-items: start;
 
-  .hcard-avatar {
-    display: inline-flex;
-    position: relative;
-    width: $avatar-size;
-    height: $avatar-size;
-    border-radius: var(--border-radius-medium);
-    margin-right: var(--space-1x);
+    .hcard-avatar {
+        display: inline-flex;
+        position: relative;
+        width: $avatar-size;
+        height: $avatar-size;
+        border-radius: var(--border-radius-medium);
+        margin-right: var(--space-1x);
 
-    > img:first-child {
-      width: $avatar-size;
-      height: $avatar-size;
-      border-radius: var(--border-radius-medium);
+        > img:first-child {
+            width: $avatar-size;
+            height: $avatar-size;
+            border-radius: var(--border-radius-medium);
+        }
+
+        > img:nth-child(2) {
+            position: absolute;
+            object-fit: contain;
+            width: $pip-size;
+            height: $pip-size;
+            bottom: 0;
+            right: 0;
+            margin: var(--border-radius-small);
+            border-radius: var(--border-radius-small);
+            border: 1px solid var(--text-light-secondary);
+        }
     }
 
-    > img:nth-child(2) {
-      position: absolute;
-      object-fit: contain;
-      width: $pip-size;
-      height: $pip-size;
-      bottom: 0;
-      right: 0;
-      margin: var(--border-radius-small);
-      border-radius: var(--border-radius-small);
-      border: 1px solid var(--text-light-secondary);
-    }
-  }
-
-  .hcard-detail {
-    margin-block: var(--space-1x);
-    text-align: left;
-    flex-grow: 10;
-
-    .dropdown-header.p-name {
-      font-size: var(--fs-400);
-      font-weight: bold;
+    .hcard-summary {
+        margin-block: var(--space-1x);
+        text-align: left;
+        flex-grow: 10;
+        @include styles.caption;
     }
 
-    .dropdown-header.h-adr {
-      font-size: var(--fs-100);
+    .hcard-detail {
+        margin-block: var(--space-1x);
+        text-align: left;
+        flex-grow: 10;
+
+        .p-name {
+            font-size: var(--fs-500);
+            //font-weight: bold;
+        }
+
+        //.dropdown-header.p-name {
+        //    font-size: var(--fs-400);
+        //    font-weight: bold;
+        //}
+
+        .dropdown-header.h-adr {
+            font-size: var(--fs-100);
+        }
     }
-  }
 }

@@ -24,6 +24,7 @@ export enum Microformats {
     P_Role = "p-role",
     P_Sex = "p-sex",
     P_Gender_Identity = "p-gender-identity",
+    P_Pronouns = "p-pronouns",
     U_Sound = "u-sound",
 
     // h-adr

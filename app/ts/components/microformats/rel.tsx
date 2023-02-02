@@ -25,7 +25,7 @@ export const RelmeLinks = (props: RelLinkProps) => {
                     <span>rel=me</span>
                 </>
             }
-            defaultIsExpanded={true}
+            defaultIsExpanded={false}
             className="relme-links"
         >
             <button

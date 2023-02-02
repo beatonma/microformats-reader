@@ -57,7 +57,8 @@ const PopupUI = () => {
             </Row>
             <div className="h-cards">
                 {hcards?.map(hcard => (
-                    <HCard hcard={hcard} key={hcard.url} />
+                    <HCard hcard={hcard} key={hcard.name ?? hcard.url} />
+                    // <HCard hcard={hcard} key={hcard.url} />
                 ))}
             </div>
             <RelmeLinks links={relLinks?.relme} />

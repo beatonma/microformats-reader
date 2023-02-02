@@ -3,8 +3,11 @@ import { Icon, Icons } from "./icons";
 import { _ } from "ts/compat";
 import "./dropdown.scss";
 
-interface DropdownProps extends HTMLProps<HTMLDivElement> {
+export interface ExpandableProps {
     defaultIsExpanded?: boolean;
+}
+
+interface DropdownProps extends HTMLProps<HTMLDivElement>, ExpandableProps {
     header: ReactNode;
     headerClassName?: string;
 }

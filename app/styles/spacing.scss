@@ -1,7 +1,9 @@
+$space: 8px;
 :root {
-  --space-half: 4px;
-  --space-1x: 8px;
-  --space-2x: 16px;
-  --space-3x: 24px;
-  --space-4x: 32px;
+    --space-half: #{calc($space * 0.5)};
+    --space-1x: #{calc($space)};
+    --space-1-5x: #{calc($space * 1.5)};
+    --space-2x: #{calc($space * 2)};
+    --space-3x: #{calc($space * 3)};
+    --space-4x: #{calc($space * 4)};
 }

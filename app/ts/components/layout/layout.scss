@@ -1,11 +1,30 @@
-.row {
-  display: flex;
-  flex-direction: row;
-  vertical-align: middle;
-  align-items: center;
-  text-align: center;
+@use "styles";
 
-  &:empty {
-    display: none;
-  }
+.row {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    align-items: center;
+    text-align: center;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.group {
+    margin-right: var(--space-1x);
+    //margin-bottom: var(--space-half);
+
+    > * {
+        margin-right: var(--space-half);
+    }
+}
+
+.caption {
+    @include styles.caption;
+
+    &.light {
+        font-weight: normal;
+    }
 }

@@ -9,56 +9,61 @@ $popup-max-width: 800px;
 $popup-max-height: 600px;
 
 html {
-  background-color: #111;
-  height: $popup-max-height;
-  overflow-y: scroll;
+    background-color: #111;
+    height: $popup-max-height;
+    overflow-y: scroll;
 }
 
 body {
-  margin: 0;
-  padding: 1ch;
-  color: var(--on-background);
-  background-color: var(--background);
-  font-size: var(--fs-default);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  min-width: $popup-min-width;
-  min-height: $popup-min-height;
-  max-width :$popup-max-width;
-  max-height: $popup-max-height;
-  width: 64ch;
-  height: max-content;
-  margin-inline: auto;
-  overflow-x: clip;
-  overflow-y: scroll;
+    margin: 0;
+    padding: 1ch;
+    color: var(--on-background);
+    background-color: var(--background);
+    font-size: var(--fs-default);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    min-width: $popup-min-width;
+    min-height: $popup-min-height;
+    max-width: $popup-max-width;
+    max-height: $popup-max-height;
+    width: 64ch;
+    height: max-content;
+    margin-inline: auto;
+    overflow-x: clip;
+    overflow-y: scroll;
+    letter-spacing: 0.15ch;
 }
-
 
 pre {
-  @include styles.bordered();
-  overflow-x: scroll;
+    @include styles.bordered();
+    overflow-x: scroll;
 }
 
-a, a:visited {
-  color: var(--accent);
-  text-decoration: none;
+a,
+a:visited {
+    display: inline-block;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+span {
+    display: inline-block;
 }
 
 section {
-  margin-bottom: 3rem;
+    margin-bottom: 3rem;
 }
 
 #quick_links {
-  margin-block: var(--space-1x);
+    margin-block: var(--space-1x);
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+    width: 10px;
+    height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--text-secondary);
+    background-color: var(--text-secondary);
 }
 
 ::selection {
-
 }

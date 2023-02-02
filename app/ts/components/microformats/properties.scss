@@ -1,42 +1,42 @@
 @use "styles/typography";
 
 .property {
-  margin-block: var(--space-half);
-  align-items: center;
+    margin-block: var(--space-half);
+    align-items: center;
 
-  .property-name {
-    @include typography.caption;
-    margin-right: var(--space-1x);
+    .property-name {
+        @include typography.caption;
+        margin-right: var(--space-1x);
 
-    &::after {
-      content: ":"
+        &::after {
+            content: ":";
+        }
+
+        &:empty {
+            display: none;
+        }
     }
 
-    &:empty {
-      display: none;
+    .property-value {
+        //font-size: var(--fs-default);
     }
-  }
 
-  .property-value {
-    font-size: var(--fs-default);
-  }
-
-  .property-icon {
-    margin-right: var(--space-half);
-  }
+    .property-icon {
+        margin-right: var(--space-half);
+    }
 }
 
 table.properties {
-  border-collapse: collapse;
-  margin-bottom: var(--space-1x);
+    border-collapse: collapse;
+    margin-bottom: var(--space-1x);
 
-  td:empty {
-    display:none;
-  }
-  td:not(:empty) {
-    padding-right: 1ch;
-  }
-  td {
-    padding-bottom: var(--space-half);
-  }
+    td:empty {
+        display: none;
+    }
+    td:not(:empty) {
+        padding-right: 1ch;
+    }
+    td {
+        padding-bottom: var(--space-half);
+    }
 }

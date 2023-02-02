@@ -34,19 +34,23 @@ export interface HAdr extends HGeo {
     value?: string;
 }
 
+export interface GenderIdentity {
+    sex?: string;
+    genderIdentity?: string;
+    pronouns?: string;
+}
+
 export interface HCardData {
     photo?: Image;
     logo?: Image;
     name?: string;
     nameDetail?: HCardNameDetail;
+    gender: GenderIdentity;
     url?: string;
     email?: string;
     birthday?: string;
     location: HAdr;
     category?: string;
-    pronouns?: string;
-    genderIdentity?: string;
-    sex?: string;
 }
 const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
     const parseLocation = (obj?: any): HAdr | null => {
@@ -79,7 +83,7 @@ const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
         return accepted ? result : null;
     };
 
-    return parseLocation(hcard) ?? parseLocation(hcard.adr?.[0]) ?? null;
+    return parseLocation(hcard.adr?.[0]) ?? parseLocation(hcard) ?? null;
 };
 
 const parseImage = (items: Image[]): Image | null => items?.find(() => true);
@@ -123,14 +127,16 @@ export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
     return hcards.map(hcard => ({
         name: valueOf(hcard, "name"),
         nameDetail: parseNameDetails(hcard),
+        gender: {
+            pronouns: parsePronouns(hcard),
+            genderIdentity: valueOf(hcard, "gender-identity"),
+            sex: valueOf(hcard, "sex"),
+        },
+        location: parseLocation(hcard),
         url: valueOf(hcard, "url"),
         birthday: valueOf(hcard, "bday"),
-        location: parseLocation(hcard),
         photo: parseImage((hcard.photo as Image[]) ?? []),
         logo: parseImage((hcard.logo as Image[]) ?? []),
-        pronouns: parsePronouns(hcard),
-        genderIdentity: valueOf(hcard, "gender-identity"),
-        sex: valueOf(hcard, "sex"),
     }));
 };
 

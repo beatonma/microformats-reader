@@ -5,6 +5,7 @@ import "./icons.scss";
 export enum Icons {
     Birthday = "cake",
     ExpandMore = "expand_more",
+    Location = "location_on",
     Map = "map",
     PgpKey = "key",
     RssFeed = "rss_feed",
