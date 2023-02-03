@@ -42,6 +42,12 @@
             }
         }
     },
+    "hcard_name_details": {
+        "message": "Name"
+    },
+    "hcard_name_sound": {
+        "message": "Sound"
+    },
     "hcard_name_honorific_prefix": {
         "message": "Honorific prefix"
     },
@@ -63,6 +69,9 @@
     "hcard_name_sortby": {
         "message": "Sort by"
     },
+    "hcard_gender_details": {
+        "message": "Gender"
+    },
     "hcard_gender_identity": {
         "message": "Gender"
     },
@@ -73,6 +82,32 @@
         "message": "Pronouns"
     },
 
+    "hcard_contact_detail": {
+        "message": "Contact"
+    },
+    "hcard_contact_url": {
+        "message": "URL"
+    },
+    "hcard_contact_phone": {
+        "message": "Phone"
+    },
+    "hcard_contact_impp": {
+        "message": "IMPP"
+    },
+    "hcard_contact_email": {
+        "message": "Email"
+    },
+    "hcard_contact_key": {
+        "message": "Public key"
+    },
+
+    "hcard_job_detail": {
+        "message": "Work"
+    },
+
+    "hcard_location_detail": {
+        "message": "Location"
+    },
     "hadr_post_office_box":  {
         "message": "PO Box"
     },
@@ -121,9 +156,6 @@
     },
 
 
-    "location": {
-        "message": "Location"
-    },
 
     "v1__popup_title": {
         "message": "Microformats"

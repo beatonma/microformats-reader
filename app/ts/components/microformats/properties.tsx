@@ -11,6 +11,9 @@ interface MicroformatPropertyProps {
     svg?: string;
     value: ReactNode;
 }
+interface MicroformatUriPropertyProps extends MicroformatPropertyProps {
+    href: string;
+}
 
 /**
  * Display a microformat field with a name and optional icon, but only if
@@ -60,10 +63,7 @@ export const PropertySpan = (props: MicroformatPropertyProps) => {
     );
 };
 
-interface MicroformatUriPropertyProps extends MicroformatPropertyProps {
-    href: string;
-}
-export const PropertyUriDiv = (props: MicroformatUriPropertyProps) => {
+export const PropertyLinkDiv = (props: MicroformatUriPropertyProps) => {
     const { cls, href, value, ...rest } = props;
     let resolvedValue = (
         <ExternalLink href={href} title={cls}>
@@ -73,7 +73,7 @@ export const PropertyUriDiv = (props: MicroformatUriPropertyProps) => {
     return <PropertyDiv value={resolvedValue} cls={cls} {...rest} />;
 };
 
-export const PropertyUriSpan = (props: MicroformatUriPropertyProps) => {
+export const PropertyLinkSpan = (props: MicroformatUriPropertyProps) => {
     const { cls, href, value, ...rest } = props;
     let resolvedValue = (
         <ExternalLink href={href} title={cls}>
@@ -87,9 +87,15 @@ export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
     const { className, children, ...rest } = props;
     return (
         <table className={`properties ${className ?? ""}`} {...rest}>
+            <TableHeader title={props.title} />
             <tbody>{children}</tbody>
         </table>
     );
+};
+
+const TableHeader = (props: HTMLProps<HTMLTableElement>) => {
+    if (!props.title) return null;
+    return <thead>{props.title}</thead>;
 };
 
 export const PropertyRow = (props: MicroformatPropertyProps) => {
@@ -109,6 +115,23 @@ export const PropertyRow = (props: MicroformatPropertyProps) => {
             <td className="property-name">{name}</td>
             <td className={`property-value ${cls ?? ""}`}>{value}</td>
         </tr>
+    );
+};
+
+export const PropertyRowLink = (props: MicroformatUriPropertyProps) => {
+    const { value, cls, href, ...rest } = props;
+
+    if (!value) return null;
+    return (
+        <PropertyRow
+            cls={cls}
+            value={
+                <ExternalLink href={href} title={cls}>
+                    {value}
+                </ExternalLink>
+            }
+            {...rest}
+        />
     );
 };
 

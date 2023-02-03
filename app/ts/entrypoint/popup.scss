@@ -10,7 +10,7 @@ $popup-max-height: 600px;
 
 html {
     background-color: #111;
-    height: $popup-max-height;
+    max-height: $popup-max-height;
     overflow-y: scroll;
 }
 
@@ -30,6 +30,7 @@ body {
     margin-inline: auto;
     overflow-x: clip;
     overflow-y: scroll;
+    transition: all 200ms;
 }
 
 pre {
@@ -55,6 +56,7 @@ section {
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
+    background-color: var(--text-secondary);
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--text-secondary);

@@ -12,7 +12,7 @@ export interface ExpandableProps {
     onToggleExpand?: () => void;
 }
 
-interface DropdownProps
+export interface DropdownProps
     extends HTMLProps<HTMLDivElement>,
         ExpandableDefaultProps {
     header: ReactNode;
@@ -27,7 +27,7 @@ export const Dropdown = (props: DropdownProps) => {
         title,
         children,
     } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? true);
     const contentID = useId();
 
     const toggleState = () => setExpanded(!isExpanded);
@@ -47,6 +47,7 @@ export const Dropdown = (props: DropdownProps) => {
                 aria-expanded={isExpanded}
                 aria-controls={contentID}
                 tabIndex={0}
+                data-expanded={isExpanded}
             >
                 <span title={title}>{header}</span>
                 <DropdownButton isExpanded={isExpanded} />

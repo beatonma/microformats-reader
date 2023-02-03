@@ -266,8 +266,9 @@ const SampleHtml = `
     <div class="p-x-pronoun-nominative">he</div>
     <div class="p-x-pronoun-oblique">him</div>
     <div class="p-x-pronoun-posessive">his</div>
+    <a href="https://beatonma.org/key/" class="u-key">Public Key</a>
     <div class="u-uid">https://beatonma.org</div>
-    <a href="mailto://michael@beatonma.org" class="u-email"></a>
+    <a href="mailto:michael@beatonma.org" class="u-email"></a>
     <div class="p-tel">+44 1234 567 890</div>
     <div class="p-note">Long hair</div>
     <div class="p-org h-card">

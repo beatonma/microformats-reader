@@ -9,6 +9,7 @@ export enum Microformats {
     P_Honorific_Suffix = "p-honorific-suffix",
     P_Nickname = "p-nickname",
     U_Email = "u-email",
+    U_IMPP = "u-impp",
     U_Logo = "u-logo",
     U_Photo = "u-photo",
     U_Url = "u-url",

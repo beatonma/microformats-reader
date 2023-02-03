@@ -1,5 +1,6 @@
 import React from "react";
 import { _ } from "ts/compat";
+import { Dropdown } from "ts/components/layout/dropdown";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
@@ -19,7 +20,7 @@ export const Gender = (props: HCardGenderIdentity | null) => {
     );
 };
 
-export const GenderDetail = (props: HCardGenderIdentity | null) => {
+export const GenderPropertiesTable = (props: HCardGenderIdentity | null) => {
     if (!props) return null;
     const { genderIdentity, pronouns, sex } = props;
     return (

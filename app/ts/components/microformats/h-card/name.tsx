@@ -5,6 +5,7 @@ import {
     PropertiesTable,
     PropertyDiv,
     PropertyRow,
+    PropertyRowLink,
 } from "ts/components/microformats/properties";
 import { HCardNameDetail } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
@@ -20,25 +21,17 @@ export const Name = (props: NameDetailProps) => {
     return <PropertyDiv cls={Microformats.P_Name} value={name} />;
 };
 
-export const NameDetail = (props: NameDetailProps) => {
-    const { name, detail } = props;
-    return (
-        <Dropdown
-            headerClassName={Microformats.P_Name}
-            header={name}
-            title={Microformats.P_Name}
-        >
-            <NameDetailTable detail={detail} />
-        </Dropdown>
-    );
-};
-
-const NameDetailTable = (props: NameDetailProps) => {
+export const NamePropertiesTable = (props: NameDetailProps) => {
     const { detail } = props;
     if (detail == null) return null;
 
     return (
         <PropertiesTable>
+            <PropertyRowLink
+                cls={Microformats.U_Sound}
+                name={_("hcard_name_sound")}
+                value={detail?.sound}
+            />
             <PropertyRow
                 cls={Microformats.P_Honorific_Prefix}
                 name={_("hcard_name_honorific_prefix")}

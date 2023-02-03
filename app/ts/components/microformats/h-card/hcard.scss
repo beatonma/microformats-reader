@@ -39,18 +39,24 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     background-color: var(--surface);
     color: var(--on-surface);
     margin-block: var(--space-1x);
+    border-radius: var(--border-radius-medium);
+    box-shadow: rgba(9, 30, 66, 0.25) 0 1px 1px,
+        rgba(9, 30, 66, 0.13) 0 0 1px 1px;
+
+    :has(> [data-expanded="true"]) {
+        margin-block: var(--space-2x);
+    }
 }
 
 .h-card {
     padding: var(--space-1x);
 
     &[data-expanded="true"] {
-        flex-direction: column;
-
         .avatar {
             @include avatarSize($avatar-size-large, $pip-size-large);
             left: 50%;
             transform: translateX(-50%);
+            margin: var(--space-3x);
         }
 
         .hcard-summary {
@@ -63,8 +69,6 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     }
 
     &[data-expanded="false"] {
-        align-items: start;
-
         .avatar {
             @include avatarSize($avatar-size-small, $pip-size-small);
             margin-right: var(--space-2x);
@@ -78,7 +82,6 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
         .detail-wrapper {
             opacity: 0;
             max-height: 0;
-            overflow: clip;
         }
     }
 
@@ -105,6 +108,21 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     .hcard-detail {
         margin: var(--space-2x);
     }
+
+    thead {
+        font-size: var(--fs-caption);
+    }
+
+    .dropdown-header {
+        font-size: var(--fs-200);
+        line-height: 1.5;
+        margin-block: var(--space-1x);
+        transition: margin $transition-duration;
+
+        &[data-expanded="false"] {
+            margin-block: 0;
+        }
+    }
 }
 
 .avatar {
@@ -112,7 +130,7 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     position: relative;
     left: 0;
     border-radius: var(--border-radius-medium);
-    transition: all $transition-duration ease-out;
+    transition: margin 300ms, left 200ms;
 
     > img {
         object-fit: cover;

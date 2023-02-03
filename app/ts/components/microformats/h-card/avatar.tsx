@@ -1,4 +1,4 @@
-import React from "react";
+import React, { HTMLProps } from "react";
 import { HCardImages, Named } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
 
@@ -7,8 +7,10 @@ enum PrimaryAvatar {
     Logo = "u-logo",
 }
 
-export const Avatar = (props: HCardImages & Named) => {
-    const { name, photo, logo } = props;
+export const Avatar = (
+    props: HTMLProps<HTMLDivElement> & HCardImages & Named
+) => {
+    const { name, photo, logo, ...rest } = props;
 
     if (!photo?.value && !logo?.value) {
         return <TextAvatar name={name} />;
@@ -22,16 +24,16 @@ export const Avatar = (props: HCardImages & Named) => {
     const image = primaryImage == PrimaryAvatar.Photo ? photo : logo;
 
     return (
-        <div className="avatar">
+        <div className="avatar" {...rest}>
             <img className={primaryImage} src={image.value} alt={image.alt} />
         </div>
     );
 };
 
-const PhotoWithLogo = (props: HCardImages) => {
-    const { photo, logo } = props;
+const PhotoWithLogo = (props: HTMLProps<HTMLDivElement> & HCardImages) => {
+    const { photo, logo, ...rest } = props;
     return (
-        <div className="avatar">
+        <div className="avatar" {...rest}>
             <img
                 loading="lazy"
                 className={Microformats.U_Photo}

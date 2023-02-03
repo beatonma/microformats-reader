@@ -73,7 +73,7 @@ export interface HCardContactData {
     email?: string;
     phone?: string;
     impp?: string;
-    key?: string;
+    publicKey?: string;
 }
 
 export interface HCardJobData {
@@ -291,7 +291,7 @@ const parseContact = (
         email: email,
         phone: phone,
         impp: impp,
-        key: key,
+        publicKey: key,
     };
 };
 

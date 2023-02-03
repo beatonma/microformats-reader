@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { HTMLProps, useState } from "react";
+import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
+    Dropdown,
     DropdownButton,
+    DropdownProps,
     ExpandableDefaultProps,
 } from "ts/components/layout/dropdown";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
+import {
+    Contact,
+    ContactPropertiesTable,
+} from "ts/components/microformats/h-card/contact";
 import { Dates } from "ts/components/microformats/h-card/dates";
-import { Gender } from "ts/components/microformats/h-card/gender";
-import { PropertyUriDiv } from "ts/components/microformats/properties";
+import {
+    Gender,
+    GenderPropertiesTable,
+} from "ts/components/microformats/h-card/gender";
+import { PropertyLinkDiv } from "ts/components/microformats/properties";
+import { HCardRaw } from "ts/components/microformats/raw";
 import { HCardData } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
+import { Todo } from "ts/dev";
 import { Location } from "./location";
-import { Name, NameDetail } from "./name";
+import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images, ...rest } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? true);
 
     const toggleExpanded = () => setExpanded(!isExpanded);
 
@@ -25,7 +37,11 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
         <div className="hcard-wrapper">
             <div className="h-card" data-expanded={isExpanded}>
                 <Row className="banner">
-                    <Avatar name={props.name} {...images} />
+                    <Avatar
+                        name={props.name}
+                        {...images}
+                        onClick={toggleExpanded}
+                    />
                     <HCardTextSummary {...rest} />
                 </Row>
 
@@ -52,14 +68,7 @@ const HCardTextSummary = (props: HCardData) => {
                 <Location {...location} />
             </Row>
             <Row>
-                <InlineGroup>
-                    <PropertyUriDiv
-                        href={contact.url}
-                        cls={Microformats.U_Url}
-                        value={contact.url}
-                    />
-                </InlineGroup>
-                <Dates {...dates} />
+                <Contact {...contact} />
             </Row>
         </div>
     );
@@ -82,7 +91,36 @@ const HCardTextDetail = (props: HCardData) => {
 
     return (
         <div className="hcard-detail">
-            <NameDetail name={name} detail={nameDetail} />
+            <Row alignment={HorizontalAlignment.Center}>
+                <Name name={name} />
+            </Row>
+
+            <DetailSection
+                header={_("hcard_name_details")}
+                defaultIsExpanded={true}
+            >
+                <NamePropertiesTable name={name} detail={nameDetail} />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_gender_details")}>
+                <GenderPropertiesTable {...gender} />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_contact_detail")}>
+                <ContactPropertiesTable {...contact} />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_location_detail")}>
+                <Todo />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_job_detail")}>
+                <Todo />
+            </DetailSection>
+
+            <HCardRaw {...props} />
         </div>
     );
 };
+
+const DetailSection = (props: DropdownProps) => <Dropdown {...props} />;
