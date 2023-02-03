@@ -51,6 +51,10 @@
         }
     }
 
+    .dropdown-icon {
+        cursor: pointer;
+    }
+
     &:has(.dropdown-content:empty) {
         .dropdown-header {
             cursor: default;

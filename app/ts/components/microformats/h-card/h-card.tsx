@@ -1,40 +1,37 @@
-import React, { HTMLProps, useState } from "react";
+import React, { useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
     Dropdown,
     DropdownButton,
-    DropdownProps,
     ExpandableDefaultProps,
 } from "ts/components/layout/dropdown";
-import { InlineGroup } from "ts/components/layout/inline-group";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
     Contact,
     ContactPropertiesTable,
 } from "ts/components/microformats/h-card/contact";
-import { Dates } from "ts/components/microformats/h-card/dates";
+import { DatesPropertiesTable } from "ts/components/microformats/h-card/dates";
+import { ExtrasPropertiesTable } from "ts/components/microformats/h-card/extras";
 import {
     Gender,
     GenderPropertiesTable,
 } from "ts/components/microformats/h-card/gender";
-import { PropertyLinkDiv } from "ts/components/microformats/properties";
+import { JobPropertiesTable } from "ts/components/microformats/h-card/job";
 import { HCardRaw } from "ts/components/microformats/raw";
 import { HCardData } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
-import { Todo } from "ts/dev";
-import { Location } from "./location";
+import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
-    const { defaultIsExpanded, images, ...rest } = props;
+    const { defaultIsExpanded, id, images, ...rest } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? true);
 
     const toggleExpanded = () => setExpanded(!isExpanded);
 
     return (
-        <div className="hcard-wrapper">
+        <div className="hcard-wrapper" id={id}>
             <div className="h-card" data-expanded={isExpanded}>
                 <Row className="banner">
                     <Avatar
@@ -57,7 +54,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
 };
 
 const HCardTextSummary = (props: HCardData) => {
-    const { name, nameDetail, gender, contact, location, job, dates } = props;
+    const { name, nameDetail, gender, contact, location, job } = props;
     return (
         <div className="hcard-summary">
             <Row alignment={HorizontalAlignment.SpaceBetween}>
@@ -75,19 +72,8 @@ const HCardTextSummary = (props: HCardData) => {
 };
 
 const HCardTextDetail = (props: HCardData) => {
-    const {
-        name,
-        nameDetail,
-        images,
-        gender,
-        contact,
-        location,
-        job,
-        dates,
-        uid,
-        category,
-        notes,
-    } = props;
+    const { name, nameDetail, gender, contact, location, job, dates, extras } =
+        props;
 
     return (
         <div className="hcard-detail">
@@ -111,11 +97,19 @@ const HCardTextDetail = (props: HCardData) => {
             </DetailSection>
 
             <DetailSection header={_("hcard_location_detail")}>
-                <Todo />
+                <LocationPropertiesTable {...location} />
             </DetailSection>
 
             <DetailSection header={_("hcard_job_detail")}>
-                <Todo />
+                <JobPropertiesTable {...job} />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_dates_detail")}>
+                <DatesPropertiesTable {...dates} />
+            </DetailSection>
+
+            <DetailSection header={_("hcard_extras_detail")}>
+                <ExtrasPropertiesTable {...extras} />
             </DetailSection>
 
             <HCardRaw {...props} />
@@ -123,4 +117,4 @@ const HCardTextDetail = (props: HCardData) => {
     );
 };
 
-const DetailSection = (props: DropdownProps) => <Dropdown {...props} />;
+const DetailSection = Dropdown; // (props: DropdownProps) => <Dropdown {...props} />;

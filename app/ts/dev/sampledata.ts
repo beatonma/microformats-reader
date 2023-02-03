@@ -296,7 +296,7 @@ const SampleHtml = `
     <div data-meta="true">
     <img loading="lazy" class="u-logo" src="https://beatonma.org/static/images/mb.png" alt="Logo for beatonma.org" width="64"/>
     <time class="dt-bday" datetime="1987-05-16">1987-05-16</time>
-    <time class="dt-anniversary" datetime="1987-05-16">1987-05-16</time>
+    <time class="dt-anniversary" datetime="2017-05-16">2017-05-16</time>
     </div>
     <div id="relme">
     <a rel="me" href="https://beatonma.org" title="Homepage" class="u-url" >

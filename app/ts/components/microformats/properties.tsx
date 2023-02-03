@@ -12,6 +12,7 @@ interface MicroformatPropertyProps {
     value: ReactNode;
 }
 interface MicroformatUriPropertyProps extends MicroformatPropertyProps {
+    title?: string;
     href: string;
 }
 
@@ -119,14 +120,15 @@ export const PropertyRow = (props: MicroformatPropertyProps) => {
 };
 
 export const PropertyRowLink = (props: MicroformatUriPropertyProps) => {
-    const { value, cls, href, ...rest } = props;
+    const { value, cls, title, href, ...rest } = props;
 
     if (!value) return null;
+
     return (
         <PropertyRow
             cls={cls}
             value={
-                <ExternalLink href={href} title={cls}>
+                <ExternalLink href={href} title={title ?? cls}>
                     {value}
                 </ExternalLink>
             }

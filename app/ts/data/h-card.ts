@@ -14,6 +14,7 @@ export interface Named {
 }
 
 export interface HCardData extends Named {
+    id?: any;
     name?: string;
     nameDetail?: HCardNameDetail;
     images?: HCardImages;
@@ -22,9 +23,7 @@ export interface HCardData extends Named {
     location: HAdr;
     job?: HCardJobData;
     dates?: HCardDates;
-    uid?: string;
-    category?: string;
-    notes?: string;
+    extras?: HCardExtras;
 }
 
 export interface HCardNameDetail {
@@ -88,6 +87,12 @@ export interface HCardDates {
     anniversary?: string;
 }
 
+export interface HCardExtras {
+    uid?: string;
+    category?: string;
+    notes?: string;
+}
+
 /*
  * Parsing.
  */
@@ -99,7 +104,7 @@ export const parseHCards = (microformats: ParsedDocument): HCardData[] => {
 
     const primaryHcards = items.map(parseHCard).filter(Boolean);
     const hcards: HCardData[] = [];
-    primaryHcards.forEach(hcard => {
+    primaryHcards.forEach((hcard, index) => {
         hcards.push(hcard);
         if (hcard.job?.orgHCard != null) hcards.push(hcard.job.orgHCard);
     });
@@ -117,6 +122,7 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
     const job = parseJob(hcard);
     const dates = parseDates(hcard);
     const images = parseImages(hcard);
+    const extras = parseExtras(hcard);
 
     if (
         noneOf([
@@ -133,14 +139,16 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
         return null;
 
     return {
-        name: valueOf(hcard, "name"),
-        nameDetail: parseNameDetails(hcard),
-        gender: parseGender(hcard),
-        location: parseLocation(hcard),
-        contact: parseContact(hcard),
-        job: parseJob(hcard),
-        dates: parseDates(hcard),
-        images: parseImages(hcard),
+        id: Math.random().toString().replace(".", ""),
+        name: name,
+        nameDetail: nameDetail,
+        gender: gender,
+        location: location,
+        contact: contact,
+        job: job,
+        dates: dates,
+        images: images,
+        extras: extras,
     };
 };
 
@@ -300,7 +308,6 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
 
     let orgHCard: HCardData | null = null;
     if (org != null && typeof org !== "string") {
-        // console.log(`hcard: ${JSON.stringify(hcard, null, 2)}`);
         orgHCard = parseHCard(org[0]?.properties);
     }
 
@@ -314,6 +321,20 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
         orgHCard: orgHCard,
         jobTitle: jobTitle,
         role: role,
+    };
+};
+
+const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
+    const uid = valueOf(hcard, "uid");
+    const notes = valueOf(hcard, "note");
+    const category = valueOf(hcard, "category");
+
+    if (noneOf([uid, notes, category])) return null;
+
+    return {
+        uid: uid,
+        notes: notes,
+        category: category,
     };
 };
 

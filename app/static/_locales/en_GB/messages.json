@@ -81,7 +81,15 @@
     "hcard_pronouns": {
         "message": "Pronouns"
     },
-
+    "hcard_dates_detail": {
+        "message": "Important dates"
+    },
+    "hcard_dates_birthday": {
+        "message": "Date of birth"
+    },
+    "hcard_dates_anniversary": {
+        "message": "Anniversary"
+    },
     "hcard_contact_detail": {
         "message": "Contact"
     },
@@ -103,6 +111,30 @@
 
     "hcard_job_detail": {
         "message": "Work"
+    },
+    "hcard_job_title": {
+        "message": "Title"
+    },
+    "hcard_job_role": {
+        "message": "Role"
+    },
+    "hcard_job_organisation": {
+        "message": "Organisation"
+    },
+    "hcard_link_to_org_hcard": {
+        "message": "View organisation h-card"
+    },
+    "hcard_extras_detail": {
+        "message": "Other stuff"
+    },
+    "hcard_extras_notes": {
+        "message": "Note"
+    },
+    "hcard_extras_uid": {
+        "message": "UID"
+    },
+    "hcard_extras_category": {
+        "message": "Category"
     },
 
     "hcard_location_detail": {

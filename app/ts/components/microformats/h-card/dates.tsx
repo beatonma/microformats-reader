@@ -2,7 +2,11 @@ import React from "react";
 import { _ } from "ts/compat";
 import { Icons } from "ts/components/icons";
 import { InlineGroup } from "ts/components/layout/inline-group";
-import { PropertyDiv } from "ts/components/microformats/properties";
+import {
+    PropertiesTable,
+    PropertyDiv,
+    PropertyRow,
+} from "ts/components/microformats/properties";
 import { HCardDates } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
 import { formatLongDate } from "ts/formatting";
@@ -13,14 +17,36 @@ export const Dates = (props: HCardDates) => {
     return <Birthday {...props} />;
 };
 
-export const DatesDetail = (props: HCardDates) => {
+export const DatesPropertiesTable = (props: HCardDates) => {
     if (!props) return null;
+    const { birthday, anniversary } = props;
 
     return (
-        <div className="hcard-dates">
-            <Birthday {...props} />
-            <Anniversary {...props} />
-        </div>
+        <PropertiesTable>
+            <PropertyRow
+                cls={Microformats.Dt_Bday}
+                name={_("hcard_dates_birthday")}
+                value={
+                    <>
+                        <time dateTime={birthday}>
+                            {formatLongDate(birthday)}
+                        </time>{" "}
+                        <Age birthday={birthday} />
+                    </>
+                }
+            />
+            <PropertyRow
+                cls={Microformats.Dt_Anniversary}
+                name={_("hcard_dates_anniversary")}
+                value={
+                    <>
+                        <time dateTime={anniversary}>
+                            {formatLongDate(anniversary)}
+                        </time>
+                    </>
+                }
+            />
+        </PropertiesTable>
     );
 };
 
