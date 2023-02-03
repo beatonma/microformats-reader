@@ -55,9 +55,9 @@
     "importOrder": [
       "^react.*",
       "<THIRD_PARTY_MODULES>",
-      "^[a-zA-Z].*",
       "^ts/",
-      "^[./].*.scss$"
+      "^(./)[^.]+$",
+      "^./.*.scss$"
     ]
   },
   "dependencies": {
