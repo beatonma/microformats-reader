@@ -29,44 +29,40 @@ const PopupUI = () => {
         setHCards(parseHCards(data));
     }, []);
 
-    // useEffect(() => {
-    //     compatBrowser.tabs
-    //         .query({ active: true, lastFocusedWindow: true })
-    //         .then(tabs => {
-    //             const currentTab = tabs[0];
-    //
-    //             compatBrowser.tabs
-    //                 .sendMessage(currentTab.id, {
-    //                     action: Message.getMicroformats,
-    //                 })
-    //                 .then((response: MessageResponse) => {
-    //                     const data = response.microformats;
-    //                     setMicroformats(data);
-    //
-    //                     setRelLinks(parseRelLinks(data));
-    //                 });
-    //         });
-    // }, []);
+    useEffect(() => {
+        compatBrowser.tabs
+            .query({ active: true, lastFocusedWindow: true })
+            .then(tabs => {
+                const currentTab = tabs[0];
+
+                compatBrowser.tabs
+                    .sendMessage(currentTab.id, {
+                        action: Message.getMicroformats,
+                    })
+                    .then((response: MessageResponse) => {
+                        const data = response.microformats;
+                        setMicroformats(data);
+
+                        setRelLinks(parseRelLinks(data));
+                    });
+            });
+    }, []);
 
     return (
-        <div>
+        <>
             <Row alignment={HorizontalAlignment.Center} id="quick_links">
-                <WebmentionEndpoint links={relLinks?.webmention} />
                 <Feeds links={relLinks?.feeds} />
+                <WebmentionEndpoint links={relLinks?.webmention} />
                 <PgpKey links={relLinks?.pgp} />
             </Row>
             <div className="h-cards">
                 {hcards?.map(hcard => (
-                    <HCard
-                        hcard={hcard}
-                        key={hcard.name ?? hcard.contact?.url}
-                    />
-                    // <HCard hcard={hcard} key={hcard.url} />
+                    <HCard {...hcard} key={hcard.name ?? hcard.contact?.url} />
                 ))}
             </div>
             <RelmeLinks links={relLinks?.relme} />
             <MicroformatsRaw microformats={microformats} />
-        </div>
+        </>
     );
 };
 

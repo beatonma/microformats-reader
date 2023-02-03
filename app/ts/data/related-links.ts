@@ -16,7 +16,7 @@ export interface RelLinks {
 
 export function parseRelLinks(microformats: ParsedDocument): RelLinks | null {
     const rels = microformats?.rels ?? null;
-    if (rels === null) return null;
+    if (rels == null) return null;
 
     const relmeLinks = rels?.me ?? [];
     const pgpLinks = rels?.pgpkey ?? [];

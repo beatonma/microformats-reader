@@ -1,61 +1,146 @@
 @use "styles";
 
-$avatar-size: 128px;
-$pip-size: 24px; // Picture-in-picture size, used for logo if photo and logo both available
+$transition-duration: 220ms;
 
-.h-card {
-    color: var(--on-surface);
-    background-color: var(--surface);
-    padding: var(--space-1x);
-    margin-block: var(--space-2x);
-    align-items: start;
+$avatar-size-small: 128px;
+$pip-size-small: 24px; // Picture-in-picture size, used for logo if photo and logo both available
 
-    .hcard-summary {
-        margin-block: var(--space-1x);
-        text-align: left;
-        flex-grow: 10;
-        @include styles.caption;
+$avatar-size-large: 150px;
+$pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and logo both available
+
+@mixin avatarSize($primary, $secondary) {
+    width: $primary;
+    height: $primary;
+
+    > img:first-child {
+        width: $primary;
+        height: $primary;
     }
 
-    .hcard-detail {
-        margin-block: var(--space-1x);
-        text-align: left;
-        flex-grow: 10;
-
-        .p-name {
-            font-size: var(--fs-500);
-        }
-
-        .dropdown-header.h-adr {
-            font-size: var(--fs-100);
-        }
+    > img:nth-child(2) {
+        width: $secondary;
+        height: $secondary;
     }
 }
 
-.hcard-avatar {
-    display: inline-flex;
+%hcard-text-large {
+    font-size: var(--fs-h1);
+}
+
+%hcard-text-medium {
+    font-size: var(--fs-default);
+}
+
+%hcard-text-small {
+    font-size: var(--fs-100);
+}
+
+.hcard-wrapper {
+    background-color: var(--surface);
+    color: var(--on-surface);
+    margin-block: var(--space-1x);
+}
+
+.h-card {
+    padding: var(--space-1x);
+
+    &[data-expanded="true"] {
+        flex-direction: column;
+
+        .avatar {
+            @include avatarSize($avatar-size-large, $pip-size-large);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hcard-summary {
+            opacity: 0;
+        }
+
+        .detail-wrapper {
+            transition: opacity $transition-duration $transition-duration;
+        }
+    }
+
+    &[data-expanded="false"] {
+        align-items: start;
+
+        .avatar {
+            @include avatarSize($avatar-size-small, $pip-size-small);
+            margin-right: var(--space-2x);
+        }
+
+        .hcard-summary {
+            opacity: 1;
+            transition: opacity $transition-duration $transition-duration;
+        }
+
+        .detail-wrapper {
+            opacity: 0;
+            max-height: 0;
+            overflow: clip;
+        }
+    }
+
+    .p-name {
+        @extend %hcard-text-large;
+    }
+
+    .detail-wrapper,
+    .hcard-summary {
+        max-width: 10000px;
+        max-height: 10000px;
+        overflow: clip;
+        transition: max-height $transition-duration,
+            max-width $transition-duration;
+    }
+
+    .banner {
+        // Avatar + summary
+        position: relative;
+        transition: all $transition-duration;
+        align-items: start;
+    }
+
+    .hcard-detail {
+        margin: var(--space-2x);
+    }
+}
+
+.avatar {
+    display: flex;
     position: relative;
-    width: $avatar-size;
-    height: $avatar-size;
+    left: 0;
     border-radius: var(--border-radius-medium);
-    margin-right: var(--space-1x);
+    transition: all $transition-duration ease-out;
+
+    > img {
+        object-fit: cover;
+        transition: all $transition-duration ease;
+    }
 
     > img:first-child {
-        width: $avatar-size;
-        height: $avatar-size;
         border-radius: var(--border-radius-medium);
     }
 
     > img:nth-child(2) {
         position: absolute;
-        object-fit: contain;
-        width: $pip-size;
-        height: $pip-size;
         bottom: 0;
         right: 0;
         margin: var(--border-radius-small);
         border-radius: var(--border-radius-small);
         border: 1px solid var(--text-light-secondary);
+    }
+
+    &.text-fallback {
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-medium);
+        background-color: var(--local-muted);
+        color: var(--local-on-muted);
+        font-size: var(--fs-h1);
+        text-transform: lowercase;
+        user-select: none;
     }
 }
 

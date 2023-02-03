@@ -84,8 +84,12 @@ export const PropertyUriSpan = (props: MicroformatUriPropertyProps) => {
 };
 
 export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
-    const { className } = props;
-    return <table className={`properties ${className ?? ""}`} {...props} />;
+    const { className, children, ...rest } = props;
+    return (
+        <table className={`properties ${className ?? ""}`} {...rest}>
+            <tbody>{children}</tbody>
+        </table>
+    );
 };
 
 export const PropertyRow = (props: MicroformatPropertyProps) => {

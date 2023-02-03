@@ -9,7 +9,11 @@ import { noneOf } from "ts/data/arrays";
  * Structures.
  */
 
-export interface HCardData {
+export interface Named {
+    name?: string;
+}
+
+export interface HCardData extends Named {
     name?: string;
     nameDetail?: HCardNameDetail;
     images?: HCardImages;
@@ -298,8 +302,6 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
     if (org != null && typeof org !== "string") {
         // console.log(`hcard: ${JSON.stringify(hcard, null, 2)}`);
         orgHCard = parseHCard(org[0]?.properties);
-        console.log(`org: ${JSON.stringify(org, null, 2)}`);
-        console.log(`orgHCard: ${JSON.stringify(orgHCard, null, 2)}`);
     }
 
     const jobTitle = valueOf(hcard, "job-title");

@@ -3,6 +3,7 @@ import { _ } from "ts/compat";
 import "./icons.scss";
 
 export enum Icons {
+    Anniversary = "celebration",
     Birthday = "cake",
     ExpandMore = "expand_more",
     Location = "location_on",
@@ -10,6 +11,7 @@ export enum Icons {
     PgpKey = "key",
     RssFeed = "rss_feed",
     Url = "link",
+    Work = "work",
     WebmentionEndpoint = "forum",
 }
 

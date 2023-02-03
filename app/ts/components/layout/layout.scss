@@ -22,7 +22,7 @@
 }
 
 .caption {
-    @include styles.caption;
+    @extend %caption;
 
     &.light {
         font-weight: normal;

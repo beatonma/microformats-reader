@@ -18,6 +18,7 @@ export enum Microformats {
     P_Tel = "p-tel",
     P_Note = "p-note",
     Dt_Bday = "dt-bday",
+    Dt_Anniversary = "dt-anniversary",
     U_Key = "u-key",
     P_Org = "p-org",
     P_Job_Title = "p-job-title",

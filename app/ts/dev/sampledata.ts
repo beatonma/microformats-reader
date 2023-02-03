@@ -270,7 +270,9 @@ const SampleHtml = `
     <a href="mailto://michael@beatonma.org" class="u-email"></a>
     <div class="p-tel">+44 1234 567 890</div>
     <div class="p-note">Long hair</div>
-    <div class="p-org">beatonma.org</div>
+    <div class="p-org h-card">
+        <a href="http://beatonma.org" class="p-name u-url">beatonma.org</a>
+    </div>
     <div class="p-job-title">Freelance developer</div>
     <div class="p-role">I make stuff</div>
     <div class="p-category">Maker</div>

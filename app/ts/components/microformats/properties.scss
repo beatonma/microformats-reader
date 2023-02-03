@@ -5,7 +5,7 @@
     align-items: center;
 
     .property-name {
-        @include typography.caption;
+        @extend %caption;
         margin-right: var(--space-1x);
 
         &::after {

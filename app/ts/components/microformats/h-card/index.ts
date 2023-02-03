@@ -1,1 +1,1 @@
-export { HCard, HCardDetail } from "./h-card";
+export { HCard } from "./h-card";

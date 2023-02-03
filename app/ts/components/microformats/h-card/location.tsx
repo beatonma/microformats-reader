@@ -14,19 +14,13 @@ import { Microformats } from "ts/data/microformats";
 import { formatLatLong } from "ts/formatting";
 import "./location.scss";
 
-interface LocationProps {
-    location?: HAdr;
-}
+export const Location = (props: HAdr | null) => {
+    if (props == null) return null;
 
-export const Location = (props: LocationProps) => {
-    const { location } = props;
-    if (location == null) return null;
-
-    const summary = addressSummary(location);
+    const summary = addressSummary(props);
 
     return (
         <InlineGroup className="location" title={_("location")}>
-            {/*{summary}*/}
             <PropertySpan
                 icon={Icons.Location}
                 cls={_("location")}
@@ -36,9 +30,8 @@ export const Location = (props: LocationProps) => {
     );
 };
 
-export const LocationDetail = (props: LocationProps) => {
-    const { location } = props;
-    if (location == null) return null;
+export const LocationDetail = (props: HAdr | null) => {
+    if (props == null) return null;
     const {
         countryName,
         extendedAddress,
@@ -52,9 +45,9 @@ export const LocationDetail = (props: LocationProps) => {
         longitude,
         altitude,
         value,
-    } = location;
+    } = props;
 
-    const summary = addressSummary(location);
+    const summary = addressSummary(props);
 
     return (
         <Dropdown header={summary} headerClassName="h-adr">

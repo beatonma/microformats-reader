@@ -6,26 +6,22 @@ import {
     PropertyRow,
     PropertySpan,
 } from "ts/components/microformats/properties";
-import { GenderIdentity } from "ts/data/h-card";
+import { HCardGenderIdentity } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
 
-interface GenderProps {
-    gender: GenderIdentity;
-}
-export const Gender = (props: GenderProps) => {
-    const { gender } = props;
-    if (!gender) return null;
+export const Gender = (props: HCardGenderIdentity | null) => {
+    if (!props) return null;
 
     return (
         <InlineGroup className="gender">
-            <GenderSummary {...gender} />
+            <GenderSummary {...props} />
         </InlineGroup>
     );
 };
 
-export const GenderDetail = (props: GenderProps) => {
-    if (!props.gender) return null;
-    const { genderIdentity, pronouns, sex } = props.gender;
+export const GenderDetail = (props: HCardGenderIdentity | null) => {
+    if (!props) return null;
+    const { genderIdentity, pronouns, sex } = props;
     return (
         <PropertiesTable>
             <PropertyRow
@@ -47,7 +43,7 @@ export const GenderDetail = (props: GenderProps) => {
     );
 };
 
-const GenderSummary = (props: GenderIdentity) => {
+const GenderSummary = (props: HCardGenderIdentity) => {
     const { genderIdentity, pronouns, sex } = props;
 
     const gender = [genderIdentity, pronouns].filter(Boolean);

@@ -24,6 +24,16 @@
     --on-background: var(--text-primary);
     --on-surface: var(--text-primary);
 
+    --muted: var(--primary);
+    --on-muted: var(--on-primary);
+    --vibrant: var(--accent);
+    --on-vibrant: var(--on-surface);
+
+    --local-muted: var(--local-primary);
+    --local-on-muted: var(--local-on-primary);
+    --local-vibrant: var(--local-accent);
+    --local-on-vibrant: var(--local-on-accent);
+
     --local-primary-100: var(--primary-100);
     --local-primary-400: var(--primary-400);
     --local-primary-900: var(--primary-900);

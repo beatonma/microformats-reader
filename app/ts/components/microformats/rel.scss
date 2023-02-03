@@ -2,27 +2,27 @@
 @use "styles/typography";
 
 .quick-link {
-  @extend %hover;
-  font-size: var(--fs-h2);
-  margin-inline: var(--space-2x);
-  padding: 6px;
+    @extend %hover;
+    font-size: var(--fs-h2);
+    margin-inline: var(--space-2x);
+    padding: 6px;
 
-  color: var(--accent);
+    color: var(--accent);
 
-  .icon {
-    cursor: pointer;
-    padding-bottom: var(--space-1x);
-    width: 40px;
-    height: 40px;
-  }
+    .icon {
+        cursor: pointer;
+        padding-bottom: var(--space-1x);
+        width: 40px;
+        height: 40px;
+    }
 
-  .link-title {
-    @include typography.caption;
-    text-align: center;
-    max-lines: 1;
-    max-width: 13ch;
-    overflow: clip;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    .link-title {
+        @extend %caption;
+        text-align: center;
+        max-lines: 1;
+        max-width: 13ch;
+        overflow: clip;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
