@@ -1,13 +1,13 @@
-import { HCardData, parseHCards } from "./h-card";
 import { describe, expect, test } from "@jest/globals";
 import { mf2 } from "microformats-parser";
+import { HCardData, parseHCards } from "./h-card";
 
 const mf = (html: string) => mf2(html, { baseUrl: "http://sally.example.com" });
 
 const firstHCard = (html: string) => parseHCards(mf(html))[0];
 
 // From example at https://microformats.org/wiki/h-card
-const SampleFlatHCard = `
+const SampleHCardFlat = `
   <div class="h-card">
     <span class="p-name">Sally Ride</span>
     <span class="p-honorific-prefix">Dr.</span>
@@ -33,7 +33,7 @@ const SampleFlatHCard = `
     <div class="p-note">First American woman in space.</div>
   </div>`;
 
-const SampleHCardNestedGeo = `
+const SampleHCardNested = `
   <div class="h-card">
     <span class="p-name">Sally Ride</span>
     <span class="p-honorific-prefix">Dr.</span>
@@ -42,7 +42,10 @@ const SampleHCardNestedGeo = `
     <span class="p-family-name">Ride</span>
     <span class="p-honorific-suffix">Ph.D.</span>,
     <span class="p-nickname">sallykride</span> (IRC)
-    <div class="p-org">Sally Ride Science</div>
+    <div class="p-org h-card">
+        <div class="p-name">Sally Ride Science</div>
+        <a href="https://sallyridescience.com" class="u-url">sallyridescience.com</a>
+    </div>
     <img class="u-photo" src="http://example.com/sk.jpg" alt="photo"/>
     <a class="u-url" href="http://sally.example.com">w</a>,
     <a class="u-email" href="mailto:sally@example.com">e</a>
@@ -82,7 +85,7 @@ describe("HCard parsing", () => {
         });
 
         test("Name detail", () => {
-            const hcard = firstHCard(SampleFlatHCard);
+            const hcard = firstHCard(SampleHCardFlat);
             const nameDetail = hcard.nameDetail;
 
             expect(hcard.name).toBe("Sally Ride");
@@ -111,17 +114,7 @@ describe("HCard parsing", () => {
         });
 
         test("Nested p-adr", () => {
-            const html = `
-                  <div class="h-card">
-                    <div class="p-adr h-adr">
-                      <span class="p-locality">Los Angeles</span> |
-                      <span class="p-region">California</span> |
-                      <span class="p-country-name">U.S.A</span> |
-                      <span class="p-postal-code">91316</span>
-                    </div>
-                  </div>`;
-
-            const hcard = firstHCard(html);
+            const hcard = firstHCard(SampleHCardNested);
             const location = hcard.location;
 
             expect(location.locality).toBe("Los Angeles");
@@ -131,43 +124,32 @@ describe("HCard parsing", () => {
         });
 
         test("Address directly in h-card", () => {
-            const hcard = firstHCard(SampleFlatHCard);
+            const hcard = firstHCard(SampleHCardFlat);
 
             testLocation(hcard);
         });
 
         test("Address with nested p-geo", () => {
-            const hcard = firstHCard(SampleHCardNestedGeo);
+            const hcard = firstHCard(SampleHCardNested);
             testLocation(hcard);
         });
     });
 
-    test("Complex h-card", () => {
-        const html = `
-              <div class="h-card">
-                Some miscellaneous text with <span class="p-name">Sally Ride</span>
-                and a <a href="https://beatonma.org" class="u-url">Homepage</a> and a <time class="dt-bday" datetime="1987-05-16">birthday</time>
-                and a place like <div class="p-adr h-adr">
-                  <span class="p-locality">Los Angeles</span> |
-                  <span class="p-region">California</span> |
-                  <span class="p-country-name">U.S.A</span> |
-                  <span class="p-postal-code">91316</span>
-                </div>
-                <img loading="lazy" class="u-photo" src="http://example.com/sk.jpg" alt="Photo of Sally Ride" />
-              </div>`;
+    describe("Organisation", () => {
+        test("Simple name", () => {
+            const hcard = firstHCard(SampleHCardFlat);
 
-        const hcard = firstHCard(html);
-        const location = hcard.location;
+            expect(hcard.job.orgName).toBe("Sally Ride Science");
+        });
 
-        expect(hcard.name).toBe("Sally Ride");
-        expect(hcard.contact.url).toBe("https://beatonma.org");
-        expect(hcard.dates.birthday).toBe("1987-05-16");
+        test("Nested h-card", () => {
+            const hcard = firstHCard(SampleHCardNested);
 
-        expect(location.locality).toBe("Los Angeles");
-        expect(location.region).toBe("California");
-        expect(location.countryName).toBe("U.S.A");
-
-        expect(hcard.images.photo.value).toBe("http://example.com/sk.jpg");
-        expect(hcard.images.photo.alt).toBe("Photo of Sally Ride");
+            expect(hcard.job.orgName).toBe("Sally Ride Science");
+            expect(hcard.job.orgHCard.name).toBe("Sally Ride Science");
+            expect(hcard.job.orgHCard.contact.url).toBe(
+                "https://sallyridescience.com"
+            );
+        });
     });
 });
