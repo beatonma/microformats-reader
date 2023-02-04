@@ -67,4 +67,6 @@ span {
 }
 
 ::selection {
+    background-color: var(--on-surface);
+    color: var(--surface);
 }
