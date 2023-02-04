@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLAttributes, HTMLProps } from "react";
 import "./layout.scss";
 
 export enum HorizontalAlignment {
@@ -11,14 +11,19 @@ export enum HorizontalAlignment {
     SpaceAround = "space-around",
     SpaceEvenly = "space-evenly",
 }
-export interface RowProps extends HTMLProps<HTMLDivElement> {
+
+export interface RowProps extends HTMLAttributes<HTMLDivElement> {
     alignment?: HorizontalAlignment;
+    wrap?: boolean;
 }
 export const Row = (props: RowProps) => {
-    const { alignment, style, className, ...rest } = props;
+    const { alignment, wrap, style, className, ...rest } = props;
     const editableStyle: React.CSSProperties = style ?? {};
     if (alignment) {
         editableStyle.justifyContent = alignment;
+    }
+    if (wrap) {
+        editableStyle.flexWrap = wrap ? "wrap" : "nowrap";
     }
     return (
         <div

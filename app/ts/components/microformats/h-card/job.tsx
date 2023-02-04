@@ -1,5 +1,8 @@
 import React from "react";
 import { _ } from "ts/compat";
+import { Icons } from "ts/components/icons";
+import { ConditionalContent } from "ts/components/layout/conditional";
+import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
     PropertyRow,
@@ -7,10 +10,24 @@ import {
 } from "ts/components/microformats/properties";
 import { HCardJobData } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
-import { Todo } from "ts/dev";
 
 export const Job = (props?: HCardJobData) => {
-    return <Todo message={"job preview"} />;
+    if (!props) return null;
+    const { jobTitle, orgHCard } = props;
+
+    return (
+        <InlineGroup>
+            <Property
+                cls={Microformats.P_Job_Title}
+                icon={Icons.Work}
+                value={jobTitle}
+            />
+            <ConditionalContent condition={() => !!jobTitle && !!orgHCard}>
+                <span>{" @ "}</span>
+            </ConditionalContent>
+            <LinkToOrganisation {...props} />
+        </InlineGroup>
+    );
 };
 
 export const JobPropertiesTable = (props?: HCardJobData) => {
@@ -56,4 +73,30 @@ const Organisation = (props: HCardJobData) => {
             />
         );
     }
+};
+
+const LinkToOrganisation = (props: HCardJobData) => {
+    const { orgName, orgHCard } = props;
+
+    if (orgHCard) {
+        return (
+            <Property
+                href={`#${orgHCard.id}`}
+                cls={Microformats.P_Org}
+                title={_("hcard_link_to_org_hcard")}
+                value={orgHCard.name}
+            />
+        );
+    }
+
+    if (orgName) {
+        return (
+            <Property
+                cls={Microformats.P_Org}
+                value={orgName}
+            />
+        );
+    }
+
+    return null;
 };

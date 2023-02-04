@@ -17,7 +17,7 @@ import {
     Gender,
     GenderPropertiesTable,
 } from "ts/components/microformats/h-card/gender";
-import { JobPropertiesTable } from "ts/components/microformats/h-card/job";
+import { Job, JobPropertiesTable } from "ts/components/microformats/h-card/job";
 import { HCardRaw } from "ts/components/microformats/raw";
 import { HCardData } from "ts/data/h-card";
 import { Location, LocationPropertiesTable } from "./location";
@@ -60,12 +60,13 @@ const HCardTextSummary = (props: HCardData) => {
             <Row alignment={HorizontalAlignment.SpaceBetween}>
                 <Name name={name} detail={nameDetail} />
             </Row>
-            <Row>
+            <Row wrap>
                 <Gender {...gender} />
                 <Location {...location} />
             </Row>
-            <Row>
+            <Row wrap>
                 <Contact {...contact} />
+                <Job {...job} />
             </Row>
         </div>
     );
