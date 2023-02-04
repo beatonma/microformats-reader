@@ -1,0 +1,38 @@
+@use "styles/animation";
+
+.avatar {
+    display: flex;
+    position: relative;
+    left: 0;
+    border-radius: var(--border-radius-medium);
+    transition: margin 300ms, left 200ms;
+
+    > img {
+        object-fit: cover;
+        transition: all animation.$duration-short ease;
+    }
+
+    > img:first-child {
+        border-radius: var(--border-radius-medium);
+    }
+
+    > img:nth-child(2) {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: var(--border-radius-small);
+        border-radius: var(--border-radius-small);
+        border: 1px solid var(--text-light-secondary);
+    }
+
+    &.text-fallback {
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-medium);
+        background-color: var(--local-muted);
+        color: var(--local-on-muted);
+        font-size: var(--fs-h1);
+        text-transform: lowercase;
+        user-select: none;
+    }
+}
