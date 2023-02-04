@@ -1,8 +1,8 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { ExternalLink } from "ts/components/external-link";
 import { Icon, Icons } from "ts/components/icons";
 import { Dropdown } from "ts/components/layout/dropdown";
+import { LinkTo } from "ts/components/link-to";
 import { RelLink } from "ts/data/related-links";
 import "./rel.scss";
 
@@ -36,9 +36,9 @@ export const RelmeLinks = (props: RelLinkProps) => {
             </button>
             {links.map(link => (
                 <div key={link.href}>
-                    <ExternalLink href={link.href} title={link.title}>
+                    <LinkTo href={link.href} title={link.title}>
                         {link.text}
-                    </ExternalLink>
+                    </LinkTo>
                 </div>
             ))}
         </Dropdown>
@@ -59,13 +59,13 @@ const QuickLinks = (props: IconRelLinkProps) => {
         <>
             {links.map(link => (
                 <div className={`quick-link`} {...rest} key={link.href}>
-                    <ExternalLink
+                    <LinkTo
                         title={link.title ?? title ?? displayTitle}
                         href={link.href}
                     >
                         <Icon icon={icon} />
                         <div className="link-title">{displayTitle}</div>
-                    </ExternalLink>
+                    </LinkTo>
                 </div>
             ))}
         </>

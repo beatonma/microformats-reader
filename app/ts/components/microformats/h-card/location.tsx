@@ -1,13 +1,12 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { ExternalLink } from "ts/components/external-link";
 import { Icon, Icons } from "ts/components/icons";
-import { Dropdown } from "ts/components/layout/dropdown";
 import { InlineGroup } from "ts/components/layout/inline-group";
+import { LinkTo } from "ts/components/link-to";
 import {
     PropertiesTable,
+    Property,
     PropertyRow,
-    PropertySpan,
 } from "ts/components/microformats/properties";
 import { HAdr } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
@@ -21,7 +20,7 @@ export const Location = (props: HAdr | null) => {
 
     return (
         <InlineGroup className="location" title={_("location")}>
-            <PropertySpan
+            <Property
                 icon={Icons.Location}
                 cls={_("location")}
                 value={summary}
@@ -191,9 +190,9 @@ function addressSummary(location: HAdr): string {
 function LinkToMap(props: HTMLProps<HTMLAnchorElement>) {
     const { href, className, ...rest } = props;
     return (
-        <ExternalLink href={href} className="maps" {...rest}>
+        <LinkTo href={href} className="maps" {...rest}>
             <Icon icon={Icons.Map} /> Open in Google Maps
-        </ExternalLink>
+        </LinkTo>
     );
 }
 

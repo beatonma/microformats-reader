@@ -1,11 +1,10 @@
 import React from "react";
 import { _ } from "ts/compat";
-import { Dropdown } from "ts/components/layout/dropdown";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
+    Property,
     PropertyRow,
-    PropertySpan,
 } from "ts/components/microformats/properties";
 import { HCardGenderIdentity } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
@@ -51,14 +50,14 @@ const GenderSummary = (props: HCardGenderIdentity) => {
     if (gender.filter(Boolean)) {
         return (
             <>
-                <PropertySpan
+                <Property
                     cls={Microformats.P_Gender_Identity}
                     value={genderIdentity}
                 />
-                <PropertySpan cls={Microformats.P_Pronouns} value={pronouns} />
+                <Property cls={Microformats.P_Pronouns} value={pronouns} />
             </>
         );
     }
 
-    return <PropertySpan cls={Microformats.P_Sex} value={sex} />;
+    return <Property cls={Microformats.P_Sex} value={sex} />;
 };

@@ -4,7 +4,7 @@ import { Icons } from "ts/components/icons";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
-    PropertyDiv,
+    Property,
     PropertyRow,
 } from "ts/components/microformats/properties";
 import { HCardDates } from "ts/data/h-card";
@@ -56,7 +56,7 @@ const Birthday = (props: HCardDates) => {
 
     return (
         <InlineGroup>
-            <PropertyDiv
+            <Property
                 cls={Microformats.Dt_Bday}
                 icon={Icons.Birthday}
                 value={
@@ -76,7 +76,7 @@ const Anniversary = (props: HCardDates) => {
     const { anniversary } = props;
     return (
         <InlineGroup>
-            <PropertyDiv
+            <Property
                 cls={Microformats.Dt_Anniversary}
                 icon={Icons.Anniversary}
                 value={

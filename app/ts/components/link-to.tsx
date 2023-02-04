@@ -1,6 +1,6 @@
 import React, { HTMLProps } from "react";
 
-export const ExternalLink = (props: HTMLProps<HTMLAnchorElement>) => {
+export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
     const { title, href, ...rest } = props;
 
     if (href?.startsWith("#")) {

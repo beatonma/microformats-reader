@@ -49,6 +49,10 @@ section {
     margin-bottom: 3rem;
 }
 
+span {
+    white-space: nowrap;
+}
+
 #quick_links {
     margin-block: var(--space-1x);
 }

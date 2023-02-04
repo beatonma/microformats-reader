@@ -5,8 +5,8 @@ import { ConditionalContent } from "ts/components/layout/conditional";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
+    Property,
     PropertyRow,
-    PropertyRowLink,
 } from "ts/components/microformats/properties";
 import { HCardJobData } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
@@ -56,7 +56,7 @@ const Organisation = (props: HCardJobData) => {
 
     if (orgHCard) {
         return (
-            <PropertyRowLink
+            <PropertyRow
                 name={_("hcard_job_organisation")}
                 title={_("hcard_link_to_org_hcard")}
                 href={`#${orgHCard.id}`}
@@ -90,12 +90,7 @@ const LinkToOrganisation = (props: HCardJobData) => {
     }
 
     if (orgName) {
-        return (
-            <Property
-                cls={Microformats.P_Org}
-                value={orgName}
-            />
-        );
+        return <Property cls={Microformats.P_Org} value={orgName} />;
     }
 
     return null;
