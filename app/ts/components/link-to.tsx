@@ -1,4 +1,5 @@
 import React, { HTMLProps } from "react";
+import { compatBrowser } from "ts/compat";
 
 export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
     const { title, href, ...rest } = props;
@@ -8,7 +9,8 @@ export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
     }
 
     const titleWithURL = [title, href].join("\n");
-    const onClick = () => chrome.tabs.create({ active: true, url: href });
+    const onClick = () =>
+        compatBrowser.tabs.create({ active: true, url: href });
 
     return <a href={href} title={titleWithURL} onClick={onClick} {...rest} />;
 };

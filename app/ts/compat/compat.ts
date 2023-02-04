@@ -11,9 +11,14 @@ interface BrowserTab {
     url?: string;
 }
 
+interface CreateTabProperties {
+    active: boolean;
+    url: string;
+}
 interface BrowserTabs {
     query: (queryInfo: any) => Promise<BrowserTab[]>;
     sendMessage: (tabId: number, message: any) => Promise<any>;
+    create: (properties: CreateTabProperties) => Promise<any>;
 }
 
 interface BrowserRuntimeOnMessage {
@@ -48,6 +53,13 @@ class ChromeBrowserProxy implements BrowserProxy {
             new Promise<any>((resolve, reject) => {
                 chrome.tabs.sendMessage(tabId, message, {}, (response: any) => {
                     resolve(response);
+                });
+            }),
+
+        create: (properties: any) =>
+            new Promise<BrowserTab>((resolve, reject) => {
+                chrome.tabs.create(properties, (tab: BrowserTab) => {
+                    resolve(tab);
                 });
             }),
     };
