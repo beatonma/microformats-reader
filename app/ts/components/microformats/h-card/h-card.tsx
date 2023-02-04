@@ -118,4 +118,4 @@ const HCardTextDetail = (props: HCardData) => {
     );
 };
 
-const DetailSection = Dropdown; // (props: DropdownProps) => <Dropdown {...props} />;
+const DetailSection = Dropdown;
