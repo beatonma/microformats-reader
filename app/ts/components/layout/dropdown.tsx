@@ -27,7 +27,7 @@ export const Dropdown = (props: DropdownProps) => {
         title,
         children,
     } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? true);
+    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
     const contentID = useId();
 
     const toggleState = () => setExpanded(!isExpanded);

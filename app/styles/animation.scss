@@ -1,25 +1,53 @@
+$duration-debug: 2500ms;
 $duration-short: 200ms;
 $duration-long: 300ms;
 
+$max-height: 1000vh;
+$max-width: 1000vw;
+$slide-distance: 0.5em;
 
-@keyframes collapseHorizontal {
+%visibilityAnimation {
+    animation-fill-mode: both;
+    overflow: clip;
+    animation-duration: $duration-long;
+    animation-timing-function: ease-in;
+}
+@mixin expandVertical {
+    @extend %visibilityAnimation;
+    animation-name: expandVertical;
+}
+@mixin expandHorizontal {
+    @extend %visibilityAnimation;
+    animation-name: expandHorizontal;
+}
+
+@mixin collapseVertical {
+    @extend %visibilityAnimation;
+    animation-name: collapseVertical;
+}
+@mixin collapseHorizontal {
+    @extend %visibilityAnimation;
+    animation-name: collapseHorizontal;
+}
+
+@keyframes expandVertical {
     0% {
-        opacity: 1;
-        max-width: 1000000px;
-    }
-    50% {
-        opacity: 0;
-    }
-    99% {
-        display: block;
-        opacity: 0;
-        max-width: 0;
-        transform: translateY(50px);
-    }
-    100% {
         display: none;
         opacity: 0;
-        max-width: 0;
+        max-height: 0;
+        transform: translateY($slide-distance);
+    }
+    1% {
+        display: block;
+        opacity: 0;
+        max-height: 0;
+    }
+    33% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        max-height: $max-height;
     }
 }
 
@@ -28,23 +56,32 @@ $duration-long: 300ms;
         display: none;
         opacity: 0;
         max-width: 0;
+        transform: translateY($slide-distance);
     }
     1% {
         display: block;
         opacity: 0;
         max-width: 0;
     }
+    33% {
+        opacity: 0;
+    }
     100% {
         opacity: 1;
-        max-width: 1000000px;
+        max-width: $max-width;
     }
 }
 
 @keyframes collapseVertical {
     0% {
         opacity: 1;
-        max-height: 1000000px;
+        max-height: $max-height;
     }
+
+    20% {
+        opacity: 0;
+    }
+
     99% {
         display: block;
         opacity: 0;
@@ -57,20 +94,26 @@ $duration-long: 300ms;
     }
 }
 
-@keyframes expandVertical {
+@keyframes collapseHorizontal {
     0% {
-        display: none;
-        opacity: 0;
-        max-height: 0;
+        opacity: 1;
+        max-width: $max-width;
     }
-    1% {
+
+    33% {
+        opacity: 0;
+        transform: translateX(25vw);
+    }
+
+    99% {
         display: block;
         opacity: 0;
-        max-height: 0;
+        max-width: 0;
     }
     100% {
-        opacity: 1;
-        max-height: 1000000px;
+        display: none;
+        opacity: 0;
+        max-width: 0;
     }
 }
 
@@ -79,7 +122,7 @@ $duration-long: 300ms;
         transform: translateY(0);
     }
     50% {
-        transform: translateY(50px);
+        transform: translateY($slide-distance);
     }
     100% {
         transform: translateY(0);

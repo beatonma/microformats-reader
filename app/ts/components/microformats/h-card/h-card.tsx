@@ -4,6 +4,7 @@ import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
     Dropdown,
     DropdownButton,
+    DropdownProps,
     ExpandableDefaultProps,
 } from "ts/components/layout/dropdown";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
@@ -18,7 +19,6 @@ import {
     GenderPropertiesTable,
 } from "ts/components/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/components/microformats/h-card/job";
-import { HCardRaw } from "ts/components/microformats/raw";
 import { HCardData } from "ts/data/h-card";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
@@ -26,13 +26,21 @@ import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, id, images, ...rest } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? true);
+    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const [isInteractedWith, setIsInteractedWith] = useState(false);
 
-    const toggleExpanded = () => setExpanded(!isExpanded);
+    const toggleExpanded = () => {
+        setExpanded(!isExpanded);
+        setIsInteractedWith(true);
+    };
 
     return (
         <div className="hcard-wrapper" id={id}>
-            <div className="h-card" data-expanded={isExpanded}>
+            <div
+                className="h-card"
+                data-expanded={isExpanded}
+                data-is-interacted-with={isInteractedWith}
+            >
                 <Row className="banner">
                     <Avatar
                         name={props.name}
@@ -84,38 +92,52 @@ const HCardTextDetail = (props: HCardData) => {
 
             <DetailSection
                 header={_("hcard_name_details")}
-                defaultIsExpanded={true}
+                dependsOn={nameDetail}
             >
-                <NamePropertiesTable name={name} detail={nameDetail} />
+                <NamePropertiesTable detail={nameDetail} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_gender_details")}>
+            <DetailSection
+                header={_("hcard_gender_details")}
+                dependsOn={gender}
+            >
                 <GenderPropertiesTable {...gender} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_contact_detail")}>
+            <DetailSection
+                header={_("hcard_contact_detail")}
+                dependsOn={contact}
+            >
                 <ContactPropertiesTable {...contact} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_location_detail")}>
+            <DetailSection
+                header={_("hcard_location_detail")}
+                dependsOn={location}
+            >
                 <LocationPropertiesTable {...location} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_job_detail")}>
+            <DetailSection header={_("hcard_job_detail")} dependsOn={job}>
                 <JobPropertiesTable {...job} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_dates_detail")}>
+            <DetailSection header={_("hcard_dates_detail")} dependsOn={dates}>
                 <DatesPropertiesTable {...dates} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_extras_detail")}>
+            <DetailSection header={_("hcard_extras_detail")} dependsOn={extras}>
                 <ExtrasPropertiesTable {...extras} />
             </DetailSection>
-
-            <HCardRaw {...props} />
         </div>
     );
 };
 
-const DetailSection = Dropdown;
+interface RequiredObjectProps {
+    dependsOn: object;
+}
+const DetailSection = (props: DropdownProps & RequiredObjectProps) => {
+    if (props.dependsOn == null) return null;
+
+    return <Dropdown {...props} />;
+};

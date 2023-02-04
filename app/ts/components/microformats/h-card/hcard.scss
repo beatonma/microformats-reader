@@ -1,6 +1,5 @@
 @use "styles";
-
-$transition-duration: 220ms;
+@use "styles/animation";
 
 $avatar-size-small: 128px;
 $pip-size-small: 24px; // Picture-in-picture size, used for logo if photo and logo both available
@@ -8,18 +7,36 @@ $pip-size-small: 24px; // Picture-in-picture size, used for logo if photo and lo
 $avatar-size-large: 150px;
 $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and logo both available
 
+/**
+ * Avatar animation
+ */
+@mixin avatarCollapsed {
+    width: $avatar-size-small;
+    height: $avatar-size-small;
+    left: 0;
+    transform: translateX(0);
+    margin-right: var(--space-2x);
+}
+@mixin avatarMidpoint {
+    width: $avatar-size-large;
+    height: $avatar-size-large;
+    left: 0;
+    transform: translateX(0);
+}
+@mixin avatarExpanded {
+    width: $avatar-size-large;
+    height: $avatar-size-large;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-3x);
+}
 @mixin avatarSize($primary, $secondary) {
-    width: $primary;
-    height: $primary;
-
     > img:first-child {
-        width: $primary;
-        height: $primary;
+        @include styles.size($primary);
     }
 
     > img:nth-child(2) {
-        width: $secondary;
-        height: $secondary;
+        @include styles.size($secondary);
     }
 }
 
@@ -53,35 +70,47 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
 
     &[data-expanded="true"] {
         .avatar {
+            animation-name: avatarGrow;
+            animation-duration: animation.$duration-long;
+            animation-fill-mode: both;
             @include avatarSize($avatar-size-large, $pip-size-large);
-            left: 50%;
-            transform: translateX(-50%);
-            margin: var(--space-3x);
         }
 
         .hcard-summary {
-            opacity: 0;
+            @include animation.collapseHorizontal;
         }
 
         .detail-wrapper {
-            transition: opacity $transition-duration $transition-duration;
+            @include animation.expandVertical;
         }
     }
 
-    &[data-expanded="false"] {
+    &[data-expanded="false"][data-is-interacted-with="false"] {
         .avatar {
+            @include avatarCollapsed;
             @include avatarSize($avatar-size-small, $pip-size-small);
-            margin-right: var(--space-2x);
-        }
-
-        .hcard-summary {
-            opacity: 1;
-            transition: opacity $transition-duration $transition-duration;
+            @include styles.size($avatar-size-small);
         }
 
         .detail-wrapper {
-            opacity: 0;
-            max-height: 0;
+            display: none;
+        }
+    }
+
+    &[data-expanded="false"][data-is-interacted-with="true"] {
+        .avatar {
+            animation-name: avatarShrink;
+            animation-duration: animation.$duration-long;
+            animation-fill-mode: both;
+            @include avatarSize($avatar-size-small, $pip-size-small);
+        }
+
+        .hcard-summary {
+            @include animation.expandHorizontal;
+        }
+
+        .detail-wrapper {
+            @include animation.collapseVertical;
         }
     }
 
@@ -89,19 +118,9 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
         @extend %hcard-text-large;
     }
 
-    .detail-wrapper,
-    .hcard-summary {
-        max-width: 10000px;
-        max-height: 10000px;
-        overflow: clip;
-        transition: max-height $transition-duration,
-            max-width $transition-duration;
-    }
-
     .banner {
         // Avatar + summary
         position: relative;
-        transition: all $transition-duration;
         align-items: start;
     }
 
@@ -109,15 +128,11 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
         margin: var(--space-2x);
     }
 
-    thead {
-        font-size: var(--fs-caption);
-    }
-
     .dropdown-header {
         font-size: var(--fs-200);
         line-height: 1.5;
         margin-block: var(--space-1x);
-        transition: margin $transition-duration;
+        transition: margin animation.$duration-short;
 
         &[data-expanded="false"] {
             margin-block: 0;
@@ -139,5 +154,32 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
         &[data-expanded="true"] {
             transform: rotateX(180deg);
         }
+    }
+}
+
+@keyframes avatarGrow {
+    0% {
+        @include avatarCollapsed;
+    }
+
+    33% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarExpanded;
+    }
+}
+@keyframes avatarShrink {
+    0% {
+        @include avatarExpanded;
+    }
+
+    66% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarCollapsed;
     }
 }
