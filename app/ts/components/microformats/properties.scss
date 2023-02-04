@@ -1,6 +1,7 @@
 @use "styles/typography";
 
 .property {
+    display: flex;
     margin-block: var(--space-half);
     align-items: center;
 
@@ -15,10 +16,6 @@
         &:empty {
             display: none;
         }
-    }
-
-    .property-value {
-        //font-size: var(--fs-default);
     }
 
     .property-icon {
@@ -38,5 +35,8 @@ table.properties {
     }
     td {
         padding-bottom: var(--space-half);
+    }
+    tr.property {
+        display: table-row;
     }
 }
