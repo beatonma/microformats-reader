@@ -37,21 +37,19 @@ export const Dropdown = (props: DropdownProps) => {
             className={`dropdown ${className ?? ""}`}
             data-expanded={isExpanded}
         >
-            <div
+            <button
                 className={`dropdown-header ${headerClassName ?? ""}`}
                 onClick={toggleState}
                 title={
                     isExpanded ? _("dropdown_collapse") : _("dropdown_expand")
                 }
-                role="button"
                 aria-expanded={isExpanded}
                 aria-controls={contentID}
-                tabIndex={0}
                 data-expanded={isExpanded}
             >
                 <span title={title}>{header}</span>
-                <DropdownButton isExpanded={isExpanded} />
-            </div>
+                <DropdownIcon isExpanded={isExpanded} />
+            </button>
             <div id={contentID} className="dropdown-content">
                 {children}
             </div>
@@ -59,7 +57,7 @@ export const Dropdown = (props: DropdownProps) => {
     );
 };
 
-export const DropdownButton = (
+export const DropdownIcon = (
     props: HTMLProps<HTMLSpanElement> & ExpandableProps
 ) => {
     const { className, isExpanded, onToggleExpand, ...rest } = props;

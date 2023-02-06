@@ -34,11 +34,16 @@
     .dropdown-header {
         display: flex;
         flex-direction: row;
+        width: -webkit-fill-available;
         justify-content: left;
         font-size: var(--fs-h3);
         vertical-align: middle;
         align-items: center;
         cursor: pointer;
+        margin-inline: 0;
+        padding-inline: 0;
+        background: none;
+        border: none;
     }
 
     .dropdown-content {

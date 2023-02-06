@@ -2,10 +2,10 @@
 @use "styles/animation";
 
 $avatar-size-small: 128px;
-$pip-size-small: 24px; // Picture-in-picture size, used for logo if photo and logo both available
+$inset-avatar-size-small: 24px;
 
 $avatar-size-large: 150px;
-$pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and logo both available
+$inset-avatar-size-large: 32px;
 
 /**
  * Avatar animation
@@ -73,7 +73,7 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
             animation-name: avatarGrow;
             animation-duration: animation.$duration-long;
             animation-fill-mode: both;
-            @include avatarSize($avatar-size-large, $pip-size-large);
+            @include avatarSize($avatar-size-large, $inset-avatar-size-large);
         }
 
         .hcard-summary {
@@ -88,7 +88,7 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     &[data-expanded="false"][data-is-interacted-with="false"] {
         .avatar {
             @include avatarCollapsed;
-            @include avatarSize($avatar-size-small, $pip-size-small);
+            @include avatarSize($avatar-size-small, $inset-avatar-size-small);
             @include styles.size($avatar-size-small);
         }
 
@@ -102,7 +102,7 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
             animation-name: avatarShrink;
             animation-duration: animation.$duration-long;
             animation-fill-mode: both;
-            @include avatarSize($avatar-size-small, $pip-size-small);
+            @include avatarSize($avatar-size-small, $inset-avatar-size-small);
         }
 
         .hcard-summary {
@@ -140,19 +140,18 @@ $pip-size-large: 32px; // Picture-in-picture size, used for logo if photo and lo
     }
 }
 
-#hcard_toggle_detail {
+button#hcard_toggle_detail {
+    @extend %hover;
     display: block;
     font-size: var(--fs-500);
-    text-align: center;
+    width: stretch;
+    cursor: pointer;
 
     .dropdown-icon {
-        display: block;
-        width: -webkit-fill-available;
         margin: 0;
         cursor: pointer;
-
-        &[data-expanded="true"] {
-            transform: rotateX(180deg);
+        &:hover {
+            background: none;
         }
     }
 }

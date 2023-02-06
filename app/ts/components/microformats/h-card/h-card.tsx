@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
     Dropdown,
-    DropdownButton,
+    DropdownIcon,
     DropdownProps,
     ExpandableDefaultProps,
 } from "ts/components/layout/dropdown";
@@ -28,6 +28,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, id, images, ...rest } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
     const [isInteractedWith, setIsInteractedWith] = useState(false);
+    const hcardContentID = useId();
 
     const toggleExpanded = () => {
         setExpanded(!isExpanded);
@@ -37,8 +38,10 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     return (
         <div className="hcard-wrapper" id={id}>
             <div
+                id={hcardContentID}
                 className="h-card"
                 data-expanded={isExpanded}
+                aria-expanded={isExpanded}
                 data-is-interacted-with={isInteractedWith}
             >
                 <Row className="banner">
@@ -54,9 +57,13 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                     <HCardTextDetail {...rest} />
                 </div>
             </div>
-            <div id="hcard_toggle_detail" onClick={toggleExpanded}>
-                <DropdownButton isExpanded={isExpanded} />
-            </div>
+            <button
+                id="hcard_toggle_detail"
+                onClick={toggleExpanded}
+                aria-controls={hcardContentID}
+            >
+                <DropdownIcon isExpanded={isExpanded} />
+            </button>
         </div>
     );
 };
