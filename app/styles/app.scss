@@ -1,0 +1,51 @@
+@use "./borders";
+
+html {
+    background-color: #111;
+    overflow-y: scroll;
+}
+
+body {
+    margin: 0;
+    padding: 1ch;
+    color: var(--on-background);
+    background-color: var(--background);
+    font-size: var(--fs-default);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    width: 64ch;
+    height: max-content;
+    margin-inline: auto;
+    overflow-x: clip;
+    overflow-y: scroll;
+    transition: all 200ms;
+}
+
+pre {
+    @include borders.bordered();
+    overflow-x: scroll;
+}
+
+a,
+a:visited {
+    display: inline-block;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: var(--text-secondary);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+}
+
+::selection {
+    background-color: var(--on-surface);
+    color: var(--surface);
+}

@@ -9,64 +9,16 @@ $popup-max-width: 800px;
 $popup-max-height: 600px;
 
 html {
-    background-color: #111;
     max-height: $popup-max-height;
-    overflow-y: scroll;
 }
 
 body {
-    margin: 0;
-    padding: 1ch;
-    color: var(--on-background);
-    background-color: var(--background);
-    font-size: var(--fs-default);
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     min-width: $popup-min-width;
     min-height: $popup-min-height;
     max-width: $popup-max-width;
     max-height: $popup-max-height;
-    width: 64ch;
-    height: max-content;
-    margin-inline: auto;
-    overflow-x: clip;
-    overflow-y: scroll;
-    transition: all 200ms;
-}
-
-pre {
-    @include styles.bordered();
-    overflow-x: scroll;
-}
-
-a,
-a:visited {
-    display: inline-block;
-    color: var(--accent);
-    text-decoration: none;
-}
-
-section {
-    margin-bottom: 3rem;
-}
-
-span {
-    white-space: nowrap;
 }
 
 #quick_links {
     margin-block: var(--space-1x);
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    background-color: var(--text-secondary);
-}
-::-webkit-scrollbar-thumb {
-    background-color: var(--text-secondary);
-}
-
-::selection {
-    background-color: var(--on-surface);
-    color: var(--surface);
 }
