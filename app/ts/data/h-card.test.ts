@@ -4,7 +4,8 @@ import { HCardData, parseHCards } from "./h-card";
 
 const mf = (html: string) => mf2(html, { baseUrl: "http://sally.example.com" });
 
-const firstHCard = (html: string) => parseHCards(mf(html))[0];
+const firstHCard = async (html: string) =>
+    parseHCards(mf(html)).then(data => data[0]);
 
 // From example at https://microformats.org/wiki/h-card
 const SampleHCardFlat = `
@@ -77,15 +78,15 @@ function testLocation(hcard: HCardData) {
 
 describe("HCard parsing", () => {
     describe("Names", () => {
-        test("Simple name", () => {
+        test("Simple name", async () => {
             const html = '<div class="h-card">Sally Ride</div>';
-            const hcard = firstHCard(html);
+            const hcard = await firstHCard(html);
 
             expect(hcard.name).toBe("Sally Ride");
         });
 
-        test("Name detail", () => {
-            const hcard = firstHCard(SampleHCardFlat);
+        test("Name detail", async () => {
+            const hcard = await firstHCard(SampleHCardFlat);
             const nameDetail = hcard.nameDetail;
 
             expect(hcard.name).toBe("Sally Ride");
@@ -99,22 +100,22 @@ describe("HCard parsing", () => {
     });
 
     describe("Locations", () => {
-        test("No location", () => {
+        test("No location", async () => {
             const html = '<div class="h-card">Sally Ride</div>';
-            const hcard = firstHCard(html);
+            const hcard = await firstHCard(html);
 
             expect(hcard.location).toBeNull();
         });
 
-        test("Simple address", () => {
+        test("Simple address", async () => {
             const html = `<div class="h-card"><div class="p-adr">My address</div>`;
-            const hcard = firstHCard(html);
+            const hcard = await firstHCard(html);
 
             expect(hcard.location.value).toBe("My address");
         });
 
-        test("Nested p-adr", () => {
-            const hcard = firstHCard(SampleHCardNested);
+        test("Nested p-adr", async () => {
+            const hcard = await firstHCard(SampleHCardNested);
             const location = hcard.location;
 
             expect(location.locality).toBe("Los Angeles");
@@ -123,27 +124,27 @@ describe("HCard parsing", () => {
             expect(location.postalCode).toBe("91316");
         });
 
-        test("Address directly in h-card", () => {
-            const hcard = firstHCard(SampleHCardFlat);
+        test("Address directly in h-card", async () => {
+            const hcard = await firstHCard(SampleHCardFlat);
 
             testLocation(hcard);
         });
 
-        test("Address with nested p-geo", () => {
-            const hcard = firstHCard(SampleHCardNested);
+        test("Address with nested p-geo", async () => {
+            const hcard = await firstHCard(SampleHCardNested);
             testLocation(hcard);
         });
     });
 
     describe("Organisation", () => {
-        test("Simple name", () => {
-            const hcard = firstHCard(SampleHCardFlat);
+        test("Simple name", async () => {
+            const hcard = await firstHCard(SampleHCardFlat);
 
             expect(hcard.job.orgName).toBe("Sally Ride Science");
         });
 
-        test("Nested h-card", () => {
-            const hcard = firstHCard(SampleHCardNested);
+        test("Nested h-card", async () => {
+            const hcard = await firstHCard(SampleHCardNested);
 
             expect(hcard.job.orgName).toBe("Sally Ride Science");
             expect(hcard.job.orgHCard.name).toBe("Sally Ride Science");
