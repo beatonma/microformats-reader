@@ -1,6 +1,5 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // Based on https://github.com/sszczep/chrome-extension-webpack
 module.exports = {
@@ -22,7 +21,12 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "postcss-loader",
+                    "sass-loader",
+                ],
             },
         ],
     },
@@ -36,9 +40,6 @@ module.exports = {
         clean: true,
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: "css/[name].css",
-        }),
         new CopyPlugin({
             patterns: [{ from: "./app/static" }],
         }),
