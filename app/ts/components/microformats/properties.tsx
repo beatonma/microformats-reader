@@ -2,7 +2,7 @@ import React, { HTMLProps, ReactNode } from "react";
 import { Icon, Icons } from "ts/components/icon";
 import { IconProps } from "ts/components/icon/icons";
 import { LinkTo } from "ts/components/link-to";
-import { Named } from "ts/data/h-card";
+import { Named } from "ts/data/common";
 import "./properties.scss";
 
 interface MicroformatPropertyProps extends Named {

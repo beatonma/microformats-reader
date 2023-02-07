@@ -1,5 +1,6 @@
 import React, { HTMLProps } from "react";
-import { HCardImages, Named } from "ts/data/h-card";
+import { Named } from "ts/data/common";
+import { HCardImages } from "ts/data/h-card";
 import { Microformats } from "ts/data/microformats";
 import "./avatar.scss";
 

@@ -25,28 +25,28 @@ const PopupUI = () => {
         const data = SampleData;
         setMicroformats(data);
 
-        setRelLinks(parseRelLinks(data));
-        setHCards(parseHCards(data));
+        parseRelLinks(data).then(setRelLinks);
+        parseHCards(data).then(setHCards);
     }, []);
 
-    useEffect(() => {
-        compatBrowser.tabs
-            .query({ active: true, lastFocusedWindow: true })
-            .then(tabs => {
-                const currentTab = tabs[0];
-
-                compatBrowser.tabs
-                    .sendMessage(currentTab.id, {
-                        action: Message.getMicroformats,
-                    })
-                    .then((response: MessageResponse) => {
-                        const data = response.microformats;
-                        setMicroformats(data);
-
-                        setRelLinks(parseRelLinks(data));
-                    });
-            });
-    }, []);
+    // useEffect(() => {
+    //     compatBrowser.tabs
+    //         .query({ active: true, lastFocusedWindow: true })
+    //         .then(tabs => {
+    //             const currentTab = tabs[0];
+    //
+    //             compatBrowser.tabs
+    //                 .sendMessage(currentTab.id, {
+    //                     action: Message.getMicroformats,
+    //                 })
+    //                 .then((response: MessageResponse) => {
+    //                     const data = response.microformats;
+    //                     setMicroformats(data);
+    //
+    //                     setRelLinks(parseRelLinks(data));
+    //                 });
+    //         });
+    // }, []);
 
     return (
         <>
@@ -55,6 +55,7 @@ const PopupUI = () => {
                 <WebmentionEndpoint links={relLinks?.webmention} />
                 <PgpKey links={relLinks?.pgp} />
             </Row>
+
             <div className="h-cards">
                 {hcards?.map(hcard => (
                     <HCard {...hcard} key={hcard.name ?? hcard.contact?.url} />

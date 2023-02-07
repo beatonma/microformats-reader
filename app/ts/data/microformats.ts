@@ -1,3 +1,5 @@
+import { Image, MicroformatProperties } from "microformats-parser/dist/types";
+
 export enum Microformats {
     H_Card = "h-card",
     P_Name = "p-name",
@@ -45,4 +47,50 @@ export enum Microformats {
     P_Latitude = "p-latitude",
     P_Longitude = "p-longitude",
     P_Altitude = "p-altitude",
+
+    // h-feed
+    P_Author = "p-author",
+}
+
+export namespace Parse {
+    export const valueOf = (obj: any, key: string): string | null => {
+        const resolvedObj = getObject(obj, key);
+        return coerceToString(resolvedObj);
+    };
+
+    export const coerceToString = (obj: any): string | null => {
+        if (obj == null) return null;
+
+        let value: string;
+        if (typeof obj === "string") value = obj;
+        else if (Array.isArray(obj)) value = coerceToString(obj[0]);
+        else value = obj.toString();
+
+        // Strip extraneous whitespace
+        return value?.replace(/\s+/gm, " ");
+    };
+
+    export const getObject = (obj: any, key: string): any | null => {
+        if (!obj) return null;
+
+        if (obj.hasOwnProperty(key)) {
+            return obj[key];
+        }
+        if (obj.hasOwnProperty("properties")) {
+            return obj["properties"][key];
+        }
+
+        return null;
+    };
+
+    /**
+     * Try to read 'key' or 'x-key' values for non-standardised properties.
+     */
+    export const parseExperimental = (
+        hcard: MicroformatProperties,
+        key: string
+    ) => valueOf(hcard, key) ?? valueOf(hcard, `x-${key}`);
+
+    export const parseImage = (items: Image[]): Image | null =>
+        items?.find(() => true);
 }
