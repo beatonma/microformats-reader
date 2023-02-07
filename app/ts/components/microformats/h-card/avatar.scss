@@ -12,7 +12,7 @@
         transition: all animation.$duration-short ease;
     }
 
-    > img:first-child {
+    > :first-child {
         border-radius: var(--border-radius-medium);
     }
 
@@ -25,10 +25,11 @@
         border: 1px solid var(--text-light-secondary);
     }
 
-    &.text-fallback {
+    .text-fallback {
+        display: flex;
+        width: stretch;
         align-items: center;
         justify-content: center;
-        border-radius: var(--border-radius-medium);
         background-color: var(--local-muted);
         color: var(--local-on-muted);
         font-size: var(--fs-h1);

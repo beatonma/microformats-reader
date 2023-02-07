@@ -1,0 +1,88 @@
+@use "styles";
+@use "styles/animation";
+
+$-primary-size-small: 128px;
+$-secondary-size-small: 24px;
+
+$-primary-size-large: 150px;
+$-secondary-size-large: 32px;
+
+@mixin avatarCollapsed {
+    @include styles.size($-primary-size-small);
+    left: 0;
+    transform: translateX(0);
+    margin-right: var(--space-2x);
+}
+@mixin avatarMidpoint {
+    @include styles.size($-primary-size-large);
+    left: 0;
+    transform: translateX(0);
+}
+@mixin avatarExpanded {
+    @include styles.size($-primary-size-large);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-3x);
+}
+
+@mixin avatarSize($primary, $secondary) {
+    > img:first-child {
+        @include styles.size($primary);
+    }
+
+    > img:nth-child(2) {
+        @include styles.size($secondary);
+    }
+}
+
+.h-card {
+    .avatar {
+        @include avatarCollapsed;
+        @include avatarSize($-primary-size-small, $-secondary-size-small);
+        animation-duration: animation.$duration-long;
+        animation-fill-mode: both;
+        animation-timing-function: ease-in-out;
+    }
+
+    &[data-expanded="true"] {
+        .avatar {
+            @include styles.size($-primary-size-large);
+            @include avatarSize($-primary-size-large, $-secondary-size-large);
+            animation-name: avatarGrow;
+        }
+    }
+
+    &[data-collapsing="true"] {
+        .avatar {
+            animation-name: avatarShrink;
+        }
+    }
+}
+
+@keyframes avatarGrow {
+    0% {
+        @include avatarCollapsed;
+    }
+
+    33% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarExpanded;
+    }
+}
+
+@keyframes avatarShrink {
+    0% {
+        @include avatarExpanded;
+    }
+
+    66% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarCollapsed;
+    }
+}

@@ -1,44 +1,6 @@
 @use "styles";
 @use "styles/animation";
-
-$avatar-size-small: 128px;
-$inset-avatar-size-small: 24px;
-
-$avatar-size-large: 150px;
-$inset-avatar-size-large: 32px;
-
-/**
- * Avatar animation
- */
-@mixin avatarCollapsed {
-    width: $avatar-size-small;
-    height: $avatar-size-small;
-    left: 0;
-    transform: translateX(0);
-    margin-right: var(--space-2x);
-}
-@mixin avatarMidpoint {
-    width: $avatar-size-large;
-    height: $avatar-size-large;
-    left: 0;
-    transform: translateX(0);
-}
-@mixin avatarExpanded {
-    width: $avatar-size-large;
-    height: $avatar-size-large;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: var(--space-3x);
-}
-@mixin avatarSize($primary, $secondary) {
-    > img:first-child {
-        @include styles.size($primary);
-    }
-
-    > img:nth-child(2) {
-        @include styles.size($secondary);
-    }
-}
+@use "./hcard-avatar";
 
 %hcard-text-large {
     font-size: var(--fs-h1);
@@ -52,99 +14,11 @@ $inset-avatar-size-large: 32px;
     font-size: var(--fs-100);
 }
 
-.hcard-wrapper {
-    background-color: var(--surface);
-    color: var(--on-surface);
-    margin-block: var(--space-1x);
-    border-radius: var(--border-radius-medium);
-    box-shadow: rgba(9, 30, 66, 0.25) 0 1px 1px,
-        rgba(9, 30, 66, 0.13) 0 0 1px 1px;
-
-    :has(> [data-expanded="true"]) {
-        margin-block: var(--space-2x);
-    }
-}
-
-.h-card {
-    padding: var(--space-1x);
-
-    &[data-expanded="true"] {
-        .avatar {
-            animation-name: avatarGrow;
-            animation-duration: animation.$duration-long;
-            animation-fill-mode: both;
-            @include avatarSize($avatar-size-large, $inset-avatar-size-large);
-        }
-
-        .hcard-summary {
-            @include animation.collapseHorizontal;
-        }
-
-        .detail-wrapper {
-            @include animation.expandVertical;
-        }
-    }
-
-    &[data-expanded="false"][data-is-interacted-with="false"] {
-        .avatar {
-            @include avatarCollapsed;
-            @include avatarSize($avatar-size-small, $inset-avatar-size-small);
-            @include styles.size($avatar-size-small);
-        }
-
-        .detail-wrapper {
-            display: none;
-        }
-    }
-
-    &[data-expanded="false"][data-is-interacted-with="true"] {
-        .avatar {
-            animation-name: avatarShrink;
-            animation-duration: animation.$duration-long;
-            animation-fill-mode: both;
-            @include avatarSize($avatar-size-small, $inset-avatar-size-small);
-        }
-
-        .hcard-summary {
-            @include animation.expandHorizontal;
-        }
-
-        .detail-wrapper {
-            @include animation.collapseVertical;
-        }
-    }
-
-    .p-name {
-        @extend %hcard-text-large;
-    }
-
-    .banner {
-        // Avatar + summary
-        position: relative;
-        align-items: start;
-    }
-
-    .hcard-detail {
-        margin: var(--space-2x);
-    }
-
-    .dropdown-header {
-        font-size: var(--fs-200);
-        line-height: 1.5;
-        margin-block: var(--space-1x);
-        transition: margin animation.$duration-short;
-
-        &[data-expanded="false"] {
-            margin-block: 0;
-        }
-    }
-}
-
 button#hcard_toggle_detail {
     @extend %hover;
     display: block;
-    font-size: var(--fs-500);
     width: stretch;
+    font-size: var(--fs-500);
     cursor: pointer;
 
     .dropdown-icon {
@@ -156,29 +30,114 @@ button#hcard_toggle_detail {
     }
 }
 
-@keyframes avatarGrow {
-    0% {
-        @include avatarCollapsed;
+.hcard-background {
+    background-color: var(--surface);
+    color: var(--on-surface);
+    margin-block: var(--space-1x);
+    border-radius: var(--border-radius-medium);
+    box-shadow: rgba(9, 30, 66, 0.25) 0 1px 1px,
+        rgba(9, 30, 66, 0.13) 0 0 1px 1px;
+    transition: margin animation.$duration-long;
+}
+
+.h-card {
+    padding: var(--space-1x);
+
+    .p-name {
+        @extend %hcard-text-large;
     }
 
-    33% {
-        @include avatarMidpoint;
+    .banner {
+        // Avatar + summary
+        position: relative;
+        align-items: start;
     }
 
-    100% {
-        @include avatarExpanded;
+    .dropdown-header {
+        font-size: var(--fs-200);
+        line-height: 1.5;
     }
 }
-@keyframes avatarShrink {
+
+.hcard-summary,
+.hcard-detail {
+    animation-duration: animation.$duration-long;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+
+    &[data-closing="false"][data-visible="false"] {
+        display: none;
+    }
+}
+.hcard-summary {
+    &[data-visible="true"] {
+        animation-name: expandSummary;
+    }
+
+    &[data-closing="true"] {
+        animation-name: collapseSummary;
+    }
+}
+
+.hcard-detail {
+    &[data-visible="true"] {
+        animation-name: expandDetail;
+    }
+
+    &[data-closing="true"] {
+        animation-name: collapseDetail;
+    }
+}
+
+@keyframes collapseSummary {
     0% {
-        @include avatarExpanded;
+        @include animation.opaque;
     }
-
-    66% {
-        @include avatarMidpoint;
+    40% {
+        @include animation.transparent;
     }
-
     100% {
-        @include avatarCollapsed;
+        @include animation.transparent;
+        @include animation.zero-width;
+        @include animation.zero-height;
+    }
+}
+
+@keyframes expandSummary {
+    0% {
+        @include animation.transparent;
+        @include animation.zero-width;
+        @include animation.zero-height;
+    }
+    60% {
+        @include animation.transparent;
+    }
+    100% {
+        @include animation.opaque;
+    }
+}
+
+@keyframes collapseDetail {
+    0% {
+        @include animation.opaque;
+    }
+    40% {
+        @include animation.transparent;
+    }
+    100% {
+        @include animation.transparent;
+        @include animation.zero-height;
+    }
+}
+@keyframes expandDetail {
+    0% {
+        @include animation.transparent;
+        @include animation.zero-height;
+    }
+    60% {
+        @include animation.transparent;
+    }
+    100% {
+        @include animation.opaque;
     }
 }

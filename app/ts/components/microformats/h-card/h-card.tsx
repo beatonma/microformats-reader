@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
 import {
@@ -6,7 +6,10 @@ import {
     DropdownIcon,
     DropdownProps,
 } from "ts/components/layout/dropdown";
-import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
+import {
+    ExpandCollapseProps,
+    ExpandableDefaultProps,
+} from "ts/components/layout/expand-collapse";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
     Contact,
@@ -24,25 +27,35 @@ import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
+
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, id, images, ...rest } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
-    const [isInteractedWith, setIsInteractedWith] = useState(false);
+    const [isCollapsing, setIsCollapsing] = useState(false);
+    const [isExpanding, setIsExpanding] = useState(false);
     const hcardContentID = useId();
+    const summaryID = useId();
+    const detailID = useId();
 
     const toggleExpanded = () => {
-        setExpanded(!isExpanded);
-        setIsInteractedWith(true);
+        const target = !isExpanded;
+        setExpanded(target);
+        setIsExpanding(target);
+        setIsCollapsing(!target);
     };
 
+    addAnimationEndListener(summaryID, isExpanding, () => setIsExpanding(false));
+    addAnimationEndListener(detailID, isCollapsing, () => setIsCollapsing(false));
+
     return (
-        <div className="hcard-wrapper" id={id}>
+        <div className="hcard-background" id={id}>
             <div
                 id={hcardContentID}
                 className="h-card"
                 data-expanded={isExpanded}
+                data-expanding={isExpanding}
+                data-collapsing={isCollapsing}
                 aria-expanded={isExpanded}
-                data-is-interacted-with={isInteractedWith}
             >
                 <Row className="banner">
                     <Avatar
@@ -50,28 +63,68 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                         {...images}
                         onClick={toggleExpanded}
                     />
-                    <HCardTextSummary {...rest} />
+                    <HCardTextSummary
+                        id={summaryID}
+                        {...rest}
+                        data-visible={!isExpanded}
+                        data-closing={isExpanding}
+                    />
                 </Row>
+                <button
+                    id="hcard_toggle_detail"
+                    onClick={toggleExpanded}
+                    aria-controls={hcardContentID}
+                    aria-expanded={isExpanded}
+                >
+                    <DropdownIcon isExpanded={isExpanded} />
+                </button>
 
-                <div className="detail-wrapper">
-                    <HCardTextDetail {...rest} />
-                </div>
+                <HCardTextDetail
+                    id={detailID}
+                    {...rest}
+                    data-visible={isExpanded}
+                    data-closing={isCollapsing}
+                />
             </div>
-            <button
-                id="hcard_toggle_detail"
-                onClick={toggleExpanded}
-                aria-controls={hcardContentID}
-            >
-                <DropdownIcon isExpanded={isExpanded} />
-            </button>
         </div>
     );
 };
 
+const addAnimationEndListener = (
+    id: string,
+    isCollapsing: boolean,
+    reset: () => void
+) => {
+    useEffect(() => {
+        if (isCollapsing) {
+            const el = document.getElementById(id);
+            el.addEventListener(
+                "animationend",
+                () => {
+                    reset();
+                },
+                {
+                    once: true,
+                }
+            );
+        }
+    }, [isCollapsing]);
+};
+
 const HCardTextSummary = (props: HCardData) => {
-    const { name, nameDetail, gender, contact, location, job } = props;
+    const {
+        name,
+        nameDetail,
+        gender,
+        contact,
+        location,
+        job,
+        dates,
+        extras,
+        ...rest
+    } = props;
     return (
-        <div className="hcard-summary">
+        <div className="hcard-summary" {...rest}>
             <Row alignment={HorizontalAlignment.SpaceBetween}>
                 <Name name={name} detail={nameDetail} />
             </Row>
@@ -88,11 +141,20 @@ const HCardTextSummary = (props: HCardData) => {
 };
 
 const HCardTextDetail = (props: HCardData) => {
-    const { name, nameDetail, gender, contact, location, job, dates, extras } =
-        props;
+    const {
+        name,
+        nameDetail,
+        gender,
+        contact,
+        location,
+        job,
+        dates,
+        extras,
+        ...rest
+    } = props;
 
     return (
-        <div className="hcard-detail">
+        <div className="hcard-detail" {...rest}>
             <Row alignment={HorizontalAlignment.Center}>
                 <Name name={name} />
             </Row>

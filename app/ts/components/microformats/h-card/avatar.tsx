@@ -14,7 +14,7 @@ export const Avatar = (
     const { name, photo, logo, ...rest } = props;
 
     if (!photo?.value && !logo?.value) {
-        return <TextAvatar name={name} />;
+        return <TextAvatar name={name} {...rest} />;
     }
 
     if (!!photo?.value && !!logo?.value) return <PhotoWithLogo {...props} />;
@@ -32,7 +32,7 @@ export const Avatar = (
 };
 
 const PhotoWithLogo = (props: HTMLProps<HTMLDivElement> & HCardImages) => {
-    const { photo, logo, ...rest } = props;
+    const { name, photo, logo, ...rest } = props;
     return (
         <div className="avatar" {...rest}>
             <img
@@ -53,10 +53,14 @@ const PhotoWithLogo = (props: HTMLProps<HTMLDivElement> & HCardImages) => {
     );
 };
 
-const TextAvatar = (props: Named) => {
-    const { name } = props;
+const TextAvatar = (props: HTMLProps<HTMLDivElement> & Named) => {
+    const { name, ...rest } = props;
     const trimmedName = name?.trim();
     if (!trimmedName) return null;
 
-    return <div className="avatar text-fallback">{trimmedName[0]}</div>;
+    return (
+        <div className="avatar" {...rest}>
+            <div className="text-fallback">{trimmedName[0]}</div>
+        </div>
+    );
 };

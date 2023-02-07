@@ -1,130 +1,37 @@
-$duration-debug: 2500ms;
+$duration-debug: 1500ms;
 $duration-short: 200ms;
 $duration-long: 300ms;
 
-$max-height: 1000vh;
-$max-width: 1000vw;
+$max-height: 100vh;
+$max-width: 100vw;
 $slide-distance: 0.5em;
 
-%visibilityAnimation {
-    animation-fill-mode: both;
-    overflow: clip;
-    animation-duration: $duration-long;
-    animation-timing-function: ease-in;
-}
-@mixin expandVertical {
-    @extend %visibilityAnimation;
-    animation-name: expandVertical;
-}
-@mixin expandHorizontal {
-    @extend %visibilityAnimation;
-    animation-name: expandHorizontal;
+$opacity-zero: 0;
+
+@mixin opaque {
+    opacity: 1;
 }
 
-@mixin collapseVertical {
-    @extend %visibilityAnimation;
-    animation-name: collapseVertical;
-}
-@mixin collapseHorizontal {
-    @extend %visibilityAnimation;
-    animation-name: collapseHorizontal;
+@mixin transparent {
+    opacity: $opacity-zero;
 }
 
-@keyframes expandVertical {
-    0% {
-        display: none;
-        opacity: 0;
-        max-height: 0;
-        transform: translateY($slide-distance);
-    }
-    1% {
-        display: block;
-        opacity: 0;
-        max-height: 0;
-    }
-    33% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        max-height: $max-height;
-    }
+@mixin zero-width {
+    max-width: 0;
 }
 
-@keyframes expandHorizontal {
-    0% {
-        display: none;
-        opacity: 0;
-        max-width: 0;
-        transform: translateY($slide-distance);
-    }
-    1% {
-        display: block;
-        opacity: 0;
-        max-width: 0;
-    }
-    33% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        max-width: $max-width;
-    }
+@mixin full-width {
+    max-width: $max-width;
 }
 
-@keyframes collapseVertical {
-    0% {
-        opacity: 1;
-        max-height: $max-height;
-    }
-
-    20% {
-        opacity: 0;
-    }
-
-    90% {
-        display: block;
-        opacity: 0;
-        max-height: 0;
-    }
-    100% {
-        display: none;
-        opacity: 0;
-        max-height: 0;
-    }
+@mixin zero-height {
+    max-height: 0;
 }
 
-@keyframes collapseHorizontal {
-    0% {
-        opacity: 1;
-        max-width: $max-width;
-    }
-
-    33% {
-        opacity: 0;
-        transform: translateX(25vw);
-    }
-
-    99% {
-        display: block;
-        opacity: 0;
-        max-width: 0;
-    }
-    100% {
-        display: none;
-        opacity: 0;
-        max-width: 0;
-    }
+@mixin full-height {
+    max-height: $max-height;
 }
 
-@keyframes arc {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY($slide-distance);
-    }
-    100% {
-        transform: translateY(0);
-    }
+@mixin slide-up {
+    transform: translateY($slide-distance);
 }
