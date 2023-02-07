@@ -5,8 +5,8 @@ import {
     Dropdown,
     DropdownIcon,
     DropdownProps,
-    ExpandableDefaultProps,
 } from "ts/components/layout/dropdown";
+import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
     Contact,

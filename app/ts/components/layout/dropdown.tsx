@@ -1,11 +1,12 @@
-import React, { HTMLProps, ReactNode, useEffect, useId, useState } from "react";
+import React, { HTMLProps, ReactNode } from "react";
 import { _ } from "ts/compat";
 import { Icon, Icons } from "ts/components/icons";
 import "ts/components/layout/dropdown.scss";
-
-export interface ExpandableDefaultProps {
-    defaultIsExpanded?: boolean;
-}
+import {
+    ExpandCollapseLayout,
+    ExpandCollapseProps,
+    ExpandableDefaultProps,
+} from "ts/components/layout/expand-collapse";
 
 export interface ExpandableProps {
     isExpanded: boolean;
@@ -19,36 +20,26 @@ export interface DropdownProps
     headerClassName?: string;
 }
 export const Dropdown = (props: DropdownProps) => {
+    return (
+        <ExpandCollapseLayout
+            child={expandCollapseProps => (
+                <DropdownLayout {...props} {...expandCollapseProps} />
+            )}
+        />
+    );
+};
+
+const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
     const {
-        header,
-        headerClassName,
         className,
-        defaultIsExpanded,
+        headerClassName,
+        header,
         title,
         children,
+        isExpanded,
+        collapsibleControllerProps,
+        collapsibleContentProps,
     } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
-    const [isClosing, setClosing] = useState(false);
-    const contentID = useId();
-
-    const toggleState = () => {
-        const target = !isExpanded;
-        setExpanded(target);
-        if (!target) {
-            setClosing(true);
-        }
-    };
-
-    useEffect(() => {
-        if (isClosing) {
-            document
-                .getElementById(contentID)
-                .addEventListener("animationend", () => setClosing(false), {
-                    once: true,
-                });
-        }
-    }, [isClosing]);
-
     return (
         <div
             className={`dropdown ${className ?? ""}`}
@@ -56,24 +47,17 @@ export const Dropdown = (props: DropdownProps) => {
         >
             <button
                 className={`dropdown-header ${headerClassName ?? ""}`}
-                onClick={toggleState}
                 title={
                     isExpanded ? _("dropdown_collapse") : _("dropdown_expand")
                 }
-                aria-expanded={isExpanded}
-                aria-controls={contentID}
                 data-expanded={isExpanded}
+                {...collapsibleControllerProps}
             >
                 <span title={title}>{header}</span>
                 <DropdownIcon isExpanded={isExpanded} />
             </button>
-            <div
-                id={contentID}
-                className="dropdown-content"
-                aria-hidden={!isExpanded}
-                data-expanded={isExpanded}
-                data-closing={isClosing}
-            >
+
+            <div className="dropdown-content" {...collapsibleContentProps}>
                 {children}
             </div>
         </div>
