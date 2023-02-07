@@ -1,4 +1,4 @@
-import React, { HTMLProps, ReactNode, useId, useState } from "react";
+import React, { HTMLProps, ReactNode, useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
 import { Icon, Icons } from "ts/components/icons";
 import "ts/components/layout/dropdown.scss";
@@ -28,9 +28,26 @@ export const Dropdown = (props: DropdownProps) => {
         children,
     } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const [isClosing, setClosing] = useState(false);
     const contentID = useId();
 
-    const toggleState = () => setExpanded(!isExpanded);
+    const toggleState = () => {
+        const target = !isExpanded;
+        setExpanded(target);
+        if (!target) {
+            setClosing(true);
+        }
+    };
+
+    useEffect(() => {
+        if (isClosing) {
+            document
+                .getElementById(contentID)
+                .addEventListener("animationend", () => setClosing(false), {
+                    once: true,
+                });
+        }
+    }, [isClosing]);
 
     return (
         <div
@@ -50,7 +67,13 @@ export const Dropdown = (props: DropdownProps) => {
                 <span title={title}>{header}</span>
                 <DropdownIcon isExpanded={isExpanded} />
             </button>
-            <div id={contentID} className="dropdown-content">
+            <div
+                id={contentID}
+                className="dropdown-content"
+                aria-hidden={!isExpanded}
+                data-expanded={isExpanded}
+                data-closing={isClosing}
+            >
                 {children}
             </div>
         </div>

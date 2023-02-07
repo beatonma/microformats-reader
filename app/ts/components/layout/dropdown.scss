@@ -1,40 +1,63 @@
-@use "styles/index";
+@use "styles";
 
 .dropdown-icon {
     @extend %hover;
     width: 1em;
     height: 1em;
     line-height: 1em;
-    transition: all 200ms;
     margin-left: var(--space-1x);
     cursor: pointer;
+    transition: all 200ms;
 
     &[data-expanded="true"] {
         transform: rotate(180deg);
     }
 }
 
+@mixin dropdownContentHidden {
+    opacity: styles.$opacity-zero;
+    max-height: 0;
+}
+@mixin dropdownContentVisible {
+    opacity: 1;
+    max-height: styles.$max-height;
+}
+
+@keyframes showContent {
+    0% {
+        @include dropdownContentHidden;
+    }
+    30% {
+        opacity: styles.$opacity-zero;
+    }
+    60% {
+        max-height: styles.$max-height;
+    }
+    100% {
+        @include dropdownContentVisible;
+    }
+}
+
+@keyframes hideContent {
+    0% {
+        @include dropdownContentVisible;
+    }
+    30% {
+        opacity: styles.$opacity-zero;
+    }
+    100% {
+        @include dropdownContentHidden;
+    }
+}
+
 .dropdown {
-    width: -webkit-fill-available;
-
-    &[data-expanded="true"] {
-        .dropdown-content:not(:empty) {
-            padding-bottom: var(--space-2x);
-        }
-    }
-
-    &[data-expanded="false"] {
-        .dropdown-content {
-            max-height: 0;
-            opacity: 0;
-            overflow-y: clip;
-        }
-    }
+    width: stretch;
+    transition: margin styles.$duration-long, padding styles.$duration-long;
 
     .dropdown-header {
         display: flex;
         flex-direction: row;
-        width: -webkit-fill-available;
+        width: stretch;
         justify-content: left;
         font-size: var(--fs-h3);
         vertical-align: middle;
@@ -46,11 +69,26 @@
         border: none;
     }
 
-    .dropdown-content {
-        transition: all 200ms ease-in, opacity 200ms;
-        max-height: 100vh;
-        height: max-content;
+    &[data-expanded="true"] {
+        margin-block: var(--space-1-5x);
+    }
 
+    .dropdown-content {
+        overflow-y: clip;
+        margin-block: var(--space-half);
+
+        &[data-expanded="true"] {
+            animation: showContent styles.$duration-long both;
+        }
+
+        &[data-closing="true"] {
+            animation: hideContent styles.$duration-long both;
+        }
+
+        &[data-expanded="false"][data-closing="false"] {
+            @include dropdownContentHidden;
+            display: none;
+        }
         &:empty {
             display: none;
         }
