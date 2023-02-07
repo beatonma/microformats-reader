@@ -40,6 +40,7 @@
     "postcss": "^8.4.21",
     "postcss-loader": "^7.0.2",
     "prettier": "^2.6.2",
+    "react-svg-loader": "^3.0.3",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",

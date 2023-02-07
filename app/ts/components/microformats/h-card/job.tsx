@@ -1,6 +1,6 @@
 import React from "react";
 import { _ } from "ts/compat";
-import { Icons } from "ts/components/icons";
+import { Icons } from "ts/components/icon";
 import { ConditionalContent } from "ts/components/layout/conditional";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {

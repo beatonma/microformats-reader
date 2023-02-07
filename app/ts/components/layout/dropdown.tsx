@@ -1,6 +1,6 @@
 import React, { HTMLProps, ReactNode } from "react";
 import { _ } from "ts/compat";
-import { Icon, Icons } from "ts/components/icons";
+import { Icon, Icons } from "ts/components/icon";
 import "ts/components/layout/dropdown.scss";
 import {
     ExpandCollapseLayout,
@@ -65,7 +65,7 @@ const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
 };
 
 export const DropdownIcon = (
-    props: HTMLProps<HTMLSpanElement> & ExpandableProps
+    props: HTMLProps<SVGElement> & ExpandableProps
 ) => {
     const { className, isExpanded, onToggleExpand, ...rest } = props;
     return (

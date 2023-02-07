@@ -1,6 +1,6 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { Icon, Icons } from "ts/components/icons";
+import { Icon, Icons } from "ts/components/icon";
 import { Dropdown } from "ts/components/layout/dropdown";
 import { LinkTo } from "ts/components/link-to";
 import { RelLink } from "ts/data/related-links";

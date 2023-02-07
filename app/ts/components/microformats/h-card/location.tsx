@@ -1,6 +1,6 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { Icon, Icons } from "ts/components/icons";
+import { Icon, Icons } from "ts/components/icon";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import { LinkTo } from "ts/components/link-to";
 import {
@@ -22,7 +22,7 @@ export const Location = (props: HAdr | null) => {
         <InlineGroup className="location" title={_("location")}>
             <Property
                 icon={Icons.Location}
-                cls={_("location")}
+                cls={_("hcard_location_detail")}
                 value={summary}
             />
         </InlineGroup>

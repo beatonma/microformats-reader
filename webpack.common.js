@@ -28,6 +28,21 @@ module.exports = {
                     "sass-loader",
                 ],
             },
+            {
+                test: /.svg$/,
+                use: [
+                    "babel-loader",
+                    {
+                        loader: "react-svg-loader",
+                        options: {
+                            jsx: true,
+                            svgo: {
+                                plugins: [{ removeViewBox: false }],
+                            },
+                        },
+                    },
+                ],
+            },
         ],
     },
     resolve: {

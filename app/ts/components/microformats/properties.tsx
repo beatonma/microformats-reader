@@ -1,5 +1,6 @@
 import React, { HTMLProps, ReactNode } from "react";
-import { Icon, IconProps, Icons, Svg, SvgProps } from "ts/components/icons";
+import { Icon, Icons } from "ts/components/icon";
+import { IconProps } from "ts/components/icon/icons";
 import { LinkTo } from "ts/components/link-to";
 import { Named } from "ts/data/h-card";
 import "./properties.scss";
@@ -9,7 +10,6 @@ interface MicroformatPropertyProps extends Named {
     href?: string;
     cls: string;
     icon?: Icons;
-    svg?: string;
     value: ReactNode;
 }
 
@@ -20,17 +20,13 @@ interface MicroformatPropertyProps extends Named {
  * @constructor
  */
 export const Property = (props: MicroformatPropertyProps) => {
-    const { cls, name, icon, svg, value } = props;
+    const { cls, name, icon, value } = props;
 
     if (!value) return null;
 
     return (
         <span className="property" title={cls}>
-            <PropertyIconOrSvg
-                svg={svg}
-                icon={icon}
-                className="property-icon"
-            />
+            <PropertyIcon icon={icon} className="property-icon" />
             <PropertyName name={name} />
             <PropertyValue {...props} />
         </span>
@@ -48,18 +44,14 @@ export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
 };
 
 export const PropertyRow = (props: MicroformatPropertyProps) => {
-    const { cls, name, icon, svg, value } = props;
+    const { cls, name, icon, value } = props;
 
     if (!value) return null;
 
     return (
         <tr className="property" {...props} title={cls}>
             <td>
-                <PropertyIconOrSvg
-                    svg={svg}
-                    icon={icon}
-                    className="property-icon"
-                />
+                <PropertyIcon icon={icon} className="property-icon" />
             </td>
             <td>
                 <PropertyName name={name} />
@@ -95,16 +87,6 @@ const TableHeader = (props: HTMLProps<HTMLTableElement>) => {
     return <thead>{props.title}</thead>;
 };
 
-const PropertySvg = (props: SvgProps) => {
-    return <Svg {...props} />;
-};
 const PropertyIcon = (props: IconProps) => {
     return <Icon {...props} />;
-};
-const PropertyIconOrSvg = (props: SvgProps & IconProps) => {
-    const { icon, svg, className } = props;
-
-    if (icon) return <PropertyIcon icon={icon} className={className} />;
-    if (svg) return <PropertySvg svg={svg} className={className} />;
-    return null;
 };
