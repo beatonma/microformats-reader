@@ -1,4 +1,7 @@
-import { Image, MicroformatProperties } from "microformats-parser/dist/types";
+import { MicroformatProperties } from "microformats-parser/dist/types";
+import { HCardData } from "ts/data/h-card";
+
+export type Author = string | HCardData;
 
 export enum Microformats {
     H_Card = "h-card",
@@ -53,12 +56,12 @@ export enum Microformats {
 }
 
 export namespace Parse {
-    export const valueOf = (obj: any, key: string): string | null => {
-        const resolvedObj = getObject(obj, key);
+    export const valueOf = (container: any, key: string): string | null => {
+        const resolvedObj = getObject(container, key);
         return coerceToString(resolvedObj);
     };
 
-    export const coerceToString = (obj: any): string | null => {
+    export const coerceToString = (obj: unknown): string | null => {
         if (obj == null) return null;
 
         let value: string;
@@ -70,14 +73,14 @@ export namespace Parse {
         return value?.replace(/\s+/gm, " ");
     };
 
-    export const getObject = (obj: any, key: string): any | null => {
-        if (!obj) return null;
+    export const getObject = (container: any, key: string): unknown | null => {
+        if (!container) return null;
 
-        if (obj.hasOwnProperty(key)) {
-            return obj[key];
+        if (container.hasOwnProperty(key)) {
+            return container[key];
         }
-        if (obj.hasOwnProperty("properties")) {
-            return obj["properties"][key];
+        if (container.hasOwnProperty("properties")) {
+            return container["properties"][key];
         }
 
         return null;
@@ -91,6 +94,13 @@ export namespace Parse {
         key: string
     ) => valueOf(hcard, key) ?? valueOf(hcard, `x-${key}`);
 
-    export const parseImage = (items: Image[]): Image | null =>
-        items?.find(() => true);
+
+    export const parseFirst = (container: any, key: string): unknown | null => {
+        const obj = getObject(container, key);
+        if (obj == null) return null;
+        if (!Array.isArray(obj))
+            throw `parseFirst expected to find an array, found ${obj}`;
+
+        return obj.find(Boolean);
+    };
 }

@@ -1,11 +1,9 @@
 import { describe, expect, test } from "@jest/globals";
-import { mf2 } from "microformats-parser";
+import { parseTestHtml } from "ts/test/test-util";
 import { HCardData, parseHCards } from "./h-card";
 
-const mf = (html: string) => mf2(html, { baseUrl: "http://sally.example.com" });
-
 const firstHCard = async (html: string) =>
-    parseHCards(mf(html)).then(data => data[0]);
+    parseHCards(parseTestHtml(html)).then(data => data[0]);
 
 // From example at https://microformats.org/wiki/h-card
 const SampleHCardFlat = `

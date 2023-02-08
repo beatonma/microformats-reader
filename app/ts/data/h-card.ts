@@ -155,8 +155,8 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
 };
 
 const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
-    const photo = Parse.parseImage((hcard.photo as Image[]) ?? []);
-    const logo = Parse.parseImage((hcard.logo as Image[]) ?? []);
+    const photo = Parse.parseFirst(hcard, "photo") as Image;
+    const logo = Parse.parseFirst(hcard, "logo") as Image;
 
     if (noneOf([photo, logo])) return null;
     return {
@@ -307,7 +307,7 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
     const org = Parse.getObject(hcard, "org");
 
     let orgHCard: HCardData | null = null;
-    if (org != null && typeof org !== "string") {
+    if (Array.isArray(org)) {
         orgHCard = parseHCard(org[0]?.properties);
     }
 
