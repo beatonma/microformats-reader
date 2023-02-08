@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
+import { CardLayout } from "ts/components/layout/card";
 import {
     Dropdown,
     DropdownIcon,
@@ -48,7 +49,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     addAnimationEndListener(detailID, isCollapsing, () => setIsCollapsing(false));
 
     return (
-        <div className="hcard-background" id={id}>
+        <CardLayout id={id}>
             <div
                 id={hcardContentID}
                 className="h-card"
@@ -86,7 +87,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                     data-closing={isCollapsing}
                 />
             </div>
-        </div>
+        </CardLayout>
     );
 };
 
