@@ -20,19 +20,9 @@ button#hcard_toggle_detail {
     width: stretch;
     font-size: var(--fs-500);
     cursor: pointer;
-
-    .dropdown-icon {
-        margin: 0;
-        cursor: pointer;
-        &:hover {
-            background: none;
-        }
-    }
 }
 
 .h-card {
-    padding: var(--space-1x);
-
     .p-name {
         @extend %hcard-text-large;
     }

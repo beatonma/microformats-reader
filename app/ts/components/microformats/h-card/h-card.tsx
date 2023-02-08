@@ -1,16 +1,13 @@
 import React, { useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
-import { CardLayout } from "ts/components/layout/card";
+import { CardContent, CardLayout } from "ts/components/layout/card";
 import {
     Dropdown,
-    DropdownIcon,
+    DropdownButton,
     DropdownProps,
 } from "ts/components/layout/dropdown";
-import {
-    ExpandCollapseProps,
-    ExpandableDefaultProps,
-} from "ts/components/layout/expand-collapse";
+import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
     Contact,
@@ -28,7 +25,6 @@ import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
-
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, id, images, ...rest } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
@@ -45,12 +41,16 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
         setIsCollapsing(!target);
     };
 
-    addAnimationEndListener(summaryID, isExpanding, () => setIsExpanding(false));
-    addAnimationEndListener(detailID, isCollapsing, () => setIsCollapsing(false));
+    addAnimationEndListener(summaryID, isExpanding, () =>
+        setIsExpanding(false)
+    );
+    addAnimationEndListener(detailID, isCollapsing, () =>
+        setIsCollapsing(false)
+    );
 
     return (
         <CardLayout id={id}>
-            <div
+            <CardContent
                 id={hcardContentID}
                 className="h-card"
                 data-expanded={isExpanded}
@@ -71,14 +71,14 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                         data-closing={isExpanding}
                     />
                 </Row>
-                <button
+
+                <DropdownButton
+                    title="h-card"
                     id="hcard_toggle_detail"
+                    isExpanded={isExpanded}
                     onClick={toggleExpanded}
                     aria-controls={hcardContentID}
-                    aria-expanded={isExpanded}
-                >
-                    <DropdownIcon isExpanded={isExpanded} />
-                </button>
+                />
 
                 <HCardTextDetail
                     id={detailID}
@@ -86,7 +86,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                     data-visible={isExpanded}
                     data-closing={isCollapsing}
                 />
-            </div>
+            </CardContent>
         </CardLayout>
     );
 };

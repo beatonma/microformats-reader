@@ -1,13 +1,13 @@
 @use "styles";
 
-.dropdown-icon {
-    @extend %hover;
-    width: 1em;
-    height: 1em;
-    line-height: 1em;
+button .dropdown-icon {
     margin-left: var(--space-1x);
     cursor: pointer;
     transition: all 200ms;
+
+    &:first-child {
+        margin-left: 0;
+    }
 
     &[data-expanded="true"] {
         transform: rotate(180deg);

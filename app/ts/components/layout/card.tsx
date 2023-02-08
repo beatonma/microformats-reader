@@ -1,8 +1,6 @@
-import React, { HTMLProps } from "react";
+import React from "react";
+import { StyledDiv } from "ts/components/layout/layout";
 import "./card.scss";
 
-export const CardLayout = (props: HTMLProps<HTMLDivElement>) => {
-    const { className, ...rest } = props;
-
-    return <div className={`${className ?? "card"}`} {...rest} />;
-};
+export const CardLayout = StyledDiv("card");
+export const CardContent = StyledDiv("card-content");

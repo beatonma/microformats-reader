@@ -13,6 +13,24 @@
     "dropdown_expand": {
         "message": "Show more"
     },
+    "dropdown_collapse_label": {
+        "message": "$TITLE$: Show less",
+        "placeholders": {
+            "title": {
+                "content": "$1",
+                "example": "Section title"
+            }
+        }
+    },
+    "dropdown_expand_label": {
+        "message": "$TITLE$: Show more",
+        "placeholders": {
+            "title": {
+                "content": "$1",
+                "example": "Section title"
+            }
+        }
+    },
 
     "quicklink_webmentions_endpoint_hover": {
         "message": "Webmention endpoint"

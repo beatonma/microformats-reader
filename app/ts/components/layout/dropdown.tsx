@@ -1,4 +1,4 @@
-import React, { HTMLProps, ReactNode } from "react";
+import React, { ComponentProps, HTMLProps, ReactNode } from "react";
 import { _ } from "ts/compat";
 import { Icon, Icons } from "ts/components/icon";
 import "ts/components/layout/dropdown.scss";
@@ -7,11 +7,6 @@ import {
     ExpandCollapseProps,
     ExpandableDefaultProps,
 } from "ts/components/layout/expand-collapse";
-
-export interface ExpandableProps {
-    isExpanded: boolean;
-    onToggleExpand?: () => void;
-}
 
 export interface DropdownProps
     extends HTMLProps<HTMLDivElement>,
@@ -40,22 +35,20 @@ const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
         collapsibleControllerProps,
         collapsibleContentProps,
     } = props;
+
     return (
         <div
             className={`dropdown ${className ?? ""}`}
             data-expanded={isExpanded}
         >
-            <button
+            <DropdownButton
+                title={title}
                 className={`dropdown-header ${headerClassName ?? ""}`}
-                title={
-                    isExpanded ? _("dropdown_collapse") : _("dropdown_expand")
-                }
-                data-expanded={isExpanded}
+                isExpanded={isExpanded}
                 {...collapsibleControllerProps}
             >
-                <span title={title}>{header}</span>
-                <DropdownIcon isExpanded={isExpanded} />
-            </button>
+                {header}
+            </DropdownButton>
 
             <div className="dropdown-content" {...collapsibleContentProps}>
                 {children}
@@ -64,18 +57,42 @@ const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
     );
 };
 
-export const DropdownIcon = (
-    props: HTMLProps<SVGElement> & ExpandableProps
+interface DropdownButtonProps {
+    title: string;
+    "aria-controls": string;
+    isExpanded: boolean;
+    onClick: () => void;
+}
+export const DropdownButton = (
+    props: ComponentProps<"button"> & DropdownButtonProps
 ) => {
-    const { className, isExpanded, onToggleExpand, ...rest } = props;
+    const { title, isExpanded, onClick, className, children, ...rest } = props;
+
     return (
-        <Icon
-            className={`dropdown-icon ${className ?? ""}`}
+        <button
+            type={"button"}
+            className={`dropdown-button ${className ?? ""}`}
+            onClick={onClick}
+            title={
+                isExpanded
+                    ? _("dropdown_collapse", title)
+                    : _("dropdown_expand", title)
+            }
+            aria-label={
+                isExpanded
+                    ? _("dropdown_collapse_label", title)
+                    : _("dropdown_expand_label", title)
+            }
+            aria-expanded={isExpanded}
             data-expanded={isExpanded}
-            icon={Icons.ExpandMore}
-            onClick={onToggleExpand}
-            title={isExpanded ? _("dropdown_collapse") : _("dropdown_expand")}
             {...rest}
-        />
+        >
+            {children}
+            <Icon
+                className="dropdown-icon"
+                data-expanded={isExpanded}
+                icon={Icons.ExpandMore}
+            />
+        </button>
     );
 };
