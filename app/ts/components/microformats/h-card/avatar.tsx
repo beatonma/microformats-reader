@@ -1,38 +1,70 @@
-import React, { HTMLProps } from "react";
-import { Named } from "ts/data/common";
-import { HCardImages } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
+import React, {HTMLProps} from "react";
+import {Image} from "microformats-parser/dist/types";
+import {Named} from "ts/data/common";
+import {Microformats} from "ts/data/microformats";
+import {HCardImages} from "ts/data/types/h-card";
 import "./avatar.scss";
 
-enum PrimaryAvatar {
-    Photo = "u-photo",
-    Logo = "u-logo",
+interface AvatarProps {
+    images: HCardImages | null;
 }
 
 export const Avatar = (
-    props: HTMLProps<HTMLDivElement> & HCardImages & Named
+    props: HTMLProps<HTMLDivElement> & Named & AvatarProps
 ) => {
-    const { name, photo, logo, ...rest } = props;
+    const { name, images, ...rest } = props;
 
-    if (!photo?.value && !logo?.value) {
+    if (!images) {
         return <TextAvatar name={name} {...rest} />;
     }
+    const { photo, logo } = images;
 
-    if (!!photo?.value && !!logo?.value) return <PhotoWithLogo {...props} />;
+    if (!!photo && !!logo) return <PhotoWithLogo photo={photo} logo={logo} />;
 
-    const primaryImage = !!photo?.value
-        ? PrimaryAvatar.Photo
-        : PrimaryAvatar.Logo;
-    const image = primaryImage == PrimaryAvatar.Photo ? photo : logo;
+    if (photo) {
+        return (
+            <SingleImageAvatar
+                image={photo}
+                imageClassName={Microformats.U_Photo}
+            />
+        );
+    }
+
+    if (logo) {
+        return (
+            <SingleImageAvatar
+                image={logo}
+                imageClassName={Microformats.U_Logo}
+            />
+        );
+    }
+
+    return <TextAvatar name={name} {...rest} />;
+};
+
+interface SingleImageAvatarProps {
+    image: Image;
+    imageClassName: string;
+}
+const SingleImageAvatar = (
+    props: HTMLProps<HTMLDivElement> & SingleImageAvatarProps
+) => {
+    const { image, imageClassName, ...rest } = props;
 
     return (
         <div className="avatar" {...rest}>
-            <img className={primaryImage} src={image.value} alt={image.alt} />
+            <img className={imageClassName} src={image.value} alt={image.alt} />
         </div>
     );
 };
 
-const PhotoWithLogo = (props: HTMLProps<HTMLDivElement> & HCardImages) => {
+interface PhotoWithLogoProps {
+    photo: Image;
+    logo: Image;
+}
+const PhotoWithLogo = (
+    props: HTMLProps<HTMLDivElement> & PhotoWithLogoProps
+) => {
     const { name, photo, logo, ...rest } = props;
     return (
         <div className="avatar" {...rest}>

@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, {HTMLProps, ReactElement} from "react";
 import "ts/components/icon/icons.scss";
 // @ts-ignore
 import BirthdaySvg from "ts/components/icon/svg/outline-400/cake.svg";
@@ -32,13 +32,16 @@ export enum Icons {
 }
 
 export interface IconProps extends HTMLProps<SVGElement> {
-    icon: Icons;
+    icon?: Icons | null;
 }
 
 export const Icon = (props: IconProps) => {
     const { icon, className, ...rest } = props;
-    if (icon == null) return null;
-    const InlineSvg = icon;
+    if (!icon) return null;
+
+    const InlineSvg = icon as unknown as (
+        _props: HTMLProps<SVGElement>
+    ) => ReactElement;
 
     return (
         <InlineSvg

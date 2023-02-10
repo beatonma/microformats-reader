@@ -1,6 +1,7 @@
-import { describe, expect, test } from "@jest/globals";
-import { parseTestHtml } from "ts/test/test-util";
-import { HCardData, parseHCards } from "./h-card";
+import {describe, expect, test} from "@jest/globals";
+import {HCardData} from "ts/data/types";
+import {parseTestHtml} from "ts/test/test-util";
+import {parseHCards} from "./h-card";
 
 const firstHCard = async (html: string) =>
     parseHCards(parseTestHtml(html)).then(data => data[0]);
@@ -66,12 +67,12 @@ const SampleHCardNested = `
 function testLocation(hcard: HCardData) {
     const location = hcard.location;
 
-    expect(location.locality).toBe("Los Angeles");
-    expect(location.region).toBe("California");
-    expect(location.postalCode).toBe("91316");
-    expect(location.countryName).toBe("U.S.A");
-    expect(location.latitude).toBe("34.06648088793238");
-    expect(location.longitude).toBe("-118.22042689866892");
+    expect(location?.locality).toBe("Los Angeles");
+    expect(location?.region).toBe("California");
+    expect(location?.postalCode).toBe("91316");
+    expect(location?.countryName).toBe("U.S.A");
+    expect(location?.latitude).toBe("34.06648088793238");
+    expect(location?.longitude).toBe("-118.22042689866892");
 }
 
 describe("HCard parsing", () => {
@@ -88,12 +89,12 @@ describe("HCard parsing", () => {
             const nameDetail = hcard.nameDetail;
 
             expect(hcard.name).toBe("Sally Ride");
-            expect(nameDetail.honorificPrefix).toBe("Dr.");
-            expect(nameDetail.honorificSuffix).toBe("Ph.D.");
-            expect(nameDetail.givenName).toBe("Sally");
-            expect(nameDetail.additionalName).toBe("K.");
-            expect(nameDetail.familyName).toBe("Ride");
-            expect(nameDetail.nickname).toBe("sallykride");
+            expect(nameDetail?.honorificPrefix).toBe("Dr.");
+            expect(nameDetail?.honorificSuffix).toBe("Ph.D.");
+            expect(nameDetail?.givenName).toBe("Sally");
+            expect(nameDetail?.additionalName).toBe("K.");
+            expect(nameDetail?.familyName).toBe("Ride");
+            expect(nameDetail?.nickname).toBe("sallykride");
         });
     });
 
@@ -109,17 +110,17 @@ describe("HCard parsing", () => {
             const html = `<div class="h-card"><div class="p-adr">My address</div>`;
             const hcard = await firstHCard(html);
 
-            expect(hcard.location.value).toBe("My address");
+            expect(hcard?.location?.value).toBe("My address");
         });
 
         test("Nested p-adr", async () => {
             const hcard = await firstHCard(SampleHCardNested);
             const location = hcard.location;
 
-            expect(location.locality).toBe("Los Angeles");
-            expect(location.region).toBe("California");
-            expect(location.countryName).toBe("U.S.A");
-            expect(location.postalCode).toBe("91316");
+            expect(location?.locality).toBe("Los Angeles");
+            expect(location?.region).toBe("California");
+            expect(location?.countryName).toBe("U.S.A");
+            expect(location?.postalCode).toBe("91316");
         });
 
         test("Address directly in h-card", async () => {
@@ -138,15 +139,15 @@ describe("HCard parsing", () => {
         test("Simple name", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
 
-            expect(hcard.job.orgName).toBe("Sally Ride Science");
+            expect(hcard?.job?.orgName).toBe("Sally Ride Science");
         });
 
         test("Nested h-card", async () => {
             const hcard = await firstHCard(SampleHCardNested);
 
-            expect(hcard.job.orgName).toBe("Sally Ride Science");
-            expect(hcard.job.orgHCard.name).toBe("Sally Ride Science");
-            expect(hcard.job.orgHCard.contact.url).toBe(
+            expect(hcard?.job?.orgName).toBe("Sally Ride Science");
+            expect(hcard?.job?.orgHCard?.name).toBe("Sally Ride Science");
+            expect(hcard?.job?.orgHCard?.contact?.url).toBe(
                 "https://sallyridescience.com"
             );
         });

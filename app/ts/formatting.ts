@@ -1,4 +1,4 @@
-import { _, compatBrowser } from "ts/compat";
+import {_, compatBrowser} from "ts/compat";
 
 export const formatLongDate = (date: string): string => {
     return new Date(date).toLocaleDateString(
@@ -12,8 +12,8 @@ export const formatLongDate = (date: string): string => {
 };
 
 export const formatLatLong = (
-    latitude?: string,
-    longitude?: string
+    latitude?: string | null,
+    longitude?: string | null
 ): string | null => {
     if (latitude == null || longitude == null) return null;
 

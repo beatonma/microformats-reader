@@ -4,6 +4,8 @@ import { compatBrowser } from "ts/compat";
 export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
     const { title, href, ...rest } = props;
 
+    if (!href) return null;
+
     if (href?.startsWith("#")) {
         return <LinkToSection {...props} />;
     }

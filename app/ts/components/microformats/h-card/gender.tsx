@@ -1,27 +1,28 @@
 import React from "react";
-import { _ } from "ts/compat";
-import { InlineGroup } from "ts/components/layout/inline-group";
-import {
-    PropertiesTable,
-    Property,
-    PropertyRow,
-} from "ts/components/microformats/properties";
-import { HCardGenderIdentity } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
+import {_} from "ts/compat";
+import {InlineGroup} from "ts/components/layout/inline-group";
+import {PropertiesTable, Property, PropertyRow,} from "ts/components/microformats/properties";
+import {PropsOf} from "ts/components/props";
+import {notNullish} from "ts/data/arrays";
+import {Microformats} from "ts/data/microformats";
+import {HCardGenderIdentity} from "ts/data/types/h-card";
 
-export const Gender = (props: HCardGenderIdentity | null) => {
-    if (!props) return null;
+export const Gender = (props: PropsOf<HCardGenderIdentity>) => {
+    const identity = props.data;
+    if (!identity) return null;
 
     return (
         <InlineGroup className="gender">
-            <GenderSummary {...props} />
+            <GenderSummary {...identity} />
         </InlineGroup>
     );
 };
 
-export const GenderPropertiesTable = (props: HCardGenderIdentity | null) => {
-    if (!props) return null;
-    const { genderIdentity, pronouns, sex } = props;
+export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
+    const identity = props.data;
+    if (!identity) return null;
+    const { genderIdentity, pronouns, sex } = identity;
+
     return (
         <PropertiesTable>
             <PropertyRow
@@ -46,8 +47,7 @@ export const GenderPropertiesTable = (props: HCardGenderIdentity | null) => {
 const GenderSummary = (props: HCardGenderIdentity) => {
     const { genderIdentity, pronouns, sex } = props;
 
-    const gender = [genderIdentity, pronouns].filter(Boolean);
-    if (gender.filter(Boolean)) {
+    if ([genderIdentity, pronouns].filter(notNullish)) {
         return (
             <>
                 <Property

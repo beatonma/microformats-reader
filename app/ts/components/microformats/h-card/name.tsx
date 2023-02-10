@@ -1,26 +1,19 @@
 import React from "react";
-import { _ } from "ts/compat";
-import {
-    PropertiesTable,
-    Property,
-    PropertyRow,
-} from "ts/components/microformats/properties";
-import { HCardNameDetail } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
+import {_} from "ts/compat";
+import {PropertiesTable, Property, PropertyRow,} from "ts/components/microformats/properties";
+import {PropsOf} from "ts/components/props";
+import {Named} from "ts/data/common";
+import {Microformats} from "ts/data/microformats";
+import {HCardNameDetail} from "ts/data/types/h-card";
 
-interface NameDetailProps {
-    name?: string;
-    detail?: HCardNameDetail;
-}
-
-export const Name = (props: NameDetailProps) => {
+export const Name = (props: Named) => {
     const { name } = props;
 
     return <Property cls={Microformats.P_Name} value={name} />;
 };
 
-export const NamePropertiesTable = (props: NameDetailProps) => {
-    const { detail } = props;
+export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
+    const detail = props.data;
     if (detail == null) return null;
 
     return (

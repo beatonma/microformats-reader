@@ -1,18 +1,15 @@
-import React, { ComponentProps, HTMLProps, ReactNode } from "react";
-import { _ } from "ts/compat";
-import { Icon, Icons } from "ts/components/icon";
+import React, {ComponentProps, HTMLProps, ReactNode} from "react";
+import {_} from "ts/compat";
+import {Icon, Icons} from "ts/components/icon";
 import "ts/components/layout/dropdown.scss";
-import {
-    ExpandCollapseLayout,
-    ExpandCollapseProps,
-    ExpandableDefaultProps,
-} from "ts/components/layout/expand-collapse";
+import {ExpandableDefaultProps, ExpandCollapseLayout, ExpandCollapseProps,} from "ts/components/layout/expand-collapse";
 
 export interface DropdownProps
     extends HTMLProps<HTMLDivElement>,
         ExpandableDefaultProps {
     header: ReactNode;
     headerClassName?: string;
+    title: string;
 }
 export const Dropdown = (props: DropdownProps) => {
     return (

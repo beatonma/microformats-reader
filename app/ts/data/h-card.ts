@@ -1,95 +1,21 @@
+import {Image, MicroformatProperties, ParsedDocument,} from "microformats-parser/dist/types";
+import {noneOf, notNullish} from "ts/data/arrays";
+import {Parse} from "ts/data/parsing";
+import {HAdrData} from "ts/data/types";
 import {
-    Image,
-    MicroformatProperties,
-    ParsedDocument,
-} from "microformats-parser/dist/types";
-import { noneOf } from "ts/data/arrays";
-import { Named } from "ts/data/common";
-import { Parse } from "./microformats";
+    HCardContactData,
+    HCardData,
+    HCardDates,
+    HCardExtras,
+    HCardGenderIdentity,
+    HCardImages,
+    HCardJobData,
+    HCardNameDetail,
+} from "ts/data/types/h-card";
 
 /*
  * Structures.
  */
-
-export interface HCardData extends Named {
-    id?: any;
-    name?: string;
-    nameDetail?: HCardNameDetail;
-    images?: HCardImages;
-    gender?: HCardGenderIdentity;
-    contact?: HCardContactData;
-    location: HAdr;
-    job?: HCardJobData;
-    dates?: HCardDates;
-    extras?: HCardExtras;
-}
-
-export interface HCardNameDetail {
-    honorificPrefix?: string;
-    honorificSuffix?: string;
-    givenName?: string;
-    additionalName?: string;
-    familyName?: string;
-    sortBy?: string;
-    nickname?: string;
-    sound?: string;
-}
-
-export interface HGeo {
-    latitude?: string;
-    longitude?: string;
-    altitude?: string;
-}
-
-export interface HAdr extends HGeo {
-    locality?: string;
-    region?: string;
-    countryName?: string;
-    postalCode?: string;
-    streetAddress?: string;
-    extendedAddress?: string;
-    postOfficeBox?: string;
-    label?: string;
-    geo?: string;
-    value?: string;
-}
-
-export interface HCardImages {
-    photo?: Image;
-    logo?: Image;
-}
-
-export interface HCardGenderIdentity {
-    sex?: string;
-    genderIdentity?: string;
-    pronouns?: string;
-}
-
-export interface HCardContactData {
-    url?: string;
-    email?: string;
-    phone?: string;
-    impp?: string;
-    publicKey?: string;
-}
-
-export interface HCardJobData {
-    orgName?: string;
-    orgHCard?: HCardData;
-    jobTitle?: string;
-    role?: string;
-}
-
-export interface HCardDates {
-    birthday?: string;
-    anniversary?: string;
-}
-
-export interface HCardExtras {
-    uid?: string;
-    category?: string;
-    notes?: string;
-}
 
 /*
  * Parsing.
@@ -100,10 +26,10 @@ export const parseHCards = async (
 ): Promise<HCardData[]> =>
     new Promise((resolve, reject) => {
         const items: MicroformatProperties[] = microformats.items
-            .filter(item => item.type.includes("h-card"))
+            .filter(item => item.type?.includes("h-card"))
             .map(item => item.properties);
 
-        const primaryHcards = items.map(parseHCard).filter(Boolean);
+        const primaryHcards = items.map(parseHCard).filter(notNullish);
         const hcards: HCardData[] = [];
         primaryHcards.forEach((hcard, index) => {
             hcards.push(hcard);
@@ -165,17 +91,29 @@ const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
     };
 };
 
-const parseLocation = (hcard: MicroformatProperties): HAdr | null => {
-    const parseLocation = (obj?: any): HAdr | null => {
+const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
+    const parseLocation = (obj?: any): HAdrData | null => {
         if (obj == null) return null;
 
         if (typeof obj === "string") {
             return {
+                locality: null,
+                region: null,
+                countryName: null,
+                postalCode: null,
+                streetAddress: null,
+                extendedAddress: null,
+                postOfficeBox: null,
+                label: null,
+                geo: null,
+                latitude: null,
+                longitude: null,
+                altitude: null,
                 value: obj,
             };
         }
 
-        const result: HAdr = {
+        const result: HAdrData = {
             locality: Parse.valueOf(obj, "locality"),
             region: Parse.valueOf(obj, "region"),
             countryName: Parse.valueOf(obj, "country-name"),
@@ -253,7 +191,7 @@ const parsePronouns = (hcard: MicroformatProperties): string | null => {
     const possessive = Parse.parseExperimental(hcard, "pronoun-possessive");
 
     return (
-        [nominative, oblique, possessive].filter(Boolean).join(" | ") || null
+        [nominative, oblique, possessive].filter(notNullish).join(" | ") || null
     );
 };
 

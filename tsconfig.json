@@ -8,12 +8,13 @@
         "jsx": "react",
         "moduleResolution": "node",
         "noImplicitAny": true,
+        "strictNullChecks": true,
+        "pretty": true,
         "sourceMap": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "baseUrl": "app/",
         "typeRoots": [
-            "gulpfile.ts/types",
             "node_modules/@types"
         ]
     },
@@ -26,5 +27,5 @@
         "compilerOptions": {
             "module": "commonjs"
         }
-    },
+    }
 }

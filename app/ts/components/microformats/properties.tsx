@@ -5,12 +5,13 @@ import { LinkTo } from "ts/components/link-to";
 import { Named } from "ts/data/common";
 import "./properties.scss";
 
-interface MicroformatPropertyProps extends Named {
-    title?: string;
-    href?: string;
+interface MicroformatPropertyProps {
     cls: string;
-    icon?: Icons;
     value: ReactNode;
+    name?: string | null;
+    title?: string;
+    href?: string | null;
+    icon?: Icons;
 }
 
 /**

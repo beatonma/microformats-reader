@@ -1,15 +1,15 @@
 import React from "react";
-import { _ } from "ts/compat";
-import {
-    PropertiesTable,
-    PropertyRow,
-} from "ts/components/microformats/properties";
-import { HCardExtras } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
+import {_} from "ts/compat";
+import {PropertiesTable, PropertyRow,} from "ts/components/microformats/properties";
+import {PropsOf} from "ts/components/props";
+import {Microformats} from "ts/data/microformats";
+import {HCardExtras} from "ts/data/types/h-card";
 
-export const ExtrasPropertiesTable = (props: HCardExtras) => {
-    if (!props) return null;
-    const { uid, category, notes } = props;
+export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
+    const extras = props.data;
+    if (!extras) return null;
+    const { uid, category, notes } = extras;
+
     return (
         <PropertiesTable>
             <PropertyRow

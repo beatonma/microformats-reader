@@ -1,9 +1,9 @@
-import React, { HTMLProps } from "react";
-import { _ } from "ts/compat";
-import { Icon, Icons } from "ts/components/icon";
-import { Dropdown } from "ts/components/layout/dropdown";
-import { LinkTo } from "ts/components/link-to";
-import { RelLink } from "ts/data/related-links";
+import React, {HTMLProps} from "react";
+import {_} from "ts/compat";
+import {Icon, Icons} from "ts/components/icon";
+import {Dropdown} from "ts/components/layout/dropdown";
+import {LinkTo} from "ts/components/link-to";
+import {RelLink} from "ts/data/related-links";
 import "./rel.scss";
 
 interface RelLinkProps {
@@ -25,6 +25,7 @@ export const RelmeLinks = (props: RelLinkProps) => {
                     <span>rel=me</span>
                 </>
             }
+            title="rel=me links"
             defaultIsExpanded={false}
             className="relme-links"
         >
@@ -93,7 +94,8 @@ export const PgpKey = (props: RelLinkProps) => {
     );
 };
 
-export const Feeds = (props: RelLinkProps) => {
+export const Feeds = (props: RelLinkProps | null) => {
+    if (!props) return null;
     return (
         <QuickLinks
             icon={Icons.RssFeed}

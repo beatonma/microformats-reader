@@ -3,5 +3,5 @@
  */
 
 export interface Named {
-    name?: string;
+    name?: string | null;
 }

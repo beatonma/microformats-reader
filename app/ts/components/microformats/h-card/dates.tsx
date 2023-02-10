@@ -1,98 +1,62 @@
 import React from "react";
-import { _ } from "ts/compat";
-import { Icons } from "ts/components/icon";
-import { InlineGroup } from "ts/components/layout/inline-group";
-import {
-    PropertiesTable,
-    Property,
-    PropertyRow,
-} from "ts/components/microformats/properties";
-import { HCardDates } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
-import { formatLongDate } from "ts/formatting";
+import {_} from "ts/compat";
+import {PropertiesTable, PropertyRow,} from "ts/components/microformats/properties";
+import {PropsOf} from "ts/components/props";
+import {Microformats} from "ts/data/microformats";
+import {HCardDates} from "ts/data/types/h-card";
+import {formatLongDate} from "ts/formatting";
 
-export const Dates = (props: HCardDates) => {
-    if (!props) return null;
-
-    return <Birthday {...props} />;
-};
-
-export const DatesPropertiesTable = (props: HCardDates) => {
-    if (!props) return null;
-    const { birthday, anniversary } = props;
+export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
+    const dates = props.data;
+    if (!dates) return null;
+    const { birthday, anniversary } = dates;
 
     return (
         <PropertiesTable>
             <PropertyRow
                 cls={Microformats.Dt_Bday}
                 name={_("hcard_dates_birthday")}
-                value={
-                    <>
-                        <time dateTime={birthday}>
-                            {formatLongDate(birthday)}
-                        </time>{" "}
-                        <Age birthday={birthday} />
-                    </>
-                }
+                value={<Birthday date={birthday} />}
             />
+
             <PropertyRow
                 cls={Microformats.Dt_Anniversary}
                 name={_("hcard_dates_anniversary")}
-                value={
-                    <>
-                        <time dateTime={anniversary}>
-                            {formatLongDate(anniversary)}
-                        </time>
-                    </>
-                }
+                value={<Time date={anniversary} />}
             />
         </PropertiesTable>
     );
 };
 
-const Birthday = (props: HCardDates) => {
-    const { birthday } = props;
+interface DateTimeProps {
+    date: string | null;
+}
+
+const Time = (props: DateTimeProps) => {
+    const { date } = props;
+    if (!date) return null;
+    return <time dateTime={date}>{formatLongDate(date)}</time>;
+};
+
+const Birthday = (props: DateTimeProps) => {
+    const birthday = props.date;
     if (!birthday) return null;
 
     return (
-        <InlineGroup>
-            <Property
-                cls={Microformats.Dt_Bday}
-                icon={Icons.Birthday}
-                value={
-                    <>
-                        <time dateTime={birthday}>
-                            {formatLongDate(birthday)}
-                        </time>{" "}
-                        <Age birthday={birthday} />
-                    </>
-                }
-            />
-        </InlineGroup>
+        <>
+            <Time date={birthday} />
+            <Age date={birthday} />
+        </>
     );
 };
 
-const Anniversary = (props: HCardDates) => {
-    const { anniversary } = props;
-    return (
-        <InlineGroup>
-            <Property
-                cls={Microformats.Dt_Anniversary}
-                icon={Icons.Anniversary}
-                value={
-                    <time dateTime={anniversary}>
-                        {formatLongDate(anniversary)}
-                    </time>
-                }
-            />
-        </InlineGroup>
-    );
-};
+const Age = (props: DateTimeProps) => {
+    const { date } = props;
+    if (!date) return null;
 
-const Age = (props: HCardDates) => {
-    const { birthday } = props;
-    const age = yearsSince(birthday);
+    const age = yearsSince(date);
     if (!age) return null;
+
     const ageMessage = _("hcard_age", age.toString());
     return <span>{`(${ageMessage})`}</span>;
 };

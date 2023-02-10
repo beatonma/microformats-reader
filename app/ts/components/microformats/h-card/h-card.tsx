@@ -1,12 +1,8 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { HTMLProps, useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
 import { HorizontalAlignment, Row } from "ts/components/layout";
 import { CardContent, CardLayout } from "ts/components/layout/card";
-import {
-    Dropdown,
-    DropdownButton,
-    DropdownProps,
-} from "ts/components/layout/dropdown";
+import { Dropdown, DropdownButton } from "ts/components/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
@@ -20,13 +16,13 @@ import {
     GenderPropertiesTable,
 } from "ts/components/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/components/microformats/h-card/job";
-import { HCardData } from "ts/data/h-card";
+import { HCardData } from "ts/data/types";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
-    const { defaultIsExpanded, id, images, ...rest } = props;
+    const { defaultIsExpanded, id, images } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
     const [isCollapsing, setIsCollapsing] = useState(false);
     const [isExpanding, setIsExpanding] = useState(false);
@@ -60,13 +56,13 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
             >
                 <Row className="banner">
                     <Avatar
-                        name={props.name}
-                        {...images}
+                        name={props.name ?? "?"}
+                        images={images}
                         onClick={toggleExpanded}
                     />
                     <HCardTextSummary
+                        {...props}
                         id={summaryID}
-                        {...rest}
                         data-visible={!isExpanded}
                         data-closing={isExpanding}
                     />
@@ -81,8 +77,8 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
                 />
 
                 <HCardTextDetail
+                    {...props}
                     id={detailID}
-                    {...rest}
                     data-visible={isExpanded}
                     data-closing={isCollapsing}
                 />
@@ -98,8 +94,7 @@ const addAnimationEndListener = (
 ) => {
     useEffect(() => {
         if (isCollapsing) {
-            const el = document.getElementById(id);
-            el.addEventListener(
+            document.getElementById(id)?.addEventListener(
                 "animationend",
                 () => {
                     reset();
@@ -127,15 +122,17 @@ const HCardTextSummary = (props: HCardData) => {
     return (
         <div className="hcard-summary" {...rest}>
             <Row alignment={HorizontalAlignment.SpaceBetween}>
-                <Name name={name} detail={nameDetail} />
+                <Name name={name} />
             </Row>
+
             <Row wrap>
-                <Gender {...gender} />
-                <Location {...location} />
+                <Gender data={gender} />
+                <Location data={location} />
             </Row>
+
             <Row wrap>
-                <Contact {...contact} />
-                <Job {...job} />
+                <Contact data={contact} />
+                <Job data={job} />
             </Row>
         </div>
     );
@@ -161,53 +158,69 @@ const HCardTextDetail = (props: HCardData) => {
             </Row>
 
             <DetailSection
-                header={_("hcard_name_details")}
+                sectionTitle={_("hcard_name_details")}
                 dependsOn={nameDetail}
             >
-                <NamePropertiesTable detail={nameDetail} />
+                <NamePropertiesTable data={nameDetail} />
             </DetailSection>
 
             <DetailSection
-                header={_("hcard_gender_details")}
+                sectionTitle={_("hcard_gender_details")}
                 dependsOn={gender}
             >
-                <GenderPropertiesTable {...gender} />
+                <GenderPropertiesTable data={gender} />
             </DetailSection>
 
             <DetailSection
-                header={_("hcard_contact_detail")}
+                sectionTitle={_("hcard_contact_detail")}
                 dependsOn={contact}
             >
-                <ContactPropertiesTable {...contact} />
+                <ContactPropertiesTable data={contact} />
             </DetailSection>
 
             <DetailSection
-                header={_("hcard_location_detail")}
+                sectionTitle={_("hcard_location_detail")}
                 dependsOn={location}
             >
-                <LocationPropertiesTable {...location} />
+                <LocationPropertiesTable data={location} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_job_detail")} dependsOn={job}>
-                <JobPropertiesTable {...job} />
+            <DetailSection sectionTitle={_("hcard_job_detail")} dependsOn={job}>
+                <JobPropertiesTable data={job} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_dates_detail")} dependsOn={dates}>
-                <DatesPropertiesTable {...dates} />
+            <DetailSection
+                sectionTitle={_("hcard_dates_detail")}
+                dependsOn={dates}
+            >
+                <DatesPropertiesTable data={dates} />
             </DetailSection>
 
-            <DetailSection header={_("hcard_extras_detail")} dependsOn={extras}>
-                <ExtrasPropertiesTable {...extras} />
+            <DetailSection
+                sectionTitle={_("hcard_extras_detail")}
+                dependsOn={extras}
+            >
+                <ExtrasPropertiesTable data={extras} />
             </DetailSection>
         </div>
     );
 };
 
 interface RequiredObjectProps {
-    dependsOn: object;
+    sectionTitle: string;
+    dependsOn: unknown;
 }
-const DetailSection = (props: DropdownProps & RequiredObjectProps) => {
-    if (props.dependsOn == null) return null;
+const DetailSection = (
+    props: HTMLProps<HTMLDivElement> & RequiredObjectProps
+) => {
+    const { sectionTitle, dependsOn, ...rest } = props;
+    if (dependsOn == null) return null;
 
-    return <Dropdown {...props} />;
+    return (
+        <Dropdown
+            header={<span>{sectionTitle}</span>}
+            title={sectionTitle}
+            {...rest}
+        />
+    );
 };

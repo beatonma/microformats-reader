@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useId, useState } from "react";
+import React, {ReactNode, useEffect, useId, useState} from "react";
 
 export interface ExpandableDefaultProps {
     defaultIsExpanded?: boolean;
@@ -62,8 +62,8 @@ export const ExpandCollapseLayout = (
     useEffect(() => {
         if (isClosing) {
             document
-                .getElementById(contentID)
-                .addEventListener("animationend", () => setClosing(false), {
+                ?.getElementById(contentID)
+                ?.addEventListener("animationend", () => setClosing(false), {
                     once: true,
                 });
         }

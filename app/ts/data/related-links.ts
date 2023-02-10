@@ -1,10 +1,10 @@
-import { ParsedDocument } from "microformats-parser/dist/types";
+import {ParsedDocument} from "microformats-parser/dist/types";
 
 export interface RelLink {
     href: string;
-    text?: string;
-    title?: string;
-    type?: string;
+    text: string;
+    title: string;
+    type: string | null;
 }
 
 export interface RelLinks {
@@ -29,15 +29,15 @@ export const parseRelLinks = async (
         const feedLinks = rels?.alternate ?? [];
         const webmentionEndpoints = rels?.webmention ?? [];
 
-        const build = (links: string[]) =>
+        const build = (links: string[]): RelLink[] =>
             links
                 .map(url => {
                     const rel = microformats["rel-urls"][url];
                     return {
                         href: url,
-                        text: rel.text?.trim() ?? rel.title?.trim() ?? url,
-                        title: rel.title?.trim(),
-                        type: rel.type?.trim(),
+                        text: rel.text.trim() ?? rel.title?.trim() ?? url,
+                        title: rel.title?.trim() ?? url,
+                        type: rel.type?.trim() ?? null,
                     };
                 })
                 .sort((a: RelLink, b: RelLink) => a.text.localeCompare(b.text));

@@ -1,19 +1,17 @@
 import React from "react";
-import { _ } from "ts/compat";
-import { Icons } from "ts/components/icon";
-import { ConditionalContent } from "ts/components/layout/conditional";
-import { InlineGroup } from "ts/components/layout/inline-group";
-import {
-    PropertiesTable,
-    Property,
-    PropertyRow,
-} from "ts/components/microformats/properties";
-import { HCardJobData } from "ts/data/h-card";
-import { Microformats } from "ts/data/microformats";
+import {_} from "ts/compat";
+import {Icons} from "ts/components/icon";
+import {ConditionalContent} from "ts/components/layout/conditional";
+import {InlineGroup} from "ts/components/layout/inline-group";
+import {PropertiesTable, Property, PropertyRow,} from "ts/components/microformats/properties";
+import {PropsOf} from "ts/components/props";
+import {Microformats} from "ts/data/microformats";
+import {HCardJobData} from "ts/data/types/h-card";
 
-export const Job = (props?: HCardJobData) => {
-    if (!props) return null;
-    const { jobTitle, orgHCard } = props;
+export const Job = (props: PropsOf<HCardJobData>) => {
+    const job = props.data;
+    if (!job) return null;
+    const { jobTitle, orgHCard } = job;
 
     return (
         <InlineGroup>
@@ -25,14 +23,15 @@ export const Job = (props?: HCardJobData) => {
             <ConditionalContent condition={() => !!jobTitle && !!orgHCard}>
                 <span>{" @ "}</span>
             </ConditionalContent>
-            <LinkToOrganisation {...props} />
+            <LinkToOrganisation {...job} />
         </InlineGroup>
     );
 };
 
-export const JobPropertiesTable = (props?: HCardJobData) => {
-    if (!props) return null;
-    const { jobTitle, role } = props;
+export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
+    const job = props.data;
+    if (!job) return null;
+    const { jobTitle, role } = job;
 
     return (
         <PropertiesTable>
@@ -46,7 +45,7 @@ export const JobPropertiesTable = (props?: HCardJobData) => {
                 name={_("hcard_job_role")}
                 value={role}
             />
-            <Organisation {...props} />
+            <Organisation {...job} />
         </PropertiesTable>
     );
 };

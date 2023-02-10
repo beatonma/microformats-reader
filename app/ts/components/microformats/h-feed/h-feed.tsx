@@ -1,28 +1,35 @@
 import React from "react";
-import { CardContent, CardLayout } from "ts/components/layout/card";
-import { HEntryData, HFeedAbout, HFeedData } from "ts/data/h-feed";
+import {CardContent, CardLayout} from "ts/components/layout/card";
+import {PropsOf} from "ts/components/props";
+import {HEntryData} from "ts/data/types/h-entry";
+import {HFeedAbout, HFeedData} from "ts/data/types/h-feed";
 import "./h-feed.scss";
 
-export const RawHFeed = (props: HFeedData) => {
-    return <pre>{JSON.stringify(props, null, 2)}</pre>;
-};
+export const HFeed = (props: PropsOf<HFeedData>) => {
+    const feed = props.data;
+    if (!feed) return null;
+    const { about, entries } = feed;
 
-export const HFeed = (props: HFeedData) => {
-    const { about, entries } = props;
     return (
         <CardLayout className="h-feed">
             <CardContent>
-                <AboutHfeed {...about} />
-                <div className="entries">{entries?.map(HEntry)}</div>
+                <AboutHFeed data={about} />
+
+                <div className="entries">
+                    {entries?.map((entry, index) => (
+                        <HEntry {...entry} key={index} />
+                    ))}
+                </div>
             </CardContent>
         </CardLayout>
     );
 };
 
-const AboutHfeed = (props: HFeedAbout) => {
-    if (props == null) return null;
+const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
+    const about = props.data;
+    if (!about) return null;
 
-    const { name, author, summary, url, photo } = props;
+    const { name, author, summary, url, photo } = about;
     return <div className="hfeed-about">{name}</div>;
 };
 
@@ -33,14 +40,10 @@ const HEntry = (props: HEntryData) => {
         content,
         dates,
         author,
-        lifeOf,
-        inReplyTo,
+        interactions,
         uid,
         url,
         location,
-        rsvp,
-        repostOf,
-        syndication,
         category,
     } = props;
     return <div className="h-entry">{name}</div>;
