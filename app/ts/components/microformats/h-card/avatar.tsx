@@ -1,8 +1,8 @@
-import React, {HTMLProps} from "react";
-import {Image} from "microformats-parser/dist/types";
-import {Named} from "ts/data/common";
-import {Microformats} from "ts/data/microformats";
-import {HCardImages} from "ts/data/types/h-card";
+import React, { HTMLProps } from "react";
+import { Image } from "microformats-parser/dist/types";
+import { Named } from "ts/data/common";
+import { Microformat } from "ts/data/microformats";
+import { HCardImages } from "ts/data/types/h-card";
 import "./avatar.scss";
 
 interface AvatarProps {
@@ -25,7 +25,7 @@ export const Avatar = (
         return (
             <SingleImageAvatar
                 image={photo}
-                imageClassName={Microformats.U_Photo}
+                imageClassName={Microformat.UrlProp.U_Photo}
             />
         );
     }
@@ -34,7 +34,7 @@ export const Avatar = (
         return (
             <SingleImageAvatar
                 image={logo}
-                imageClassName={Microformats.U_Logo}
+                imageClassName={Microformat.UrlProp.U_Logo}
             />
         );
     }
@@ -70,15 +70,15 @@ const PhotoWithLogo = (
         <div className="avatar" {...rest}>
             <img
                 loading="lazy"
-                className={Microformats.U_Photo}
-                title={Microformats.U_Photo}
+                className={Microformat.UrlProp.U_Photo}
+                title={Microformat.UrlProp.U_Photo}
                 src={photo.value}
                 alt={photo.alt}
             />
             <img
                 loading="lazy"
-                className={Microformats.U_Logo}
-                title={Microformats.U_Logo}
+                className={Microformat.UrlProp.U_Logo}
+                title={Microformat.UrlProp.U_Logo}
                 src={logo.value}
                 alt={logo.alt}
             />

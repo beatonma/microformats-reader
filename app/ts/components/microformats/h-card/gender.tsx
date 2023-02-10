@@ -1,11 +1,15 @@
 import React from "react";
-import {_} from "ts/compat";
-import {InlineGroup} from "ts/components/layout/inline-group";
-import {PropertiesTable, Property, PropertyRow,} from "ts/components/microformats/properties";
-import {PropsOf} from "ts/components/props";
-import {notNullish} from "ts/data/arrays";
-import {Microformats} from "ts/data/microformats";
-import {HCardGenderIdentity} from "ts/data/types/h-card";
+import { _ } from "ts/compat";
+import { InlineGroup } from "ts/components/layout/inline-group";
+import {
+    PropertiesTable,
+    Property,
+    PropertyRow,
+} from "ts/components/microformats/properties";
+import { PropsOf } from "ts/components/props";
+import { notNullish } from "ts/data/arrays";
+import { Microformat } from "ts/data/microformats";
+import { HCardGenderIdentity } from "ts/data/types/h-card";
 
 export const Gender = (props: PropsOf<HCardGenderIdentity>) => {
     const identity = props.data;
@@ -26,17 +30,17 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformats.P_Gender_Identity}
+                cls={Microformat.PlainProp.P_Gender_Identity}
                 name={_("hcard_gender_identity")}
                 value={genderIdentity}
             />
             <PropertyRow
-                cls={Microformats.P_Pronouns}
+                cls={Microformat.PlainProp.P_Pronouns}
                 name={_("hcard_pronouns")}
                 value={pronouns}
             />
             <PropertyRow
-                cls={Microformats.P_Sex}
+                cls={Microformat.PlainProp.P_Sex}
                 name={_("hcard_sex")}
                 value={sex}
             />
@@ -51,13 +55,16 @@ const GenderSummary = (props: HCardGenderIdentity) => {
         return (
             <>
                 <Property
-                    cls={Microformats.P_Gender_Identity}
+                    cls={Microformat.PlainProp.P_Gender_Identity}
                     value={genderIdentity}
                 />
-                <Property cls={Microformats.P_Pronouns} value={pronouns} />
+                <Property
+                    cls={Microformat.PlainProp.P_Pronouns}
+                    value={pronouns}
+                />
             </>
         );
     }
 
-    return <Property cls={Microformats.P_Sex} value={sex} />;
+    return <Property cls={Microformat.PlainProp.P_Sex} value={sex} />;
 };

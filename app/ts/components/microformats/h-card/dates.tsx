@@ -1,10 +1,13 @@
 import React from "react";
-import {_} from "ts/compat";
-import {PropertiesTable, PropertyRow,} from "ts/components/microformats/properties";
-import {PropsOf} from "ts/components/props";
-import {Microformats} from "ts/data/microformats";
-import {HCardDates} from "ts/data/types/h-card";
-import {formatLongDate} from "ts/formatting";
+import { _ } from "ts/compat";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/components/microformats/properties";
+import { PropsOf } from "ts/components/props";
+import { Microformat } from "ts/data/microformats";
+import { HCardDates } from "ts/data/types/h-card";
+import { formatLongDate } from "ts/formatting";
 
 export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
     const dates = props.data;
@@ -14,13 +17,13 @@ export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformats.Dt_Bday}
+                cls={Microformat.DateProp.Dt_Bday}
                 name={_("hcard_dates_birthday")}
                 value={<Birthday date={birthday} />}
             />
 
             <PropertyRow
-                cls={Microformats.Dt_Anniversary}
+                cls={Microformat.DateProp.Dt_Anniversary}
                 name={_("hcard_dates_anniversary")}
                 value={<Time date={anniversary} />}
             />

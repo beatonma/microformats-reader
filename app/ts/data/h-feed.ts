@@ -5,6 +5,7 @@ import {
 } from "microformats-parser/dist/types";
 import { anyOf, notNullish } from "ts/data/arrays";
 import { parseHEntry } from "ts/data/h-entry";
+import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing";
 import { HFeedData } from "ts/data/types/h-feed";
 
@@ -12,11 +13,18 @@ export const parseHFeeds = async (
     microformats: ParsedDocument
 ): Promise<HFeedData[]> => {
     return new Promise((resolve, reject) => {
-        const feeds: MicroformatRoot[] = microformats.items.filter(item =>
-            item.type?.includes("h-feed")
+        const feeds = Parse.getRootsOfType(
+            microformats,
+            Microformat.Root.H_Feed
+        )
+            .map(parseHFeed)
+            .filter(notNullish);
+
+        const unwrappedEntries = wrapWithHFeed(
+            Parse.getRootsOfType(microformats, Microformat.Root.H_Entry)
         );
 
-        resolve(feeds.map(parseHFeed).filter(notNullish));
+        resolve([...feeds, unwrappedEntries].filter(notNullish));
     });
 };
 
@@ -46,5 +54,14 @@ const parseHFeed = (hfeed: MicroformatRoot): HFeedData | null => {
     return {
         about: about,
         entries: entries,
+    };
+};
+
+const wrapWithHFeed = (entries: MicroformatRoot[]): HFeedData | null => {
+    if (entries.length === 0) return null;
+
+    return {
+        about: null,
+        entries: entries.map(parseHEntry).filter(notNullish),
     };
 };

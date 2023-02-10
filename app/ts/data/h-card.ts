@@ -1,7 +1,12 @@
-import {Image, MicroformatProperties, ParsedDocument,} from "microformats-parser/dist/types";
-import {noneOf, notNullish} from "ts/data/arrays";
-import {Parse} from "ts/data/parsing";
-import {HAdrData} from "ts/data/types";
+import {
+    Image,
+    MicroformatProperties,
+    ParsedDocument,
+} from "microformats-parser/dist/types";
+import { noneOf, notNullish } from "ts/data/arrays";
+import { Microformat } from "ts/data/microformats";
+import { Parse } from "ts/data/parsing";
+import { HAdrData } from "ts/data/types";
 import {
     HCardContactData,
     HCardData,
@@ -14,10 +19,6 @@ import {
 } from "ts/data/types/h-card";
 
 /*
- * Structures.
- */
-
-/*
  * Parsing.
  */
 
@@ -25,9 +26,10 @@ export const parseHCards = async (
     microformats: ParsedDocument
 ): Promise<HCardData[]> =>
     new Promise((resolve, reject) => {
-        const items: MicroformatProperties[] = microformats.items
-            .filter(item => item.type?.includes("h-card"))
-            .map(item => item.properties);
+        const items = Parse.getRootsOfType(
+            microformats,
+            Microformat.Root.H_Card
+        ).map(item => item.properties);
 
         const primaryHcards = items.map(parseHCard).filter(notNullish);
         const hcards: HCardData[] = [];

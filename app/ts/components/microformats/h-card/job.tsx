@@ -1,12 +1,16 @@
 import React from "react";
-import {_} from "ts/compat";
-import {Icons} from "ts/components/icon";
-import {ConditionalContent} from "ts/components/layout/conditional";
-import {InlineGroup} from "ts/components/layout/inline-group";
-import {PropertiesTable, Property, PropertyRow,} from "ts/components/microformats/properties";
-import {PropsOf} from "ts/components/props";
-import {Microformats} from "ts/data/microformats";
-import {HCardJobData} from "ts/data/types/h-card";
+import { _ } from "ts/compat";
+import { Icons } from "ts/components/icon";
+import { ConditionalContent } from "ts/components/layout/conditional";
+import { InlineGroup } from "ts/components/layout/inline-group";
+import {
+    PropertiesTable,
+    Property,
+    PropertyRow,
+} from "ts/components/microformats/properties";
+import { PropsOf } from "ts/components/props";
+import { Microformat } from "ts/data/microformats";
+import { HCardJobData } from "ts/data/types/h-card";
 
 export const Job = (props: PropsOf<HCardJobData>) => {
     const job = props.data;
@@ -16,7 +20,7 @@ export const Job = (props: PropsOf<HCardJobData>) => {
     return (
         <InlineGroup>
             <Property
-                cls={Microformats.P_Job_Title}
+                cls={Microformat.PlainProp.P_Job_Title}
                 icon={Icons.Work}
                 value={jobTitle}
             />
@@ -36,12 +40,12 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformats.P_Job_Title}
+                cls={Microformat.PlainProp.P_Job_Title}
                 name={_("hcard_job_title")}
                 value={jobTitle}
             />
             <PropertyRow
-                cls={Microformats.P_Role}
+                cls={Microformat.PlainProp.P_Role}
                 name={_("hcard_job_role")}
                 value={role}
             />
@@ -59,7 +63,7 @@ const Organisation = (props: HCardJobData) => {
                 name={_("hcard_job_organisation")}
                 title={_("hcard_link_to_org_hcard")}
                 href={`#${orgHCard.id}`}
-                cls={Microformats.P_Org}
+                cls={Microformat.PlainProp.P_Org}
                 value={orgName}
             />
         );
@@ -67,7 +71,7 @@ const Organisation = (props: HCardJobData) => {
         return (
             <PropertyRow
                 name={_("hcard_job_organisation")}
-                cls={Microformats.P_Org}
+                cls={Microformat.PlainProp.P_Org}
                 value={orgName}
             />
         );
@@ -81,7 +85,7 @@ const LinkToOrganisation = (props: HCardJobData) => {
         return (
             <Property
                 href={`#${orgHCard.id}`}
-                cls={Microformats.P_Org}
+                cls={Microformat.PlainProp.P_Org}
                 title={_("hcard_link_to_org_hcard")}
                 value={orgHCard.name}
             />
@@ -89,7 +93,7 @@ const LinkToOrganisation = (props: HCardJobData) => {
     }
 
     if (orgName) {
-        return <Property cls={Microformats.P_Org} value={orgName} />;
+        return <Property cls={Microformat.PlainProp.P_Org} value={orgName} />;
     }
 
     return null;

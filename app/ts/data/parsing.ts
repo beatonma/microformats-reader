@@ -1,6 +1,17 @@
-import { MicroformatProperties } from "microformats-parser/dist/types";
+import {
+    MicroformatProperties,
+    MicroformatRoot,
+    ParsedDocument,
+} from "microformats-parser/dist/types";
+import { Microformat } from "ts/data/microformats";
 
 export namespace Parse {
+    export const getRootsOfType = (
+        microformats: ParsedDocument,
+        type: Microformat.Root
+    ): MicroformatRoot[] =>
+        microformats.items.filter(item => item.type?.includes(type));
+
     export const getObject = (container: any, key: string): unknown | null => {
         if (!container) return null;
 
@@ -49,13 +60,4 @@ export namespace Parse {
         hcard: MicroformatProperties,
         key: string
     ) => valueOf(hcard, key) ?? valueOf(hcard, `x-${key}`);
-
-    export const parseDate = (container: any, key: string): Date | null => {
-        const dateString = valueOf(container, key);
-        if (!dateString) return null;
-
-        const date = new Date(dateString);
-        if (date.toString() === "Invalid Date") return null;
-        return date;
-    };
 }

@@ -1,9 +1,12 @@
 import React from "react";
-import {_} from "ts/compat";
-import {PropertiesTable, PropertyRow,} from "ts/components/microformats/properties";
-import {PropsOf} from "ts/components/props";
-import {Microformats} from "ts/data/microformats";
-import {HCardExtras} from "ts/data/types/h-card";
+import { _ } from "ts/compat";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/components/microformats/properties";
+import { PropsOf } from "ts/components/props";
+import { Microformat } from "ts/data/microformats";
+import { HCardExtras } from "ts/data/types/h-card";
 
 export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
     const extras = props.data;
@@ -13,17 +16,17 @@ export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformats.P_Note}
+                cls={Microformat.PlainProp.P_Note}
                 name={_("hcard_extras_notes")}
                 value={notes}
             />
             <PropertyRow
-                cls={Microformats.P_Category}
+                cls={Microformat.PlainProp.P_Category}
                 name={_("hcard_extras_category")}
                 value={category}
             />
             <PropertyRow
-                cls={Microformats.U_Uid}
+                cls={Microformat.UrlProp.U_Uid}
                 name={_("hcard_extras_uid")}
                 value={uid}
             />

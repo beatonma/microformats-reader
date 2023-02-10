@@ -3,10 +3,11 @@ import { Icon, Icons } from "ts/components/icon";
 import { IconProps } from "ts/components/icon/icons";
 import { LinkTo } from "ts/components/link-to";
 import { Named } from "ts/data/common";
+import { Microformats } from "ts/data/microformats";
 import "./properties.scss";
 
 interface MicroformatPropertyProps {
-    cls: string;
+    cls: Microformats;
     value: ReactNode;
     name?: string | null;
     title?: string;
