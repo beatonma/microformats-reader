@@ -148,6 +148,7 @@ const SampleHtml = `
     <div class="text">
     <div class="row">
     <h2 class="title p-name">Changelog: django-wm 3.1.0</h2>
+    <div class="e-content"><p>This is embedded content</p></div>
     <time class="date" datetime="6 Oct 2022, 6:42 p.m.">06 Oct 2022</time>
     </div>
     <div class="summary p-summary">New config options and bugfixes</div>

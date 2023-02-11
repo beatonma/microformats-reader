@@ -1,6 +1,8 @@
 import { MicroformatProperty } from "microformats-parser/dist/types";
+import { noneOf } from "ts/data/arrays";
 import { Parse } from "ts/data/parsing";
 import {
+    Author,
     HEntryData,
     HEntryInteractions,
     RsvpValue,
@@ -12,6 +14,8 @@ export const parseHEntry = (entry: MicroformatProperty): HEntryData | null => {
     const summary = Parse.valueOf(entry, "summary");
     const url = Parse.valueOf(entry, "url");
     const uid = Parse.valueOf(entry, "uid");
+    const category = Parse.valueOf(entry, "category");
+    const content = Parse.valueOf(entry, "content");
     const interactions = parseInteractions(entry);
 
     return {
@@ -20,9 +24,9 @@ export const parseHEntry = (entry: MicroformatProperty): HEntryData | null => {
         url: url,
         uid: uid,
         interactions: interactions,
+        category: category,
+        content: content,
         author: null,
-        category: null,
-        content: null,
         dates: null,
         location: null,
     };
@@ -37,7 +41,7 @@ const parseInteractions = (
     const rsvp = parseRsvp(entry);
     const syndication = Parse.getArray<string>(entry, "syndication");
 
-    // if (noneOf([syndication, inReplyTo, rsvp])) return null;
+    if (noneOf([inReplyTo, likeOf, repostOf, rsvp, syndication])) return null;
 
     return {
         inReplyTo: inReplyTo,
