@@ -2,7 +2,7 @@ export const notNullish = <T>(value: T | null | undefined): value is T =>
     value != null;
 
 export const anyOf = (values: any[]): values is any[] =>
-    values.filter(notNullish).length > 0;
+    values.find(notNullish) != null;
 
 export const noneOf = (values: any[]): values is (null | undefined)[] =>
-    values.filter(notNullish).length === 0;
+    values.find(notNullish) == null;
