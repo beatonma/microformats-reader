@@ -1,4 +1,4 @@
-import React, {HTMLProps, ReactElement} from "react";
+import React, { HTMLProps, ReactElement } from "react";
 import "ts/components/icon/icons.scss";
 // @ts-ignore
 import BirthdaySvg from "ts/components/icon/svg/outline-400/cake.svg";
@@ -10,6 +10,8 @@ import ExpandMoreSvg from "ts/components/icon/svg/outline-400/expand_more.svg";
 import WebmentionEndpointSvg from "ts/components/icon/svg/outline-400/forum.svg";
 // @ts-ignore
 import PgpKeySvg from "ts/components/icon/svg/outline-400/key.svg";
+// @ts-ignore
+import LinkSvg from "ts/components/icon/svg/outline-400/link.svg";
 // @ts-ignore
 import LocationSvg from "ts/components/icon/svg/outline-400/location_on.svg";
 // @ts-ignore
@@ -23,6 +25,7 @@ export enum Icons {
     Anniversary = AnniversarySvg,
     Birthday = BirthdaySvg,
     ExpandMore = ExpandMoreSvg,
+    Link = LinkSvg,
     Location = LocationSvg,
     Map = MapSvg,
     PgpKey = PgpKeySvg,

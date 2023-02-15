@@ -25,8 +25,8 @@ export const Location = (props: PropsOf<HAdrData>) => {
         <InlineGroup className="location" title={_("location")}>
             <Property
                 icon={Icons.Location}
-                cls={Microformat.PlainProp.P_Adr}
-                value={summary}
+                microformat={Microformat.PlainProp.P_Adr}
+                displayValue={summary}
             />
         </InlineGroup>
     );
@@ -34,6 +34,7 @@ export const Location = (props: PropsOf<HAdrData>) => {
 
 export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
     const location = props.data;
+
     if (!location) return null;
 
     const {
@@ -52,62 +53,62 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
 
     return (
         <>
-            <LinkToMap href={getMapsUrl(location) ?? undefined} />
+            <LinkToMap href={getMapsUrl(location)} />
             <PropertiesTable>
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Label}
-                    name={_("hadr_label")}
-                    value={label}
+                    microformat={Microformat.PlainProp.P_Label}
+                    displayName={_("hadr_label")}
+                    displayValue={label}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Post_Office_Box}
-                    name={_("hadr_post_office_box")}
-                    value={postOfficeBox}
+                    microformat={Microformat.PlainProp.P_Post_Office_Box}
+                    displayName={_("hadr_post_office_box")}
+                    displayValue={postOfficeBox}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Street_Address}
-                    name={_("hadr_street_address")}
-                    value={streetAddress}
+                    microformat={Microformat.PlainProp.P_Street_Address}
+                    displayName={_("hadr_street_address")}
+                    displayValue={streetAddress}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Extended_Address}
-                    name={_("hadr_extended_address")}
-                    value={extendedAddress}
+                    microformat={Microformat.PlainProp.P_Extended_Address}
+                    displayName={_("hadr_extended_address")}
+                    displayValue={extendedAddress}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Locality}
-                    name={_("hadr_locality")}
-                    value={locality}
+                    microformat={Microformat.PlainProp.P_Locality}
+                    displayName={_("hadr_locality")}
+                    displayValue={locality}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Region}
-                    name={_("hadr_region")}
-                    value={region}
+                    microformat={Microformat.PlainProp.P_Region}
+                    displayName={_("hadr_region")}
+                    displayValue={region}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Country_Name}
-                    name={_("hadr_country_name")}
-                    value={countryName}
+                    microformat={Microformat.PlainProp.P_Country_Name}
+                    displayName={_("hadr_country_name")}
+                    displayValue={countryName}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Postal_Code}
-                    name={_("hadr_postal_code")}
-                    value={postalCode}
+                    microformat={Microformat.PlainProp.P_Postal_Code}
+                    displayName={_("hadr_postal_code")}
+                    displayValue={postalCode}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Latitude}
-                    name={_("hadr_latitude")}
-                    value={latitude}
+                    microformat={Microformat.PlainProp.P_Latitude}
+                    displayName={_("hadr_latitude")}
+                    displayValue={latitude}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Longitude}
-                    name={_("hadr_longitude")}
-                    value={longitude}
+                    microformat={Microformat.PlainProp.P_Longitude}
+                    displayName={_("hadr_longitude")}
+                    displayValue={longitude}
                 />
                 <PropertyRow
-                    cls={Microformat.PlainProp.P_Altitude}
-                    name={_("hadr_altitude")}
-                    value={altitude}
+                    microformat={Microformat.PlainProp.P_Altitude}
+                    displayName={_("hadr_altitude")}
+                    displayValue={altitude}
                 />
             </PropertiesTable>
         </>
@@ -117,7 +118,11 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
 function addressSummary(location: HAdrData): string | null {
     const { countryName, locality, region, latitude, longitude } = location;
 
-    let fields: string[] = [locality, region, countryName].filter(notNullish);
+    let fields: string[] = [
+        locality?.[0],
+        region?.[0],
+        countryName?.[0],
+    ].filter(notNullish);
     if (fields) {
         return fields.join(", ");
     }
@@ -136,13 +141,13 @@ function LinkToMap(props: HTMLProps<HTMLAnchorElement>) {
     );
 }
 
-const getMapsUrl = (location: HAdrData): string | null => {
+const getMapsUrl = (location: HAdrData): string | undefined => {
     const query = (
         formatLatLong(location.latitude, location.longitude) ??
         addressSummary(location)
     )?.replace(/\s+/g, "+");
 
-    if (!query) return null;
+    if (!query) return undefined;
 
     return `https://www.google.com/maps/search/${query}`;
 };

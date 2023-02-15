@@ -4,6 +4,7 @@
     display: flex;
     margin-block: var(--space-half);
     align-items: center;
+    white-space: nowrap;
 
     .property-name {
         @extend %caption;
@@ -20,6 +21,7 @@
 
     .property-icon {
         margin-right: var(--space-half);
+        opacity: 0.6;
     }
 }
 
@@ -27,16 +29,27 @@ table.properties {
     border-collapse: collapse;
     margin-bottom: var(--space-1x);
 
-    td:empty {
-        display: none;
-    }
-    td:not(:empty) {
-        padding-right: 1ch;
-    }
     td {
+        vertical-align: baseline;
         padding-bottom: var(--space-half);
+
+        &:empty {
+            display: none;
+        }
+
+        &:not(:empty) {
+            padding-right: 1ch;
+        }
     }
     tr.property {
         display: table-row;
+    }
+
+    .property-value-multi {
+        display: block;
+
+        &:not(:last-child) {
+            padding-bottom: 4px;
+        }
     }
 }

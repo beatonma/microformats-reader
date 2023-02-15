@@ -271,7 +271,9 @@ const SampleHtml = `
     <div class="u-uid">https://beatonma.org</div>
     <a href="mailto:michael@beatonma.org" class="u-email"></a>
     <div class="p-tel">+44 1234 567 890</div>
+    <a href="mailto:beatonma@gmail.com" class="u-email">email #2</a>
     <div class="p-note">Long hair</div>
+    <div class="p-note">Greenish eyes</div>
     <div class="p-org h-card">
         <a href="http://beatonma.org" class="p-name u-url">beatonma.org</a>
     </div>

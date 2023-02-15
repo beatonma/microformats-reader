@@ -1,4 +1,8 @@
-@mixin size($width, $height:$width) {
+@mixin fixedSize($width, $height: $width) {
     width: $width;
     height: $height;
+    max-width: $width;
+    max-height: $height;
+    min-width: $width;
+    min-height: $height;
 }

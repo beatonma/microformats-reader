@@ -1,6 +1,6 @@
-import { MicroformatProperty } from "microformats-parser/dist/types";
+import { MicroformatProperties } from "microformats-parser/dist/types";
 import { noneOf } from "ts/data/arrays";
-import { Parse } from "ts/data/parsing";
+import { Parse } from "ts/data/parse";
 import {
     Author,
     HEntryData,
@@ -9,13 +9,15 @@ import {
     rsvpValueOf,
 } from "ts/data/types/h-entry";
 
-export const parseHEntry = (entry: MicroformatProperty): HEntryData | null => {
-    const name = Parse.valueOf(entry, "name");
-    const summary = Parse.valueOf(entry, "summary");
-    const url = Parse.valueOf(entry, "url");
-    const uid = Parse.valueOf(entry, "uid");
-    const category = Parse.valueOf(entry, "category");
-    const content = Parse.valueOf(entry, "content");
+export const parseHEntry = (
+    entry: MicroformatProperties
+): HEntryData | null => {
+    const name = Parse.first<string>(entry, "name");
+    const summary = Parse.first<string>(entry, "summary");
+    const url = Parse.first<string>(entry, "url");
+    const uid = Parse.first<string>(entry, "uid");
+    const category = Parse.first<string>(entry, "category");
+    const content = Parse.first<string>(entry, "content");
     const interactions = parseInteractions(entry);
 
     return {
@@ -33,13 +35,13 @@ export const parseHEntry = (entry: MicroformatProperty): HEntryData | null => {
 };
 
 const parseInteractions = (
-    entry: MicroformatProperty
+    entry: MicroformatProperties
 ): HEntryInteractions | null => {
-    const inReplyTo = Parse.valueOf(entry, "in-reply-to");
-    const likeOf = Parse.valueOf(entry, "life-of");
-    const repostOf = Parse.valueOf(entry, "repost-of");
+    const inReplyTo = Parse.first<string>(entry, "in-reply-to");
+    const likeOf = Parse.first<string>(entry, "life-of");
+    const repostOf = Parse.first<string>(entry, "repost-of");
     const rsvp = parseRsvp(entry);
-    const syndication = Parse.getArray<string>(entry, "syndication");
+    const syndication = Parse.get<string>(entry, "syndication");
 
     if (noneOf([inReplyTo, likeOf, repostOf, rsvp, syndication])) return null;
 
@@ -52,8 +54,8 @@ const parseInteractions = (
     };
 };
 
-const parseRsvp = (entry: MicroformatProperty): RsvpValue | null => {
-    const value = Parse.valueOf(entry, "rsvp");
+const parseRsvp = (entry: MicroformatProperties): RsvpValue | null => {
+    const value = Parse.first<string>(entry, "rsvp");
     if (!value) return null;
     return rsvpValueOf(value);
 };

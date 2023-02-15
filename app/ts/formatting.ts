@@ -1,4 +1,4 @@
-import {_, compatBrowser} from "ts/compat";
+import { _, compatBrowser } from "ts/compat";
 
 export const formatLongDate = (date: string): string => {
     return new Date(date).toLocaleDateString(
@@ -36,4 +36,10 @@ export const formatLatLong = (
     const longString = `${longitude.replace(/[-+]/, "")}${longDirection}`;
 
     return `${latString}, ${longString}`;
+};
+
+export const formatUri = (uri: string | null): string | null => {
+    if (!uri) return null;
+
+    return uri.replace(/^(https?|irc|mailto|tel):(\/\/)?/g, "");
 };

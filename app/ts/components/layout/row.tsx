@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, HTMLProps } from "react";
+import React, { HTMLAttributes } from "react";
 import "./layout.scss";
 
 export enum HorizontalAlignment {

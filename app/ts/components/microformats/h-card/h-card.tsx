@@ -1,6 +1,6 @@
 import React, { HTMLProps, useEffect, useId, useState } from "react";
 import { _ } from "ts/compat";
-import { HorizontalAlignment, Row } from "ts/components/layout";
+import { Row } from "ts/components/layout";
 import { CardContent, CardLayout } from "ts/components/layout/card";
 import { Dropdown, DropdownButton } from "ts/components/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
@@ -49,7 +49,6 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
             <CardContent
                 id={hcardContentID}
                 className="h-card"
-                data-expanded={isExpanded}
                 data-expanding={isExpanding}
                 data-collapsing={isCollapsing}
                 aria-expanded={isExpanded}
@@ -114,6 +113,7 @@ const HCardTextSummary = (props: HCardData) => {
         gender,
         contact,
         location,
+        images,
         job,
         dates,
         extras,
@@ -121,17 +121,15 @@ const HCardTextSummary = (props: HCardData) => {
     } = props;
     return (
         <div className="hcard-summary" {...rest}>
-            <Row alignment={HorizontalAlignment.SpaceBetween}>
-                <Name name={name} />
-            </Row>
+            <Name name={name} />
 
             <Row wrap>
                 <Gender data={gender} />
-                <Location data={location} />
+                <Contact data={contact} />
             </Row>
 
             <Row wrap>
-                <Contact data={contact} />
+                <Location data={location} />
                 <Job data={job} />
             </Row>
         </div>
@@ -153,9 +151,7 @@ const HCardTextDetail = (props: HCardData) => {
 
     return (
         <div className="hcard-detail" {...rest}>
-            <Row alignment={HorizontalAlignment.Center}>
-                <Name name={name} />
-            </Row>
+            <Name name={name} />
 
             <DetailSection
                 sectionTitle={_("hcard_name_details")}

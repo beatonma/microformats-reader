@@ -13,7 +13,12 @@ import { HCardNameDetail } from "ts/data/types/h-card";
 export const Name = (props: Named) => {
     const { name } = props;
 
-    return <Property cls={Microformat.PlainProp.P_Name} value={name} />;
+    return (
+        <Property
+            microformat={Microformat.PlainProp.P_Name}
+            displayValue={name}
+        />
+    );
 };
 
 export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
@@ -24,44 +29,43 @@ export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
         <PropertiesTable>
             <PropertyRow
                 href={detail.sound}
-                cls={Microformat.UrlProp.U_Sound}
-                name={_("hcard_name_sound")}
-                value={detail.sound}
+                microformat={Microformat.UrlProp.U_Sound}
+                displayName={_("hcard_name_sound")}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Honorific_Prefix}
-                name={_("hcard_name_honorific_prefix")}
-                value={detail.honorificPrefix}
+                microformat={Microformat.PlainProp.P_Honorific_Prefix}
+                displayName={_("hcard_name_honorific_prefix")}
+                displayValue={detail.honorificPrefix}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Honorific_Suffix}
-                name={_("hcard_name_honorific_suffix")}
-                value={detail.honorificSuffix}
+                microformat={Microformat.PlainProp.P_Honorific_Suffix}
+                displayName={_("hcard_name_honorific_suffix")}
+                displayValue={detail.honorificSuffix}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Given_Name}
-                name={_("hcard_name_given")}
-                value={detail.givenName}
+                microformat={Microformat.PlainProp.P_Given_Name}
+                displayName={_("hcard_name_given")}
+                displayValue={detail.givenName}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Additional_Name}
-                name={_("hcard_name_additional")}
-                value={detail.additionalName}
+                microformat={Microformat.PlainProp.P_Additional_Name}
+                displayName={_("hcard_name_additional")}
+                displayValue={detail.additionalName}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Family_Name}
-                name={_("hcard_name_family")}
-                value={detail.familyName}
+                microformat={Microformat.PlainProp.P_Family_Name}
+                displayName={_("hcard_name_family")}
+                displayValue={detail.familyName}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Nickname}
-                name={_("hcard_name_nickname")}
-                value={detail.nickname}
+                microformat={Microformat.PlainProp.P_Nickname}
+                displayName={_("hcard_name_nickname")}
+                displayValue={detail.nickname}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Sort_String}
-                name={_("hcard_name_sortby")}
-                value={detail.sortBy}
+                microformat={Microformat.PlainProp.P_Sort_String}
+                displayName={_("hcard_name_sortby")}
+                displayValue={detail.sortBy}
             />
         </PropertiesTable>
     );

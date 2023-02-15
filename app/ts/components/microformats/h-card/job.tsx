@@ -20,9 +20,9 @@ export const Job = (props: PropsOf<HCardJobData>) => {
     return (
         <InlineGroup>
             <Property
-                cls={Microformat.PlainProp.P_Job_Title}
+                microformat={Microformat.PlainProp.P_Job_Title}
                 icon={Icons.Work}
-                value={jobTitle}
+                displayValue={jobTitle}
             />
             <ConditionalContent condition={() => !!jobTitle && !!orgHCard}>
                 <span>{" @ "}</span>
@@ -40,14 +40,14 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformat.PlainProp.P_Job_Title}
-                name={_("hcard_job_title")}
-                value={jobTitle}
+                microformat={Microformat.PlainProp.P_Job_Title}
+                displayName={_("hcard_job_title")}
+                displayValue={jobTitle}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Role}
-                name={_("hcard_job_role")}
-                value={role}
+                microformat={Microformat.PlainProp.P_Role}
+                displayName={_("hcard_job_role")}
+                displayValue={role}
             />
             <Organisation {...job} />
         </PropertiesTable>
@@ -60,19 +60,19 @@ const Organisation = (props: HCardJobData) => {
     if (orgHCard) {
         return (
             <PropertyRow
-                name={_("hcard_job_organisation")}
+                displayName={_("hcard_job_organisation")}
                 title={_("hcard_link_to_org_hcard")}
                 href={`#${orgHCard.id}`}
-                cls={Microformat.PlainProp.P_Org}
-                value={orgName}
+                microformat={Microformat.PlainProp.P_Org}
+                displayValue={orgName}
             />
         );
     } else {
         return (
             <PropertyRow
-                name={_("hcard_job_organisation")}
-                cls={Microformat.PlainProp.P_Org}
-                value={orgName}
+                displayName={_("hcard_job_organisation")}
+                microformat={Microformat.PlainProp.P_Org}
+                displayValue={orgName}
             />
         );
     }
@@ -85,15 +85,20 @@ const LinkToOrganisation = (props: HCardJobData) => {
         return (
             <Property
                 href={`#${orgHCard.id}`}
-                cls={Microformat.PlainProp.P_Org}
+                microformat={Microformat.PlainProp.P_Org}
                 title={_("hcard_link_to_org_hcard")}
-                value={orgHCard.name}
+                displayValue={orgHCard.name}
             />
         );
     }
 
     if (orgName) {
-        return <Property cls={Microformat.PlainProp.P_Org} value={orgName} />;
+        return (
+            <Property
+                microformat={Microformat.PlainProp.P_Org}
+                displayValue={orgName}
+            />
+        );
     }
 
     return null;

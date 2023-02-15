@@ -17,15 +17,19 @@ export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformat.DateProp.Dt_Bday}
-                name={_("hcard_dates_birthday")}
-                value={<Birthday date={birthday} />}
+                microformat={Microformat.DateProp.Dt_Bday}
+                displayName={_("hcard_dates_birthday")}
+                displayValue={birthday?.map(date => (
+                    <Birthday date={date} />
+                ))}
             />
 
             <PropertyRow
-                cls={Microformat.DateProp.Dt_Anniversary}
-                name={_("hcard_dates_anniversary")}
-                value={<Time date={anniversary} />}
+                microformat={Microformat.DateProp.Dt_Anniversary}
+                displayName={_("hcard_dates_anniversary")}
+                displayValue={anniversary?.map(date => (
+                    <Time date={date} />
+                ))}
             />
         </PropertiesTable>
     );
@@ -47,8 +51,7 @@ const Birthday = (props: DateTimeProps) => {
 
     return (
         <>
-            <Time date={birthday} />
-            <Age date={birthday} />
+            <Time date={birthday} /> <Age date={birthday} />
         </>
     );
 };

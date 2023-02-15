@@ -1,14 +1,8 @@
 @use "styles";
 
-//span.icon-wrapper {
-//    @include styles.size(1em);
-//    display: inline-flex;
-//}
-
 svg.icon {
-    @include styles.size(1em);
+    @include styles.fixedSize(1em);
     display: inline-flex;
-    @include styles.size(1em);
     stroke: currentColor;
     fill: currentColor;
     cursor: default;

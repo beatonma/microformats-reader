@@ -1,25 +1,24 @@
 @use "styles";
 @use "styles/animation";
 
-$-primary-size-small: 128px;
+$primary-size-small: 128px;
 $-secondary-size-small: 24px;
 
 $-primary-size-large: 150px;
 $-secondary-size-large: 32px;
 
 @mixin avatarCollapsed {
-    @include styles.size($-primary-size-small);
+    @include styles.fixedSize($primary-size-small);
     left: 0;
     transform: translateX(0);
-    margin-right: var(--space-2x);
 }
 @mixin avatarMidpoint {
-    @include styles.size($-primary-size-large);
+    @include styles.fixedSize($-primary-size-large);
     left: 0;
     transform: translateX(0);
 }
 @mixin avatarExpanded {
-    @include styles.size($-primary-size-large);
+    @include styles.fixedSize($-primary-size-large);
     left: 50%;
     transform: translateX(-50%);
     padding: var(--space-3x);
@@ -27,26 +26,26 @@ $-secondary-size-large: 32px;
 
 @mixin avatarSize($primary, $secondary) {
     > img:first-child {
-        @include styles.size($primary);
+        @include styles.fixedSize($primary);
     }
 
     > img:nth-child(2) {
-        @include styles.size($secondary);
+        @include styles.fixedSize($secondary);
     }
 }
 
 .h-card {
     .avatar {
         @include avatarCollapsed;
-        @include avatarSize($-primary-size-small, $-secondary-size-small);
+        @include avatarSize($primary-size-small, $-secondary-size-small);
         animation-duration: animation.$duration-long;
         animation-fill-mode: both;
         animation-timing-function: ease-in-out;
     }
 
-    &[data-expanded="true"] {
+    &[aria-expanded="true"] {
         .avatar {
-            @include styles.size($-primary-size-large);
+            @include styles.fixedSize($-primary-size-large);
             @include avatarSize($-primary-size-large, $-secondary-size-large);
             animation-name: avatarGrow;
         }

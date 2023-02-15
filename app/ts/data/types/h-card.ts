@@ -15,14 +15,14 @@ export interface HCardData {
 }
 
 export interface HCardNameDetail {
-    honorificPrefix: string | null;
-    honorificSuffix: string | null;
-    givenName: string | null;
-    additionalName: string | null;
-    familyName: string | null;
-    sortBy: string | null;
-    nickname: string | null;
-    sound: string | null;
+    honorificPrefix: string[] | null;
+    honorificSuffix: string[] | null;
+    givenName: string[] | null;
+    additionalName: string[] | null;
+    familyName: string[] | null;
+    sortBy: string[] | null;
+    nickname: string[] | null;
+    sound: string[] | null;
 }
 
 export interface HCardImages {
@@ -31,33 +31,33 @@ export interface HCardImages {
 }
 
 export interface HCardGenderIdentity {
-    sex: string | null;
-    genderIdentity: string | null;
-    pronouns: string | null;
+    sex: string[] | null;
+    genderIdentity: string[] | null;
+    pronouns: string[] | null;
 }
 
 export interface HCardContactData {
-    url: string | null;
-    email: string | null;
-    phone: string | null;
-    impp: string | null;
-    publicKey: string | null;
+    url: string[] | null;
+    email: string[] | null;
+    phone: string[] | null;
+    impp: string[] | null;
+    publicKey: string[] | null;
 }
 
 export interface HCardJobData {
     orgName: string | null;
     orgHCard: HCardData | null;
-    jobTitle: string | null;
-    role: string | null;
+    jobTitle: string[] | null;
+    role: string[] | null;
 }
 
 export interface HCardDates {
-    birthday: string | null;
-    anniversary: string | null;
+    birthday: string[] | null;
+    anniversary: string[] | null;
 }
 
 export interface HCardExtras {
-    uid: string | null;
-    category: string | null;
-    notes: string | null;
+    uid: string[] | null;
+    category: string[] | null;
+    notes: string[] | null;
 }

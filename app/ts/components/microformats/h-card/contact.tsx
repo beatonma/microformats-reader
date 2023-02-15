@@ -1,5 +1,6 @@
 import React from "react";
 import { _ } from "ts/compat";
+import { Icons } from "ts/components/icon";
 import { InlineGroup } from "ts/components/layout/inline-group";
 import {
     PropertiesTable,
@@ -16,7 +17,11 @@ export const Contact = (props: PropsOf<HCardContactData>) => {
 
     return (
         <InlineGroup>
-            <Property cls={Microformat.UrlProp.U_Url} href={url} value={url} />
+            <Property
+                icon={Icons.Link}
+                microformat={Microformat.UrlProp.U_Url}
+                href={url}
+            />
         </InlineGroup>
     );
 };
@@ -30,35 +35,35 @@ export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformat.UrlProp.U_Url}
+                microformat={Microformat.UrlProp.U_Url}
                 href={url}
-                name={_("hcard_contact_url")}
-                value={url}
+                displayName={_("hcard_contact_url")}
             />
             <PropertyRow
-                cls={Microformat.UrlProp.U_Email}
+                microformat={Microformat.UrlProp.U_Email}
                 href={email}
-                name={_("hcard_contact_email")}
-                value={email}
+                displayName={_("hcard_contact_email")}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Tel}
-                href={`tel:${phone}`}
-                name={_("hcard_contact_phone")}
-                value={phone}
+                microformat={Microformat.PlainProp.P_Tel}
+                href={buildUri("tel:", phone)}
+                displayName={_("hcard_contact_phone")}
             />
             <PropertyRow
-                cls={Microformat.UrlProp.U_IMPP}
+                microformat={Microformat.UrlProp.U_IMPP}
                 href={impp}
-                name={_("hcard_contact_impp")}
-                value={impp}
+                displayName={_("hcard_contact_impp")}
             />
             <PropertyRow
-                cls={Microformat.UrlProp.U_Key}
+                microformat={Microformat.UrlProp.U_Key}
                 href={publicKey}
-                name={_("hcard_contact_key")}
-                value={publicKey}
+                displayName={_("hcard_contact_key")}
             />
         </PropertiesTable>
     );
+};
+
+const buildUri = (prefix: string, values: string[] | null): string[] | null => {
+    if (values == null || values.length === 0) return null;
+    return values.map(value => `${prefix}${value}`);
 };

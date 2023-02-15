@@ -10,7 +10,7 @@
     color: var(--accent);
 
     .icon {
-        @include styles.size(32px);
+        @include styles.fixedSize(32px);
         cursor: pointer;
         padding-bottom: var(--space-halfx);
     }

@@ -30,19 +30,20 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformat.PlainProp.P_Gender_Identity}
-                name={_("hcard_gender_identity")}
-                value={genderIdentity}
+                microformat={Microformat.PlainProp.P_Gender_Identity}
+                displayName={_("hcard_gender_identity")}
+                displayValue={genderIdentity}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Pronouns}
-                name={_("hcard_pronouns")}
-                value={pronouns}
+                microformat={Microformat.PlainProp.P_Pronouns}
+                displayName={_("hcard_pronouns")}
+                displayValue={pronouns}
+                allowValueAsHref={true}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Sex}
-                name={_("hcard_sex")}
-                value={sex}
+                microformat={Microformat.PlainProp.P_Sex}
+                displayName={_("hcard_sex")}
+                displayValue={sex}
             />
         </PropertiesTable>
     );
@@ -55,16 +56,22 @@ const GenderSummary = (props: HCardGenderIdentity) => {
         return (
             <>
                 <Property
-                    cls={Microformat.PlainProp.P_Gender_Identity}
-                    value={genderIdentity}
+                    microformat={Microformat.PlainProp.P_Gender_Identity}
+                    displayValue={genderIdentity?.[0]}
                 />
                 <Property
-                    cls={Microformat.PlainProp.P_Pronouns}
-                    value={pronouns}
+                    microformat={Microformat.PlainProp.P_Pronouns}
+                    displayValue={pronouns?.[0]}
+                    allowValueAsHref={true}
                 />
             </>
         );
     }
 
-    return <Property cls={Microformat.PlainProp.P_Sex} value={sex} />;
+    return (
+        <Property
+            microformat={Microformat.PlainProp.P_Sex}
+            displayValue={sex?.[0]}
+        />
+    );
 };

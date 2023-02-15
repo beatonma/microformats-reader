@@ -16,19 +16,19 @@ export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                cls={Microformat.PlainProp.P_Note}
-                name={_("hcard_extras_notes")}
-                value={notes}
+                microformat={Microformat.PlainProp.P_Note}
+                displayName={_("hcard_extras_notes")}
+                displayValue={notes}
             />
             <PropertyRow
-                cls={Microformat.PlainProp.P_Category}
-                name={_("hcard_extras_category")}
-                value={category}
+                microformat={Microformat.PlainProp.P_Category}
+                displayName={_("hcard_extras_category")}
+                displayValue={category}
             />
             <PropertyRow
-                cls={Microformat.UrlProp.U_Uid}
-                name={_("hcard_extras_uid")}
-                value={uid}
+                microformat={Microformat.UrlProp.U_Uid}
+                displayName={_("hcard_extras_uid")}
+                displayValue={uid}
             />
         </PropertiesTable>
     );

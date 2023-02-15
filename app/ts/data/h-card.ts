@@ -1,11 +1,13 @@
 import {
     Image,
     MicroformatProperties,
+    MicroformatProperty,
+    MicroformatRoot,
     ParsedDocument,
 } from "microformats-parser/dist/types";
 import { noneOf, notNullish } from "ts/data/arrays";
 import { Microformat } from "ts/data/microformats";
-import { Parse } from "ts/data/parsing";
+import { Parse } from "ts/data/parse";
 import { HAdrData } from "ts/data/types";
 import {
     HCardContactData,
@@ -44,7 +46,7 @@ export const parseHCards = async (
 const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
     if (hcard == null) return null;
 
-    const name = Parse.valueOf(hcard, "name");
+    const name = Parse.first<string>(hcard, "name");
     const nameDetail = parseNameDetails(hcard);
     const gender = parseGender(hcard);
     const location = parseLocation(hcard);
@@ -83,8 +85,8 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
 };
 
 const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
-    const photo = Parse.parseFirst(hcard, "photo") as Image;
-    const logo = Parse.parseFirst(hcard, "logo") as Image;
+    const photo = Parse.first<Image>(hcard, "photo");
+    const logo = Parse.first<Image>(hcard, "logo");
 
     if (noneOf([photo, logo])) return null;
     return {
@@ -94,7 +96,9 @@ const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
 };
 
 const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
-    const parseLocation = (obj?: any): HAdrData | null => {
+    const _parseLocation = (
+        obj?: MicroformatProperties | string | null
+    ): HAdrData | null => {
         if (obj == null) return null;
 
         if (typeof obj === "string") {
@@ -116,40 +120,44 @@ const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
         }
 
         const result: HAdrData = {
-            locality: Parse.valueOf(obj, "locality"),
-            region: Parse.valueOf(obj, "region"),
-            countryName: Parse.valueOf(obj, "country-name"),
-            postalCode: Parse.valueOf(obj, "postal-code"),
-            streetAddress: Parse.valueOf(obj, "street-address"),
-            extendedAddress: Parse.valueOf(obj, "extended-address"),
-            postOfficeBox: Parse.valueOf(obj, "post-office-box"),
-            label: Parse.valueOf(obj, "label"),
-            geo: Parse.valueOf(obj, "geo"),
-            latitude: Parse.valueOf(obj, "latitude"),
-            longitude: Parse.valueOf(obj, "longitude"),
-            altitude: Parse.valueOf(obj, "altitude"),
-            value: Parse.valueOf(obj, "value"),
+            locality: Parse.get<string>(obj, "locality"),
+            region: Parse.get<string>(obj, "region"),
+            countryName: Parse.get<string>(obj, "country-name"),
+            postalCode: Parse.get<string>(obj, "postal-code"),
+            streetAddress: Parse.get<string>(obj, "street-address"),
+            extendedAddress: Parse.get<string>(obj, "extended-address"),
+            postOfficeBox: Parse.get<string>(obj, "post-office-box"),
+            label: Parse.get<string>(obj, "label"),
+            geo: Parse.get<string>(obj, "geo"),
+            latitude: Parse.first<string>(obj, "latitude"),
+            longitude: Parse.first<string>(obj, "longitude"),
+            altitude: Parse.first<string>(obj, "altitude"),
+            value: Parse.first<string>(obj, "value"),
         };
 
         // Return HAdr if at least one field is populated, otherwise null.
-        const accepted = Object.values(result).find(Boolean) != null;
+        const accepted = Object.values(result).find(notNullish) != null;
         return accepted ? result : null;
     };
 
-    return parseLocation(hcard.adr?.[0]) ?? parseLocation(hcard) ?? null;
+    const nestedAdr = (hcard.adr?.[0] as string | MicroformatRoot) ?? null;
+    if (typeof nestedAdr === "string") {
+        return _parseLocation(nestedAdr);
+    }
+    return _parseLocation(nestedAdr?.properties) ?? _parseLocation(hcard);
 };
 
 const parseNameDetails = (
     hcard: MicroformatProperties
 ): HCardNameDetail | null => {
-    const honorificPrefix = Parse.valueOf(hcard, "honorific-prefix");
-    const honorificSuffix = Parse.valueOf(hcard, "honorific-suffix");
-    const givenName = Parse.valueOf(hcard, "given-name");
-    const additionalName = Parse.valueOf(hcard, "additional-name");
-    const familyName = Parse.valueOf(hcard, "family-name");
-    const sortBy = Parse.valueOf(hcard, "sort-string");
-    const nickname = Parse.valueOf(hcard, "nickname");
-    const sound = Parse.valueOf(hcard, "sound");
+    const honorificPrefix = Parse.get<string>(hcard, "honorific-prefix");
+    const honorificSuffix = Parse.get<string>(hcard, "honorific-suffix");
+    const givenName = Parse.get<string>(hcard, "given-name");
+    const additionalName = Parse.get<string>(hcard, "additional-name");
+    const familyName = Parse.get<string>(hcard, "family-name");
+    const sortBy = Parse.get<string>(hcard, "sort-string");
+    const nickname = Parse.get<string>(hcard, "nickname");
+    const sound = Parse.get<string>(hcard, "sound");
 
     if (
         noneOf([
@@ -166,14 +174,14 @@ const parseNameDetails = (
         return null;
 
     return {
-        honorificPrefix: Parse.valueOf(hcard, "honorific-prefix"),
-        honorificSuffix: Parse.valueOf(hcard, "honorific-suffix"),
-        givenName: Parse.valueOf(hcard, "given-name"),
-        additionalName: Parse.valueOf(hcard, "additional-name"),
-        familyName: Parse.valueOf(hcard, "family-name"),
-        sortBy: Parse.valueOf(hcard, "sort-string"),
-        nickname: Parse.valueOf(hcard, "nickname"),
-        sound: Parse.valueOf(hcard, "sound"),
+        honorificPrefix: Parse.get<string>(hcard, "honorific-prefix"),
+        honorificSuffix: Parse.get<string>(hcard, "honorific-suffix"),
+        givenName: Parse.get<string>(hcard, "given-name"),
+        additionalName: Parse.get<string>(hcard, "additional-name"),
+        familyName: Parse.get<string>(hcard, "family-name"),
+        sortBy: Parse.get<string>(hcard, "sort-string"),
+        nickname: Parse.get<string>(hcard, "nickname"),
+        sound: Parse.get<string>(hcard, "sound"),
     };
 };
 
@@ -182,27 +190,28 @@ const parseNameDetails = (
  * - https://microformats.org/wiki/pronouns-brainstorming
  * @param hcard
  */
-const parsePronouns = (hcard: MicroformatProperties): string | null => {
+const parsePronouns = (hcard: MicroformatProperties): string[] | null => {
     const pronouns =
-        Parse.parseExperimental(hcard, "pronouns") ??
-        Parse.parseExperimental(hcard, "pronoun");
+        Parse.getExperimental<string>(hcard, "pronouns") ??
+        Parse.getExperimental<string>(hcard, "pronoun");
     if (pronouns) return pronouns;
 
-    const nominative = Parse.parseExperimental(hcard, "pronoun-nominative");
-    const oblique = Parse.parseExperimental(hcard, "pronoun-oblique");
-    const possessive = Parse.parseExperimental(hcard, "pronoun-possessive");
+    const nominative =
+        Parse.getExperimental<string>(hcard, "pronoun-nominative") ?? [];
+    const oblique =
+        Parse.getExperimental<string>(hcard, "pronoun-oblique") ?? [];
+    const possessive =
+        Parse.getExperimental<string>(hcard, "pronoun-possessive") ?? [];
 
-    return (
-        [nominative, oblique, possessive].filter(notNullish).join(" | ") || null
-    );
+    return Parse.takeIfNotEmpty([...nominative, ...oblique, ...possessive]);
 };
 
 const parseGender = (
     hcard: MicroformatProperties
 ): HCardGenderIdentity | null => {
     const pronouns = parsePronouns(hcard);
-    const genderIdentity = Parse.valueOf(hcard, "gender-identity");
-    const sex = Parse.valueOf(hcard, "sex");
+    const genderIdentity = Parse.get<string>(hcard, "gender-identity");
+    const sex = Parse.get<string>(hcard, "sex");
 
     if (noneOf([pronouns, genderIdentity, sex])) return null;
     return {
@@ -213,8 +222,8 @@ const parseGender = (
 };
 
 const parseDates = (hcard: MicroformatProperties): HCardDates | null => {
-    const birthday = Parse.valueOf(hcard, "bday");
-    const anniversary = Parse.valueOf(hcard, "anniversary");
+    const birthday = Parse.get<string>(hcard, "bday");
+    const anniversary = Parse.get<string>(hcard, "anniversary");
 
     if (!birthday && !anniversary) return null;
     return {
@@ -226,11 +235,11 @@ const parseDates = (hcard: MicroformatProperties): HCardDates | null => {
 const parseContact = (
     hcard: MicroformatProperties
 ): HCardContactData | null => {
-    const url = Parse.valueOf(hcard, "url");
-    const email = Parse.valueOf(hcard, "email");
-    const phone = Parse.valueOf(hcard, "tel");
-    const impp = Parse.valueOf(hcard, "impp");
-    const key = Parse.valueOf(hcard, "key");
+    const url = Parse.get<string>(hcard, "url");
+    const email = Parse.get<string>(hcard, "email");
+    const phone = Parse.get<string>(hcard, "tel");
+    const impp = Parse.get<string>(hcard, "impp");
+    const key = Parse.get<string>(hcard, "key");
 
     if (noneOf([url, email, phone, impp, key])) return null;
 
@@ -244,20 +253,20 @@ const parseContact = (
 };
 
 const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
-    const org = Parse.getObject(hcard, "org");
+    const org: MicroformatProperty[] | null = Parse.get(hcard, "org");
 
     let orgHCard: HCardData | null = null;
-    if (Array.isArray(org)) {
-        orgHCard = parseHCard(org[0]?.properties);
+    if (org) {
+        orgHCard = parseHCard((org[0] as MicroformatRoot)?.properties);
     }
 
-    const jobTitle = Parse.valueOf(hcard, "job-title");
-    const role = Parse.valueOf(hcard, "role");
+    const jobTitle = Parse.get<string>(hcard, "job-title");
+    const role = Parse.get<string>(hcard, "role");
 
     if (noneOf([org, jobTitle, role])) return null;
 
     return {
-        orgName: orgHCard?.name ?? Parse.coerceToString(org),
+        orgName: orgHCard?.name ?? org?.[0]?.toString() ?? null,
         orgHCard: orgHCard,
         jobTitle: jobTitle,
         role: role,
@@ -265,9 +274,9 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
 };
 
 const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
-    const uid = Parse.valueOf(hcard, "uid");
-    const notes = Parse.valueOf(hcard, "note");
-    const category = Parse.valueOf(hcard, "category");
+    const uid = Parse.get<string>(hcard, "uid");
+    const notes = Parse.get<string>(hcard, "note");
+    const category = Parse.get<string>(hcard, "category");
 
     if (noneOf([uid, notes, category])) return null;
 

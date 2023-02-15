@@ -6,7 +6,7 @@ import {
 import { anyOf, notNullish } from "ts/data/arrays";
 import { parseHEntry } from "ts/data/h-entry";
 import { Microformat } from "ts/data/microformats";
-import { Parse } from "ts/data/parsing";
+import { Parse } from "ts/data/parse";
 import { HFeedData } from "ts/data/types/h-feed";
 
 export const parseHFeeds = async (
@@ -29,13 +29,16 @@ export const parseHFeeds = async (
 };
 
 const parseHFeed = (hfeed: MicroformatRoot): HFeedData | null => {
-    const name = Parse.valueOf(hfeed, "name");
-    const author = Parse.valueOf(hfeed, "author");
-    const summary = Parse.valueOf(hfeed, "summary");
-    const url = Parse.valueOf(hfeed, "url");
-    const photo = Parse.parseFirst(hfeed, "photo") as Image;
+    const properties = hfeed.properties;
+    const name = Parse.first<string>(properties, "name");
+    const author = Parse.first<string>(properties, "author");
+    const summary = Parse.first<string>(properties, "summary");
+    const url = Parse.first<string>(properties, "url");
+    const photo = Parse.first(properties, "photo") as Image;
 
-    const entries = hfeed["children"]?.map(parseHEntry).filter(notNullish);
+    const entries = hfeed.children
+        ?.map(item => parseHEntry(item.properties))
+        .filter(notNullish);
 
     if (!entries) return null;
 
@@ -62,6 +65,8 @@ const wrapWithHFeed = (entries: MicroformatRoot[]): HFeedData | null => {
 
     return {
         about: null,
-        entries: entries.map(parseHEntry).filter(notNullish),
+        entries: entries
+            .map(item => parseHEntry(item.properties))
+            .filter(notNullish),
     };
 };
