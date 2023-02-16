@@ -1,8 +1,13 @@
-import React, {ComponentProps, HTMLProps, ReactNode} from "react";
-import {_} from "ts/compat";
-import {Icon, Icons} from "ts/components/icon";
+import React, { ComponentProps, HTMLProps, ReactNode, useContext } from "react";
+import { _ } from "ts/compat";
+import { Icon, Icons } from "ts/components/icon";
 import "ts/components/layout/dropdown.scss";
-import {ExpandableDefaultProps, ExpandCollapseLayout, ExpandCollapseProps,} from "ts/components/layout/expand-collapse";
+import {
+    ExpandCollapseLayout,
+    ExpandCollapseProps,
+    ExpandableDefaultProps,
+} from "ts/components/layout/expand-collapse";
+import { OptionsContext } from "ts/options";
 
 export interface DropdownProps
     extends HTMLProps<HTMLDivElement>,
@@ -12,8 +17,10 @@ export interface DropdownProps
     title: string;
 }
 export const Dropdown = (props: DropdownProps) => {
+    const options = useContext(OptionsContext);
     return (
         <ExpandCollapseLayout
+            defaultIsExpanded={options.dropdownExpandByDefault}
             child={expandCollapseProps => (
                 <DropdownLayout {...props} {...expandCollapseProps} />
             )}
