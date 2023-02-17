@@ -79,11 +79,14 @@ const Organisation = (props: HCardJobData) => {
 };
 
 const LinkToOrganisation = (props: HCardJobData) => {
-    const { orgName, orgHCard } = props;
+    const { jobTitle, orgName, orgHCard } = props;
+
+    const icon = jobTitle ? undefined : Icons.Work;
 
     if (orgHCard) {
         return (
             <Property
+                icon={icon}
                 href={`#${orgHCard.id}`}
                 microformat={Microformat.PlainProp.P_Org}
                 title={_("hcard_link_to_org_hcard")}
@@ -95,6 +98,7 @@ const LinkToOrganisation = (props: HCardJobData) => {
     if (orgName) {
         return (
             <Property
+                icon={icon}
                 microformat={Microformat.PlainProp.P_Org}
                 displayValue={orgName}
             />
