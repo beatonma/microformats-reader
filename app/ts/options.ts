@@ -1,10 +1,15 @@
 import { createContext } from "react";
+import * as process from "process";
+
+export const AppConfig = {
+    isDebug: (process.env.DEBUG ?? "").toLowerCase() === "true",
+};
 
 export interface AppOptions {
     dropdownExpandByDefault: boolean;
 }
 
-const defaultOptions: AppOptions = {
+export const defaultOptions: AppOptions = {
     dropdownExpandByDefault: false,
 };
 

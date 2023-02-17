@@ -25,14 +25,14 @@ ${SampleHtmlHEntry}
 
 const parseTestFeeds = async (html: string) => parseHFeeds(parseTestHtml(html));
 const firstHFeed = async (html: string) =>
-    parseTestFeeds(html).then(data => data[0]);
+    parseTestFeeds(html).then(data => data?.[0] ?? null);
 const firstHEntry = async (html: string) =>
     firstHFeed(html).then(data => data?.entries?.[0]);
 
 describe("HFeed parsing", () => {
     test("feed metadata", async () => {
         const feed = await firstHFeed(SampleHtmlHFeed);
-        const about = feed.about;
+        const about = feed?.about;
 
         expect(about?.name).toBe("Posts");
         expect(about?.summary).toBe("Personal blogs");
@@ -43,7 +43,7 @@ describe("HFeed parsing", () => {
 
     test("feed entries", async () => {
         const feed = await firstHFeed(SampleHtmlHFeed);
-        const entries = feed.entries;
+        const entries = feed?.entries;
         expect(entries?.length).toBe(1);
 
         const entry = entries?.[0];

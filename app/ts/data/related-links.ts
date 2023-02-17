@@ -1,4 +1,5 @@
-import {ParsedDocument} from "microformats-parser/dist/types";
+import { ParsedDocument } from "microformats-parser/dist/types";
+import { noneOf } from "ts/data/arrays";
 
 export interface RelLink {
     href: string;
@@ -8,10 +9,10 @@ export interface RelLink {
 }
 
 export interface RelLinks {
-    relme: RelLink[];
-    pgp: RelLink[];
-    feeds: RelLink[];
-    webmention: RelLink[];
+    relme: RelLink[] | null;
+    pgp: RelLink[] | null;
+    feeds: RelLink[] | null;
+    webmention: RelLink[] | null;
 }
 
 export const parseRelLinks = async (
@@ -29,8 +30,9 @@ export const parseRelLinks = async (
         const feedLinks = rels?.alternate ?? [];
         const webmentionEndpoints = rels?.webmention ?? [];
 
-        const build = (links: string[]): RelLink[] =>
-            links
+        const build = (links: string[]): RelLink[] | null => {
+            if (links.length === 0) return null;
+            return links
                 .map(url => {
                     const rel = microformats["rel-urls"][url];
                     return {
@@ -41,11 +43,21 @@ export const parseRelLinks = async (
                     };
                 })
                 .sort((a: RelLink, b: RelLink) => a.text.localeCompare(b.text));
+        };
 
-        resolve({
-            relme: build(relmeLinks),
-            pgp: build(pgpLinks),
-            feeds: build(feedLinks),
-            webmention: build(webmentionEndpoints),
-        });
+        const relme = build(relmeLinks);
+        const pgp = build(pgpLinks);
+        const feeds = build(feedLinks);
+        const webmention = build(webmentionEndpoints);
+
+        if (noneOf([relme, pgp, feeds, webmention])) {
+            resolve(null);
+        } else {
+            resolve({
+                relme: relme,
+                pgp: pgp,
+                feeds: feeds,
+                webmention: webmention,
+            });
+        }
     });

@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+  <title>A sample page with multiple microformat root elements.</title>
+</head>
+
+<body>
+<div class="h-feed">
+  <img src="/feed.jpg" alt=""/>
+  <a href="/articles/" class="p-name u-url">Articles</a>
+  <div class="p-author">W. Developer</div>
+
+  <!-- h-entry example from https://microformats.org/wiki/h-entry -->
+  <article class="h-entry">
+    <h1 class="p-name">Microformats are amazing</h1>
+    <p>Published by <a class="p-author h-card" href="http://example.com">W. Developer</a>
+      on
+      <time class="dt-published" datetime="2013-06-13 12:00:00">13<sup>th</sup> June 2013</time>
+    </p>
+
+    <p class="p-summary">In which I extol the virtues of using microformats.</p>
+
+    <div class="e-content">
+      <p>Blah blah blah</p>
+    </div>
+  </article>
+
+  <article class="h-entry">
+    <h1 class="p-name">Microformats are still cool</h1>
+    <p>Published by <a class="p-author h-card" href="http://example.com">W. Developer</a>
+      on
+      <time class="dt-published" datetime="2017-06-13 12:00:00">13<sup>th</sup> June 2017</time>
+    </p>
+
+    <p class="p-summary">Another summary.</p>
+
+    <div class="e-content">
+      <p>Blah blah blah</p>
+    </div>
+  </article>
+</div>
+</body>
+
+<footer>
+
+<!-- h-card example from https://microformats.org/wiki/h-card -->
+<div class="h-card">
+  <span class="p-name">Sally Ride</span>
+  <span class="p-honorific-prefix">Dr.</span>
+  <span class="p-given-name">Sally</span>
+  <abbr class="p-additional-name">K.</abbr>
+  <span class="p-family-name">Ride</span>
+  <span class="p-honorific-suffix">Ph.D.</span>,
+  <span class="p-nickname">sallykride</span> (IRC)
+  <div class="p-org">Sally Ride Science</div>
+  <img class="u-photo" src="http://example.com/sk.jpg" alt="Photo"/>
+  <a class="u-url" href="http://sally.example.com">w</a>,
+  <a class="u-email" href="mailto:sally@example.com">e</a>
+  <div class="p-tel">+1.818.555.1212</div>
+  <div class="p-street-address">123 Main st.</div>
+  <span class="p-locality">Los Angeles</span>,
+  <abbr class="p-region" title="California">CA</abbr>,
+  <span class="p-postal-code">91316</span>
+  <div class="p-country-name">U.S.A</div>
+  <time class="dt-bday">1951-05-26</time>
+  birthday
+  <div class="p-category">physicist</div>
+  <div class="p-note">First American woman in space.</div>
+</div>
+</footer>
+</html>

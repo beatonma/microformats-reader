@@ -7,6 +7,10 @@
         "message": "Displays microformat data from the active page."
     },
 
+    "no_microformat_content": {
+        "message": "No microformat content found."
+    },
+
     "dropdown_collapse": {
         "message": "Show less"
     },

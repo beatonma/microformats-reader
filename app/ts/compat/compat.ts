@@ -1,8 +1,9 @@
+import { AppConfig } from "ts/options";
+
 declare const chrome: any;
 declare const browser: any;
 
-const DEBUG = true;
-const MessagesJson = DEBUG
+const MessagesJson = AppConfig.isDebug
     ? require("../../static/_locales/en_GB/messages.json")
     : {};
 
@@ -17,7 +18,7 @@ interface CreateTabProperties {
 }
 interface BrowserTabs {
     query: (queryInfo: any) => Promise<BrowserTab[]>;
-    sendMessage: (tabId: number, message: any) => Promise<any>;
+    sendMessage: (tabId: number | undefined, message: any) => Promise<any>;
     create: (properties: CreateTabProperties) => Promise<any>;
 }
 

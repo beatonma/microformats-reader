@@ -4,7 +4,7 @@ import { parseTestHtml } from "ts/test/test-util";
 import { parseHCards } from "./h-card";
 
 const firstHCard = async (html: string) =>
-    parseHCards(parseTestHtml(html)).then(data => data[0] ?? null);
+    parseHCards(parseTestHtml(html)).then(data => data?.[0] ?? null);
 
 const makeHCard = async (content: string, name: string = "Sally Ride") =>
     firstHCard(
@@ -82,14 +82,14 @@ describe("HCard parsing", () => {
             const html = '<div class="h-card">Sally Ride</div>';
             const hcard = await firstHCard(html);
 
-            expect(hcard.name).toBe("Sally Ride");
+            expect(hcard?.name).toBe("Sally Ride");
         });
 
         test("Name detail", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
-            const nameDetail = hcard.nameDetail;
+            const nameDetail = hcard?.nameDetail;
 
-            expect(hcard.name).toBe("Sally Ride");
+            expect(hcard?.name).toBe("Sally Ride");
             expect(nameDetail?.honorificPrefix?.[0]).toBe("Dr.");
             expect(nameDetail?.honorificSuffix?.[0]).toBe("Ph.D.");
             expect(nameDetail?.givenName?.[0]).toBe("Sally");
@@ -100,8 +100,8 @@ describe("HCard parsing", () => {
     });
 
     describe("Locations", () => {
-        const testLocation = (hcard: HCardData) => {
-            const location = hcard.location;
+        const testLocation = (hcard: HCardData | null) => {
+            const location = hcard?.location;
 
             expect(location?.locality?.[0]).toBe("Los Angeles");
             expect(location?.region?.[0]).toBe("California");
@@ -115,7 +115,7 @@ describe("HCard parsing", () => {
             const html = '<div class="h-card">Sally Ride</div>';
             const hcard = await firstHCard(html);
 
-            expect(hcard.location).toBeNull();
+            expect(hcard?.location).toBeNull();
         });
 
         test("Simple address", async () => {
@@ -127,7 +127,7 @@ describe("HCard parsing", () => {
 
         test("Nested p-adr", async () => {
             const hcard = await firstHCard(SampleHCardNested);
-            const location = hcard.location;
+            const location = hcard?.location;
 
             expect(location?.locality?.[0]).toBe("Los Angeles");
             expect(location?.region?.[0]).toBe("California");
@@ -170,7 +170,7 @@ describe("HCard parsing", () => {
         test("Not available", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
 
-            expect(hcard.gender).toBeNull();
+            expect(hcard?.gender).toBeNull();
         });
 
         test("x-pronoun-___", async () => {
@@ -179,7 +179,7 @@ describe("HCard parsing", () => {
                 <span class="p-x-pronoun-oblique">her</span>
                 <span class="p-x-pronoun-possessive">hers</span>`);
 
-            expect(hcard.gender?.pronouns).toEqual(["she", "her", "hers"]);
+            expect(hcard?.gender?.pronouns).toEqual(["she", "her", "hers"]);
         });
 
         test("pronoun-___", async () => {
@@ -188,7 +188,7 @@ describe("HCard parsing", () => {
                 <span class="p-pronoun-oblique">her</span>
                 <span class="p-pronoun-possessive">hers</span>`);
 
-            expect(hcard.gender?.pronouns).toEqual(["she", "her", "hers"]);
+            expect(hcard?.gender?.pronouns).toEqual(["she", "her", "hers"]);
         });
 
         test("u-pronoun", async () => {
@@ -204,7 +204,7 @@ describe("HCard parsing", () => {
               ). If you are writing about me and are in doubt: ask.
             </p>`);
 
-            expect(hcard.gender?.pronouns).toEqual([
+            expect(hcard?.gender?.pronouns).toEqual([
                 "https://nl.wiktionary.org/wiki/hij#Persoonlijk_voornaamwoord",
                 "https://sv.wiktionary.org/wiki/han#Pronomen",
                 "https://en.wiktionary.org/wiki/he#Pronoun",

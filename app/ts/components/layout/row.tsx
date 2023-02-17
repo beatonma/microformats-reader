@@ -19,12 +19,14 @@ export interface RowProps extends HTMLAttributes<HTMLDivElement> {
 export const Row = (props: RowProps) => {
     const { alignment, wrap, style, className, ...rest } = props;
     const editableStyle: React.CSSProperties = style ?? {};
+
     if (alignment) {
         editableStyle.justifyContent = alignment;
     }
     if (wrap) {
         editableStyle.flexWrap = wrap ? "wrap" : "nowrap";
     }
+
     return (
         <div
             className={`row ${className ?? ""}`}

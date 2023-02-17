@@ -3,7 +3,7 @@ import {
     MicroformatRoot,
     ParsedDocument,
 } from "microformats-parser/dist/types";
-import { anyOf, notNullish } from "ts/data/arrays";
+import { anyOf, isEmpty, isEmptyOrNull, notNullish } from "ts/data/arrays";
 import { parseHEntry } from "ts/data/h-entry";
 import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parse";
@@ -11,7 +11,7 @@ import { HFeedData } from "ts/data/types/h-feed";
 
 export const parseHFeeds = async (
     microformats: ParsedDocument
-): Promise<HFeedData[]> => {
+): Promise<HFeedData[] | null> => {
     return new Promise((resolve, reject) => {
         const feeds = Parse.getRootsOfType(
             microformats,
@@ -24,7 +24,13 @@ export const parseHFeeds = async (
             Parse.getRootsOfType(microformats, Microformat.Root.H_Entry)
         );
 
-        resolve([...feeds, unwrappedEntries].filter(notNullish));
+        const result = [...feeds, unwrappedEntries].filter(notNullish);
+        if (isEmpty(result)) {
+            resolve(null);
+            return;
+        }
+
+        resolve(result);
     });
 };
 
@@ -40,7 +46,7 @@ const parseHFeed = (hfeed: MicroformatRoot): HFeedData | null => {
         ?.map(item => parseHEntry(item.properties))
         .filter(notNullish);
 
-    if (!entries) return null;
+    if (isEmptyOrNull(entries)) return null;
 
     let about = null;
 

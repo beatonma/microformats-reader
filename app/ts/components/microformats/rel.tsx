@@ -1,18 +1,19 @@
-import React, {HTMLProps} from "react";
-import {_} from "ts/compat";
-import {Icon, Icons} from "ts/components/icon";
-import {Dropdown} from "ts/components/layout/dropdown";
-import {LinkTo} from "ts/components/link-to";
-import {RelLink} from "ts/data/related-links";
+import React, { HTMLProps } from "react";
+import { _ } from "ts/compat";
+import { Icon, Icons } from "ts/components/icon";
+import { Dropdown } from "ts/components/layout/dropdown";
+import { LinkTo } from "ts/components/link-to";
+import { isEmptyOrNull } from "ts/data/arrays";
+import { RelLink } from "ts/data/related-links";
 import "./rel.scss";
 
 interface RelLinkProps {
-    links: RelLink[];
+    links: RelLink[] | null | undefined;
 }
 export const RelmeLinks = (props: RelLinkProps) => {
     const { links } = props;
 
-    if (!links) return null;
+    if (isEmptyOrNull(links)) return null;
 
     const onClickVerify = () => {
         console.log("TODO verify rel=me links");
@@ -26,7 +27,6 @@ export const RelmeLinks = (props: RelLinkProps) => {
                 </>
             }
             title="rel=me links"
-            defaultIsExpanded={false}
             className="relme-links"
         >
             <button
@@ -35,23 +35,24 @@ export const RelmeLinks = (props: RelLinkProps) => {
             >
                 TODO Verify
             </button>
+
             {links.map(link => (
-                <div key={link.href}>
-                    <LinkTo href={link.href} title={link.title}>
-                        {link.text}
-                    </LinkTo>
-                </div>
+                <LinkTo href={link.href} title={link.title} key={link.href}>
+                    {link.text}
+                </LinkTo>
             ))}
         </Dropdown>
     );
 };
 
-interface IconRelLinkProps extends RelLinkProps, HTMLProps<HTMLDivElement> {
+interface IconRelLinkProps {
     icon: Icons;
     displayTitle: string;
 }
 
-const QuickLinks = (props: IconRelLinkProps) => {
+const QuickLinks = (
+    props: IconRelLinkProps & RelLinkProps & HTMLProps<HTMLDivElement>
+) => {
     const { links, displayTitle, title, icon, ...rest } = props;
 
     if (!links) return null;
@@ -59,17 +60,36 @@ const QuickLinks = (props: IconRelLinkProps) => {
     return (
         <>
             {links.map(link => (
-                <div className={`quick-link`} {...rest} key={link.href}>
-                    <LinkTo
-                        title={link.title ?? title ?? displayTitle}
-                        href={link.href}
-                    >
-                        <Icon icon={icon} />
-                        <div className="link-title">{displayTitle}</div>
-                    </LinkTo>
-                </div>
+                <QuickLink
+                    link={link}
+                    icon={icon}
+                    displayTitle={displayTitle}
+                    title={title}
+                    {...rest}
+                />
             ))}
         </>
+    );
+};
+
+interface QuickLinkProps {
+    link: RelLink;
+    icon: Icons;
+    title?: string;
+    displayTitle: string;
+}
+const QuickLink = (props: HTMLProps<HTMLDivElement> & QuickLinkProps) => {
+    const { link, displayTitle, title, icon, ...rest } = props;
+    return (
+        <div className={`quick-link`} {...rest} key={link.href}>
+            <LinkTo
+                title={link.title ?? title ?? displayTitle}
+                href={link.href}
+            >
+                <Icon icon={icon} />
+                <div className="link-title">{displayTitle}</div>
+            </LinkTo>
+        </div>
     );
 };
 

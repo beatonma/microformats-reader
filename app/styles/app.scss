@@ -7,7 +7,7 @@ html {
 
 body {
     margin: 0;
-    padding: 1ch;
+    padding: 0;
     color: var(--on-background);
     background-color: var(--background);
     font-size: var(--fs-default);
@@ -32,8 +32,16 @@ a:visited {
     text-decoration: none;
 }
 
+p {
+    margin-block: 0.5em;
+}
+
 section {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+
+    &:empty {
+        display: none;
+    }
 }
 
 ::-webkit-scrollbar {
@@ -55,4 +63,8 @@ button {
     border: none;
     margin-inline: 0;
     padding-inline: 0;
+}
+
+option {
+    padding: var(--space-half);
 }

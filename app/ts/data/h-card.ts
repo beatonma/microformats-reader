@@ -5,7 +5,7 @@ import {
     MicroformatRoot,
     ParsedDocument,
 } from "microformats-parser/dist/types";
-import { noneOf, notNullish } from "ts/data/arrays";
+import { isEmpty, isEmptyOrNull, noneOf, notNullish } from "ts/data/arrays";
 import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parse";
 import { HAdrData } from "ts/data/types";
@@ -26,7 +26,7 @@ import {
 
 export const parseHCards = async (
     microformats: ParsedDocument
-): Promise<HCardData[]> =>
+): Promise<HCardData[] | null> =>
     new Promise((resolve, reject) => {
         const items = Parse.getRootsOfType(
             microformats,
@@ -34,6 +34,11 @@ export const parseHCards = async (
         ).map(item => item.properties);
 
         const primaryHcards = items.map(parseHCard).filter(notNullish);
+        if (isEmpty(primaryHcards)) {
+            resolve(null);
+            return;
+        }
+
         const hcards: HCardData[] = [];
         primaryHcards.forEach((hcard, index) => {
             hcards.push(hcard);
@@ -66,9 +71,11 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
             job,
             dates,
             images,
+            extras,
         ])
-    )
+    ) {
         return null;
+    }
 
     return {
         id: Math.random().toString().replace(".", ""),
