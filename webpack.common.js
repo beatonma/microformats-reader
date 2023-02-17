@@ -1,7 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
-// Based on https://github.com/sszczep/chrome-extension-webpack
 module.exports = {
     optimization: {
         minimize: false,
@@ -42,6 +41,10 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.html/,
+                type: "asset/source",
             },
         ],
     },
