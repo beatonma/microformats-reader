@@ -1,8 +1,10 @@
 import React from "react";
-import {CardContent, CardLayout} from "ts/components/layout/card";
-import {PropsOf} from "ts/components/props";
-import {HEntryData} from "ts/data/types/h-entry";
-import {HFeedAbout, HFeedData} from "ts/data/types/h-feed";
+import { CardContent, CardLayout } from "ts/components/layout/card";
+import { Property } from "ts/components/microformats/properties";
+import { PropsOf } from "ts/components/props";
+import { Microformat } from "ts/data/microformats";
+import { HEntryData } from "ts/data/types/h-entry";
+import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 import "./h-feed.scss";
 
 export const HFeed = (props: PropsOf<HFeedData>) => {
@@ -30,7 +32,16 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
     if (!about) return null;
 
     const { name, author, summary, url, photo } = about;
-    return <div className="hfeed-about">{name}</div>;
+    return (
+        <div className="hfeed-about">
+            <Property
+                image={photo}
+                microformat={Microformat.PlainProp.P_Name}
+                href={url}
+                displayValue={name}
+            />
+        </div>
+    );
 };
 
 const HEntry = (props: HEntryData) => {
@@ -46,5 +57,13 @@ const HEntry = (props: HEntryData) => {
         location,
         category,
     } = props;
-    return <div className="h-entry">{name}</div>;
+    return (
+        <div className="h-entry">
+            <Property
+                microformat={Microformat.PlainProp.P_Name}
+                href={url}
+                displayValue={name}
+            />
+        </div>
+    );
 };

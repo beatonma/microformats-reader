@@ -1,13 +1,13 @@
 import {
-    Image,
+    MicroformatProperties,
     MicroformatRoot,
     ParsedDocument,
 } from "microformats-parser/dist/types";
-import { anyOf, isEmpty, isEmptyOrNull, notNullish } from "ts/data/arrays";
+import { isEmpty, isEmptyOrNull, noneOf, notNullish } from "ts/data/arrays";
 import { parseHEntry } from "ts/data/h-entry";
 import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parse";
-import { HFeedData } from "ts/data/types/h-feed";
+import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 
 export const parseHFeeds = async (
     microformats: ParsedDocument
@@ -35,30 +35,13 @@ export const parseHFeeds = async (
 };
 
 const parseHFeed = (hfeed: MicroformatRoot): HFeedData | null => {
-    const properties = hfeed.properties;
-    const name = Parse.first<string>(properties, "name");
-    const author = Parse.first<string>(properties, "author");
-    const summary = Parse.first<string>(properties, "summary");
-    const url = Parse.first<string>(properties, "url");
-    const photo = Parse.first(properties, "photo") as Image;
-
     const entries = hfeed.children
         ?.map(item => parseHEntry(item.properties))
         .filter(notNullish);
 
     if (isEmptyOrNull(entries)) return null;
 
-    let about = null;
-
-    if (anyOf([name, author, summary, url, photo])) {
-        about = {
-            name: name,
-            author: author,
-            summary: summary,
-            url: url,
-            photo: photo,
-        };
-    }
+    const about = parseAbout(hfeed.properties);
 
     return {
         about: about,
@@ -74,5 +57,23 @@ const wrapWithHFeed = (entries: MicroformatRoot[]): HFeedData | null => {
         entries: entries
             .map(item => parseHEntry(item.properties))
             .filter(notNullish),
+    };
+};
+
+const parseAbout = (properties: MicroformatProperties): HFeedAbout | null => {
+    const name = Parse.first<string>(properties, "name");
+    const author = Parse.first<string>(properties, "author");
+    const summary = Parse.first<string>(properties, "summary");
+    const url = Parse.first<string>(properties, "url");
+    const photo = Parse.firstImage(properties, "photo");
+
+    if (noneOf([name, author, summary, url, photo])) return null;
+
+    return {
+        name: name,
+        author: author,
+        summary: summary,
+        url: url,
+        photo: photo,
     };
 };

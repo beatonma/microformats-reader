@@ -1,3 +1,4 @@
+@use "styles/size";
 @use "styles/typography";
 
 .property {
@@ -19,9 +20,14 @@
         }
     }
 
+    svg.property-icon {
+        opacity: 0.6;
+    }
+    img.property-icon {
+        @include size.fixedSize(1em);
+    }
     .property-icon {
         margin-right: var(--space-half);
-        opacity: 0.6;
     }
 }
 

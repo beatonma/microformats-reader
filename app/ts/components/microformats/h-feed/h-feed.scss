@@ -1,0 +1,10 @@
+@use "ts/components/layout/card.scss";
+
+.h-feed {
+}
+
+.hfeed-about {
+    .property[data-microformat="p-name"] {
+        @extend %card-text-large;
+    }
+}

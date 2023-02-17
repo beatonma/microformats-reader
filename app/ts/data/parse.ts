@@ -1,4 +1,5 @@
 import {
+    Image,
     MicroformatProperties,
     MicroformatProperty,
     MicroformatRoot,
@@ -6,6 +7,7 @@ import {
 } from "microformats-parser/dist/types";
 import { notNullish } from "ts/data/arrays";
 import { Microformat } from "ts/data/microformats";
+import { isString } from "ts/data/types";
 
 export namespace Parse {
     export const getRootsOfType = (
@@ -28,6 +30,20 @@ export namespace Parse {
         container: MicroformatProperties,
         key: string
     ): T | null => (get(container, key)?.find(notNullish) as T) ?? null;
+
+    export const firstImage = (
+        container: MicroformatProperties,
+        key: string
+    ): Image | null => {
+        const result = first(container, key);
+        if (isString(result)) {
+            return {
+                value: result,
+                alt: "",
+            };
+        }
+        return result as Image;
+    };
 
     /**
      * Try to read 'key' or 'x-key' values for non-standardised properties.

@@ -1,10 +1,12 @@
 import React, { HTMLProps, ReactNode } from "react";
+import { Image } from "microformats-parser/dist/types";
 import { Icon, Icons } from "ts/components/icon";
-import { IconProps } from "ts/components/icon/icons";
-import { LinkTo } from "ts/components/link-to";
+import { Img } from "ts/components/image";
+import { MaybeLinkTo } from "ts/components/link-to";
 import { notNullish } from "ts/data/arrays";
 import { Named } from "ts/data/common";
 import { Microformats } from "ts/data/microformats";
+import { isString } from "ts/data/types";
 import { formatUri } from "ts/formatting";
 import "./properties.scss";
 
@@ -16,6 +18,7 @@ interface PropertyProps {
 
 interface PropertyIconProps {
     icon?: Icons;
+    image?: Image | null;
 }
 
 interface PropertyValueProps extends AllowValueAsHref {
@@ -45,6 +48,7 @@ export const Property = (
         href,
         allowValueAsHref,
         icon,
+        image,
         displayValue,
     } = props;
 
@@ -54,11 +58,12 @@ export const Property = (
         <div
             className="property"
             title={microformat}
+            data-microformat={microformat}
             onDoubleClick={() =>
-                console.log(`PropertyRow: ${JSON.stringify(props)}`)
+                console.log(`Property: ${JSON.stringify(props)}`)
             }
         >
-            <PropertyIcon icon={icon} />
+            <PropertyIcon icon={icon} image={image} />
             <PropertyName name={displayName} />
             <PropertyValue
                 title={title}
@@ -93,6 +98,7 @@ export const PropertyRow = (
         microformat,
         displayName,
         icon,
+        image,
         displayValue,
         href,
         title,
@@ -110,7 +116,7 @@ export const PropertyRow = (
             }
         >
             <td>
-                <PropertyIcon icon={icon} />
+                <PropertyIcon icon={icon} image={image} />
             </td>
 
             <td>
@@ -130,9 +136,11 @@ export const PropertyRow = (
     );
 };
 
-const PropertyName = (props: Named) => (
-    <div className="property-name">{props.name}</div>
-);
+const PropertyName = (props: Named) => {
+    const { name } = props;
+    if (!name) return null;
+    return <div className="property-name">{name}</div>;
+};
 
 const PropertyValue = (props: PropertyValueProps) => {
     const { displayValue, href, title, microformat, allowValueAsHref } = props;
@@ -239,27 +247,21 @@ const SingleValueProperty = (props: SingleValuePropertyProps) => {
 
     let resolvedHref = href;
     if (allowValueAsHref) {
-        if (
-            typeof displayValue === "string" &&
-            displayValue.match(/^https?:\/\/\S+$/)
-        ) {
+        if (isString(displayValue) && displayValue.match(/^https?:\/\/\S+$/)) {
             resolvedHref = displayValue;
             resolvedDisplayValue = formatUri(displayValue);
         }
     }
 
-    if (resolvedHref) {
-        return (
-            <LinkTo
-                href={resolvedHref}
-                className={resolvedClassName}
-                title={resolvedTitle}
-            >
-                {resolvedDisplayValue ?? formatUri(resolvedHref)}
-            </LinkTo>
-        );
-    }
-    return <div className={resolvedClassName}>{resolvedDisplayValue}</div>;
+    return (
+        <MaybeLinkTo
+            href={resolvedHref ?? undefined}
+            className={resolvedClassName}
+            title={resolvedTitle}
+        >
+            {resolvedDisplayValue ?? formatUri(resolvedHref)}
+        </MaybeLinkTo>
+    );
 };
 
 const TableHeader = (props: PropertiesTableProps) => {
@@ -267,6 +269,11 @@ const TableHeader = (props: PropertiesTableProps) => {
     return <thead>{props.tableHeader}</thead>;
 };
 
-const PropertyIcon = (props: IconProps) => (
-    <Icon {...props} className="property-icon" />
-);
+const PropertyIcon = (props: PropertyIconProps) => {
+    const { image, ...rest } = props;
+    if (image) {
+        return <Img image={image} className="property-icon" />;
+    }
+
+    return <Icon {...rest} className="property-icon" />;
+};

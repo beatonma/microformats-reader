@@ -1,17 +1,6 @@
 @use "styles/animation";
 @use "./hcard-avatar";
-
-%hcard-text-large {
-    font-size: var(--fs-h1);
-}
-
-%hcard-text-medium {
-    font-size: var(--fs-default);
-}
-
-%hcard-text-small {
-    font-size: var(--fs-100);
-}
+@use "ts/components/layout/card.scss";
 
 button#hcard_toggle_detail {
     @extend %hover;
@@ -23,7 +12,7 @@ button#hcard_toggle_detail {
 
 .h-card {
     .p-name {
-        @extend %hcard-text-large;
+        @extend %card-text-large;
     }
 
     .dropdown-header {

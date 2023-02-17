@@ -5,10 +5,10 @@ import {
     MicroformatRoot,
     ParsedDocument,
 } from "microformats-parser/dist/types";
-import { isEmpty, isEmptyOrNull, noneOf, notNullish } from "ts/data/arrays";
+import { isEmpty, noneOf, notNullish } from "ts/data/arrays";
 import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parse";
-import { HAdrData } from "ts/data/types";
+import { HAdrData, isString } from "ts/data/types";
 import {
     HCardContactData,
     HCardData,
@@ -92,8 +92,8 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
 };
 
 const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
-    const photo = Parse.first<Image>(hcard, "photo");
-    const logo = Parse.first<Image>(hcard, "logo");
+    const photo = Parse.firstImage(hcard, "photo");
+    const logo = Parse.firstImage(hcard, "logo");
 
     if (noneOf([photo, logo])) return null;
     return {
@@ -108,7 +108,7 @@ const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
     ): HAdrData | null => {
         if (obj == null) return null;
 
-        if (typeof obj === "string") {
+        if (isString(obj)) {
             return {
                 locality: null,
                 region: null,
@@ -148,7 +148,7 @@ const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
     };
 
     const nestedAdr = (hcard.adr?.[0] as string | MicroformatRoot) ?? null;
-    if (typeof nestedAdr === "string") {
+    if (isString(nestedAdr)) {
         return _parseLocation(nestedAdr);
     }
     return _parseLocation(nestedAdr?.properties) ?? _parseLocation(hcard);

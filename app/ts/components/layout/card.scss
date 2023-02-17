@@ -1,6 +1,18 @@
 @use "styles";
 @use "styles/animation";
 
+%card-text-large {
+    font-size: var(--fs-h1);
+}
+
+%card-text-medium {
+    font-size: var(--fs-default);
+}
+
+%card-text-small {
+    font-size: var(--fs-100);
+}
+
 .card {
     background-color: var(--surface);
     color: var(--on-surface);

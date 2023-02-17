@@ -1,6 +1,23 @@
 .dev {
-    background-color: #004351;
-    color: #f18b8d;
+    background-color: #5900d5;
+
+    > .row {
+        gap: var(--space-1x);
+    }
+
+    button,
+    select {
+        background-color: #fce664;
+        padding: var(--space-1x);
+        border-radius: 4px;
+        font-size: var(--fs-caption);
+        font-family: monospace;
+        transition: all 200ms;
+
+        &:active {
+            background-color: #ffe432;
+        }
+    }
 }
 
 section.dev {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { mf2 } from "microformats-parser";
 import { ParsedDocument } from "microformats-parser/dist/types";
+import { Row } from "ts/components/layout";
 // @ts-ignore
 import SampleEmpty from "ts/dev/samples/empty.html";
 // @ts-ignore
@@ -18,7 +19,7 @@ import SampleHFeedImplied from "ts/dev/samples/h-feed_implied.html";
 import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
-import { PopupUI, parseDocument } from "ts/entrypoint/popup";
+import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
 import "./dev.scss";
 
 const Samples = {
@@ -32,25 +33,28 @@ const Samples = {
     "Sample: h-card, h-feed": SampleHCardHFeed,
 };
 
-const PopupDev = () => {
+interface DebugUIProps {
+    microformats: PopupProps;
+    parsedDocument: ParsedDocument | null;
+    setParsedDocument: (data: ParsedDocument) => void;
+}
+const DebugUI = (props: DebugUIProps) => {
     const [page, setPage] = useState<keyof typeof Samples>(
         "Sample: h-card, h-feed"
     );
-    const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
-        null
-    );
-    const microformats = parseDocument(parsedDocument);
     useEffect(() => {
-        setParsedDocument(
+        props.setParsedDocument(
             mf2(Samples[page], { baseUrl: "https://example.beatonma.org" })
         );
     }, [page]);
 
-    if (!microformats) return null;
+    const copyToClipboard = (obj: object | null) => {
+        navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
+    };
 
     return (
-        <>
-            <section className="dev">
+        <section className="dev">
+            <Row>
                 <select
                     value={page}
                     onChange={event =>
@@ -58,10 +62,39 @@ const PopupDev = () => {
                     }
                 >
                     {Object.keys(Samples).map(name => (
-                        <option value={name}>{name}</option>
+                        <option value={name} key={name}>
+                            {name}
+                        </option>
                     ))}
                 </select>
-            </section>
+
+                <button onClick={() => copyToClipboard(props.parsedDocument)}>
+                    Copy ParsedDocument
+                </button>
+
+                <button onClick={() => copyToClipboard(props.microformats)}>
+                    Copy result
+                </button>
+            </Row>
+        </section>
+    );
+};
+
+const PopupDev = () => {
+    const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
+        null
+    );
+    const microformats = parseDocument(parsedDocument);
+
+    if (!microformats) return null;
+
+    return (
+        <>
+            <DebugUI
+                microformats={microformats}
+                parsedDocument={parsedDocument}
+                setParsedDocument={setParsedDocument}
+            />
 
             <PopupUI {...microformats} />
         </>

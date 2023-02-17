@@ -1,7 +1,11 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLAttributes, HTMLProps } from "react";
 import { compatBrowser } from "ts/compat";
 
-export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
+interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
+    href: string | null | undefined;
+}
+
+export const LinkTo = (props: LinkProps) => {
     const { title, href, ...rest } = props;
 
     if (!href) return null;
@@ -17,8 +21,15 @@ export const LinkTo = (props: HTMLProps<HTMLAnchorElement>) => {
     return <a href={href} title={titleWithURL} onClick={onClick} {...rest} />;
 };
 
-const LinkToSection = (props: HTMLProps<HTMLAnchorElement>) => {
+export const MaybeLinkTo = (props: LinkProps) => {
+    const { href, ...rest } = props;
+    if (href) return <LinkTo {...props} />;
+
+    return <span {...rest} />;
+};
+
+const LinkToSection = (props: LinkProps) => {
     const { title, href, ...rest } = props;
 
-    return <a href={href} title={title} {...rest} />;
+    return <a href={href ?? undefined} title={title} {...rest} />;
 };

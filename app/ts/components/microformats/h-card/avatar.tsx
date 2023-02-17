@@ -1,5 +1,6 @@
 import React, { HTMLProps, useState } from "react";
 import { Image } from "microformats-parser/dist/types";
+import { Img } from "ts/components/image";
 import { Named } from "ts/data/common";
 import { Microformat } from "ts/data/microformats";
 import { HCardImages } from "ts/data/types/h-card";
@@ -59,12 +60,7 @@ const SingleImageAvatar = (
 
     return (
         <div className="avatar" {...rest}>
-            <img
-                className={imageClassName}
-                src={image.value}
-                alt={image.alt}
-                onError={onError}
-            />
+            <Img image={image} className={imageClassName} onError={onError} />
         </div>
     );
 };
@@ -80,20 +76,16 @@ const PhotoWithLogo = (
     const { name, photo, logo, onError, ...rest } = props;
     return (
         <div className="avatar" {...rest}>
-            <img
-                loading="lazy"
+            <Img
+                image={photo}
                 className={Microformat.UrlProp.U_Photo}
                 title={Microformat.UrlProp.U_Photo}
-                src={photo.value}
-                alt={photo.alt}
                 onError={onError}
             />
-            <img
-                loading="lazy"
+            <Img
+                image={logo}
                 className={Microformat.UrlProp.U_Logo}
                 title={Microformat.UrlProp.U_Logo}
-                src={logo.value}
-                alt={logo.alt}
             />
         </div>
     );
