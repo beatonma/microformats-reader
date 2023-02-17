@@ -1,9 +1,9 @@
-import React, { HTMLProps, useEffect, useId, useState } from "react";
+import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
 import { Row } from "ts/components/layout";
-import { CardContent, CardLayout } from "ts/components/layout/card";
-import { Dropdown, DropdownButton } from "ts/components/layout/dropdown";
+import { Dropdown } from "ts/components/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/components/layout/expand-collapse";
+import { ExpandableCard } from "ts/components/layout/expandable-card";
 import { Avatar } from "ts/components/microformats/h-card/avatar";
 import {
     Contact,
@@ -22,88 +22,18 @@ import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
-    const { defaultIsExpanded, id, images } = props;
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
-    const [isCollapsing, setIsCollapsing] = useState(false);
-    const [isExpanding, setIsExpanding] = useState(false);
-    const hcardContentID = useId();
-    const summaryID = useId();
-    const detailID = useId();
-
-    const toggleExpanded = () => {
-        const target = !isExpanded;
-        setExpanded(target);
-        setIsExpanding(target);
-        setIsCollapsing(!target);
-    };
-
-    addAnimationEndListener(summaryID, isExpanding, () =>
-        setIsExpanding(false)
-    );
-    addAnimationEndListener(detailID, isCollapsing, () =>
-        setIsCollapsing(false)
-    );
+    const { defaultIsExpanded, images } = props;
 
     return (
-        <CardLayout id={id}>
-            <CardContent
-                id={hcardContentID}
-                className="h-card"
-                data-expanding={isExpanding}
-                data-collapsing={isCollapsing}
-                aria-expanded={isExpanded}
-            >
-                <Row className="banner">
-                    <Avatar
-                        name={props.name ?? "?"}
-                        images={images}
-                        onClick={toggleExpanded}
-                    />
-                    <HCardTextSummary
-                        {...props}
-                        id={summaryID}
-                        data-visible={!isExpanded}
-                        data-closing={isExpanding}
-                    />
-                </Row>
-
-                <DropdownButton
-                    title="h-card"
-                    id="hcard_toggle_detail"
-                    isExpanded={isExpanded}
-                    onClick={toggleExpanded}
-                    aria-controls={hcardContentID}
-                />
-
-                <HCardTextDetail
-                    {...props}
-                    id={detailID}
-                    data-visible={isExpanded}
-                    data-closing={isCollapsing}
-                />
-            </CardContent>
-        </CardLayout>
+        <ExpandableCard
+            defaultIsExpanded={defaultIsExpanded}
+            className="h-card"
+            contentDescription="h-card"
+            sharedContent={<Avatar name={props.name ?? "?"} images={images} />}
+            summaryContent={<HCardTextSummary {...props} />}
+            detailContent={<HCardTextDetail {...props} />}
+        />
     );
-};
-
-const addAnimationEndListener = (
-    id: string,
-    isCollapsing: boolean,
-    reset: () => void
-) => {
-    useEffect(() => {
-        if (isCollapsing) {
-            document.getElementById(id)?.addEventListener(
-                "animationend",
-                () => {
-                    reset();
-                },
-                {
-                    once: true,
-                }
-            );
-        }
-    }, [isCollapsing]);
 };
 
 const HCardTextSummary = (props: HCardData) => {

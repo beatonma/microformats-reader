@@ -1,14 +1,5 @@
-@use "styles/animation";
 @use "./hcard-avatar";
 @use "ts/components/layout/card.scss";
-
-button#hcard_toggle_detail {
-    @extend %hover;
-    display: block;
-    width: stretch;
-    font-size: var(--fs-500);
-    cursor: pointer;
-}
 
 .h-card {
     .p-name {
@@ -18,98 +9,5 @@ button#hcard_toggle_detail {
     .dropdown-header {
         font-size: var(--fs-200);
         line-height: 1.5;
-    }
-
-    .banner {
-        // Avatar + summary
-        align-items: start;
-        gap: var(--space-2x);
-    }
-}
-
-.hcard-summary,
-.hcard-detail {
-    animation-duration: animation.$duration-long;
-    animation-fill-mode: both;
-    animation-timing-function: ease-in-out;
-
-    &[data-closing="false"][data-visible="false"] {
-        display: none;
-    }
-}
-.hcard-summary {
-    &[data-visible="true"] {
-        animation-name: expandSummary;
-    }
-
-    &[data-closing="true"] {
-        animation-name: collapseSummary;
-    }
-}
-
-.hcard-detail {
-    &[data-visible="true"] {
-        animation-name: expandDetail;
-    }
-
-    &[data-closing="true"] {
-        animation-name: collapseDetail;
-    }
-
-    .property:has(.p-name) {
-        justify-content: center;
-    }
-}
-
-@keyframes collapseSummary {
-    0% {
-        @include animation.opaque;
-    }
-    40% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.transparent;
-        @include animation.zero-width;
-        @include animation.zero-height;
-    }
-}
-
-@keyframes expandSummary {
-    0% {
-        @include animation.transparent;
-        @include animation.zero-width;
-        @include animation.zero-height;
-    }
-    60% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.opaque;
-    }
-}
-
-@keyframes collapseDetail {
-    0% {
-        @include animation.opaque;
-    }
-    40% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-}
-@keyframes expandDetail {
-    0% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-    60% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.opaque;
     }
 }

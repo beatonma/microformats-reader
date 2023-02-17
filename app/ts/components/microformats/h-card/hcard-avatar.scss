@@ -43,7 +43,7 @@ $-secondary-size-large: 32px;
         animation-timing-function: ease-in-out;
     }
 
-    &[aria-expanded="true"] {
+    [aria-expanded="true"] {
         .avatar {
             @include styles.fixedSize($-primary-size-large);
             @include avatarSize($-primary-size-large, $-secondary-size-large);
@@ -51,7 +51,7 @@ $-secondary-size-large: 32px;
         }
     }
 
-    &[data-collapsing="true"] {
+    [data-collapsing="true"] {
         .avatar {
             animation-name: avatarShrink;
         }
