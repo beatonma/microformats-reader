@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLProps, useState } from "react";
 import { Image } from "microformats-parser/dist/types";
 import { Named } from "ts/data/common";
 import { Microformat } from "ts/data/microformats";
@@ -13,19 +13,23 @@ export const Avatar = (
     props: HTMLProps<HTMLDivElement> & Named & AvatarProps
 ) => {
     const { name, images, ...rest } = props;
+    const [hasLoadingError, setLoadingError] = useState(false);
 
-    if (!images) {
+    if (hasLoadingError || !images) {
         return <TextAvatar name={name} {...rest} />;
     }
     const { photo, logo } = images;
+    const onError = () => setLoadingError(true);
 
-    if (!!photo && !!logo) return <PhotoWithLogo photo={photo} logo={logo} />;
+    if (!!photo && !!logo)
+        return <PhotoWithLogo photo={photo} logo={logo} onError={onError} />;
 
     if (photo) {
         return (
             <SingleImageAvatar
                 image={photo}
                 imageClassName={Microformat.UrlProp.U_Photo}
+                onError={onError}
             />
         );
     }
@@ -35,6 +39,7 @@ export const Avatar = (
             <SingleImageAvatar
                 image={logo}
                 imageClassName={Microformat.UrlProp.U_Logo}
+                onError={onError}
             />
         );
     }
@@ -45,15 +50,21 @@ export const Avatar = (
 interface SingleImageAvatarProps {
     image: Image;
     imageClassName: string;
+    onError: () => void;
 }
 const SingleImageAvatar = (
     props: HTMLProps<HTMLDivElement> & SingleImageAvatarProps
 ) => {
-    const { image, imageClassName, ...rest } = props;
+    const { image, imageClassName, onError, ...rest } = props;
 
     return (
         <div className="avatar" {...rest}>
-            <img className={imageClassName} src={image.value} alt={image.alt} />
+            <img
+                className={imageClassName}
+                src={image.value}
+                alt={image.alt}
+                onError={onError}
+            />
         </div>
     );
 };
@@ -61,11 +72,12 @@ const SingleImageAvatar = (
 interface PhotoWithLogoProps {
     photo: Image;
     logo: Image;
+    onError: () => void;
 }
 const PhotoWithLogo = (
     props: HTMLProps<HTMLDivElement> & PhotoWithLogoProps
 ) => {
-    const { name, photo, logo, ...rest } = props;
+    const { name, photo, logo, onError, ...rest } = props;
     return (
         <div className="avatar" {...rest}>
             <img
@@ -74,6 +86,7 @@ const PhotoWithLogo = (
                 title={Microformat.UrlProp.U_Photo}
                 src={photo.value}
                 alt={photo.alt}
+                onError={onError}
             />
             <img
                 loading="lazy"
