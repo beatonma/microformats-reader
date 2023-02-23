@@ -24,6 +24,7 @@ export const Dropdown = (props: DropdownProps) => {
             child={expandCollapseProps => (
                 <DropdownLayout {...props} {...expandCollapseProps} />
             )}
+            grandChildren={props.children}
         />
     );
 };

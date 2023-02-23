@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useId, useState} from "react";
+import React, { ReactNode, useEffect, useId, useState } from "react";
 
 export interface ExpandableDefaultProps {
     defaultIsExpanded?: boolean;
@@ -28,6 +28,7 @@ interface CollapsibleContentProps {
 
 interface ExpandCollapseInternalProps {
     child: (props: ExpandCollapseProps) => ReactNode;
+    grandChildren: ReactNode | ReactNode[];
 }
 
 export const ExpandCollapseLayout = (
@@ -38,7 +39,11 @@ export const ExpandCollapseLayout = (
     const [isClosing, setClosing] = useState(false);
     const contentID = useId();
 
+    const canExpand = React.Children.count(props.grandChildren) > 0;
+
     const toggleState = () => {
+        if (!canExpand) return;
+
         const target = !isExpanded;
         setExpanded(target);
         if (!target) {
