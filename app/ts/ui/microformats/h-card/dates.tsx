@@ -2,7 +2,7 @@ import React from "react";
 import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardDates } from "ts/data/types/h-card";
-import { formatLongDate } from "ts/ui/formatting";
+import { formatDateTime } from "ts/ui/formatting/time";
 import { PropertiesTable, PropertyRow } from "ts/ui/microformats/properties";
 import { PropsOf } from "ts/ui/props";
 
@@ -39,7 +39,7 @@ interface DateTimeProps {
 const Time = (props: DateTimeProps) => {
     const { date } = props;
     if (!date) return null;
-    return <time dateTime={date}>{formatLongDate(date)}</time>;
+    return <time dateTime={date}>{formatDateTime(date)}</time>;
 };
 
 const Birthday = (props: DateTimeProps) => {

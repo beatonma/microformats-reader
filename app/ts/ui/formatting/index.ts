@@ -1,19 +1,8 @@
-import { _, compatBrowser } from "ts/compat";
-
-export const formatLongDate = (date: string): string => {
-    return new Date(date).toLocaleDateString(
-        compatBrowser.i18n.getUILanguage(),
-        {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }
-    );
-};
+import { _ } from "ts/compat";
 
 export const formatLatLong = (
-    latitude?: string | null,
-    longitude?: string | null
+    latitude: string | null | undefined,
+    longitude: string | null | undefined
 ): string | null => {
     if (latitude == null || longitude == null) return null;
 
@@ -41,5 +30,5 @@ export const formatLatLong = (
 export const formatUri = (uri: string | null | undefined): string | null => {
     if (!uri) return null;
 
-    return uri.replace(/^(https?|irc|mailto|tel):(\/\/)?/g, "");
+    return uri?.replace(/^(https?|irc|mailto|tel):(\/\/)?/g, "") ?? null;
 };
