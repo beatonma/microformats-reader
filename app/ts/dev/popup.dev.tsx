@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { mf2 } from "microformats-parser";
 import { ParsedDocument } from "microformats-parser/dist/types";
-import { Row } from "ts/components/layout";
 // @ts-ignore
 import SampleEmpty from "ts/dev/samples/empty.html";
 // @ts-ignore
@@ -20,6 +19,7 @@ import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
 import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
+import { Row } from "ts/ui/layout";
 import "./dev.scss";
 
 const Samples = {

@@ -1,0 +1,21 @@
+@use "../../layout/card.scss";
+
+.h-feed {
+}
+
+.hfeed-about {
+    .property[data-microformat="p-name"] {
+        @extend %card-text-large;
+    }
+}
+
+.h-entry {
+    .dropdown-header {
+        font-size: var(--fs-default);
+        display: block;
+    }
+
+    .p-summary {
+        font-size: var(--fs-caption);
+    }
+}

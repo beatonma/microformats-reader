@@ -2,36 +2,37 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { ParsedDocument } from "microformats-parser/dist/types";
 import { _, compatBrowser } from "ts/compat";
-import { HorizontalAlignment, Row } from "ts/components/layout";
+import { parseHCards } from "ts/data/parsing/h-card";
+import { parseHFeeds } from "ts/data/parsing/h-feed";
+import { parseRelatedLinks } from "ts/data/parsing/related-links";
+import { HCardData } from "ts/data/types";
+import { HFeedData } from "ts/data/types/h-feed";
+import { RelatedLinks } from "ts/data/types/rel";
+import { noneOf } from "ts/data/util/arrays";
+import "ts/entrypoint/popup.scss";
+import { Message, MessageResponse } from "ts/message";
+import { formatUri } from "ts/ui/formatting";
+import { HorizontalAlignment, Row } from "ts/ui/layout";
 import {
     Feeds,
     HCard,
     PgpKey,
     RelmeLinks,
     WebmentionEndpoint,
-} from "ts/components/microformats";
-import { HFeed } from "ts/components/microformats/h-feed/h-feed";
-import { PropsOf } from "ts/components/props";
-import { noneOf } from "ts/data/arrays";
-import { parseHCards } from "ts/data/h-card";
-import { parseHFeeds } from "ts/data/h-feed";
-import { RelLinks, parseRelLinks } from "ts/data/related-links";
-import { HCardData } from "ts/data/types";
-import { HFeedData } from "ts/data/types/h-feed";
-import "ts/entrypoint/popup.scss";
-import { formatUri } from "ts/formatting";
-import { Message, MessageResponse } from "ts/message";
+} from "ts/ui/microformats";
+import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
+import { PropsOf } from "ts/ui/props";
 
 export const parseDocument = (
     microformats: ParsedDocument | null
 ): PopupProps => {
-    const [relLinks, setRelLinks] = useState<RelLinks | null>(null);
+    const [relLinks, setRelLinks] = useState<RelatedLinks | null>(null);
     const [hcards, setHCards] = useState<HCardData[] | null>(null);
     const [feeds, setFeeds] = useState<HFeedData[] | null>(null);
 
     useEffect(() => {
         if (!microformats) return;
-        parseRelLinks(microformats).then(setRelLinks);
+        parseRelatedLinks(microformats).then(setRelLinks);
         parseHCards(microformats).then(setHCards);
         parseHFeeds(microformats).then(setFeeds);
     }, [microformats]);
@@ -44,7 +45,7 @@ export const parseDocument = (
 };
 
 export interface PopupProps {
-    relLinks: RelLinks | null;
+    relLinks: RelatedLinks | null;
     hcards: HCardData[] | null;
     feeds: HFeedData[] | null;
 }
@@ -96,7 +97,7 @@ const Popup = () => {
     return <PopupUI {...microformats} />;
 };
 
-const QuickLinks = (props: PropsOf<RelLinks>) => {
+const QuickLinks = (props: PropsOf<RelatedLinks>) => {
     const { data } = props;
 
     if (!data) return null;

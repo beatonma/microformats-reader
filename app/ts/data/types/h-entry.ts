@@ -1,6 +1,6 @@
-import { HCiteData } from "ts/data/h-cite";
 import { HAdrData } from "ts/data/types/h-adr";
 import { HCardData } from "ts/data/types/h-card";
+import { HCiteData } from "ts/data/types/h-cite";
 import { HGeoData } from "ts/data/types/h-geo";
 
 export type Author = string | HCardData;
@@ -14,7 +14,7 @@ export interface HEntryData {
     name: string | null;
     author: Author | null;
     summary: string | null;
-    content: string | null;
+    content: string[] | null;
     dates: HEntryDates | null;
     category: string | null;
     url: string | null;

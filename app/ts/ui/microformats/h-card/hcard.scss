@@ -1,0 +1,13 @@
+@use "./hcard-avatar";
+@use "../../layout/card.scss";
+
+.h-card {
+    .p-name {
+        @extend %card-text-large;
+    }
+
+    .dropdown-header {
+        font-size: var(--fs-200);
+        line-height: 1.5;
+    }
+}

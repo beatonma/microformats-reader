@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "webpack --watch --config webpack.dev.js --env DEBUG=true",
     "build": "webpack --config webpack.production.js",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "keywords": [
     "chrome",
