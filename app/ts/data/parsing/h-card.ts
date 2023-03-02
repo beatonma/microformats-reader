@@ -17,7 +17,7 @@ import {
     HCardJobData,
     HCardNameDetail,
 } from "ts/data/types/h-card";
-import { isEmpty, notNullish } from "ts/data/util/arrays";
+import {isEmpty, notNullish, takeIfNotEmpty} from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
 
 /*
@@ -190,7 +190,7 @@ const parsePronouns = (hcard: MicroformatProperties): string[] | null => {
     const possessive =
         Parse.getExperimental<string>(hcard, "pronoun-possessive") ?? [];
 
-    return Parse.takeIfNotEmpty([...nominative, ...oblique, ...possessive]);
+    return takeIfNotEmpty([...nominative, ...oblique, ...possessive]);
 };
 
 const parseGender = (
