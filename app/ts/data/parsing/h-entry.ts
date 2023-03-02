@@ -66,8 +66,8 @@ const parseRsvp = (entry: MicroformatProperties): RsvpValue | null => {
 };
 
 const parseDates = (entry: MicroformatProperties): HEntryDates | null => {
-    const published = Parse.first<string>(entry, Microformat.Dt.Published);
-    const updated = Parse.first<string>(entry, Microformat.Dt.Updated);
+    const published = Parse.getDate(entry, Microformat.Dt.Published);
+    const updated = Parse.getDate(entry, Microformat.Dt.Updated);
 
     if (noneOf([published, updated])) return null;
 

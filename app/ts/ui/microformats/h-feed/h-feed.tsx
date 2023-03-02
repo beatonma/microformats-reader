@@ -2,7 +2,6 @@ import React from "react";
 import { Microformat } from "ts/data/microformats";
 import { HEntryData } from "ts/data/types/h-entry";
 import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
-import { formatDateTime } from "ts/ui/formatting/time";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dropdown } from "ts/ui/layout/dropdown";
@@ -94,7 +93,7 @@ const HEntrySummary = (props: HEntryData) => {
                     />
                     <Property
                         microformat={Microformat.Dt.Published}
-                        displayValue={formatDateTime(dates?.published)}
+                        displayValue={dates?.published}
                     />
                 </Row>
             </div>

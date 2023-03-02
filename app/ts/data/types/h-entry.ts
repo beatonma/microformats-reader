@@ -32,8 +32,8 @@ export interface HEntryInteractions {
 }
 
 export interface HEntryDates {
-    published: string | null;
-    updated: string | null;
+    published: Date[] | null;
+    updated: Date[] | null;
 }
 
 export enum RsvpValue {

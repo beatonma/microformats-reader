@@ -17,7 +17,7 @@ import {
     HCardJobData,
     HCardNameDetail,
 } from "ts/data/types/h-card";
-import {isEmpty, notNullish, takeIfNotEmpty} from "ts/data/util/arrays";
+import { isEmpty, notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
 
 /*
@@ -211,8 +211,8 @@ const parseGender = (
 };
 
 const parseDates = (hcard: MicroformatProperties): HCardDates | null => {
-    const birthday = Parse.get<string>(hcard, Microformat.Dt.Bday);
-    const anniversary = Parse.get<string>(hcard, Microformat.Dt.Anniversary);
+    const birthday = Parse.getDate(hcard, Microformat.Dt.Bday);
+    const anniversary = Parse.getDate(hcard, Microformat.Dt.Anniversary);
 
     return nullable({
         birthday: birthday,

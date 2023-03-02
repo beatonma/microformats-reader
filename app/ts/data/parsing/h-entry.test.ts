@@ -17,6 +17,9 @@ const SampleHtmlHEntry = `<div class="h-entry">
 const firstHEntry = async (html: string) =>
     parseHEntry(parseTestHtml(html)?.items?.[0]?.properties);
 
+const expectDateToBe = (result: Date | undefined, expected: Date) =>
+    expect(result?.getTime()).toBe(expected.getTime());
+
 describe("HEntry parsing", () => {
     test("entry", async () => {
         const entry = await firstHEntry(SampleHtmlHEntry);
@@ -39,7 +42,7 @@ describe("HEntry parsing", () => {
 
     test("dates", async () => {
         const entry = await firstHEntry(SampleHtmlHEntry);
-        expect(entry?.dates?.published).toBe("2022-02-07");
-        expect(entry?.dates?.updated).toBe("2023-01-06");
+        expectDateToBe(entry?.dates?.published?.[0], new Date("2022-02-07"));
+        expectDateToBe(entry?.dates?.updated?.[0], new Date("2023-01-06"));
     });
 });

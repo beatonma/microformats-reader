@@ -5,6 +5,11 @@ import { isString } from "ts/data/types";
 import { Named } from "ts/data/types/common";
 import { notNullish } from "ts/data/util/arrays";
 import { formatUri } from "ts/ui/formatting";
+import {
+    formatDateTime,
+    formatShortDateTime,
+    isDate,
+} from "ts/ui/formatting/time";
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
@@ -13,7 +18,7 @@ import "./properties.scss";
 interface PropertyProps {
     microformat: Microformats;
     displayName?: string | null;
-    title?: string;
+    title?: string | null | undefined;
 }
 
 interface PropertyIconProps {
@@ -22,10 +27,10 @@ interface PropertyIconProps {
 }
 
 interface PropertyValueProps extends AllowValueAsHref {
-    title?: string;
+    title?: string | null | undefined;
     microformat: Microformats;
     href?: string | string[] | null;
-    displayValue?: ReactNode | ReactNode[];
+    displayValue?: ReactNode | ReactNode[] | Date[];
 }
 
 interface AllowValueAsHref {
@@ -146,9 +151,9 @@ const PropertyValue = (props: PropertyValueProps) => {
     const { displayValue, href, title, microformat, allowValueAsHref } = props;
 
     const valueAt = (
-        obj: ReactNode | ReactNode[],
+        obj: ReactNode | ReactNode[] | Date[],
         index: number
-    ): ReactNode | null => {
+    ): ReactNode | Date | null => {
         return (Array.isArray(obj) ? obj[index] : obj) ?? null;
     };
 
@@ -195,11 +200,11 @@ const PropertyValue = (props: PropertyValueProps) => {
 
 interface ZippedHrefValue {
     href: string | null | undefined;
-    displayValue: ReactNode;
+    displayValue: ReactNode | Date;
 }
 interface MultiValuePropertyProps extends AllowValueAsHref {
     microformat: Microformats;
-    title: string | undefined;
+    title: string | null | undefined;
     values: ZippedHrefValue[];
 }
 const MultiValueProperty = (props: MultiValuePropertyProps) => {
@@ -226,38 +231,22 @@ interface SingleValuePropertyProps extends AllowValueAsHref {
     href: string | null | undefined;
     microformat: Microformats;
     className?: string;
-    title: string | undefined;
-    displayValue: ReactNode;
+    title: string | null | undefined;
+    displayValue: ReactNode | Date;
 }
 const SingleValueProperty = (props: SingleValuePropertyProps) => {
     const {
-        href,
-        microformat,
-        className,
-        displayValue,
-        title,
-        allowValueAsHref,
-    } = props;
-    const resolvedClassName = `property-value ${className ?? ""} ${
-        microformat ?? ""
-    }`;
-    const resolvedTitle = [microformat, title].filter(notNullish).join("\n");
-
-    let resolvedDisplayValue = displayValue;
-
-    let resolvedHref = href;
-    if (allowValueAsHref) {
-        if (isString(displayValue) && displayValue.match(/^https?:\/\/\S+$/)) {
-            resolvedHref = displayValue;
-            resolvedDisplayValue = formatUri(displayValue);
-        }
-    }
+        resolvedHref,
+        resolvedTitle,
+        resolvedDisplayValue,
+        resolvedClassName,
+    } = resolveValues(props);
 
     return (
         <MaybeLinkTo
             href={resolvedHref ?? undefined}
             className={resolvedClassName}
-            title={resolvedTitle}
+            title={resolvedTitle ?? undefined}
         >
             {resolvedDisplayValue ?? formatUri(resolvedHref)}
         </MaybeLinkTo>
@@ -276,4 +265,54 @@ const PropertyIcon = (props: PropertyIconProps) => {
     }
 
     return <Icon {...rest} className="property-icon" />;
+};
+
+interface ResolvedProperties {
+    resolvedClassName: string;
+    resolvedHref: string | null;
+    resolvedTitle: string | null;
+    resolvedDisplayValue: ReactNode | null;
+}
+const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
+    const {
+        displayValue,
+        allowValueAsHref,
+        href,
+        title,
+        microformat,
+        className,
+    } = props;
+    const resolvedClassName = `property-value ${className ?? ""} ${
+        microformat ?? ""
+    }`;
+
+    let resolvedHref: string | null = href ?? null;
+    let resolvedDisplayValue: ReactNode = isDate(displayValue)
+        ? formatShortDateTime(displayValue)
+        : displayValue;
+    let extraTitle: (string | null)[] = [];
+
+    if (
+        allowValueAsHref &&
+        isString(displayValue) &&
+        displayValue.match(/^https?:\/\/\S+$/)
+    ) {
+        resolvedHref = displayValue;
+        resolvedDisplayValue = formatUri(displayValue);
+    }
+
+    if (isDate(displayValue)) {
+        extraTitle.push(formatDateTime(displayValue));
+    }
+
+    const resolvedTitle = [microformat, title, ...extraTitle]
+        .filter(notNullish)
+        .join("\n");
+
+    return {
+        resolvedClassName: resolvedClassName,
+        resolvedDisplayValue: resolvedDisplayValue,
+        resolvedHref: resolvedHref,
+        resolvedTitle: resolvedTitle,
+    };
 };

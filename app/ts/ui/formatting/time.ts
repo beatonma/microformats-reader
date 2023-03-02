@@ -27,6 +27,21 @@ const isSameDay = (then: Date, now: Date): boolean =>
 const isYesterday = (then: Date, now: Date): boolean =>
     isSameDay(then, new Date(now.getTime() - MILLIS_IN_DAY));
 
+export const yearsSince = (datetime: Date, __now?: Date): number | null => {
+    const now = __now ?? new Date();
+
+    const dateHasPassed =
+        now.getMonth() >= datetime.getMonth() &&
+        now.getDate() >= datetime.getDate();
+    const yearDifference = now.getFullYear() - datetime.getFullYear();
+    return Math.max(
+        0,
+        Math.floor(dateHasPassed ? yearDifference : yearDifference - 1)
+    );
+};
+
+export const isDate = (obj: any): obj is Date => obj instanceof Date;
+
 /**
  * Abbreviated date/time for UI display.
  */

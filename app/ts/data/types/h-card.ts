@@ -52,8 +52,8 @@ export interface HCardJobData {
 }
 
 export interface HCardDates {
-    birthday: string[] | null;
-    anniversary: string[] | null;
+    birthday: Date[] | null;
+    anniversary: Date[] | null;
 }
 
 export interface HCardExtras {

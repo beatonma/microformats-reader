@@ -24,7 +24,7 @@ export namespace Parse {
         const value = container?.[key.replace(/^(dt|e|h|p|u)-/, "")];
         if (value == null) return null;
         if (value?.length === 0) return null;
-        return takeIfNotEmpty(value as T[]);
+        return value as T[];
     };
 
     export const first = <T extends MicroformatProperty>(
@@ -46,6 +46,15 @@ export namespace Parse {
         return result as Image;
     };
 
+    export const getDate = (
+        container: MicroformatProperties,
+        key: string
+    ): Date[] | null => {
+        const dates = get<string>(container, key);
+
+        return dates?.map(it => new Date(it)) ?? null;
+    };
+
     export const getEmbeddedValue = (
         container: MicroformatProperties,
         key: string
@@ -60,9 +69,4 @@ export namespace Parse {
         hcard: MicroformatProperties,
         key: string
     ): T[] | null => get(hcard, key) ?? get(hcard, `x-${key}`);
-
-    export const takeIfNotEmpty = <T>(arr: T[] | null): T[] | null => {
-        if (arr?.length === 0) return null;
-        return arr;
-    };
 }
