@@ -9,21 +9,21 @@ const now = new Date("2023-02-01 14:38");
 
 describe("Date & Time Formatting", () => {
     describe("formatShortDate", () => {
-        test("Today", () => {
+        test("Today: show time", () => {
             expect(formatShortDateTime("2023-02-01 12:01", now)).toBe(
                 "12:01 today"
             );
         });
 
-        test("Yesterday", () => {
+        test("Yesterday: show time", () => {
             expect(formatShortDateTime("2023-01-31 15:02", now)).toBe(
                 "15:02 yesterday"
             );
         });
 
-        test("Any date", () => {
+        test("Any other date: no time", () => {
             expect(formatShortDateTime("2022-01-31 15:02", now)).toBe(
-                "15:02 31 January 2022"
+                "31 January 2022"
             );
         });
     });

@@ -16,11 +16,6 @@ const DATE_FORMAT: Intl.DateTimeFormatOptions = {
     year: "numeric",
 };
 
-const DATETIME_FORMAT: Intl.DateTimeFormatOptions = {
-    ...TIME_FORMAT,
-    ...DATE_FORMAT,
-};
-
 const MILLIS_IN_HOUR = 1000 * 60 * 60;
 const MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
 
@@ -32,14 +27,17 @@ const isSameDay = (then: Date, now: Date): boolean =>
 const isYesterday = (then: Date, now: Date): boolean =>
     isSameDay(then, new Date(now.getTime() - MILLIS_IN_DAY));
 
+/**
+ * Abbreviated date/time for UI display.
+ */
 export const formatShortDateTime = (
-    dateStr: string | null | undefined,
+    datetime: Date | string | null | undefined,
     __now?: Date
 ): string | null => {
-    if (dateStr == null) return null;
+    if (datetime == null) return null;
 
     const now = __now ?? new Date();
-    const date = new Date(dateStr);
+    const date = isString(datetime) ? new Date(datetime) : datetime;
 
     if (isSameDay(date, now)) {
         return _("datetime_time_today", formatTime(date));
@@ -49,7 +47,7 @@ export const formatShortDateTime = (
         return _("datetime_time_yesterday", formatTime(date));
     }
 
-    return formatDateTime(date);
+    return formatDate(date);
 };
 
 export const formatDate = (
@@ -76,11 +74,13 @@ export const formatTime = (
     );
 };
 
+/**
+ * Full datetime formatting for metadata.
+ */
 export const formatDateTime = (
     datetime: Date | string | null | undefined
 ): string | null => {
     if (datetime == null) return null;
-    const date = isString(datetime) ? new Date(datetime) : datetime;
 
     const timeStr = formatTime(datetime);
     const dateStr = formatDate(datetime);
