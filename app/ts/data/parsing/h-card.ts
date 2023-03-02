@@ -48,6 +48,8 @@ export const parseHCards = async (
         resolve(hcards);
     });
 
+const generateId = () => Math.random().toString().replace(".", "");
+
 const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
     if (hcard == null) return null;
 
@@ -61,18 +63,21 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
     const images = parseImages(hcard);
     const extras = parseExtras(hcard);
 
-    return nullable({
-        id: Math.random().toString().replace(".", ""),
-        name: name,
-        nameDetail: nameDetail,
-        gender: gender,
-        location: location,
-        contact: contact,
-        job: job,
-        dates: dates,
-        images: images,
-        extras: extras,
-    });
+    return nullable(
+        {
+            id: generateId(),
+            name: name,
+            nameDetail: nameDetail,
+            gender: gender,
+            location: location,
+            contact: contact,
+            job: job,
+            dates: dates,
+            images: images,
+            extras: extras,
+        },
+        ["id"]
+    );
 };
 
 const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
