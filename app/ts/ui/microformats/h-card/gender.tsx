@@ -38,7 +38,6 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
                 microformat={Microformat.P.Pronouns}
                 displayName={_("hcard_pronouns")}
                 displayValue={pronouns}
-                allowValueAsHref={true}
             />
             <PropertyRow
                 microformat={Microformat.P.Sex}
@@ -62,7 +61,6 @@ const GenderSummary = (props: HCardGenderIdentity) => {
                 <Property
                     microformat={Microformat.P.Pronouns}
                     displayValue={pronouns?.[0]}
-                    allowValueAsHref={true}
                 />
             </>
         );

@@ -30,5 +30,5 @@ export const formatLatLong = (
 export const formatUri = (uri: string | null | undefined): string | null => {
     if (!uri) return null;
 
-    return uri?.replace(/^(https?|irc|mailto|tel):(\/\/)?/g, "") ?? null;
+    return uri?.replace(/^(https?|irc[s6]?|mailto|tel):(\/\/)?/g, "") ?? null;
 };

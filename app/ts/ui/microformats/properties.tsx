@@ -1,7 +1,7 @@
 import React, { HTMLProps, ReactNode } from "react";
 import { Image } from "microformats-parser/dist/types";
 import { Microformats } from "ts/data/microformats";
-import { isString } from "ts/data/types";
+import { isString, isUri } from "ts/data/types";
 import { Named } from "ts/data/types/common";
 import { notNullish } from "ts/data/util/arrays";
 import { formatUri } from "ts/ui/formatting";
@@ -15,6 +15,8 @@ import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
 import "./properties.scss";
 
+type DisplayValue = ReactNode | string[] | Date[];
+
 interface PropertyProps {
     microformat: Microformats;
     displayName?: string | null;
@@ -26,16 +28,20 @@ interface PropertyIconProps {
     image?: Image | null;
 }
 
-interface PropertyValueProps extends AllowValueAsHref {
+interface PropertyValueProps {
     title?: string | null | undefined;
     microformat: Microformats;
     href?: string | string[] | null;
-    displayValue?: ReactNode | ReactNode[] | Date[];
+    displayValue?: DisplayValue;
+    links?: Link[] | null;
 }
 
-interface AllowValueAsHref {
-    allowValueAsHref?: boolean;
+interface Link {
+    href: string | null | undefined;
+    displayValue: ReactNode | Date | null | undefined;
 }
+const isLink = (obj: any): obj is Link =>
+    obj.hasOwnProperty("href") && obj.hasOwnProperty("displayValue");
 
 interface PropertyLayoutBuildProps {
     layoutProps: Record<string, any>;
@@ -43,41 +49,56 @@ interface PropertyLayoutBuildProps {
     propertyName: ReactNode;
     propertyValue: ReactNode;
 }
-const PropertyLayout = (
-    props: PropertyProps &
-        PropertyValueProps &
-        PropertyIconProps & {
-            layoutBuilder: (buildProps: PropertyLayoutBuildProps) => ReactNode;
-        }
-) => {
+
+type PropertyLayoutProps = PropertyProps &
+    PropertyValueProps &
+    PropertyIconProps;
+
+interface LayoutBuilder {
+    layoutBuilder: (buildProps: PropertyLayoutBuildProps) => ReactNode;
+}
+
+/**
+ * Display a microformat field with a name and optional icon, but only if
+ * it has a non-empty value.
+ *
+ * Display values are accepted in the following formats:
+ * - A single [href] AND/OR a single [displayValue].
+ * - An array of [href] OR an array of [displayValue].
+ *   - !!! If either of these is provided as an array, providing a value for the other will throw an exception.
+ * - An array of [links].
+ *
+ */
+const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
     const {
         microformat,
         displayName,
         title,
         href,
-        allowValueAsHref,
         icon,
         image,
         displayValue,
+        links,
         layoutBuilder,
     } = props;
 
-    if (!displayValue && !href) return null;
+    if (!displayValue && !href && !links) return null;
+
+    checkPropertyLayoutCOnfiguration(props);
 
     const layoutProps = {
         className: "property",
         title: title ?? microformat,
         "data-microformat": microformat,
     };
-    const propertyIcon = <PropertyIcon icon={icon} image={image} />;
-    const propertyName = <PropertyName name={displayName} />;
-    const propertyValue = (
+    const propertyIcon: ReactNode = <PropertyIcon icon={icon} image={image} />;
+    const propertyName: ReactNode = <PropertyName name={displayName} />;
+    const propertyValue: ReactNode = (
         <PropertyValue
             title={title}
             displayValue={displayValue}
             href={href}
             microformat={microformat}
-            allowValueAsHref={allowValueAsHref}
         />
     );
 
@@ -92,27 +113,44 @@ const PropertyLayout = (
 };
 
 /**
- * Display a microformat field with a name and optional icon, but only if
- * it has a non-empty value.
- * @param props
- * @constructor
+ * Throw an exception if the given props contains an invalid combination of values.
  */
-export const Property = (
-    props: PropertyProps & PropertyValueProps & PropertyIconProps
-) => {
-    return (
-        <PropertyLayout
-            {...props}
-            layoutBuilder={buildProps => (
-                <div {...buildProps.layoutProps}>
-                    {buildProps.propertyIcon}
-                    {buildProps.propertyName}
-                    {buildProps.propertyValue}
-                </div>
-            )}
-        />
-    );
+const checkPropertyLayoutCOnfiguration = (props: PropertyLayoutProps) => {
+    const { links, href, displayValue } = props;
+
+    if (
+        !!displayValue &&
+        !!href &&
+        (Array.isArray(displayValue) || Array.isArray(href))
+    ) {
+        throw (
+            "Property error: " +
+            "Both [href, displayValue] are defined and contain multiple values. " +
+            "This should be replaced with the 'links' property."
+        );
+    }
+
+    if (!!links && (!!displayValue || !!href)) {
+        throw (
+            "Property error: " +
+            "[links] should be used instead of [href, displayValue], " +
+            "not in combination with them."
+        );
+    }
 };
+
+export const Property = (props: PropertyLayoutProps) => (
+    <PropertyLayout
+        {...props}
+        layoutBuilder={buildProps => (
+            <div {...buildProps.layoutProps}>
+                {buildProps.propertyIcon}
+                {buildProps.propertyName}
+                {buildProps.propertyValue}
+            </div>
+        )}
+    />
+);
 
 interface PropertiesTableProps {
     tableHeader?: string;
@@ -129,21 +167,26 @@ export const PropertiesTable = (
     );
 };
 
-export const PropertyRow = (
-    props: PropertyProps & PropertyValueProps & PropertyIconProps
-) => {
-    return (
-        <PropertyLayout
-            {...props}
-            layoutBuilder={buildProps => (
-                <tr {...buildProps.layoutProps}>
-                    <td>{buildProps.propertyValue}</td>
-                    <td>{buildProps.propertyName}</td>
-                    <td>{buildProps.propertyIcon}</td>
-                </tr>
-            )}
-        />
-    );
+export const PropertyRow = (props: PropertyLayoutProps) => (
+    <PropertyLayout
+        {...props}
+        layoutBuilder={buildProps => (
+            <tr {...buildProps.layoutProps}>
+                <td>{buildProps.propertyIcon}</td>
+                <td>{buildProps.propertyName}</td>
+                <td>{buildProps.propertyValue}</td>
+            </tr>
+        )}
+    />
+);
+
+const PropertyIcon = (props: PropertyIconProps) => {
+    const { image, ...rest } = props;
+    if (image) {
+        return <Img image={image} className="property-icon" />;
+    }
+
+    return <Icon {...rest} className="property-icon" />;
 };
 
 const PropertyName = (props: Named) => {
@@ -153,86 +196,63 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { displayValue, href, title, microformat, allowValueAsHref } = props;
+    const { displayValue, href, links, title, microformat } = props;
 
-    const valueAt = (
-        obj: ReactNode | ReactNode[] | Date[],
-        index: number
-    ): ReactNode | Date | null => {
-        return (Array.isArray(obj) ? obj[index] : obj) ?? null;
-    };
-
-    if (Array.isArray(href)) {
-        const values = href.map((it, index) => ({
-            href: it,
-            displayValue: valueAt(displayValue, index),
-        }));
-
+    if (!Array.isArray(href) && !Array.isArray(displayValue)) {
         return (
-            <MultiValueProperty
-                values={values}
+            <SingleValueProperty
+                href={href}
                 microformat={microformat}
                 title={title}
-                allowValueAsHref={allowValueAsHref}
-            />
-        );
-    } else if (Array.isArray(displayValue)) {
-        const values = displayValue.map((it, index) => ({
-            href: valueAt(href, index) as string,
-            displayValue: it,
-        }));
-
-        return (
-            <MultiValueProperty
-                values={values}
-                microformat={microformat}
-                title={title}
-                allowValueAsHref={allowValueAsHref}
+                displayValue={displayValue}
             />
         );
     }
 
+    if (href != null && !Array.isArray(href))
+        throw "Unexpected state: property href is not an array.";
+    if (displayValue != null && !Array.isArray(displayValue))
+        throw "Unexpected state: property displayValue is not an array.";
+
     return (
-        <SingleValueProperty
-            href={href}
+        <MultiValueProperty
             microformat={microformat}
             title={title}
-            displayValue={displayValue}
-            allowValueAsHref={allowValueAsHref}
+            links={links}
+            values={href ?? displayValue}
         />
     );
 };
 
-interface ZippedHrefValue {
-    href: string | null | undefined;
-    displayValue: ReactNode | Date;
-}
-interface MultiValuePropertyProps extends AllowValueAsHref {
+interface MultiValuePropertyProps {
     microformat: Microformats;
     title: string | null | undefined;
-    values: ZippedHrefValue[];
+    links: Link[] | null | undefined;
+    values: string[] | Date[] | null | undefined;
 }
 const MultiValueProperty = (props: MultiValuePropertyProps) => {
-    const { microformat, title, values, allowValueAsHref } = props;
+    const { microformat, title, links, values } = props;
 
-    return (
-        <>
-            {values.map((value, index) => (
+    const properties =
+        (values ?? links)?.map((value, index) => {
+            const valueIsLink = isLink(value);
+
+            return (
                 <SingleValueProperty
                     className="property-value-multi"
                     key={index}
-                    href={value.href}
+                    href={valueIsLink ? value.href : null}
                     microformat={microformat}
                     title={title}
-                    displayValue={value.displayValue}
-                    allowValueAsHref={allowValueAsHref}
+                    displayValue={valueIsLink ? value.displayValue : value}
                 />
-            ))}
-        </>
-    );
+            );
+        }) ?? null;
+
+    return <>{properties}</>;
 };
 
-interface SingleValuePropertyProps extends AllowValueAsHref {
+interface SingleValuePropertyProps {
     href: string | null | undefined;
     microformat: Microformats;
     className?: string;
@@ -263,15 +283,6 @@ const TableHeader = (props: PropertiesTableProps) => {
     return <thead>{props.tableHeader}</thead>;
 };
 
-const PropertyIcon = (props: PropertyIconProps) => {
-    const { image, ...rest } = props;
-    if (image) {
-        return <Img image={image} className="property-icon" />;
-    }
-
-    return <Icon {...rest} className="property-icon" />;
-};
-
 interface ResolvedProperties {
     resolvedClassName: string;
     resolvedHref: string | null;
@@ -279,14 +290,7 @@ interface ResolvedProperties {
     resolvedDisplayValue: ReactNode | null;
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
-    const {
-        displayValue,
-        allowValueAsHref,
-        href,
-        title,
-        microformat,
-        className,
-    } = props;
+    const { displayValue, href, title, microformat, className } = props;
     const resolvedClassName = `property-value ${className ?? ""} ${
         microformat ?? ""
     }`;
@@ -297,11 +301,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         : displayValue;
     let extraTitle: (string | null)[] = [];
 
-    if (
-        allowValueAsHref &&
-        isString(displayValue) &&
-        displayValue.match(/^https?:\/\/\S+$/)
-    ) {
+    if (isString(displayValue) && isUri(displayValue)) {
         resolvedHref = displayValue;
         resolvedDisplayValue = formatUri(displayValue);
     }

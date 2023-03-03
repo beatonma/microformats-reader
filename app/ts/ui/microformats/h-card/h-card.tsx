@@ -1,7 +1,9 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
+import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
 import { Row } from "ts/ui/layout";
+import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
@@ -33,6 +35,23 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
             summaryContent={<HCardTextSummary {...props} />}
             detailContent={<HCardTextDetail {...props} />}
         />
+    );
+};
+
+export const EmbeddedHCard = (props: EmbeddedHCardData) => {
+    const { id, name, hcard } = props;
+
+    if (!hcard) return null;
+
+    return (
+        <dialog id={`hcard_${id}`}>
+            <CardLayout>
+                <CardContent>
+                    {name}
+                    <HCardTextSummary {...hcard} />
+                </CardContent>
+            </CardLayout>
+        </dialog>
     );
 };
 
