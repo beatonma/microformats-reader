@@ -27,6 +27,6 @@ export const isEmptyOrNull = <T>(
 export const isEmpty = <T>(value: T[]): boolean => value.length === 0;
 
 export const takeIfNotEmpty = <T>(arr: T[] | null): T[] | null => {
-    if (arr?.length === 0) return null;
+    if (isEmptyOrNull(arr)) return null;
     return arr;
 };

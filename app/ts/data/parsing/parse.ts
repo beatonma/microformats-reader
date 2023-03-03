@@ -7,7 +7,7 @@ import {
 } from "microformats-parser/dist/types";
 import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
-import { notNullish } from "ts/data/util/arrays";
+import { notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 
 export namespace Parse {
     export const getRootsOfType = (
@@ -20,9 +20,7 @@ export namespace Parse {
         key: string
     ): T[] | null => {
         const value = container?.[key.replace(/^(dt|e|h|p|u)-/, "")];
-        if (value == null) return null;
-        if (value?.length === 0) return null;
-        return value as T[];
+        return takeIfNotEmpty(value) as T[];
     };
 
     export const first = <T extends MicroformatProperty>(
