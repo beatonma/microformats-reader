@@ -37,14 +37,18 @@ interface AllowValueAsHref {
     allowValueAsHref?: boolean;
 }
 
-/**
- * Display a microformat field with a name and optional icon, but only if
- * it has a non-empty value.
- * @param props
- * @constructor
- */
-export const Property = (
-    props: PropertyProps & PropertyValueProps & PropertyIconProps
+interface PropertyLayoutBuildProps {
+    layoutProps: Record<string, any>;
+    propertyIcon: ReactNode;
+    propertyName: ReactNode;
+    propertyValue: ReactNode;
+}
+const PropertyLayout = (
+    props: PropertyProps &
+        PropertyValueProps &
+        PropertyIconProps & {
+            layoutBuilder: (buildProps: PropertyLayoutBuildProps) => ReactNode;
+        }
 ) => {
     const {
         microformat,
@@ -55,29 +59,58 @@ export const Property = (
         icon,
         image,
         displayValue,
+        layoutBuilder,
     } = props;
 
     if (!displayValue && !href) return null;
 
+    const layoutProps = {
+        className: "property",
+        title: title ?? microformat,
+        "data-microformat": microformat,
+    };
+    const propertyIcon = <PropertyIcon icon={icon} image={image} />;
+    const propertyName = <PropertyName name={displayName} />;
+    const propertyValue = (
+        <PropertyValue
+            title={title}
+            displayValue={displayValue}
+            href={href}
+            microformat={microformat}
+            allowValueAsHref={allowValueAsHref}
+        />
+    );
+
+    const layout = layoutBuilder({
+        layoutProps: layoutProps,
+        propertyIcon: propertyIcon,
+        propertyName: propertyName,
+        propertyValue: propertyValue,
+    });
+
+    return <>{layout}</>;
+};
+
+/**
+ * Display a microformat field with a name and optional icon, but only if
+ * it has a non-empty value.
+ * @param props
+ * @constructor
+ */
+export const Property = (
+    props: PropertyProps & PropertyValueProps & PropertyIconProps
+) => {
     return (
-        <div
-            className="property"
-            title={microformat}
-            data-microformat={microformat}
-            onDoubleClick={() =>
-                console.debug(`Property: ${JSON.stringify(props)}`)
-            }
-        >
-            <PropertyIcon icon={icon} image={image} />
-            <PropertyName name={displayName} />
-            <PropertyValue
-                title={title}
-                displayValue={displayValue}
-                href={href}
-                microformat={microformat}
-                allowValueAsHref={allowValueAsHref}
-            />
-        </div>
+        <PropertyLayout
+            {...props}
+            layoutBuilder={buildProps => (
+                <div {...buildProps.layoutProps}>
+                    {buildProps.propertyIcon}
+                    {buildProps.propertyName}
+                    {buildProps.propertyValue}
+                </div>
+            )}
+        />
     );
 };
 
@@ -99,45 +132,17 @@ export const PropertiesTable = (
 export const PropertyRow = (
     props: PropertyProps & PropertyValueProps & PropertyIconProps
 ) => {
-    const {
-        microformat,
-        displayName,
-        icon,
-        image,
-        displayValue,
-        href,
-        title,
-        allowValueAsHref,
-    } = props;
-
-    if (!displayValue && !href) return null;
-
     return (
-        <tr
-            className="property"
-            title={title ?? microformat}
-            onDoubleClick={() =>
-                console.debug(`PropertyRow: ${JSON.stringify(props)}`)
-            }
-        >
-            <td>
-                <PropertyIcon icon={icon} image={image} />
-            </td>
-
-            <td>
-                <PropertyName name={displayName} />
-            </td>
-
-            <td>
-                <PropertyValue
-                    title={title}
-                    displayValue={displayValue}
-                    href={href}
-                    microformat={microformat}
-                    allowValueAsHref={allowValueAsHref}
-                />
-            </td>
-        </tr>
+        <PropertyLayout
+            {...props}
+            layoutBuilder={buildProps => (
+                <tr {...buildProps.layoutProps}>
+                    <td>{buildProps.propertyValue}</td>
+                    <td>{buildProps.propertyName}</td>
+                    <td>{buildProps.propertyIcon}</td>
+                </tr>
+            )}
+        />
     );
 };
 
