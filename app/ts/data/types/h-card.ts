@@ -14,6 +14,12 @@ export interface HCardData {
     extras: HCardExtras | null;
 }
 
+export interface EmbeddedHCard {
+    id: string;
+    name: string | null;
+    hcard: HCardData | null;
+}
+
 export interface HCardNameDetail {
     honorificPrefix: string[] | null;
     honorificSuffix: string[] | null;
@@ -45,8 +51,7 @@ export interface HCardContactData {
 }
 
 export interface HCardJobData {
-    orgName: string | null;
-    orgHCard: HCardData | null;
+    organisation: EmbeddedHCard | null;
     jobTitle: string[] | null;
     role: string[] | null;
 }

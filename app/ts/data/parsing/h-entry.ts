@@ -1,8 +1,8 @@
 import { MicroformatProperties } from "microformats-parser/dist/types";
 import { Microformat } from "ts/data/microformats";
+import { parseEmbeddedHCard } from "ts/data/parsing/h-card";
 import { Parse } from "ts/data/parsing/parse";
 import {
-    Author,
     HEntryData,
     HEntryDates,
     HEntryInteractions,
@@ -22,7 +22,7 @@ export const parseHEntry = (
     const content = Parse.getEmbeddedValue(entry, Microformat.E.Content);
     const interactions = parseInteractions(entry);
     const dates = parseDates(entry);
-    const author = null;
+    const author = parseEmbeddedHCard(entry, Microformat.P.Author);
     const location = null;
 
     return {
@@ -34,8 +34,8 @@ export const parseHEntry = (
         category: category,
         content: content,
         dates: dates,
-        author: null,
-        location: null,
+        author: author,
+        location: location,
     };
 };
 

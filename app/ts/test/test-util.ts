@@ -6,3 +6,7 @@ export const parseTestHtml = (html: string) => {
         experimental: { lang: true, textContent: true },
     });
 };
+
+Object.prototype.toString = function () {
+    return JSON.stringify(this);
+};

@@ -8,6 +8,7 @@ import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing/parse";
 import { HAdrData, isString } from "ts/data/types";
 import {
+    EmbeddedHCard,
     HCardContactData,
     HCardData,
     HCardDates,
@@ -29,7 +30,7 @@ export const parseHCards = async (
 ): Promise<HCardData[] | null> =>
     new Promise((resolve, reject) => {
         const items = Parse.getRootsOfType(
-            microformats,
+            microformats.items,
             Microformat.H.Card
         ).map(item => item.properties);
 
@@ -39,13 +40,15 @@ export const parseHCards = async (
             return;
         }
 
-        const hcards: HCardData[] = [];
-        primaryHcards.forEach((hcard, index) => {
-            hcards.push(hcard);
-            if (hcard.job?.orgHCard != null) hcards.push(hcard.job.orgHCard);
-        });
+        resolve(primaryHcards);
 
-        resolve(hcards);
+        // const hcards: HCardData[] = [];
+        // primaryHcards.forEach((hcard, index) => {
+        //     hcards.push(hcard);
+        //     if (hcard.job?.orgHCard != null) hcards.push(hcard.job.orgHCard);
+        // });
+
+        // resolve(hcards);
     });
 
 const generateId = () => Math.random().toString().replace(".", "");
@@ -244,22 +247,13 @@ const parseContact = (
 };
 
 const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
-    const org: MicroformatProperty[] | null = Parse.get(
-        hcard,
-        Microformat.P.Org
-    );
-
-    let orgHCard: HCardData | null = null;
-    if (org) {
-        orgHCard = parseHCard((org[0] as MicroformatRoot)?.properties);
-    }
+    const org = parseEmbeddedHCard(hcard, Microformat.P.Org);
 
     const jobTitle = Parse.get<string>(hcard, Microformat.P.Job_Title);
     const role = Parse.get<string>(hcard, Microformat.P.Role);
 
     return nullable({
-        orgName: orgHCard?.name ?? org?.[0]?.toString() ?? null,
-        orgHCard: orgHCard,
+        organisation: org,
         jobTitle: jobTitle,
         role: role,
     });
@@ -275,4 +269,27 @@ const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
         notes: notes,
         category: category,
     });
+};
+
+export const parseEmbeddedHCard = (
+    container: MicroformatProperties,
+    key: string
+): EmbeddedHCard | null => {
+    const obj = Parse.first<MicroformatRoot | string>(container, key);
+    if (obj == null) return null;
+
+    if (isString(obj)) {
+        return {
+            id: generateId(),
+            name: obj,
+            hcard: null,
+        };
+    }
+
+    const hcard = parseHCard(obj.properties);
+    return {
+        id: generateId(),
+        name: hcard?.name ?? null,
+        hcard: hcard,
+    };
 };

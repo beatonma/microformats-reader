@@ -15,7 +15,7 @@ import { PropsOf } from "ts/ui/props";
 export const Job = (props: PropsOf<HCardJobData>) => {
     const job = props.data;
     if (!job) return null;
-    const { jobTitle, orgHCard } = job;
+    const { jobTitle, organisation } = job;
 
     return (
         <InlineGroup>
@@ -24,7 +24,7 @@ export const Job = (props: PropsOf<HCardJobData>) => {
                 icon={Icons.Work}
                 displayValue={jobTitle}
             />
-            <ConditionalContent condition={() => !!jobTitle && !!orgHCard}>
+            <ConditionalContent condition={() => !!jobTitle && !!organisation}>
                 <span>{" @ "}</span>
             </ConditionalContent>
             <LinkToOrganisation {...job} />
@@ -55,55 +55,34 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
 };
 
 const Organisation = (props: HCardJobData) => {
-    const { orgName, orgHCard } = props;
+    const { organisation } = props;
 
-    if (orgHCard) {
-        return (
-            <PropertyRow
-                displayName={_("hcard_job_organisation")}
-                title={_("hcard_link_to_org_hcard")}
-                href={`#${orgHCard.id}`}
-                microformat={Microformat.P.Org}
-                displayValue={orgName}
-            />
-        );
-    } else {
-        return (
-            <PropertyRow
-                displayName={_("hcard_job_organisation")}
-                microformat={Microformat.P.Org}
-                displayValue={orgName}
-            />
-        );
-    }
+    return (
+        <PropertyRow
+            microformat={Microformat.P.Org}
+            href={`#${organisation?.id}`}
+            title={_("hcard_link_to_org_hcard")}
+            displayName={_("hcard_job_organisation")}
+            displayValue={organisation?.name}
+        />
+    );
 };
 
 const LinkToOrganisation = (props: HCardJobData) => {
-    const { jobTitle, orgName, orgHCard } = props;
+    const { jobTitle, organisation } = props;
+
+    if (organisation == null) return null;
+    const { name, hcard } = organisation;
 
     const icon = jobTitle ? undefined : Icons.Work;
 
-    if (orgHCard) {
-        return (
-            <Property
-                icon={icon}
-                href={`#${orgHCard.id}`}
-                microformat={Microformat.P.Org}
-                title={_("hcard_link_to_org_hcard")}
-                displayValue={orgHCard.name}
-            />
-        );
-    }
-
-    if (orgName) {
-        return (
-            <Property
-                icon={icon}
-                microformat={Microformat.P.Org}
-                displayValue={orgName}
-            />
-        );
-    }
-
-    return null;
+    return (
+        <Property
+            icon={icon}
+            href={hcard == null ? null : `#${hcard.id}`}
+            microformat={Microformat.P.Org}
+            title={_("hcard_link_to_org_hcard")}
+            displayValue={name}
+        />
+    );
 };

@@ -33,7 +33,7 @@ describe("HFeed parsing", () => {
 
         expect(about?.name).toBe("Posts");
         expect(about?.summary).toBe("Personal blogs");
-        expect(about?.author).toBe("Sally Ride");
+        expect(about?.author?.name).toBe("Sally Ride");
         expect(about?.url).toBe("http://sally.example.com/posts/");
         expect(about?.photo?.value).toBe("http://sally.example.com/feed.png");
     });

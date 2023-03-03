@@ -1,5 +1,6 @@
-import {Image} from "microformats-parser/dist/types";
-import {Author, HEntryData} from "ts/data/types/h-entry";
+import { Image } from "microformats-parser/dist/types";
+import { EmbeddedHCard } from "ts/data/types/h-card";
+import { HEntryData } from "ts/data/types/h-entry";
 
 /**
  * https://microformats.org/wiki/h-feed
@@ -11,7 +12,7 @@ export interface HFeedData {
 
 export interface HFeedAbout {
     name: string | null;
-    author: Author | null;
+    author: EmbeddedHCard | null;
     url: string | null;
     summary: string | null;
     photo: Image | null;

@@ -1,11 +1,11 @@
-import { Author } from "ts/data/types/h-entry";
+import { EmbeddedHCard } from "ts/data/types/h-card";
 
 /**
  * https://microformats.org/wiki/h-cite
  */
 export interface HCiteData {
     name: string | null;
-    author: Author | null;
+    author: EmbeddedHCard | null;
     dates: HCiteDates | null;
     url: string | null;
     uid: string | null;

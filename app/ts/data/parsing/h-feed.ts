@@ -4,6 +4,7 @@ import {
     ParsedDocument,
 } from "microformats-parser/dist/types";
 import { Microformat } from "ts/data/microformats";
+import { parseEmbeddedHCard } from "ts/data/parsing/h-card";
 import { parseHEntry } from "ts/data/parsing/h-entry";
 import { Parse } from "ts/data/parsing/parse";
 import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
@@ -18,12 +19,15 @@ export const parseHFeeds = async (
     microformats: ParsedDocument
 ): Promise<HFeedData[] | null> => {
     return new Promise((resolve, reject) => {
-        const feeds = Parse.getRootsOfType(microformats, Microformat.H.Feed)
+        const feeds = Parse.getRootsOfType(
+            microformats.items,
+            Microformat.H.Feed
+        )
             .map(parseHFeed)
             .filter(notNullish);
 
         const unwrappedEntries = wrapWithHFeed(
-            Parse.getRootsOfType(microformats, Microformat.H.Entry)
+            Parse.getRootsOfType(microformats.items, Microformat.H.Entry)
         );
 
         const result = [...feeds, unwrappedEntries].filter(notNullish);
@@ -63,11 +67,11 @@ const wrapWithHFeed = (entries: MicroformatRoot[]): HFeedData | null => {
 };
 
 const parseAbout = (properties: MicroformatProperties): HFeedAbout | null => {
-    const name = Parse.first<string>(properties, "name");
-    const author = Parse.first<string>(properties, "author");
-    const summary = Parse.first<string>(properties, "summary");
-    const url = Parse.first<string>(properties, "url");
-    const photo = Parse.firstImage(properties, "photo");
+    const name = Parse.first<string>(properties, Microformat.P.Name);
+    const author = parseEmbeddedHCard(properties, Microformat.P.Author);
+    const summary = Parse.first<string>(properties, Microformat.P.Summary);
+    const url = Parse.first<string>(properties, Microformat.U.Url);
+    const photo = Parse.firstImage(properties, Microformat.U.Photo);
 
     if (noneOf([name, author, summary, url, photo])) return null;
 

@@ -65,7 +65,7 @@ export const Property = (
             title={microformat}
             data-microformat={microformat}
             onDoubleClick={() =>
-                console.log(`Property: ${JSON.stringify(props)}`)
+                console.debug(`Property: ${JSON.stringify(props)}`)
             }
         >
             <PropertyIcon icon={icon} image={image} />
@@ -117,7 +117,7 @@ export const PropertyRow = (
             className="property"
             title={title ?? microformat}
             onDoubleClick={() =>
-                console.log(`PropertyRow: ${JSON.stringify(props)}`)
+                console.debug(`PropertyRow: ${JSON.stringify(props)}`)
             }
         >
             <td>

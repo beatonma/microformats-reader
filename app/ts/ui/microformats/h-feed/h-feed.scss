@@ -1,6 +1,9 @@
 @use "../../layout/card.scss";
 
 .h-feed {
+    .p-name {
+        font-size: var(--fs-h2);
+    }
 }
 
 .hfeed-about {
@@ -11,11 +14,22 @@
 
 .h-entry {
     .dropdown-header {
-        font-size: var(--fs-default);
         display: block;
     }
 
+    .p-name {
+        font-size: var(--fs-h3);
+    }
+
     .p-summary {
+        font-size: var(--fs-100);
+    }
+
+    .dt-published {
+        font-size: var(--fs-caption);
+    }
+
+    .by-line {
         font-size: var(--fs-caption);
     }
 }

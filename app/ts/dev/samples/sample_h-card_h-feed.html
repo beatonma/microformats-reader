@@ -7,6 +7,7 @@
 <div class="h-feed">
   <img src="https://beatonma.org/static/images/avatar.jpg" alt="" class="u-photo"/>
   <a href="/articles/" class="p-name u-url">Articles</a>
+  <div class="p-summary">This feed is made of articles</div>
   <div class="p-author">W. Developer</div>
 
   <!-- h-entry example from https://microformats.org/wiki/h-entry -->
@@ -44,27 +45,33 @@
 
 <!-- h-card example from https://microformats.org/wiki/h-card -->
 <div class="h-card">
-  <span class="p-name">Sally Ride</span>
-  <span class="p-honorific-prefix">Dr.</span>
-  <span class="p-given-name">Sally</span>
-  <abbr class="p-additional-name">K.</abbr>
-  <span class="p-family-name">Ride</span>
-  <span class="p-honorific-suffix">Ph.D.</span>,
-  <span class="p-nickname">sallykride</span> (IRC)
-  <div class="p-org">Sally Ride Science</div>
-  <img class="u-photo" src="http://example.com/sk.jpg" alt="Photo"/>
-  <a class="u-url" href="http://sally.example.com">w</a>,
-  <a class="u-email" href="mailto:sally@example.com">e</a>
-  <div class="p-tel">+1.818.555.1212</div>
-  <div class="p-street-address">123 Main st.</div>
-  <span class="p-locality">Los Angeles</span>,
-  <abbr class="p-region" title="California">CA</abbr>,
-  <span class="p-postal-code">91316</span>
-  <div class="p-country-name">U.S.A</div>
-  <time class="dt-bday">1951-05-26</time>
-  birthday
-  <div class="p-category">physicist</div>
-  <div class="p-note">First American woman in space.</div>
-</div>
+    <span class="p-name">Sally Ride</span>
+    <span class="p-honorific-prefix">Dr.</span>
+    <span class="p-given-name">Sally</span>
+    <abbr class="p-additional-name">K.</abbr>
+    <span class="p-family-name">Ride</span>
+    <span class="p-honorific-suffix">Ph.D.</span>,
+    <span class="p-nickname">sallykride</span> (IRC)
+    <div class="p-org h-card">
+        <div class="p-name">Sally Ride Science</div>
+        <a href="https://sallyridescience.com" class="u-url">sallyridescience.com</a>
+    </div>
+    <img class="u-photo" src="http://example.com/sk.jpg" alt="photo"/>
+    <a class="u-url" href="http://sally.example.com">w</a>,
+    <a class="u-email" href="mailto:sally@example.com">e</a>
+    <div class="p-tel">+1.818.555.1212</div>
+    <div class="p-street-address">123 Main st.</div>
+    <span class="p-locality">Los Angeles</span>,
+    <abbr class="p-region" title="California">CA</abbr>,
+    <span class="p-postal-code">91316</span>
+    <div class="p-country-name">U.S.A</div>
+    <div class="p-geo">
+      <div class="p-latitude">34.06648088793238</div>
+      <div class="p-longitude">-118.22042689866892</div>
+    </div>
+    <time class="dt-bday">1951-05-26</time> birthday
+    <div class="p-category">physicist</div>
+    <div class="p-note">First American woman in space.</div>
+  </div>
 </footer>
 </html>

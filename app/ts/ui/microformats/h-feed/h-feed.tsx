@@ -2,6 +2,7 @@ import React from "react";
 import { Microformat } from "ts/data/microformats";
 import { HEntryData } from "ts/data/types/h-entry";
 import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
+import { Icons } from "ts/ui/icon";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dropdown } from "ts/ui/layout/dropdown";
@@ -39,8 +40,23 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
             <Property
                 image={photo}
                 microformat={Microformat.P.Name}
-                href={url}
                 displayValue={name}
+            />
+            <Row className="by-line">
+                <Property
+                    microformat={Microformat.P.Author}
+                    displayValue={author?.name}
+                />
+
+                <Property
+                    microformat={Microformat.U.Url}
+                    icon={Icons.Link}
+                    href={url}
+                />
+            </Row>
+            <Property
+                microformat={Microformat.P.Summary}
+                displayValue={summary}
             />
         </div>
     );
@@ -101,6 +117,11 @@ const HEntrySummary = (props: HEntryData) => {
             <Property
                 microformat={Microformat.P.Summary}
                 displayValue={summary}
+            />
+
+            <Property
+                microformat={Microformat.P.Category}
+                displayValue={category}
             />
         </>
     );

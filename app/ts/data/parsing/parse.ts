@@ -4,7 +4,6 @@ import {
     MicroformatProperties,
     MicroformatProperty,
     MicroformatRoot,
-    ParsedDocument,
 } from "microformats-parser/dist/types";
 import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
@@ -12,10 +11,9 @@ import { notNullish } from "ts/data/util/arrays";
 
 export namespace Parse {
     export const getRootsOfType = (
-        microformats: ParsedDocument,
+        items: MicroformatRoot[],
         type: Microformat.H
-    ): MicroformatRoot[] =>
-        microformats.items.filter(item => item.type?.includes(type));
+    ): MicroformatRoot[] => items.filter(item => item.type?.includes(type));
 
     export const get = <T extends MicroformatProperty>(
         container: MicroformatProperties,

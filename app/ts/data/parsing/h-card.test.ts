@@ -151,15 +151,17 @@ describe("HCard parsing", () => {
         test("Simple name", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
 
-            expect(hcard?.job?.orgName).toBe("Sally Ride Science");
+            expect(hcard?.job?.organisation?.name).toBe("Sally Ride Science");
         });
 
         test("Nested h-card", async () => {
             const hcard = await firstHCard(SampleHCardNested);
 
-            expect(hcard?.job?.orgName).toBe("Sally Ride Science");
-            expect(hcard?.job?.orgHCard?.name).toBe("Sally Ride Science");
-            expect(hcard?.job?.orgHCard?.contact?.url?.[0]).toBe(
+            expect(hcard?.job?.organisation?.name).toBe("Sally Ride Science");
+            expect(hcard?.job?.organisation?.hcard?.name).toBe(
+                "Sally Ride Science"
+            );
+            expect(hcard?.job?.organisation?.hcard?.contact?.url?.[0]).toBe(
                 "https://sallyridescience.com"
             );
         });
