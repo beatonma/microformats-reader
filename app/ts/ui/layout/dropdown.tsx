@@ -9,14 +9,12 @@ import {
     ExpandableDefaultProps,
 } from "ts/ui/layout/expand-collapse";
 
-export interface DropdownProps
-    extends HTMLProps<HTMLDivElement>,
-        ExpandableDefaultProps {
+export interface DropdownProps extends HTMLProps<HTMLDivElement> {
     header: ReactNode;
     headerClassName?: string;
-    title: string;
+    title: string | undefined;
 }
-export const Dropdown = (props: DropdownProps) => {
+export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     const options = useContext(OptionsContext);
     return (
         <ExpandCollapseLayout
@@ -29,7 +27,9 @@ export const Dropdown = (props: DropdownProps) => {
     );
 };
 
-const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
+const DropdownLayout = (
+    props: DropdownProps & HTMLProps<HTMLDivElement> & ExpandCollapseProps
+) => {
     const {
         className,
         headerClassName,
@@ -47,7 +47,7 @@ const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
             data-expanded={isExpanded}
         >
             <DropdownButton
-                title={title}
+                title={title ?? undefined}
                 className={`dropdown-header ${headerClassName ?? ""}`}
                 isExpanded={isExpanded}
                 {...collapsibleControllerProps}
@@ -63,7 +63,7 @@ const DropdownLayout = (props: DropdownProps & ExpandCollapseProps) => {
 };
 
 interface DropdownButtonProps {
-    title: string;
+    title: string | undefined;
     "aria-controls": string;
     isExpanded: boolean;
     onClick: () => void;

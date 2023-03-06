@@ -1,9 +1,10 @@
-import React, { HTMLProps, ReactNode } from "react";
+import React, { HTMLProps, MouseEvent, ReactNode } from "react";
 import { Image } from "microformats-parser/dist/types";
 import { Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { Named } from "ts/data/types/common";
 import { notNullish } from "ts/data/util/arrays";
+import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { formatUri } from "ts/ui/formatting";
 import {
     formatDateTime,
@@ -26,6 +27,7 @@ interface PropertyProps {
 interface PropertyIconProps {
     icon?: Icons;
     image?: Image | null;
+    imageMicroformat?: Microformats;
 }
 
 interface PropertyValueProps {
@@ -77,6 +79,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         href,
         icon,
         image,
+        imageMicroformat,
         displayValue,
         links,
         layoutBuilder,
@@ -91,7 +94,13 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         title: title ?? microformat,
         "data-microformat": microformat,
     };
-    const propertyIcon: ReactNode = <PropertyIcon icon={icon} image={image} />;
+    const propertyIcon: ReactNode = (
+        <PropertyIcon
+            icon={icon}
+            image={image}
+            imageMicroformat={imageMicroformat}
+        />
+    );
     const propertyName: ReactNode = <PropertyName name={displayName} />;
     const propertyValue: ReactNode = (
         <PropertyValue
@@ -181,9 +190,15 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
 );
 
 const PropertyIcon = (props: PropertyIconProps) => {
-    const { image, ...rest } = props;
+    const { image, imageMicroformat, ...rest } = props;
     if (image) {
-        return <Img image={image} className="property-icon" />;
+        return (
+            <Img
+                image={image}
+                title={imageMicroformat}
+                className="property-icon"
+            />
+        );
     }
 
     return <Icon {...rest} className="property-icon" />;
@@ -267,11 +282,19 @@ const SingleValueProperty = (props: SingleValuePropertyProps) => {
         resolvedClassName,
     } = resolveValues(props);
 
+    const onContextClick = (e: MouseEvent) => {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            copyToClipboard(props.href ?? props.displayValue);
+        }
+    };
+
     return (
         <MaybeLinkTo
             href={resolvedHref ?? undefined}
             className={resolvedClassName}
             title={resolvedTitle ?? undefined}
+            onContextMenu={onContextClick}
         >
             {resolvedDisplayValue ?? formatUri(resolvedHref)}
         </MaybeLinkTo>
@@ -310,7 +333,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         extraTitle.push(formatDateTime(displayValue));
     }
 
-    const resolvedTitle = [microformat, title, ...extraTitle]
+    const resolvedTitle = [microformat, ...extraTitle, title]
         .filter(notNullish)
         .join("\n");
 

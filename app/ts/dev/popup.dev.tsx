@@ -19,6 +19,7 @@ import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
 import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
+import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
 import "./dev.scss";
 
@@ -47,10 +48,6 @@ const DebugUI = (props: DebugUIProps) => {
             mf2(Samples[page], { baseUrl: "https://example.beatonma.org" })
         );
     }, [page]);
-
-    const copyToClipboard = (obj: object | null) => {
-        navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
-    };
 
     return (
         <section className="dev">

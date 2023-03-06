@@ -1,28 +1,26 @@
 @use "../../layout/card.scss";
 
 .h-feed {
-    .p-name {
-        font-size: var(--fs-h2);
+    .dropdown-header {
+        font-size: var(--fs-default);
     }
-}
 
-.hfeed-about {
-    .property[data-microformat="p-name"] {
-        @extend %card-text-large;
+    .by-line {
+        gap: 1ch;
     }
 }
 
 .h-entry {
-    .dropdown-header {
-        display: block;
+    margin-block: var(--space-1x);
+    border-left: 2px var(--accent) solid;
+    padding-left: var(--space-1-5x);
+
+    .property {
+        margin-block: 0;
     }
 
     .p-name {
-        font-size: var(--fs-h3);
-    }
-
-    .p-summary {
-        font-size: var(--fs-100);
+        font-size: var(--fs-large);
     }
 
     .dt-published {

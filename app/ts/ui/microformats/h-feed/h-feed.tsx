@@ -1,11 +1,13 @@
 import React from "react";
+import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HEntryData } from "ts/data/types/h-entry";
 import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
+import { formatDateTime } from "ts/ui/formatting/time";
 import { Icons } from "ts/ui/icon";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
-import { CardContent, CardLayout } from "ts/ui/layout/card";
-import { Dropdown } from "ts/ui/layout/dropdown";
+import { ExpandableCard } from "ts/ui/layout/expandable-card";
+import { Categories } from "ts/ui/microformats/common/categories";
 import { Property } from "ts/ui/microformats/properties";
 import { PropsOf } from "ts/ui/props";
 import "./h-feed.scss";
@@ -16,32 +18,44 @@ export const HFeed = (props: PropsOf<HFeedData>) => {
     const { about, entries } = feed;
 
     return (
-        <CardLayout className="h-feed">
-            <CardContent>
-                <AboutHFeed data={about} />
-
+        <ExpandableCard
+            className={Microformat.H.Feed}
+            defaultIsExpanded={true}
+            contentDescription={""}
+            sharedContent={<AboutHFeed data={about} />}
+            summaryContent={null}
+            detailContent={
                 <div className="entries">
                     {entries?.map((entry, index) => (
                         <HEntry {...entry} key={index} />
                     ))}
                 </div>
-            </CardContent>
-        </CardLayout>
+            }
+        />
     );
 };
 
 const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
     const about = props.data;
-    if (!about) return null;
+    if (!about)
+        return (
+            <div className="hfeed-about">
+                <h1>{_("hfeed_unnamed")}</h1>
+            </div>
+        );
 
     const { name, author, summary, url, photo } = about;
     return (
         <div className="hfeed-about">
-            <Property
-                image={photo}
-                microformat={Microformat.P.Name}
-                displayValue={name}
-            />
+            <h1>
+                <Property
+                    image={photo}
+                    imageMicroformat={Microformat.U.Photo}
+                    microformat={Microformat.P.Name}
+                    displayValue={name ?? _("hfeed_unnamed")}
+                />
+            </h1>
+
             <Row className="by-line">
                 <Property
                     microformat={Microformat.P.Author}
@@ -54,6 +68,7 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
                     href={url}
                 />
             </Row>
+
             <Property
                 microformat={Microformat.P.Summary}
                 displayValue={summary}
@@ -76,53 +91,31 @@ const HEntry = (props: HEntryData) => {
         category,
     } = props;
 
-    return (
-        <Dropdown
-            header={<HEntrySummary {...props} />}
-            title="h-entry"
-            className="h-entry"
-        ></Dropdown>
-    );
-};
+    const dateUpdated = dates?.updated
+        ?.map(dt => _("date_updated", formatDateTime(dt)))
+        .join(", ");
 
-const HEntrySummary = (props: HEntryData) => {
-    const {
-        name,
-        summary,
-        content,
-        dates,
-        author,
-        interactions,
-        uid,
-        url,
-        location,
-        category,
-    } = props;
     return (
-        <>
-            <div>
-                <Row alignment={HorizontalAlignment.SpaceBetween}>
-                    <Property
-                        microformat={Microformat.P.Name}
-                        href={url}
-                        displayValue={name}
-                    />
-                    <Property
-                        microformat={Microformat.Dt.Published}
-                        displayValue={dates?.published}
-                    />
-                </Row>
-            </div>
+        <div className={Microformat.H.Entry}>
+            <Row alignment={HorizontalAlignment.SpaceBetween}>
+                <Property
+                    microformat={Microformat.P.Name}
+                    href={url}
+                    displayValue={name}
+                />
+                <Property
+                    microformat={Microformat.Dt.Published}
+                    displayValue={dates?.published}
+                    title={dateUpdated}
+                />
+            </Row>
 
             <Property
                 microformat={Microformat.P.Summary}
                 displayValue={summary}
             />
 
-            <Property
-                microformat={Microformat.P.Category}
-                displayValue={category}
-            />
-        </>
+            <Categories data={category} />
+        </div>
     );
 };

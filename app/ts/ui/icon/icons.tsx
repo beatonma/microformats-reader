@@ -19,6 +19,8 @@ import MapSvg from "ts/ui/icon/svg/outline-400/map.svg";
 // @ts-ignore
 import RssFeedSvg from "ts/ui/icon/svg/outline-400/rss_feed.svg";
 // @ts-ignore
+import TagSvg from "ts/ui/icon/svg/outline-400/tag.svg";
+// @ts-ignore
 import WorkSvg from "ts/ui/icon/svg/outline-400/work.svg";
 
 export enum Icons {
@@ -30,6 +32,7 @@ export enum Icons {
     Map = MapSvg,
     PgpKey = PgpKeySvg,
     RssFeed = RssFeedSvg,
+    Tag = TagSvg,
     Work = WorkSvg,
     WebmentionEndpoint = WebmentionEndpointSvg,
 }

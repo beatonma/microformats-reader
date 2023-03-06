@@ -188,6 +188,9 @@
   "hadr_label": {
     "message": "Label"
   },
+  "hfeed_unnamed": {
+    "message": "h-feed"
+  },
   "direction_cardinal_north": {
     "message": "N"
   },
@@ -199,6 +202,15 @@
   },
   "direction_cardinal_west": {
     "message": "W"
+  },
+  "date_updated": {
+    "message": "Updated $WHEN$",
+    "placeholders": {
+      "when": {
+        "content": "$1",
+        "example": ""
+      }
+    }
   },
   "datetime_time_today": {
     "message": "$TIME$ today",

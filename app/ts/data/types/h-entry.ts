@@ -14,7 +14,7 @@ export interface HEntryData {
     summary: string | null;
     content: string[] | null;
     dates: HEntryDates | null;
-    category: string | null;
+    category: string[] | null;
     url: string | null;
     uid: string | null;
     location: string | HCardData | HAdrData | HGeoData | null;
