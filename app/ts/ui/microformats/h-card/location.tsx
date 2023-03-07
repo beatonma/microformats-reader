@@ -13,7 +13,6 @@ import {
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
-import "./location.scss";
 
 export const Location = (props: PropsOf<HAdrData>) => {
     const location = props.data;

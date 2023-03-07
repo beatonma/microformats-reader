@@ -2,7 +2,6 @@ import React, { ComponentProps, HTMLProps, ReactNode, useContext } from "react";
 import { _ } from "ts/compat";
 import { OptionsContext } from "ts/options";
 import { Icon, Icons } from "ts/ui/icon";
-import "ts/ui/layout/dropdown.scss";
 import {
     ExpandCollapseLayout,
     ExpandCollapseProps,

@@ -4,7 +4,6 @@ import { Microformat } from "ts/data/microformats";
 import { Named } from "ts/data/types/common";
 import { HCardImages } from "ts/data/types/h-card";
 import { Img } from "ts/ui/image";
-import "./avatar.scss";
 
 interface AvatarProps {
     images: HCardImages | null;

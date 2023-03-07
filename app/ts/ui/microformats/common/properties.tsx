@@ -14,7 +14,6 @@ import {
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
-import "ts/ui/microformats/common/properties.scss";
 
 type DisplayValue = ReactNode | string[] | Date[];
 

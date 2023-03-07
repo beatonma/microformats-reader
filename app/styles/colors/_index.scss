@@ -59,7 +59,7 @@
     accent-color: var(--local-accent);
 }
 
-html {
+:root {
     @media (prefers-color-scheme: no-preference) {
         @include light.light();
     }

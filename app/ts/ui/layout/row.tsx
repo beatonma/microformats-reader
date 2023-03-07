@@ -1,5 +1,4 @@
 import React, { HTMLAttributes } from "react";
-import "./layout.scss";
 
 export enum HorizontalAlignment {
     Start = "start",

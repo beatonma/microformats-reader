@@ -5,7 +5,6 @@ import { isEmptyOrNull } from "ts/data/util/arrays";
 import { Icon, Icons } from "ts/ui/icon";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
-import "ts/ui/microformats/rel/rel.scss";
 
 interface RelLinkProps {
     links: RelLink[] | null | undefined;

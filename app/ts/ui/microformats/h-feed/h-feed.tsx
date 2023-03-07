@@ -12,7 +12,6 @@ import { Author } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
 import { Property } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
-import "./h-feed.scss";
 
 export const HFeed = (props: PropsOf<HFeedData>) => {
     const feed = props.data;

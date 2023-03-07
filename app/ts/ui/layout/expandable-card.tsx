@@ -3,7 +3,6 @@ import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { Row } from "ts/ui/layout/row";
-import "./expandable-card.scss";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     contentDescription: string;

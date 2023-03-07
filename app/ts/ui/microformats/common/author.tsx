@@ -4,7 +4,6 @@ import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
 import { ExpandCollapseLayout } from "ts/ui/layout/expand-collapse";
 import { Property } from "ts/ui/microformats/common/properties";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
-import "./author.scss";
 
 interface AuthorProps {
     author: EmbeddedHCardData | null;

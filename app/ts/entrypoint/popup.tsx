@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { ParsedDocument } from "microformats-parser/dist/types";
+import "styles/app.scss";
 import { _, compatBrowser } from "ts/compat";
 import { parseHCards } from "ts/data/parsing/h-card";
 import { parseHFeeds } from "ts/data/parsing/h-feed";
@@ -9,7 +10,6 @@ import { HCardData } from "ts/data/types";
 import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
-import "ts/entrypoint/popup.scss";
 import { Message, MessageResponse } from "ts/message";
 import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";

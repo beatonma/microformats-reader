@@ -22,7 +22,6 @@ import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
 import { OpenProps } from "ts/ui/types";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
-import "./hcard.scss";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;

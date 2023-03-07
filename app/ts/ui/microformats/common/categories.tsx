@@ -4,7 +4,6 @@ import { isEmptyOrNull } from "ts/data/util/arrays";
 import { Icons } from "ts/ui/icon";
 import { Property } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
-import "./categories.scss";
 
 export const Categories = (props: PropsOf<string[]>) => {
     const { data: categories } = props;

@@ -1,5 +1,4 @@
 import React, { HTMLProps, ReactElement } from "react";
-import "ts/ui/icon/icons.scss";
 // @ts-ignore
 import BirthdaySvg from "ts/ui/icon/svg/outline-400/cake.svg";
 // @ts-ignore
