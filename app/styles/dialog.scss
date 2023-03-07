@@ -1,0 +1,15 @@
+#dialog_scrim {
+    transition: background-color 200ms;
+
+    &[data-visible] {
+        background-color: var(--scrim);
+        z-index: 100000;
+    }
+}
+
+dialog {
+    z-index: 1000000;
+    padding: 0;
+    border: none;
+    border-radius: 1ch;
+}

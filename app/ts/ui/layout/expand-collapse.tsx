@@ -27,19 +27,21 @@ interface CollapsibleContentProps {
 }
 
 interface ExpandCollapseInternalProps {
-    child: (props: ExpandCollapseProps) => ReactNode;
-    grandChildren: ReactNode | ReactNode[];
+    layout: (props: ExpandCollapseProps) => ReactNode;
+    children?: ReactNode | ReactNode[];
 }
 
 export const ExpandCollapseLayout = (
     props: ExpandableDefaultProps & ExpandCollapseInternalProps
 ) => {
-    const { defaultIsExpanded, child } = props;
+    const { defaultIsExpanded, layout } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
     const [isClosing, setClosing] = useState(false);
     const contentID = useId();
 
-    const canExpand = React.Children.count(props.grandChildren) > 0;
+    const canExpand = props.children
+        ? React.Children.count(props.children) > 0
+        : true;
 
     const toggleState = () => {
         if (!canExpand) return;
@@ -76,7 +78,7 @@ export const ExpandCollapseLayout = (
 
     return (
         <>
-            {child({
+            {layout({
                 isExpanded: isExpanded,
                 isClosing: isClosing,
                 collapsibleControllerProps: collapsibleControllerProps,

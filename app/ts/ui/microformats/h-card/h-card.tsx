@@ -40,7 +40,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
 };
 
 export const EmbeddedHCardDialog = (props: EmbeddedHCardData & OpenProps) => {
-    const { id, name, hcard, isOpen } = props;
+    const { id, hcard, isOpen } = props;
 
     if (hcard == null) return null;
 
@@ -48,7 +48,6 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & OpenProps) => {
         <dialog id={`hcard_${id}`} open={isOpen}>
             <CardLayout>
                 <CardContent>
-                    {name}
                     <HCardTextSummary {...hcard} />
                 </CardContent>
             </CardLayout>

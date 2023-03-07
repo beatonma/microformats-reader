@@ -3,12 +3,14 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HEntryData } from "ts/data/types/h-entry";
 import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
+import { TODO } from "ts/dev";
 import { formatDateTime } from "ts/ui/formatting/time";
 import { Icons } from "ts/ui/icon";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
+import { Author } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
-import { Property } from "ts/ui/microformats/properties";
+import { Property } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 import "./h-feed.scss";
 
@@ -57,10 +59,7 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
             </h1>
 
             <Row className="by-line">
-                <Property
-                    microformat={Microformat.P.Author}
-                    displayValue={author?.name}
-                />
+                <Author author={author} />
 
                 <Property
                     microformat={Microformat.U.Url}
@@ -90,6 +89,10 @@ const HEntry = (props: HEntryData) => {
         location,
         category,
     } = props;
+
+    TODO("interactions");
+    TODO("embedded author hcard, if different from h-feed author");
+    TODO("location");
 
     const dateUpdated = dates?.updated
         ?.map(dt => _("date_updated", formatDateTime(dt)))

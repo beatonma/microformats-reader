@@ -19,10 +19,10 @@ export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     return (
         <ExpandCollapseLayout
             defaultIsExpanded={options.dropdownExpandByDefault}
-            child={expandCollapseProps => (
+            layout={expandCollapseProps => (
                 <DropdownLayout {...props} {...expandCollapseProps} />
             )}
-            grandChildren={props.children}
+            children={props.children}
         />
     );
 };
