@@ -8,7 +8,7 @@ import {
     PropertiesTable,
     Property,
     PropertyRow,
-} from "ts/ui/microformats/properties";
+} from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 
 export const Contact = (props: PropsOf<HCardContactData>) => {

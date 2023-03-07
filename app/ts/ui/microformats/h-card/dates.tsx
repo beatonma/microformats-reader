@@ -3,7 +3,10 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardDates } from "ts/data/types/h-card";
 import { yearsSince } from "ts/ui/formatting/time";
-import { PropertiesTable, PropertyRow } from "ts/ui/microformats/properties";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 import { DateTime, DateTimeProps } from "ts/ui/time";
 

@@ -7,13 +7,17 @@ import {
     PropertiesTable,
     Property,
     PropertyRow,
-} from "ts/ui/microformats/properties";
+} from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 
 export const Name = (props: Named) => {
     const { name } = props;
 
-    return <Property microformat={Microformat.P.Name} displayValue={name} />;
+    return (
+        <h1>
+            <Property microformat={Microformat.P.Name} displayValue={name} />
+        </h1>
+    );
 };
 
 export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {

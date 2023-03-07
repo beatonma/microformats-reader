@@ -19,6 +19,7 @@ import {
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
+import { OpenProps } from "ts/ui/types";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import "./hcard.scss";
@@ -38,13 +39,13 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     );
 };
 
-export const EmbeddedHCard = (props: EmbeddedHCardData) => {
-    const { id, name, hcard } = props;
+export const EmbeddedHCardDialog = (props: EmbeddedHCardData & OpenProps) => {
+    const { id, name, hcard, isOpen } = props;
 
-    if (!hcard) return null;
+    if (hcard == null) return null;
 
     return (
-        <dialog id={`hcard_${id}`}>
+        <dialog id={`hcard_${id}`} open={isOpen}>
             <CardLayout>
                 <CardContent>
                     {name}
