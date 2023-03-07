@@ -22,6 +22,7 @@ import {
 } from "ts/ui/microformats";
 import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
 import { PropsOf } from "ts/ui/props";
+import { injectTheme } from "ts/ui/theme";
 
 export const parseDocument = (
     microformats: ParsedDocument | null
@@ -35,6 +36,8 @@ export const parseDocument = (
         parseRelatedLinks(microformats).then(setRelLinks);
         parseHCards(microformats).then(setHCards);
         parseHFeeds(microformats).then(setFeeds);
+
+        injectTheme(null);
     }, [microformats]);
 
     return {

@@ -7,23 +7,12 @@
     --text-secondary-invert: var(--text-dark-secondary);
     --text-tertiary-invert: var(--text-dark-tertiary);
 
-    --primary-100: #353442;
-    --primary-400: #4b495d;
-    --primary-900: #8783a8;
-    --primary: var(--primary-400);
-    --on-primary: var(--text-light);
-
-    --accent-100: #734343;
-    --accent-400: #f18b8d;
-    --accent-900: #eac2c3;
-    --accent: var(--accent-400);
-    --on-accent: var(--text-light);
-
     --hover: rgba(255, 255, 255, 0.08);
 
-    // v2
     --background: #252225;
     --surface: #31303a;
+    --warn: #be0000;
 
-    --warn: #4d2331;
+    --muted: #5c6d7a;
+    --vibrant: #5a9ace;
 }
