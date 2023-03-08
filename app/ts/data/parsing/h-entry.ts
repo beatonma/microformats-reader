@@ -10,6 +10,7 @@ import {
     rsvpValueOf,
 } from "ts/data/types/h-entry";
 import { noneOf } from "ts/data/util/arrays";
+import { nullable } from "ts/data/util/object";
 
 export const parseHEntry = (
     entry: MicroformatProperties
@@ -25,18 +26,21 @@ export const parseHEntry = (
     const author = parseEmbeddedHCard(entry, Microformat.P.Author);
     const location = null;
 
-    return {
-        name: name,
-        summary: summary,
-        url: url,
-        uid: uid,
-        interactions: interactions,
-        category: category,
-        content: content,
-        dates: dates,
-        author: author,
-        location: location,
-    };
+    return nullable(
+        {
+            name: name,
+            summary: summary,
+            url: url,
+            uid: uid,
+            interactions: interactions,
+            category: category,
+            content: content,
+            dates: dates,
+            author: author,
+            location: location,
+        },
+        { requireAnyKey: ["name", "summary", "url"] }
+    );
 };
 
 const parseInteractions = (

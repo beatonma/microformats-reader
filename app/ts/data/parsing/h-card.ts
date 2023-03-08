@@ -79,7 +79,7 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
             images: images,
             extras: extras,
         },
-        ["id"]
+        { ignoredKeys: ["id"] }
     );
 };
 
