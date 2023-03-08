@@ -13,6 +13,7 @@ import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
 import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
+import { ScrimLayout } from "ts/ui/layout/dialog";
 import {
     Feeds,
     HCard,
@@ -60,27 +61,29 @@ export const PopupUI = (props: PopupProps) => {
     }
 
     return (
-        <div className="microformats-content">
-            <section id="quick_links">
-                <QuickLinks data={relLinks} />
-            </section>
+        <ScrimLayout>
+            <div className="microformats-content">
+                <section id="quick_links">
+                    <QuickLinks data={relLinks} />
+                </section>
 
-            <section id="h_cards">
-                {hcards?.map(hcard => (
-                    <HCard {...hcard} key={hcard.id} />
-                ))}
-            </section>
+                <section id="h_cards">
+                    {hcards?.map(hcard => (
+                        <HCard {...hcard} key={hcard.id} />
+                    ))}
+                </section>
 
-            <section id="h_feeds">
-                {feeds?.map((feed, index) => (
-                    <HFeed data={feed} key={index} />
-                ))}
-            </section>
+                <section id="h_feeds">
+                    {feeds?.map((feed, index) => (
+                        <HFeed data={feed} key={index} />
+                    ))}
+                </section>
 
-            <section id="rel_me">
-                <RelmeLinks links={relLinks?.relme} />
-            </section>
-        </div>
+                <section id="rel_me">
+                    <RelmeLinks links={relLinks?.relme} />
+                </section>
+            </div>
+        </ScrimLayout>
     );
 };
 

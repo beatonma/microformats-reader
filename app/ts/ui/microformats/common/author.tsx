@@ -14,25 +14,28 @@ export const Author = (props: AuthorProps) => {
 
     return (
         <ExpandCollapseLayout
-            layout={state => (
-                <div className="author-wrapper">
-                    <div {...state.collapsibleControllerProps}>
-                        <Property
-                            microformat={Microformat.P.Author}
-                            displayValue={author.name}
-                        />
-                    </div>
-
-                    <div {...state.collapsibleContentProps}>
-                        {
-                            <EmbeddedHCardDialog
-                                {...author}
-                                isOpen={state.isExpanded}
+            layout={state => {
+                return (
+                    <div className="author-wrapper">
+                        <div {...state.collapsibleControllerProps}>
+                            <Property
+                                microformat={Microformat.P.Author}
+                                displayValue={author.name}
                             />
-                        }
+                        </div>
+
+                        <div {...state.collapsibleContentProps}>
+                            {
+                                <EmbeddedHCardDialog
+                                    {...author}
+                                    open={state.isExpanded}
+                                    onClose={() => state.setState(false)}
+                                />
+                            }
+                        </div>
                     </div>
-                </div>
-            )}
+                );
+            }}
         />
     );
 };

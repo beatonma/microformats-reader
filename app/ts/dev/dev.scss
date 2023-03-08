@@ -1,5 +1,5 @@
 .dev {
-    background-color: #5900d5;
+    background-color: #000000;
 
     > .row {
         gap: var(--space-1x);
@@ -7,15 +7,20 @@
 
     button,
     select {
-        background-color: #fce664;
+        background-color: #000000;
+        color: #fce664;
         padding: var(--space-1x);
         border-radius: 4px;
         font-size: var(--fs-caption);
         font-family: monospace;
         transition: all 200ms;
+        cursor: pointer;
 
+        &:hover,
         &:active {
-            background-color: #ffe432;
+            background-color: #111111;
+            color: #ffe432;
+            font-weight: bold;
         }
     }
 }

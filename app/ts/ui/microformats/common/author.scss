@@ -9,5 +9,11 @@
         position: absolute;
         top: 0;
         left: 0;
+        background-color: var(--muted);
+        color: var(--on-muted);
+
+        .card {
+            margin-block: 0;
+        }
     }
 }

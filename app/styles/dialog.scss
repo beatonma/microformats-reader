@@ -1,7 +1,10 @@
 #dialog_scrim {
     transition: background-color 200ms;
 
-    &[data-visible] {
+    &[data-visible="true"] {
+        position: absolute;
+        inset: 0;
+
         background-color: var(--scrim);
         z-index: 100000;
     }

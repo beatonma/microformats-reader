@@ -9,6 +9,7 @@ export interface ExpandCollapseProps {
     isClosing: boolean;
     collapsibleControllerProps: CollapsibleControllerProps;
     collapsibleContentProps: CollapsibleContentProps;
+    setState: (newState: boolean) => void;
 }
 
 // Properties for the button that controls expand/collapse behaviour.
@@ -83,6 +84,7 @@ export const ExpandCollapseLayout = (
                 isClosing: isClosing,
                 collapsibleControllerProps: collapsibleControllerProps,
                 collapsibleContentProps: collapsibleContentProps,
+                setState: setExpanded,
             })}
         </>
     );

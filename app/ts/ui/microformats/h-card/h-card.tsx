@@ -4,6 +4,7 @@ import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
 import { Row } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
+import { Dialog, DialogProps } from "ts/ui/layout/dialog";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
@@ -19,7 +20,6 @@ import {
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
-import { OpenProps } from "ts/ui/types";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 
@@ -38,19 +38,19 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     );
 };
 
-export const EmbeddedHCardDialog = (props: EmbeddedHCardData & OpenProps) => {
-    const { id, hcard, isOpen } = props;
+export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
+    const { id, hcard, open, onClose } = props;
 
     if (hcard == null) return null;
 
     return (
-        <dialog id={`hcard_${id}`} open={isOpen}>
+        <Dialog id={`hcard_${id}`} open={open} onClose={onClose}>
             <CardLayout>
                 <CardContent>
                     <HCardTextSummary {...hcard} />
                 </CardContent>
             </CardLayout>
-        </dialog>
+        </Dialog>
     );
 };
 
