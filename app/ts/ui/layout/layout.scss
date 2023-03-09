@@ -5,17 +5,10 @@
     flex-direction: row;
     align-items: center;
     text-align: center;
+    flex-wrap: nowrap;
 
     &:empty {
         display: none;
-    }
-}
-
-.group {
-    margin-right: var(--space-1x);
-
-    > * {
-        margin-right: var(--space-half);
     }
 }
 

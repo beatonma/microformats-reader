@@ -3,8 +3,9 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardJobData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
+import { Row } from "ts/ui/layout";
 import { ConditionalContent } from "ts/ui/layout/conditional";
-import { InlineGroup } from "ts/ui/layout/inline-group";
+import { RowSpace } from "ts/ui/layout/row";
 import {
     PropertiesTable,
     Property,
@@ -18,17 +19,17 @@ export const Job = (props: PropsOf<HCardJobData>) => {
     const { jobTitle, organisation } = job;
 
     return (
-        <InlineGroup>
+        <Row spaced={RowSpace.Char}>
             <Property
                 microformat={Microformat.P.Job_Title}
                 icon={Icons.Work}
                 displayValue={jobTitle}
             />
             <ConditionalContent condition={() => !!jobTitle && !!organisation}>
-                <span>{" @ "}</span>
+                <span>@</span>
             </ConditionalContent>
             <LinkToOrganisation {...job} />
-        </InlineGroup>
+        </Row>
     );
 };
 

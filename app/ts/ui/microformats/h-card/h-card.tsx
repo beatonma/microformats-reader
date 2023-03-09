@@ -71,12 +71,12 @@ const HCardTextSummary = (props: HCardData) => {
         <div className="hcard-summary" {...rest}>
             <Name name={name} />
 
-            <Row wrap>
+            <Row wrap spaced>
                 <Gender data={gender} />
                 <Contact data={contact} />
             </Row>
 
-            <Row wrap>
+            <Row wrap spaced>
                 <Location data={location} />
                 <Job data={job} />
             </Row>

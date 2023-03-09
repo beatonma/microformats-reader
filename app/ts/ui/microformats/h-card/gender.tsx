@@ -3,7 +3,6 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardGenderIdentity } from "ts/data/types/h-card";
 import { notNullish } from "ts/data/util/arrays";
-import { InlineGroup } from "ts/ui/layout/inline-group";
 import {
     PropertiesTable,
     Property,
@@ -15,11 +14,7 @@ export const Gender = (props: PropsOf<HCardGenderIdentity>) => {
     const identity = props.data;
     if (!identity) return null;
 
-    return (
-        <InlineGroup className="gender">
-            <GenderSummary {...identity} />
-        </InlineGroup>
-    );
+    return <GenderSummary {...identity} />;
 };
 
 export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {

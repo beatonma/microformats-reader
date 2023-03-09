@@ -3,7 +3,6 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardContactData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
-import { InlineGroup } from "ts/ui/layout/inline-group";
 import {
     PropertiesTable,
     Property,
@@ -16,13 +15,11 @@ export const Contact = (props: PropsOf<HCardContactData>) => {
     if (!url) return null;
 
     return (
-        <InlineGroup>
-            <Property
-                icon={Icons.Link}
-                microformat={Microformat.U.Url}
-                href={url}
-            />
-        </InlineGroup>
+        <Property
+            icon={Icons.Link}
+            microformat={Microformat.U.Url}
+            href={url}
+        />
     );
 };
 

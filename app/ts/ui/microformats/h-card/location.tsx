@@ -5,7 +5,6 @@ import { HAdrData } from "ts/data/types";
 import { notNullish } from "ts/data/util/arrays";
 import { formatLatLong } from "ts/ui/formatting";
 import { Icon, Icons } from "ts/ui/icon";
-import { InlineGroup } from "ts/ui/layout/inline-group";
 import { LinkTo } from "ts/ui/link-to";
 import {
     PropertiesTable,
@@ -21,13 +20,11 @@ export const Location = (props: PropsOf<HAdrData>) => {
     const summary = addressSummary(location);
 
     return (
-        <InlineGroup className="location" title={_("location")}>
-            <Property
-                icon={Icons.Location}
-                microformat={Microformat.P.Adr}
-                displayValue={summary}
-            />
-        </InlineGroup>
+        <Property
+            icon={Icons.Location}
+            microformat={Microformat.P.Adr}
+            displayValue={summary}
+        />
     );
 };
 
