@@ -19,6 +19,7 @@ button .dropdown-icon {
     max-height: 0;
 }
 @mixin dropdownContentVisible {
+    @include styles.border-left;
     opacity: 1;
     max-height: styles.$max-height;
 }

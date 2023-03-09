@@ -3,8 +3,12 @@
     --border-radius-medium: 10px;
 }
 
-@mixin bordered {
-    border: 1px solid var(--vibrant);
-    border-radius: 1ch;
-    padding: 1ch;
+$border-style: 2px solid var(--vibrant);
+
+@mixin border-left {
+    border-left: $border-style;
+    padding-left: var(--space-1x);
+}
+%border-left {
+    @include border-left;
 }

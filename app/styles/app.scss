@@ -8,7 +8,7 @@
 @use "ts/ui";
 
 html {
-    background-color: #111;
+    background-color: black;
     overflow-y: scroll;
 }
 
@@ -25,11 +25,6 @@ body {
     overflow-x: clip;
     overflow-y: scroll;
     transition: all 200ms;
-}
-
-pre {
-    @include borders.bordered();
-    overflow-x: scroll;
 }
 
 a,

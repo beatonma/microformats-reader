@@ -11,9 +11,8 @@
 }
 
 .h-entry {
+    @extend %border-left;
     margin-block: var(--space-1x);
-    border-left: 2px var(--vibrant) solid;
-    padding-left: var(--space-1-5x);
 
     .property {
         margin-block: 0;

@@ -10,7 +10,7 @@
         background-color: #000000;
         color: #fce664;
         padding: var(--space-1x);
-        border-radius: 4px;
+        border-radius: var(--border-radius-small);
         font-size: var(--fs-caption);
         font-family: monospace;
         transition: all 200ms;
