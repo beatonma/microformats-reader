@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Reader for microformat-compliant content",
   "scripts": {
-    "dev": "webpack --watch --config webpack.dev.js --env DEBUG=true",
-    "build": "webpack --config webpack.production.js",
+    "dev": "webpack --watch --config webpack.dev.js --env DEBUG=true --env VERSION=$(git rev-parse HEAD)",
+    "build": "webpack --config webpack.production.js  --env VERSION=$(git rev-parse HEAD)",
     "test": "jest --watch"
   },
   "keywords": [
