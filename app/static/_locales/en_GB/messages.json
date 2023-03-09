@@ -1,6 +1,6 @@
 {
   "extension_name": {
-    "message": "DEV Microformats Reader"
+    "message": "[DEV] Microformats Reader"
   },
   "extension_description": {
     "message": "Displays microformat data from the active page."

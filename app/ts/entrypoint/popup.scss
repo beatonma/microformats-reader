@@ -1,4 +1,4 @@
-@use "styles";
+@use "styles/app";
 
 /**
  * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
@@ -10,6 +10,8 @@ $popup-max-height: 600px;
 
 html {
     max-height: $popup-max-height;
+    overflow-y: scroll;
+    background-color: black;
 }
 
 body {
@@ -17,6 +19,8 @@ body {
     min-height: $popup-min-height;
     max-width: $popup-max-width;
     max-height: $popup-max-height;
+    overflow-x: clip;
+    overflow-y: scroll;
 }
 
 #quick_links {
@@ -31,8 +35,4 @@ body {
     a {
         font-size: var(--fs-caption);
     }
-}
-
-.microformats-content {
-    padding: 1ch;
 }

@@ -18,6 +18,7 @@ import SampleHFeedImplied from "ts/dev/samples/h-feed_implied.html";
 import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
+import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
 import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
@@ -98,8 +99,4 @@ const PopupDev = () => {
     );
 };
 
-const container = document?.getElementById("container.dev");
-if (container) {
-    const root = createRoot(container);
-    root.render(<PopupDev />);
-}
+initEntrypoint("extension_name", "container.dev", <PopupDev />);

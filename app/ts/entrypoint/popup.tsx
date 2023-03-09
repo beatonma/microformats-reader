@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { ParsedDocument } from "microformats-parser/dist/types";
-import "styles/app.scss";
 import { _, compatBrowser } from "ts/compat";
 import { parseHCards } from "ts/data/parsing/h-card";
 import { parseHFeeds } from "ts/data/parsing/h-feed";
@@ -10,6 +8,7 @@ import { HCardData } from "ts/data/types";
 import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
+import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
 import { Message, MessageResponse } from "ts/message";
 import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
@@ -24,6 +23,7 @@ import {
 import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
 import { PropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
+import "./popup.scss";
 
 export const parseDocument = (
     microformats: ParsedDocument | null
@@ -62,7 +62,7 @@ export const PopupUI = (props: PopupProps) => {
 
     return (
         <ScrimLayout>
-            <div className="microformats-content">
+            <main>
                 <section id="quick_links">
                     <QuickLinks data={relLinks} />
                 </section>
@@ -82,7 +82,7 @@ export const PopupUI = (props: PopupProps) => {
                 <section id="rel_me">
                     <RelmeLinks links={relLinks?.relme} />
                 </section>
-            </div>
+            </main>
         </ScrimLayout>
     );
 };
@@ -140,8 +140,4 @@ const getMicroformatsFromCurrentTab = (): PopupProps => {
     return parseDocument(microformats);
 };
 
-const container = document?.getElementById("container");
-if (container) {
-    const root = createRoot(container);
-    root.render(<Popup />);
-}
+initEntrypoint("extension_name", "container", <Popup />);
