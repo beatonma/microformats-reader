@@ -22,16 +22,13 @@
     ],
 
     "action": {
+        "default_title": "__MSG_popup_title__",
         "default_popup": "popup.html"
     },
 
     "options_page": "options.html",
     "options_ui": {
         "page": "options.html"
-    },
-
-    "background": {
-        "service_worker": "service-worker.js"
     },
 
     "content_scripts": [

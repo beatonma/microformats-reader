@@ -10,6 +10,11 @@ import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { Message, MessageResponse } from "ts/message";
+import {
+    ActiveState,
+    EmptyState,
+    applyToolbarIconState,
+} from "ts/ui/browser/toolbar";
 import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { ScrimLayout } from "ts/ui/layout/dialog";
@@ -55,8 +60,13 @@ export interface PopupProps {
 }
 export const PopupUI = (props: PopupProps) => {
     const { relLinks, hcards, feeds } = props;
+    const isEmpty = noneOf([relLinks, hcards, feeds]);
 
-    if (noneOf([relLinks, hcards, feeds])) {
+    useEffect(() => {
+        updateToolbarIcon(isEmpty);
+    }, [isEmpty]);
+
+    if (isEmpty) {
         return <NoContent />;
     }
 
@@ -123,21 +133,25 @@ const getMicroformatsFromCurrentTab = (): PopupProps => {
     );
 
     useEffect(() => {
-        compatBrowser.tabs
-            .query({ active: true, lastFocusedWindow: true })
-            .then(tabs => {
-                const currentTab = tabs[0];
-                compatBrowser.tabs
-                    .sendMessage(currentTab.id, {
-                        action: Message.getMicroformats,
-                    })
-                    .then((response: MessageResponse) => {
-                        setMicroformats(response.microformats);
-                    });
-            });
+        compatBrowser.tabs.currentTab().then(currentTab => {
+            if (currentTab == null) return;
+
+            compatBrowser.tabs
+                .sendMessage(currentTab.id, {
+                    action: Message.getMicroformats,
+                })
+                .then((response: MessageResponse) => {
+                    setMicroformats(response?.microformats ?? null);
+                });
+        });
     }, []);
 
     return parseDocument(microformats);
+};
+
+const updateToolbarIcon = (isEmpty: boolean) => {
+    const state = isEmpty ? EmptyState : ActiveState;
+    return applyToolbarIconState(state);
 };
 
 initEntrypointUi("extension_name", "container", <Popup />);

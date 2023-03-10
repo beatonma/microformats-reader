@@ -1,12 +1,16 @@
 {
   "extension_name": {
-    "message": "[DEV] Microformats Reader"
+    "message": "DEV Microformats Reader"
   },
   "extension_version": {
     "message": "Version"
   },
   "extension_description": {
     "message": "Displays microformat data from the active page."
+  },
+  "popup_title": {
+    "message": "View microformat content",
+    "description": "Hover text for browser toolbar icon."
   },
   "no_microformat_content": {
     "message": "No microformat content found."

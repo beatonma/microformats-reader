@@ -9,5 +9,5 @@ export interface MessageRequest {
 }
 
 export interface MessageResponse {
-    microformats: ParsedDocument;
+    microformats?: ParsedDocument;
 }
