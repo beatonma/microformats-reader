@@ -28,6 +28,10 @@ const Version = () => {
             >
                 <span>{_("extension_version")}:</span>
                 <code>{AppConfig.version}</code>
+                &middot;
+                <code>{AppConfig.versionDate}</code>
+                &middot;
+                <code>{AppConfig.versionDescription}</code>
             </Row>
         </section>
     );
