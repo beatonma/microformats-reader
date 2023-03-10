@@ -1,4 +1,5 @@
 import { mf2 } from "microformats-parser";
+import "ts/dev/translation";
 
 export const parseTestHtml = (html: string) => {
     return mf2(html, {

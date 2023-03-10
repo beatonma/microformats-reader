@@ -22,6 +22,7 @@ import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
 import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
+import "ts/dev/translation";
 import "./dev.scss";
 
 const Samples = {
