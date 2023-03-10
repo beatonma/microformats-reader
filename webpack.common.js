@@ -13,7 +13,6 @@ module.exports = {
         minimize: false,
     },
     entry: {
-        "service-worker": "./app/ts/entrypoint/service-worker.ts",
         "content-script": "./app/ts/entrypoint/content-script.ts",
         popup: "./app/ts/entrypoint/popup.tsx",
         options: "./app/ts/entrypoint/options.tsx",
