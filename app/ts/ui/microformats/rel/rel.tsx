@@ -58,8 +58,9 @@ const QuickLinks = (
 
     return (
         <>
-            {links.map(link => (
+            {links.map((link, index) => (
                 <QuickLink
+                    key={index}
                     link={link}
                     icon={icon}
                     displayTitle={displayTitle}

@@ -57,7 +57,7 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
                 />
             </h1>
 
-            <Row spaced>
+            <Row spaced className="by-line">
                 <Author author={author} />
 
                 <Property
