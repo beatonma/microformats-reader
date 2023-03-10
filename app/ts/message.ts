@@ -1,4 +1,4 @@
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { PopupProps } from "ts/entrypoint/popup";
 
 export enum Message {
     getMicroformats = "get-microformats",
@@ -8,6 +8,4 @@ export interface MessageRequest {
     action: Message;
 }
 
-export interface MessageResponse {
-    microformats?: ParsedDocument;
-}
+export type MessageResponse = PopupProps;

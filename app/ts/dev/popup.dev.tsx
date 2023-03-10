@@ -18,10 +18,12 @@ import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
 import "ts/dev/translation";
+import { parseDocument } from "ts/entrypoint/content-script";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
-import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
+import { PopupProps, PopupUI } from "ts/entrypoint/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
+import { Loading } from "ts/ui/loading";
 import "./dev.scss";
 
 const Samples = {
@@ -36,7 +38,7 @@ const Samples = {
 };
 
 interface DebugUIProps {
-    microformats: PopupProps;
+    microformats: PopupProps | null;
     parsedDocument: ParsedDocument | null;
     setParsedDocument: (data: ParsedDocument) => void;
 }
@@ -82,9 +84,17 @@ const PopupDev = () => {
     const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
         null
     );
-    const microformats = parseDocument(parsedDocument);
+    const [microformats, setMicroformats] = useState<PopupProps | null>(null);
 
-    if (!microformats) return null;
+    useEffect(() => {
+        if (parsedDocument) {
+            parseDocument(parsedDocument).then(setMicroformats);
+        }
+    }, [parsedDocument]);
+
+    // if (!microformats) return <Loading />;
+
+    // const microformats = parseDocument(parsedDocument);
 
     return (
         <>
@@ -94,7 +104,7 @@ const PopupDev = () => {
                 setParsedDocument={setParsedDocument}
             />
 
-            <PopupUI {...microformats} />
+            {microformats ? <PopupUI {...microformats} /> : <Loading />}
         </>
     );
 };

@@ -27,13 +27,16 @@ const isSameDay = (then: Date, now: Date): boolean =>
 const isYesterday = (then: Date, now: Date): boolean =>
     isSameDay(then, new Date(now.getTime() - MILLIS_IN_DAY));
 
-export const yearsSince = (datetime: Date, __now?: Date): number | null => {
+export const yearsSince = (
+    datetime: Date | string,
+    __now?: Date
+): number | null => {
+    const date = isString(datetime) ? new Date(datetime) : datetime;
     const now = __now ?? new Date();
 
     const dateHasPassed =
-        now.getMonth() >= datetime.getMonth() &&
-        now.getDate() >= datetime.getDate();
-    const yearDifference = now.getFullYear() - datetime.getFullYear();
+        now.getMonth() >= date.getMonth() && now.getDate() >= date.getDate();
+    const yearDifference = now.getFullYear() - date.getFullYear();
     return Math.max(
         0,
         Math.floor(dateHasPassed ? yearDifference : yearDifference - 1)

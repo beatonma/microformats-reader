@@ -30,30 +30,8 @@ import { PropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import "./popup.scss";
 
-export const parseDocument = (
-    microformats: ParsedDocument | null
-): PopupProps => {
-    const [relLinks, setRelLinks] = useState<RelatedLinks | null>(null);
-    const [hcards, setHCards] = useState<HCardData[] | null>(null);
-    const [feeds, setFeeds] = useState<HFeedData[] | null>(null);
-
-    useEffect(() => {
-        if (!microformats) return;
-        parseRelatedLinks(microformats).then(setRelLinks);
-        parseHCards(microformats).then(setHCards);
-        parseHFeeds(microformats).then(setFeeds);
-
-        injectTheme(null);
-    }, [microformats]);
-
-    return {
-        relLinks: relLinks,
-        hcards: hcards,
-        feeds: feeds,
-    };
-};
-
 export interface PopupProps {
+    microformats: ParsedDocument;
     relLinks: RelatedLinks | null;
     hcards: HCardData[] | null;
     feeds: HFeedData[] | null;
@@ -110,6 +88,9 @@ const NoContent = () => (
 
 const Popup = () => {
     const microformats = getMicroformatsFromCurrentTab();
+
+    if (microformats == null) return null;
+
     return <PopupUI {...microformats} />;
 };
 
@@ -127,10 +108,8 @@ const QuickLinks = (props: PropsOf<RelatedLinks>) => {
     );
 };
 
-const getMicroformatsFromCurrentTab = (): PopupProps => {
-    const [microformats, setMicroformats] = useState<ParsedDocument | null>(
-        null
-    );
+const getMicroformatsFromCurrentTab = (): PopupProps | undefined => {
+    const [props, setProps] = useState<PopupProps>();
 
     useEffect(() => {
         compatBrowser.tabs.currentTab().then(currentTab => {
@@ -141,12 +120,13 @@ const getMicroformatsFromCurrentTab = (): PopupProps => {
                     action: Message.getMicroformats,
                 })
                 .then((response: MessageResponse) => {
-                    setMicroformats(response?.microformats ?? null);
+                    setProps(response);
+                    injectTheme(null);
                 });
         });
     }, []);
 
-    return parseDocument(microformats);
+    return props;
 };
 
 const updateToolbarIcon = (isEmpty: boolean) => {

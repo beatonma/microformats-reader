@@ -28,7 +28,7 @@ export class ChromeBrowserProxy implements BrowserProxy {
     runtime = {
         onMessage: {
             addListener: (listener: any) => {
-                chrome.runtime.onMessage.addListener(listener);
+                chrome.runtime?.onMessage?.addListener(listener);
             },
         },
     };
