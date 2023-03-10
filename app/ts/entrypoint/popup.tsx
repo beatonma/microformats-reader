@@ -8,7 +8,7 @@ import { HCardData } from "ts/data/types";
 import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
-import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
+import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { Message, MessageResponse } from "ts/message";
 import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
@@ -140,4 +140,4 @@ const getMicroformatsFromCurrentTab = (): PopupProps => {
     return parseDocument(microformats);
 };
 
-initEntrypoint("extension_name", "container", <Popup />);
+initEntrypointUi("extension_name", "container", <Popup />);

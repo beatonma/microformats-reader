@@ -1,7 +1,7 @@
 import React from "react";
 import { _ } from "ts/compat";
 import { Todo } from "ts/dev";
-import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
+import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { AppConfig } from "ts/options";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { RowSpace } from "ts/ui/layout/row";
@@ -37,4 +37,4 @@ const Version = () => {
     );
 };
 
-initEntrypoint("options_title", "container", <Options />);
+initEntrypointUi("options_title", "container", <Options />);

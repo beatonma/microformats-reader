@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { _, compatBrowser } from "ts/compat";
 
-export const initEntrypoint = (
+export const initEntrypointUi = (
     titleMessageName: string,
     htmlContainerId: string,
     entrypoint: ReactNode

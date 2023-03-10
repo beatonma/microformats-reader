@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { mf2 } from "microformats-parser";
 import { ParsedDocument } from "microformats-parser/dist/types";
 // @ts-ignore
@@ -18,11 +17,11 @@ import SampleHFeedImplied from "ts/dev/samples/h-feed_implied.html";
 import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
-import { initEntrypoint } from "ts/entrypoint/init-entrypoint";
+import "ts/dev/translation";
+import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { PopupProps, PopupUI, parseDocument } from "ts/entrypoint/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
-import "ts/dev/translation";
 import "./dev.scss";
 
 const Samples = {
@@ -100,4 +99,4 @@ const PopupDev = () => {
     );
 };
 
-initEntrypoint("extension_name", "container.dev", <PopupDev />);
+initEntrypointUi("extension_name", "container.dev", <PopupDev />);
