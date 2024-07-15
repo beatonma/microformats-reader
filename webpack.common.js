@@ -21,7 +21,7 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: ["babel-loader"],
+                use: ["swc-loader"],
                 exclude: /node_modules/,
             },
             {
@@ -34,16 +34,12 @@ module.exports = {
                 ],
             },
             {
-                test: /.svg$/,
+                test: /\.svg$/,
                 use: [
-                    "babel-loader",
                     {
-                        loader: "react-svg-loader",
+                        loader: "@svgr/webpack",
                         options: {
-                            jsx: true,
-                            svgo: {
-                                plugins: [{ removeViewBox: false }],
-                            },
+                            icon: true,
                         },
                     },
                 ],
