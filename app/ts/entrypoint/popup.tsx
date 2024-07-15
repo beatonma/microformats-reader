@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { ParsedDocument } from "@microformats-parser";
 import { _, compatBrowser } from "ts/compat";
-import { parseHCards } from "ts/data/parsing/h-card";
-import { parseHFeeds } from "ts/data/parsing/h-feed";
-import { parseRelatedLinks } from "ts/data/parsing/related-links";
 import { HCardData } from "ts/data/types";
 import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
@@ -56,9 +53,7 @@ export const PopupUI = (props: PopupProps) => {
                 </section>
 
                 <section id="h_cards">
-                    {hcards?.map(hcard => (
-                        <HCard {...hcard} key={hcard.id} />
-                    ))}
+                    {hcards?.map(hcard => <HCard {...hcard} key={hcard.id} />)}
                 </section>
 
                 <section id="h_feeds">

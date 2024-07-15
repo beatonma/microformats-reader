@@ -1,5 +1,5 @@
 import React from "react";
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { ParsedDocument } from "@microformats-parser";
 import { HFeedData } from "ts/data/types";
 import { HCardData } from "ts/data/types/h-card";
 import { Dropdown } from "ts/ui/layout/dropdown";

@@ -1,17 +1,19 @@
 import { ChromeBrowserProxy } from "ts/compat/browser/chrome";
 import { BrowserProxy } from "ts/compat/browser/types";
+import { MockBrowserProxy } from "ts/compat/browser/mock";
 
-declare const browser: any;
-declare const chrome: any;
+declare const browser: any | undefined;
+declare const chrome: any | undefined;
 
 const getCompatBrowser = (): BrowserProxy => {
-    if (chrome !== undefined) {
+    if (typeof chrome !== "undefined") {
         return new ChromeBrowserProxy();
     }
-    if (browser !== undefined) {
+    if (typeof browser !== "undefined") {
         return browser;
     }
-    throw "Unsupported browser!";
+
+    return new MockBrowserProxy();
 };
 
 export const compatBrowser = getCompatBrowser();

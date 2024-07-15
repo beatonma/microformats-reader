@@ -1,4 +1,4 @@
-import { MicroformatProperties } from "microformats-parser/dist/types";
+import { MicroformatProperties } from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { parseEmbeddedHCard } from "ts/data/parsing/h-card";
 import { Parse } from "ts/data/parsing/parse";
@@ -13,7 +13,7 @@ import { noneOf } from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
 
 export const parseHEntry = (
-    entry: MicroformatProperties
+    entry: MicroformatProperties,
 ): HEntryData | null => {
     const name = Parse.first<string>(entry, Microformat.P.Name);
     const summary = Parse.first<string>(entry, Microformat.P.Summary);
@@ -39,12 +39,12 @@ export const parseHEntry = (
             author: author,
             location: location,
         },
-        { requireAnyKey: ["name", "summary", "url"] }
+        { requireAnyKey: ["name", "summary", "url"] },
     );
 };
 
 const parseInteractions = (
-    entry: MicroformatProperties
+    entry: MicroformatProperties,
 ): HEntryInteractions | null => {
     const inReplyTo = Parse.first<string>(entry, Microformat.U.InReplyTo);
     const likeOf = Parse.first<string>(entry, Microformat.U.LikeOf);

@@ -1,9 +1,8 @@
 import {
     MicroformatProperties,
-    MicroformatProperty,
     MicroformatRoot,
     ParsedDocument,
-} from "microformats-parser/dist/types";
+} from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing/parse";
 import { HAdrData, isString } from "ts/data/types";
@@ -26,12 +25,12 @@ import { nullable } from "ts/data/util/object";
  */
 
 export const parseHCards = async (
-    microformats: ParsedDocument
+    microformats: ParsedDocument,
 ): Promise<HCardData[] | null> =>
     new Promise((resolve, reject) => {
         const items = Parse.getRootsOfType(
             microformats.items,
-            Microformat.H.Card
+            Microformat.H.Card,
         ).map(item => item.properties);
 
         const primaryHcards = items.map(parseHCard).filter(notNullish);
@@ -79,7 +78,7 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
             images: images,
             extras: extras,
         },
-        { ignoredKeys: ["id"] }
+        { ignoredKeys: ["id"] },
     );
 };
 
@@ -95,7 +94,7 @@ const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
 
 const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
     const _parseLocation = (
-        obj?: MicroformatProperties | string | null
+        obj?: MicroformatProperties | string | null,
     ): HAdrData | null => {
         if (obj == null) return null;
 
@@ -125,11 +124,11 @@ const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
             streetAddress: Parse.get<string>(obj, Microformat.P.Street_Address),
             extendedAddress: Parse.get<string>(
                 obj,
-                Microformat.P.Extended_Address
+                Microformat.P.Extended_Address,
             ),
             postOfficeBox: Parse.get<string>(
                 obj,
-                Microformat.P.Post_Office_Box
+                Microformat.P.Post_Office_Box,
             ),
             label: Parse.get<string>(obj, Microformat.P.Label),
             geo: Parse.get<string>(obj, Microformat.H.Geo),
@@ -148,20 +147,20 @@ const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
 };
 
 const parseNameDetails = (
-    hcard: MicroformatProperties
+    hcard: MicroformatProperties,
 ): HCardNameDetail | null => {
     const honorificPrefix = Parse.get<string>(
         hcard,
-        Microformat.P.Honorific_Prefix
+        Microformat.P.Honorific_Prefix,
     );
     const honorificSuffix = Parse.get<string>(
         hcard,
-        Microformat.P.Honorific_Suffix
+        Microformat.P.Honorific_Suffix,
     );
     const givenName = Parse.get<string>(hcard, Microformat.P.Given_Name);
     const additionalName = Parse.get<string>(
         hcard,
-        Microformat.P.Additional_Name
+        Microformat.P.Additional_Name,
     );
     const familyName = Parse.get<string>(hcard, Microformat.P.Family_Name);
     const sortBy = Parse.get<string>(hcard, Microformat.P.Sort_String);
@@ -202,12 +201,12 @@ const parsePronouns = (hcard: MicroformatProperties): string[] | null => {
 };
 
 const parseGender = (
-    hcard: MicroformatProperties
+    hcard: MicroformatProperties,
 ): HCardGenderIdentity | null => {
     const pronouns = parsePronouns(hcard);
     const genderIdentity = Parse.get<string>(
         hcard,
-        Microformat.P.Gender_Identity
+        Microformat.P.Gender_Identity,
     );
     const sex = Parse.get<string>(hcard, Microformat.P.Sex);
 
@@ -229,7 +228,7 @@ const parseDates = (hcard: MicroformatProperties): HCardDates | null => {
 };
 
 const parseContact = (
-    hcard: MicroformatProperties
+    hcard: MicroformatProperties,
 ): HCardContactData | null => {
     const url = Parse.get<string>(hcard, Microformat.U.Url);
     const email = Parse.get<string>(hcard, Microformat.U.Email);
@@ -273,7 +272,7 @@ const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
 
 export const parseEmbeddedHCard = (
     container: MicroformatProperties,
-    key: string
+    key: string,
 ): EmbeddedHCard | null => {
     const obj = Parse.first<MicroformatRoot | string>(container, key);
     if (obj == null) return null;

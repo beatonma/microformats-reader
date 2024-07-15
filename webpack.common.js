@@ -53,6 +53,9 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
         modules: [path.resolve(__dirname, "./app"), "node_modules"],
+        alias: {
+            process: "process/browser",
+        },
     },
     output: {
         filename: "[name].js",

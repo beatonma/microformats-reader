@@ -1,15 +1,54 @@
-import { compatBrowser } from "ts/compat/browser";
-import { AppConfig } from "ts/options";
+import {
+    BrowserAction,
+    BrowserI18n,
+    BrowserProxy,
+    BrowserRuntime,
+    BrowserTabs,
+} from "ts/compat/browser/types";
 
-const MessagesJson =
-    AppConfig.isDebug || AppConfig.isTest
-        ? require("static/_locales/en_GB/messages.json")
-        : {};
+export class MockBrowserProxy implements BrowserProxy {
+    constructor() {
+        console.log("MockBrowserProxy should only be used in tests.");
+    }
+
+    tabs: BrowserTabs = {
+        query: mock([]),
+
+        currentTab: mock({}),
+
+        sendMessage: mock({}),
+
+        create: mock({}),
+    };
+
+    runtime: BrowserRuntime = {
+        onMessage: {
+            addListener: mock({}),
+        },
+    };
+
+    i18n: BrowserI18n = {
+        getMessage: getStaticMessage,
+        getUILanguage: () => "en-GB",
+    };
+
+    // action = mock.action;
+    action: BrowserAction = {
+        setBadgeText: mock({}),
+        setBadgeColors: mock({}),
+    };
+
+    toString = () => "Mock";
+}
 
 interface TranslationMessage {
     message: string;
     placeholders?: Record<string, { content: string; example?: string }>;
 }
+
+const mock = <T>(retValue: T): (() => Promise<T>) => {
+    return async () => retValue;
+};
 
 /**
  * Mock of browser i18n.getMessage when the browser API is not available.
@@ -17,7 +56,8 @@ interface TranslationMessage {
  * - During tests with `jest`
  * - While building the popup UI in a browser tab instead of in an actual extension popup.
  */
-function getStaticMessage(name: string, ...substitutions: any): string {
+const getStaticMessage = (name: string, ...substitutions: any): string => {
+    const MessagesJson = require("static/_locales/en_GB/messages.json");
     const translation: TranslationMessage | null = MessagesJson[name];
 
     if (!translation) return `__nostr:__${name}`;
@@ -44,13 +84,4 @@ function getStaticMessage(name: string, ...substitutions: any): string {
     }
 
     return message.replace(/\$(\w+)\$/, "_");
-}
-
-if (AppConfig.isTest || compatBrowser.i18n == null) {
-    // Patch translation stuff for in-tab UI dev.
-    console.debug(`[DEBUG] Patching browser.i18n (${compatBrowser})`);
-    compatBrowser.i18n = {
-        getMessage: getStaticMessage,
-        getUILanguage: () => "en-GB",
-    };
-}
+};

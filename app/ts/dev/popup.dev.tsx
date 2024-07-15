@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { mf2 } from "microformats-parser";
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { ParsedDocument } from "@microformats-parser";
 // @ts-ignore
 import SampleEmpty from "ts/dev/samples/empty.html";
 // @ts-ignore
@@ -17,7 +17,6 @@ import SampleHFeedImplied from "ts/dev/samples/h-feed_implied.html";
 import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
-import "ts/dev/translation";
 import { parseDocument } from "ts/entrypoint/content-script";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { PopupProps, PopupUI } from "ts/entrypoint/popup";
@@ -44,11 +43,11 @@ interface DebugUIProps {
 }
 const DebugUI = (props: DebugUIProps) => {
     const [page, setPage] = useState<keyof typeof Samples>(
-        "Sample: h-card, h-feed"
+        "Sample: h-card, h-feed",
     );
     useEffect(() => {
         props.setParsedDocument(
-            mf2(Samples[page], { baseUrl: "https://example.beatonma.org" })
+            mf2(Samples[page], { baseUrl: "https://example.beatonma.org" }),
         );
     }, [page]);
 
@@ -82,7 +81,7 @@ const DebugUI = (props: DebugUIProps) => {
 
 const PopupDev = () => {
     const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
-        null
+        null,
     );
     const [microformats, setMicroformats] = useState<PopupProps | null>(null);
 
@@ -91,10 +90,6 @@ const PopupDev = () => {
             parseDocument(parsedDocument).then(setMicroformats);
         }
     }, [parsedDocument]);
-
-    // if (!microformats) return <Loading />;
-
-    // const microformats = parseDocument(parsedDocument);
 
     return (
         <>
@@ -109,4 +104,4 @@ const PopupDev = () => {
     );
 };
 
-initEntrypointUi("extension_name", "container.dev", <PopupDev />);
+initEntrypointUi("extension_name", "container", <PopupDev />);

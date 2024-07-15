@@ -1,5 +1,5 @@
 import React, { HTMLProps } from "react";
-import { Image } from "microformats-parser/dist/types";
+import { Image } from "@microformats-parser";
 
 interface ImgProps
     extends Omit<HTMLProps<HTMLImageElement>, "src" | "alt" | "loading"> {

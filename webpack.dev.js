@@ -15,17 +15,7 @@ module.exports = (env, argv) => {
             static: "./dist",
         },
         entry: {
-            "popup.dev": "./app/ts/dev/popup.dev.tsx",
-        },
-
-        module: {
-            rules: [
-                {
-                    test: /\.tsx?$/,
-                    use: ["ts-loader"],
-                    exclude: /node_modules/,
-                },
-            ],
+            popup: "./app/ts/dev/popup.dev.tsx",
         },
         plugins: [new webpack.DefinePlugin(injectedEnv)],
     });

@@ -4,7 +4,7 @@ import {
     MicroformatProperties,
     MicroformatProperty,
     MicroformatRoot,
-} from "microformats-parser/dist/types";
+} from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
 import { notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
@@ -12,12 +12,12 @@ import { notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 export namespace Parse {
     export const getRootsOfType = (
         items: MicroformatRoot[],
-        type: Microformat.H
+        type: Microformat.H,
     ): MicroformatRoot[] => items.filter(item => item.type?.includes(type));
 
     export const get = <T extends MicroformatProperty>(
         container: MicroformatProperties,
-        key: string
+        key: string,
     ): T[] | null => {
         const value = container?.[key.replace(/^(dt|e|h|p|u)-/, "")];
         return takeIfNotEmpty(value) as T[];
@@ -25,12 +25,12 @@ export namespace Parse {
 
     export const first = <T extends MicroformatProperty>(
         container: MicroformatProperties,
-        key: string
+        key: string,
     ): T | null => (get(container, key)?.find(notNullish) as T) ?? null;
 
     export const firstImage = (
         container: MicroformatProperties,
-        key: string
+        key: string,
     ): Image | null => {
         const result = first(container, key);
         if (isString(result)) {
@@ -44,7 +44,7 @@ export namespace Parse {
 
     export const getDate = (
         container: MicroformatProperties,
-        key: string
+        key: string,
     ): Date[] | null => {
         const dates = get<string>(container, key);
 
@@ -53,7 +53,7 @@ export namespace Parse {
 
     export const getEmbeddedValue = (
         container: MicroformatProperties,
-        key: string
+        key: string,
     ): string[] | null => {
         return get(container, key)?.map((it: Html) => it["value"]) ?? null;
     };
@@ -63,6 +63,6 @@ export namespace Parse {
      */
     export const getExperimental = <T extends MicroformatProperty>(
         hcard: MicroformatProperties,
-        key: string
+        key: string,
     ): T[] | null => get(hcard, key) ?? get(hcard, `x-${key}`);
 }

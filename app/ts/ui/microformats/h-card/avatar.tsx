@@ -1,5 +1,5 @@
 import React, { HTMLProps, useState } from "react";
-import { Image } from "microformats-parser/dist/types";
+import { Image } from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { Named } from "ts/data/types/common";
 import { HCardImages } from "ts/data/types/h-card";
@@ -10,7 +10,7 @@ interface AvatarProps {
 }
 
 export const Avatar = (
-    props: HTMLProps<HTMLDivElement> & Named & AvatarProps
+    props: HTMLProps<HTMLDivElement> & Named & AvatarProps,
 ) => {
     const { name, images, ...rest } = props;
     const [hasLoadingError, setLoadingError] = useState(false);
@@ -53,7 +53,7 @@ interface SingleImageAvatarProps {
     onError: () => void;
 }
 const SingleImageAvatar = (
-    props: HTMLProps<HTMLDivElement> & SingleImageAvatarProps
+    props: HTMLProps<HTMLDivElement> & SingleImageAvatarProps,
 ) => {
     const { image, imageClassName, onError, ...rest } = props;
 
@@ -70,7 +70,7 @@ interface PhotoWithLogoProps {
     onError: () => void;
 }
 const PhotoWithLogo = (
-    props: HTMLProps<HTMLDivElement> & PhotoWithLogoProps
+    props: HTMLProps<HTMLDivElement> & PhotoWithLogoProps,
 ) => {
     const { name, photo, logo, onError, ...rest } = props;
     return (

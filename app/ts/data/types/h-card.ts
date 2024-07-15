@@ -1,5 +1,5 @@
-import { Image } from "microformats-parser/dist/types";
 import { HAdrData } from "ts/data/types/h-adr";
+import { Image } from "@microformats-parser";
 
 export interface HCardData {
     id: string;

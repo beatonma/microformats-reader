@@ -1,5 +1,5 @@
 import React, { HTMLProps, MouseEvent, ReactNode } from "react";
-import { Image } from "microformats-parser/dist/types";
+import { Image } from "@microformats-parser";
 import { Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { Named } from "ts/data/types/common";
@@ -41,8 +41,8 @@ interface Link {
     href: string | null | undefined;
     displayValue: ReactNode | Date | null | undefined;
 }
-const isLink = (obj: any): obj is Link =>
-    obj.hasOwnProperty("href") && obj.hasOwnProperty("displayValue");
+const isLink = (obj: any | undefined): obj is Link =>
+    obj?.hasOwnProperty("href") && obj?.hasOwnProperty("displayValue");
 
 interface PropertyLayoutBuildProps {
     layoutProps: Record<string, any>;
@@ -164,7 +164,7 @@ interface PropertiesTableProps {
     tableHeader?: string;
 }
 export const PropertiesTable = (
-    props: HTMLProps<HTMLTableElement> & PropertiesTableProps
+    props: HTMLProps<HTMLTableElement> & PropertiesTableProps,
 ) => {
     const { className, children, ...rest } = props;
     return (

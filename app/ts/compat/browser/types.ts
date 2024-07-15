@@ -1,7 +1,7 @@
 export interface BrowserProxy {
     tabs: BrowserTabs;
     runtime: BrowserRuntime;
-    i18n: Browseri18n;
+    i18n: BrowserI18n;
     action: BrowserAction;
 }
 
@@ -42,7 +42,7 @@ export interface BrowserRuntime {
 //
 // i18n
 //
-export interface Browseri18n {
+export interface BrowserI18n {
     getMessage: (key: string, substitutions?: any) => string;
     getUILanguage: () => string;
 }

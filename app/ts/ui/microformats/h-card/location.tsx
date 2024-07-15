@@ -111,7 +111,7 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
     );
 };
 
-function addressSummary(location: HAdrData): string | null {
+const addressSummary = (location: HAdrData): string | null => {
     const { countryName, locality, region, latitude, longitude } = location;
 
     let fields: string[] = [
@@ -124,9 +124,9 @@ function addressSummary(location: HAdrData): string | null {
     }
 
     return formatLatLong(latitude, longitude) ?? null;
-}
+};
 
-function LinkToMap(props: HTMLProps<HTMLAnchorElement>) {
+const LinkToMap = (props: HTMLProps<HTMLAnchorElement>) => {
     const { href, className, ...rest } = props;
     if (!href) return null;
 
@@ -135,7 +135,7 @@ function LinkToMap(props: HTMLProps<HTMLAnchorElement>) {
             <Icon icon={Icons.Map} /> Open in Google Maps
         </LinkTo>
     );
-}
+};
 
 const getMapsUrl = (location: HAdrData): string | undefined => {
     const query = (

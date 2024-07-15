@@ -2,7 +2,7 @@ import {
     MicroformatProperties,
     MicroformatRoot,
     ParsedDocument,
-} from "microformats-parser/dist/types";
+} from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { parseEmbeddedHCard } from "ts/data/parsing/h-card";
 import { parseHEntry } from "ts/data/parsing/h-entry";
@@ -16,18 +16,18 @@ import {
 } from "ts/data/util/arrays";
 
 export const parseHFeeds = async (
-    microformats: ParsedDocument
+    microformats: ParsedDocument,
 ): Promise<HFeedData[] | null> => {
     return new Promise((resolve, reject) => {
         const feeds = Parse.getRootsOfType(
             microformats.items,
-            Microformat.H.Feed
+            Microformat.H.Feed,
         )
             .map(parseHFeed)
             .filter(notNullish);
 
         const unwrappedEntries = wrapWithHFeed(
-            Parse.getRootsOfType(microformats.items, Microformat.H.Entry)
+            Parse.getRootsOfType(microformats.items, Microformat.H.Entry),
         );
 
         const result = [...feeds, unwrappedEntries].filter(notNullish);

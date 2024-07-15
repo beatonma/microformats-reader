@@ -1,5 +1,5 @@
 import { mf2 } from "microformats-parser";
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { ParsedDocument } from "@microformats-parser";
 import { compatBrowser } from "ts/compat";
 import { parseHCards } from "ts/data/parsing/h-card";
 import { parseHFeeds } from "ts/data/parsing/h-feed";
@@ -9,7 +9,6 @@ import { PopupProps } from "ts/entrypoint/popup";
 import { Message, MessageRequest, MessageResponse } from "ts/message";
 
 const loadMicroformats = () => {
-    console.log("loadMicroformats");
     const documentHtml = document.documentElement.innerHTML;
 
     return mf2(documentHtml, {
@@ -18,9 +17,8 @@ const loadMicroformats = () => {
 };
 
 export const parseDocument = async (
-    parsed: ParsedDocument = loadMicroformats()
+    parsed: ParsedDocument = loadMicroformats(),
 ): Promise<PopupProps> => {
-    console.log("parseDocument");
     const relatedLinks = await parseRelatedLinks(parsed);
     const hcards = await parseHCards(parsed);
     const hfeeds = await parseHFeeds(parsed);
@@ -37,18 +35,18 @@ compatBrowser.runtime.onMessage.addListener(
     (
         request: MessageRequest,
         sender: any,
-        sendResponse: (response?: MessageResponse) => void
+        sendResponse: (response?: MessageResponse) => void,
     ) => {
         if (request.action === Message.getMicroformats) {
             microformats.then(props => {
                 sendResponse(props);
             });
         }
-    }
+    },
 );
 
 const microformats = parseDocument();
 
 TODO(
-    "Get colors from theme and/or use `vibrant` on photo/logo: https://github.com/Vibrant-Colors/node-vibrant"
+    "Get colors from theme and/or use `vibrant` on photo/logo: https://github.com/Vibrant-Colors/node-vibrant",
 );

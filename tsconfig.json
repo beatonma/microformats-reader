@@ -14,9 +14,9 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "baseUrl": "app/",
-        "typeRoots": [
-            "node_modules/@types"
-        ]
+        "paths": {
+            "@microformats-parser": ["./@types/microformats-parser"]
+        }
     },
     "exclude": [
         "build/",

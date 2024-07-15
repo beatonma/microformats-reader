@@ -1,9 +1,9 @@
-import { ParsedDocument } from "microformats-parser/dist/types";
+import { ParsedDocument } from "@microformats-parser";
 import { RelLink, RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
 
 export const parseRelatedLinks = async (
-    microformats: ParsedDocument
+    microformats: ParsedDocument,
 ): Promise<RelatedLinks | null> =>
     new Promise((resolve, reject) => {
         const rels = microformats?.rels ?? null;
@@ -31,7 +31,7 @@ export const parseRelatedLinks = async (
 
 const build = (
     microformats: ParsedDocument,
-    links: string[] | null | undefined
+    links: string[] | null | undefined,
 ): RelLink[] | null => {
     if (links == null || links.length === 0) return null;
     return links
