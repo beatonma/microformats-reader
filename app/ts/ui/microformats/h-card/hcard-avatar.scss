@@ -36,18 +36,20 @@ $-secondary-size-large: 32px;
 
 .h-card {
     .avatar {
-        @include avatarCollapsed;
-        @include avatarSize($primary-size-small, $-secondary-size-small);
         animation-duration: animation.$duration-long;
         animation-fill-mode: both;
         animation-timing-function: ease-in-out;
+
+        @include avatarCollapsed;
+        @include avatarSize($primary-size-small, $-secondary-size-small);
     }
 
     [aria-expanded="true"] {
         .avatar {
+            animation-name: avatarGrow;
+
             @include styles.fixedSize($-primary-size-large);
             @include avatarSize($-primary-size-large, $-secondary-size-large);
-            animation-name: avatarGrow;
         }
     }
 
