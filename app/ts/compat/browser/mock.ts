@@ -18,13 +18,14 @@ export class MockBrowserProxy implements BrowserProxy {
 
         sendMessage: mock({}),
 
-        create: mock({}),
+        create: mock(undefined),
     };
 
     runtime: BrowserRuntime = {
         onMessage: {
-            addListener: mock({}),
+            addListener: mock(undefined),
         },
+        sendMessage: mock(undefined),
     };
 
     i18n: BrowserI18n = {
@@ -32,10 +33,9 @@ export class MockBrowserProxy implements BrowserProxy {
         getUILanguage: () => "en-GB",
     };
 
-    // action = mock.action;
     action: BrowserAction = {
-        setBadgeText: mock({}),
-        setBadgeColors: mock({}),
+        setBadgeText: mock(undefined),
+        setBadgeColors: mock(undefined),
     };
 
     toString = () => "Mock";

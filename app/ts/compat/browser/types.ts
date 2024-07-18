@@ -1,5 +1,7 @@
 import { MessageRequest } from "ts/message";
 
+type ErrorString = void | string | undefined;
+
 export interface BrowserProxy {
     tabs: BrowserTabs;
     runtime: BrowserRuntime;
@@ -17,15 +19,18 @@ export interface BrowserTab {
 export interface BrowserTabs {
     query: (queryInfo: TabQuery) => Promise<BrowserTab[]>;
     currentTab: () => Promise<BrowserTab | null>;
-    sendMessage: (tabId: number | undefined, message: any) => Promise<any>;
-    create: (properties: CreateTabProperties) => Promise<any>;
+    sendMessage: <T extends MessageRequest>(
+        tabId: number | undefined,
+        message: T,
+    ) => Promise<unknown | ErrorString>;
+    create: (properties: CreateTabProperties) => Promise<ErrorString>;
 }
 
-export interface TabQuery {
+interface TabQuery {
     active?: boolean;
     lastFocusedWindow?: boolean;
 }
-export interface CreateTabProperties {
+interface CreateTabProperties {
     active: boolean;
     url: string;
 }
@@ -81,6 +86,6 @@ export interface SetBadgeTextDetails {
     text?: string;
 }
 export interface BrowserAction {
-    setBadgeText: (details: SetBadgeTextDetails) => Promise<any>;
-    setBadgeColors: (details: SetBadgeColorDetails) => Promise<any>;
+    setBadgeText: (details: SetBadgeTextDetails) => Promise<ErrorString>;
+    setBadgeColors: (details: SetBadgeColorDetails) => Promise<ErrorString>;
 }
