@@ -5,7 +5,7 @@ import { _, compatBrowser } from "ts/compat";
 export const initEntrypointUi = (
     titleMessageName: string,
     htmlContainerId: string,
-    entrypoint: ReactNode
+    entrypoint: ReactNode,
 ) => {
     const container = document?.getElementById(htmlContainerId);
     if (container) {

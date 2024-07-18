@@ -1,3 +1,5 @@
+import { MessageRequest } from "ts/message";
+
 export interface BrowserProxy {
     tabs: BrowserTabs;
     runtime: BrowserRuntime;
@@ -31,12 +33,31 @@ export interface CreateTabProperties {
 //
 // Runtime
 //
+interface MessageSender {
+    documentId?: string;
+    documentLifecycle?: string;
+    frameId?: number;
+    id?: string;
+    origin?: string;
+    tab?: BrowserTab;
+    tlsChannelId?: string;
+    url?: string;
+}
+type MessageListener = (
+    message: MessageRequest,
+    sender: MessageSender,
+    sendResponse: (response: object) => void,
+) => boolean | Promise<unknown>;
 export interface BrowserRuntimeOnMessage {
-    addListener: (listener: any) => void;
+    addListener: (listener: MessageListener) => void;
 }
 
 export interface BrowserRuntime {
     onMessage: BrowserRuntimeOnMessage;
+    sendMessage: <T extends MessageRequest>(
+        message: T,
+        options?: object,
+    ) => Promise<any>;
 }
 
 //

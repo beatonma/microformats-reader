@@ -7,6 +7,8 @@ import { parseRelatedLinks } from "ts/data/parsing/related-links";
 import { TODO } from "ts/dev";
 import { PopupProps } from "ts/entrypoint/popup";
 import { Message, MessageRequest, MessageResponse } from "ts/message";
+import { noneOf } from "ts/data/util/arrays";
+import { ActiveState, EmptyState } from "ts/ui/browser/toolbar";
 
 const loadMicroformats = () => {
     const documentHtml = document.documentElement.innerHTML;
@@ -34,18 +36,30 @@ export const parseDocument = async (
 compatBrowser.runtime.onMessage.addListener(
     (
         request: MessageRequest,
-        sender: any,
-        sendResponse: (response?: MessageResponse) => void,
+        sender,
+        sendResponse: (response: MessageResponse) => void,
     ) => {
         if (request.action === Message.getMicroformats) {
-            microformats.then(props => {
-                sendResponse(props);
-            });
+            microformats.then(sendResponse);
+            return true;
         }
+        return false;
     },
 );
 
 const microformats = parseDocument();
+
+microformats.then(value => {
+    const { relLinks, hcards, feeds } = value;
+
+    const isEmpty = noneOf([relLinks, hcards, feeds]);
+    const state = isEmpty ? EmptyState : ActiveState;
+
+    void compatBrowser.runtime.sendMessage({
+        action: Message.showBadge,
+        state: state,
+    });
+});
 
 TODO(
     "Get colors from theme and/or use `vibrant` on photo/logo: https://github.com/Vibrant-Colors/node-vibrant",

@@ -1,6 +1,10 @@
 import {
+    BrowserAction,
+    BrowserI18n,
     BrowserProxy,
+    BrowserRuntime,
     BrowserTab,
+    BrowserTabs,
     SetBadgeColorDetails,
     SetBadgeTextDetails,
 } from "ts/compat/browser/types";
@@ -8,7 +12,7 @@ import {
 declare const chrome: any;
 
 export class ChromeBrowserProxy implements BrowserProxy {
-    tabs = {
+    tabs: BrowserTabs = {
         query: (queryInfo: any) => chrome.tabs.query(queryInfo),
 
         currentTab: () =>
@@ -25,20 +29,24 @@ export class ChromeBrowserProxy implements BrowserProxy {
         create: (properties: any) => chrome.tabs.create(properties),
     };
 
-    runtime = {
+    runtime: BrowserRuntime = {
         onMessage: {
             addListener: (listener: any) => {
                 chrome.runtime?.onMessage?.addListener(listener);
             },
         },
+        sendMessage: chrome.runtime?.sendMessage,
     };
 
-    i18n = chrome.i18n;
+    i18n: BrowserI18n = chrome.i18n;
 
-    // action = chrome.action;
-    action = {
-        setBadgeText: (details: SetBadgeTextDetails) =>
-            chrome.action?.setBadgeText(details),
+    action: BrowserAction = {
+        setBadgeText: (details: SetBadgeTextDetails) => {
+            if (chrome.action == null)
+                return browserProxyError("chrome.action.setBadgeText");
+
+            return chrome.action.setBadgeText(details);
+        },
         setBadgeColors: (details: SetBadgeColorDetails) => {
             if (chrome.action == null)
                 return browserProxyError("chrome.action.setBadgeColors");
@@ -52,7 +60,7 @@ export class ChromeBrowserProxy implements BrowserProxy {
                     chrome.action.setBadgeBackgroundColor({
                         tabId: details.tabId,
                         color: details.background,
-                    })
+                    }),
                 );
         },
     };
@@ -62,7 +70,7 @@ export class ChromeBrowserProxy implements BrowserProxy {
 
 const browserProxyError = (name: string, reject?: () => void): null => {
     console.error(
-        `'${name}' failed. This should only occur during in-tab UI building development.`
+        `'${name}' failed. This should only occur during in-tab UI building development.`,
     );
     reject?.();
     return null;

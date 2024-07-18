@@ -14,6 +14,7 @@ module.exports = {
     },
     entry: {
         "content-script": "./app/ts/entrypoint/content-script.ts",
+        "service-worker": "./app/ts/entrypoint/service-worker.ts",
         popup: "./app/ts/entrypoint/popup.tsx",
         options: "./app/ts/entrypoint/options.tsx",
     },
