@@ -1,4 +1,4 @@
-import { PopupProps } from "ts/entrypoint/popup";
+import { PopupProps } from "ts/entrypoint/popup/popup";
 import { ToolbarIconState } from "ts/ui/browser/toolbar";
 
 export enum Message {

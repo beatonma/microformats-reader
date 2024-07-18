@@ -5,7 +5,7 @@ import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { AppConfig } from "ts/options";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { RowSpace } from "ts/ui/layout/row";
-import "./options.scss";
+import "ts/entrypoint/options/options.scss";
 
 const Options = () => {
     return (

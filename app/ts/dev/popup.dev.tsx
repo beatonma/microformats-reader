@@ -19,7 +19,7 @@ import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
 import { parseDocument } from "ts/entrypoint/content-script";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
-import { PopupProps, PopupUI } from "ts/entrypoint/popup";
+import { Popup, PopupProps, PopupUI } from "ts/entrypoint/popup/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
 import { Loading } from "ts/ui/loading";
@@ -40,6 +40,7 @@ interface DebugUIProps {
     microformats: PopupProps | null;
     parsedDocument: ParsedDocument | null;
     setParsedDocument: (data: ParsedDocument) => void;
+    onHide: () => void;
 }
 const DebugUI = (props: DebugUIProps) => {
     const [page, setPage] = useState<keyof typeof Samples>(
@@ -74,12 +75,15 @@ const DebugUI = (props: DebugUIProps) => {
                 <button onClick={() => copyToClipboard(props.microformats)}>
                     Copy result
                 </button>
+
+                <button onClick={props.onHide}>x</button>
             </Row>
         </section>
     );
 };
 
 const PopupDev = () => {
+    const [showSamples, setShowSamples] = useState(true);
     const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
         null,
     );
@@ -91,12 +95,17 @@ const PopupDev = () => {
         }
     }, [parsedDocument]);
 
+    if (!showSamples) {
+        return <Popup />;
+    }
+
     return (
         <>
             <DebugUI
                 microformats={microformats}
                 parsedDocument={parsedDocument}
                 setParsedDocument={setParsedDocument}
+                onHide={() => setShowSamples(false)}
             />
 
             {microformats ? <PopupUI {...microformats} /> : <Loading />}

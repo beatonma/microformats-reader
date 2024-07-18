@@ -5,7 +5,7 @@ import { parseHCards } from "ts/data/parsing/h-card";
 import { parseHFeeds } from "ts/data/parsing/h-feed";
 import { parseRelatedLinks } from "ts/data/parsing/related-links";
 import { TODO } from "ts/dev";
-import { PopupProps } from "ts/entrypoint/popup";
+import { PopupProps } from "ts/entrypoint/popup/popup";
 import { Message, MessageRequest, MessageResponse } from "ts/message";
 import { noneOf } from "ts/data/util/arrays";
 import { ActiveState, EmptyState } from "ts/ui/browser/toolbar";

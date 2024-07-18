@@ -5,9 +5,7 @@ import { HCardData } from "ts/data/types";
 import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
-import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { Message, MessageResponse } from "ts/message";
-import { formatUri } from "ts/ui/formatting";
 import { HorizontalAlignment, Row } from "ts/ui/layout";
 import { ScrimLayout } from "ts/ui/layout/dialog";
 import {
@@ -20,7 +18,7 @@ import {
 import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
 import { PropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
-import "./popup.scss";
+import "ts/entrypoint/popup/popup.scss";
 
 export interface PopupProps {
     microformats: ParsedDocument;
@@ -64,15 +62,10 @@ export const PopupUI = (props: PopupProps) => {
 const NoContent = () => (
     <div id="no_content">
         <p>{_("no_microformat_content")}</p>
-        <p>
-            <a href={document.location.href}>
-                {formatUri(document.location.href)}
-            </a>
-        </p>
     </div>
 );
 
-const Popup = () => {
+export const Popup = () => {
     const microformats = getMicroformatsFromCurrentTab();
 
     if (microformats == null) return null;
@@ -117,5 +110,3 @@ const getMicroformatsFromCurrentTab = (): PopupProps | undefined => {
 
     return props;
 };
-
-initEntrypointUi("extension_name", "container", <Popup />);
