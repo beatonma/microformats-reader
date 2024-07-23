@@ -3,6 +3,7 @@ import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { Row } from "ts/ui/layout";
+import { classes } from "ts/ui/util";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     contentDescription: string;
@@ -48,7 +49,7 @@ export const ExpandableCard = (
     addAnimationEndListener(detailID, isCollapsing, endAnimation);
 
     return (
-        <CardLayout className={`expandable-card ${className ?? ""}`} {...rest}>
+        <CardLayout className={classes("expandable-card", className)} {...rest}>
             <CardContent
                 id={cardContentID}
                 data-expanding={isExpanding}

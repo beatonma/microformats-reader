@@ -21,6 +21,7 @@ import RssFeedSvg from "ts/ui/icon/svg/outline-400/rss_feed.svg";
 import TagSvg from "ts/ui/icon/svg/outline-400/tag.svg";
 // @ts-ignore
 import WorkSvg from "ts/ui/icon/svg/outline-400/work.svg";
+import { classes } from "ts/ui/util";
 
 export enum Icons {
     Anniversary = AnniversarySvg,
@@ -51,7 +52,7 @@ export const Icon = (props: IconProps) => {
 
     return (
         <InlineSvg
-            className={`icon ${className ?? ""}`}
+            className={classes("icon", className)}
             role="img"
             aria-hidden={true}
             {...rest}

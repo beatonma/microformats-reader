@@ -7,6 +7,7 @@ import {
     ExpandCollapseProps,
     ExpandableDefaultProps,
 } from "ts/ui/layout/expand-collapse";
+import { classes } from "ts/ui/util";
 
 export interface DropdownProps extends HTMLProps<HTMLDivElement> {
     header: ReactNode;
@@ -27,7 +28,7 @@ export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
 };
 
 const DropdownLayout = (
-    props: DropdownProps & HTMLProps<HTMLDivElement> & ExpandCollapseProps
+    props: DropdownProps & HTMLProps<HTMLDivElement> & ExpandCollapseProps,
 ) => {
     const {
         className,
@@ -42,12 +43,12 @@ const DropdownLayout = (
 
     return (
         <div
-            className={`dropdown ${className ?? ""}`}
+            className={classes("dropdown", className)}
             data-expanded={isExpanded}
         >
             <DropdownButton
                 title={title ?? undefined}
-                className={`dropdown-header ${headerClassName ?? ""}`}
+                className={classes("dropdown-header", headerClassName)}
                 isExpanded={isExpanded}
                 {...collapsibleControllerProps}
             >
@@ -68,14 +69,14 @@ interface DropdownButtonProps {
     onClick: () => void;
 }
 export const DropdownButton = (
-    props: ComponentProps<"button"> & DropdownButtonProps
+    props: ComponentProps<"button"> & DropdownButtonProps,
 ) => {
     const { title, isExpanded, onClick, className, children, ...rest } = props;
 
     return (
         <button
-            type={"button"}
-            className={`dropdown-button ${className ?? ""}`}
+            type="button"
+            className={classes("dropdown-button", className)}
             onClick={onClick}
             title={
                 isExpanded

@@ -14,6 +14,7 @@ import {
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
+import { classes } from "ts/ui/util";
 
 type DisplayValue = ReactNode | string[] | Date[];
 
@@ -168,7 +169,7 @@ export const PropertiesTable = (
 ) => {
     const { className, children, ...rest } = props;
     return (
-        <table className={`properties ${className ?? ""}`} {...rest}>
+        <table className={classes("properties", className)} {...rest}>
             <TableHeader tableHeader={props.tableHeader} />
             <tbody>{children}</tbody>
         </table>
@@ -313,15 +314,12 @@ interface ResolvedProperties {
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     const { displayValue, href, title, microformat, className } = props;
-    const resolvedClassName = `property-value ${className ?? ""} ${
-        microformat ?? ""
-    }`;
 
     let resolvedHref: string | null = href ?? null;
     let resolvedDisplayValue: ReactNode = isDate(displayValue)
         ? formatShortDateTime(displayValue)
         : displayValue;
-    let extraTitle: (string | null)[] = [];
+    const extraTitle: (string | null)[] = [];
 
     if (isString(displayValue) && isUri(displayValue)) {
         resolvedHref = displayValue;
@@ -337,7 +335,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         .join("\n");
 
     return {
-        resolvedClassName: resolvedClassName,
+        resolvedClassName: classes("property-value", className, microformat),
         resolvedDisplayValue: resolvedDisplayValue,
         resolvedHref: resolvedHref,
         resolvedTitle: resolvedTitle,
