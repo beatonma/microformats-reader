@@ -15,6 +15,10 @@ const loadMicroformats = () => {
 
     return mf2(documentHtml, {
         baseUrl: document.URL,
+        experimental: {
+            lang: true,
+            textContent: true,
+        },
     });
 };
 

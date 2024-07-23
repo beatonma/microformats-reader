@@ -3,6 +3,7 @@ export interface RelLink {
     text: string;
     title: string;
     type: string | null;
+    lang: string | null;
 }
 
 export interface FeedLinks {

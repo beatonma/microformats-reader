@@ -50,6 +50,7 @@ const build = (
             rel.text = rel.text?.trim();
             rel.title = rel.title?.trim();
             rel.type = rel.type?.trim();
+            rel.hreflang = rel.hreflang?.trim();
             return rel;
         })
         .filter(it => (typeFilter ? it.type === typeFilter : true))
@@ -58,6 +59,7 @@ const build = (
             text: rel.text ?? rel.title ?? rel.url,
             title: rel.title ?? rel.url,
             type: rel.type ?? null,
+            lang: rel.hreflang ?? null,
         }))
         .sort((a: RelLink, b: RelLink) => a.text.localeCompare(b.text));
 };
