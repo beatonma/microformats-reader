@@ -6,7 +6,7 @@ export const notNullish = <T>(value: T | null | undefined): value is T =>
     value != null;
 
 export const notNullishOrEmpty = <T>(
-    value: T | null | undefined
+    value: T | null | undefined,
 ): value is T => {
     if (Array.isArray(value)) {
         return value.length > 0 || anyOf(value);
@@ -15,13 +15,13 @@ export const notNullishOrEmpty = <T>(
 };
 
 export const anyOf = <T>(values: T[]): values is T[] =>
-    values.find(notNullishOrEmpty) != null;
+    values.some(notNullishOrEmpty);
 
 export const noneOf = (values: any[]): values is (null | undefined)[] =>
-    values.find(notNullishOrEmpty) == null;
+    !values.some(notNullishOrEmpty);
 
 export const isEmptyOrNull = <T>(
-    value: T[] | null | undefined
+    value: T[] | null | undefined,
 ): value is null | undefined => value == null || value.length === 0;
 
 export const isEmpty = <T>(value: T[]): boolean => value.length === 0;
