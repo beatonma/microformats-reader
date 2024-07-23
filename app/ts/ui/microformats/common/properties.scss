@@ -1,11 +1,10 @@
-@use "../../../../styles/size";
-@use "../../../../styles/typography";
+@use "styles/size";
+@use "styles/typography";
 
 .property {
     display: flex;
     margin-block: var(--space-half);
     align-items: center;
-    white-space: nowrap;
 
     .property-name {
         @extend %caption;
