@@ -45,11 +45,17 @@
   "quicklink_webmentions_endpoint": {
     "message": "Webmentions"
   },
-  "quicklink_rss_hover": {
-    "message": "RSS feed"
+  "quicklink_atom": {
+    "message": "Atom"
+  },
+  "quicklink_atom_hover": {
+    "message": "Atom feed"
   },
   "quicklink_rss": {
     "message": "RSS"
+  },
+  "quicklink_rss_hover": {
+    "message": "RSS feed"
   },
   "quicklink_pgp_hover": {
     "message": "PGP public key"

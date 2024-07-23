@@ -30,6 +30,7 @@ export enum Icons {
     Location = LocationSvg,
     Map = MapSvg,
     PgpKey = PgpKeySvg,
+    AtomFeed = RssFeedSvg,
     RssFeed = RssFeedSvg,
     Tag = TagSvg,
     Work = WorkSvg,
@@ -45,7 +46,7 @@ export const Icon = (props: IconProps) => {
     if (!icon) return null;
 
     const InlineSvg = icon as unknown as (
-        _props: HTMLProps<SVGElement>
+        _props: HTMLProps<SVGElement>,
     ) => ReactElement;
 
     return (

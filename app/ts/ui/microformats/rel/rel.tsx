@@ -1,10 +1,11 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { RelLink } from "ts/data/types/rel";
+import { FeedLinks, RelLink } from "ts/data/types/rel";
 import { isEmptyOrNull } from "ts/data/util/arrays";
 import { Icon, Icons } from "ts/ui/icon";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
+import { TODO } from "ts/dev";
 
 interface RelLinkProps {
     links: RelLink[] | null | undefined;
@@ -15,7 +16,7 @@ export const RelmeLinks = (props: RelLinkProps) => {
     if (isEmptyOrNull(links)) return null;
 
     const onClickVerify = () => {
-        console.log("TODO verify rel=me links");
+        TODO("verify rel=me links");
     };
 
     return (
@@ -50,7 +51,7 @@ interface IconRelLinkProps {
 }
 
 const QuickLinks = (
-    props: IconRelLinkProps & RelLinkProps & HTMLProps<HTMLDivElement>
+    props: IconRelLinkProps & RelLinkProps & HTMLProps<HTMLDivElement>,
 ) => {
     const { links, displayTitle, title, icon, ...rest } = props;
 
@@ -114,13 +115,21 @@ export const PgpKey = (props: RelLinkProps) => {
     );
 };
 
-export const Feeds = (props: RelLinkProps | null) => {
-    if (!props) return null;
+export const Feeds = (props: { feeds: FeedLinks | null }) => {
+    if (!props?.feeds) return null;
+
     return (
-        <QuickLinks
-            icon={Icons.RssFeed}
-            displayTitle={_("quicklink_rss")}
-            links={props.links}
-        />
+        <>
+            <QuickLinks
+                icon={Icons.AtomFeed}
+                displayTitle={_("quicklink_atom")}
+                links={props.feeds.atom}
+            />
+            <QuickLinks
+                icon={Icons.RssFeed}
+                displayTitle={_("quicklink_rss")}
+                links={props.feeds.rss}
+            />
+        </>
     );
 };

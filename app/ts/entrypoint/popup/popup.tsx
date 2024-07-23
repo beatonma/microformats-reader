@@ -80,7 +80,7 @@ const QuickLinks = (props: PropsOf<RelatedLinks>) => {
 
     return (
         <Row alignment={HorizontalAlignment.Center}>
-            <Feeds links={data.feeds} />
+            <Feeds feeds={data.feeds} />
             <WebmentionEndpoint links={data.webmention} />
             <PgpKey links={data.pgp} />
         </Row>

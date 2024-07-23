@@ -5,9 +5,16 @@ export interface RelLink {
     type: string | null;
 }
 
+export interface FeedLinks {
+    atom: RelLink[] | null;
+    rss: RelLink[] | null;
+}
+
 export interface RelatedLinks {
-    relme: RelLink[] | null;
+    alternate: RelLink[] | null;
     pgp: RelLink[] | null;
-    feeds: RelLink[] | null;
+    relme: RelLink[] | null;
+    search: RelLink[] | null;
     webmention: RelLink[] | null;
+    feeds: FeedLinks | null;
 }
