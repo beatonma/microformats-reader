@@ -1,0 +1,138 @@
+%-linear {
+    display: flex;
+    gap: var(--gap);
+
+    &:empty {
+        display: none;
+    }
+
+    &.wrapped {
+        flex-wrap: wrap;
+    }
+
+    &.space {
+        &-none {
+            --gap: 0;
+        }
+
+        &-char {
+            --gap: 1ch;
+        }
+
+        &-small {
+            --gap: var(--space-half);
+        }
+
+        &-medium {
+            --gap: var(--space);
+        }
+
+        &-large {
+            --gap: var(--space-2x);
+        }
+    }
+}
+
+%row {
+    @extend %-linear;
+    flex-flow: row nowrap;
+
+    &.scrollable {
+        overflow-x: auto;
+    }
+
+    &.horizontal {
+        &-start {
+            justify-content: start;
+        }
+        &-center {
+            justify-content: center;
+        }
+        &-end {
+            justify-content: end;
+        }
+        &-space-between {
+            justify-content: space-between;
+        }
+        &-space-around {
+            justify-content: space-around;
+        }
+        &-space-evenly {
+            justify-content: space-evenly;
+        }
+    }
+    &.vertical {
+        &-start {
+            align-items: start;
+            align-content: start;
+        }
+        &-center {
+            align-items: center;
+            align-content: center;
+        }
+        &-end {
+            align-items: end;
+            align-content: end;
+        }
+        &-baseline {
+            align-items: baseline;
+        }
+    }
+
+    &.space-around {
+        margin-inline: var(--gap);
+    }
+}
+
+%column {
+    @extend %-linear;
+    flex-flow: column nowrap;
+
+    &.scrollable {
+        overflow-y: auto;
+    }
+
+    &.horizontal {
+        &-start {
+            align-items: start;
+        }
+        &-center {
+            align-items: center;
+        }
+        &-end {
+            align-items: end;
+        }
+    }
+    &.vertical {
+        &-start {
+            justify-content: start;
+        }
+        &-center {
+            justify-content: center;
+        }
+        &-end {
+            justify-content: end;
+        }
+        &-space-between {
+            justify-content: space-between;
+        }
+        &-space-around {
+            justify-content: space-around;
+        }
+        &-space-evenly {
+            justify-content: space-evenly;
+        }
+    }
+
+    &.space-around {
+        margin-block: var(--gap);
+    }
+}
+
+.row {
+    @extend %row;
+}
+
+.column {
+    @extend %column;
+}

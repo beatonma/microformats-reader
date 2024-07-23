@@ -1,1 +1,3 @@
-export { Row, HorizontalAlignment } from "./row";
+export { Space } from "./space";
+export { Alignment } from "./alignment";
+export { Row, Column } from "./linear";

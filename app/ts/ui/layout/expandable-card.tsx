@@ -2,7 +2,7 @@ import React, { HTMLProps, ReactNode, useEffect, useId, useState } from "react";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
-import { Row } from "ts/ui/layout/row";
+import { Row } from "ts/ui/layout";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     contentDescription: string;
@@ -12,7 +12,7 @@ interface ExpandableCardProps extends ExpandableDefaultProps {
 }
 
 export const ExpandableCard = (
-    props: ExpandableCardProps & HTMLProps<HTMLDivElement>
+    props: ExpandableCardProps & HTMLProps<HTMLDivElement>,
 ) => {
     const {
         contentDescription,
@@ -92,7 +92,7 @@ export const ExpandableCard = (
 const addAnimationEndListener = (
     id: string,
     isCollapsing: boolean,
-    reset: () => void
+    reset: () => void,
 ) => {
     useEffect(() => {
         if (isCollapsing) {
@@ -103,7 +103,7 @@ const addAnimationEndListener = (
                 },
                 {
                     once: true,
-                }
+                },
             );
         }
     }, [isCollapsing]);

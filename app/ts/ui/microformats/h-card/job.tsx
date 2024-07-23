@@ -3,9 +3,8 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardJobData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
-import { Row } from "ts/ui/layout";
+import { Row, Space } from "ts/ui/layout";
 import { ConditionalContent } from "ts/ui/layout/conditional";
-import { RowSpace } from "ts/ui/layout/row";
 import {
     PropertiesTable,
     Property,
@@ -19,7 +18,7 @@ export const Job = (props: PropsOf<HCardJobData>) => {
     const { jobTitle, organisation } = job;
 
     return (
-        <Row spaced={RowSpace.Char}>
+        <Row space={Space.Char}>
             <Property
                 microformat={Microformat.P.Job_Title}
                 icon={Icons.Work}

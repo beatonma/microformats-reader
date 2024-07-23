@@ -6,7 +6,7 @@ import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 import { TODO } from "ts/dev";
 import { formatDateTime } from "ts/ui/formatting/time";
 import { Icons } from "ts/ui/icon";
-import { HorizontalAlignment, Row } from "ts/ui/layout";
+import { Alignment, Row, Space } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Author } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
@@ -57,7 +57,7 @@ const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
                 />
             </h1>
 
-            <Row spaced className="by-line">
+            <Row space={Space.Small} className="by-line">
                 <Author author={author} />
 
                 <Property
@@ -99,7 +99,7 @@ const HEntry = (props: HEntryData) => {
 
     return (
         <div className={Microformat.H.Entry}>
-            <Row alignment={HorizontalAlignment.SpaceBetween}>
+            <Row horizontal={Alignment.SpaceBetween}>
                 <Property
                     microformat={Microformat.P.Name}
                     href={url}

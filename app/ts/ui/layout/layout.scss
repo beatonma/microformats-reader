@@ -1,17 +1,5 @@
 @use "styles";
 
-.row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    flex-wrap: nowrap;
-
-    &:empty {
-        display: none;
-    }
-}
-
 .caption {
     @extend %caption;
 

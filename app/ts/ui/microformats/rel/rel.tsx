@@ -6,6 +6,7 @@ import { Icon, Icons } from "ts/ui/icon";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
 import { TODO } from "ts/dev";
+import { Alignment, Column, Space } from "ts/ui/layout";
 
 interface RelLinkProps {
     links: RelLink[] | null | undefined;
@@ -82,13 +83,15 @@ interface QuickLinkProps {
 const QuickLink = (props: HTMLProps<HTMLDivElement> & QuickLinkProps) => {
     const { link, displayTitle, title, icon, ...rest } = props;
     return (
-        <div className={`quick-link`} {...rest} key={link.href}>
+        <div className="quick-link" {...rest} key={link.href}>
             <LinkTo
                 title={link.title ?? title ?? displayTitle}
                 href={link.href}
             >
-                <Icon icon={icon} />
-                <div className="link-title">{displayTitle}</div>
+                <Column horizontal={Alignment.Center} space={Space.Medium}>
+                    <Icon icon={icon} />
+                    <div className="link-title">{displayTitle}</div>
+                </Column>
             </LinkTo>
         </div>
     );

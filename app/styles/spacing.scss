@@ -2,7 +2,8 @@ $space: 8px;
 :root {
     --space-char: 0.5ch; // Approximately equivalent to width of space character.
     --space-half: #{calc($space * 0.5)};
-    --space-1x: #{calc($space)};
+    --space: #{$space};
+    --space-1x: #{$space};
     --space-1-5x: #{calc($space * 1.5)};
     --space-2x: #{calc($space * 2)};
     --space-3x: #{calc($space * 3)};

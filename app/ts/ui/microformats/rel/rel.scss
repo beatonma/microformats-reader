@@ -12,7 +12,6 @@
     .icon {
         @include styles.fixedSize(32px);
         cursor: pointer;
-        padding-bottom: var(--space-halfx);
     }
 
     .link-title {

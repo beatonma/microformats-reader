@@ -86,7 +86,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
 
     if (!displayValue && !href && !links) return null;
 
-    checkPropertyLayoutCOnfiguration(props);
+    checkPropertyLayoutConfiguration(props);
 
     const layoutProps = {
         className: "property",
@@ -123,7 +123,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
 /**
  * Throw an exception if the given props contains an invalid combination of values.
  */
-const checkPropertyLayoutCOnfiguration = (props: PropertyLayoutProps) => {
+const checkPropertyLayoutConfiguration = (props: PropertyLayoutProps) => {
     const { links, href, displayValue } = props;
 
     if (

@@ -3,9 +3,8 @@ import { _ } from "ts/compat";
 import { Todo } from "ts/dev";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { AppConfig } from "ts/options";
-import { HorizontalAlignment, Row } from "ts/ui/layout";
-import { RowSpace } from "ts/ui/layout/row";
 import "ts/entrypoint/options/options.scss";
+import { Alignment, Row, Space } from "ts/ui/layout";
 
 const Options = () => {
     return (
@@ -21,11 +20,7 @@ const Options = () => {
 const Version = () => {
     return (
         <section>
-            <Row
-                id="version"
-                spaced={RowSpace.Char}
-                alignment={HorizontalAlignment.Center}
-            >
+            <Row id="version" space={Space.Char} horizontal={Alignment.Center}>
                 <span>{_("extension_version")}:</span>
                 <code>{AppConfig.version}</code>
                 &middot;

@@ -2,7 +2,7 @@ import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
-import { Row } from "ts/ui/layout";
+import { Row, Space } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dialog, DialogProps } from "ts/ui/layout/dialog";
 import { Dropdown } from "ts/ui/layout/dropdown";
@@ -22,6 +22,8 @@ import {
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
+import { Microformat } from "ts/data/microformats";
+import { Property } from "ts/ui/microformats/common/properties";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -71,15 +73,17 @@ const HCardTextSummary = (props: HCardData) => {
         <div className="hcard-summary" {...rest}>
             <Name name={name} />
 
-            <Row wrap spaced>
+            <Row wrap space={Space.Small}>
                 <Gender data={gender} />
                 <Contact data={contact} />
             </Row>
 
-            <Row wrap spaced>
+            <Row wrap space={Space.Small}>
                 <Location data={location} />
                 <Job data={job} />
             </Row>
+
+            <Notes notes={extras?.notes} />
         </div>
     );
 };
@@ -155,7 +159,7 @@ interface RequiredObjectProps {
     dependsOn: unknown;
 }
 const DetailSection = (
-    props: HTMLProps<HTMLDivElement> & RequiredObjectProps
+    props: HTMLProps<HTMLDivElement> & RequiredObjectProps,
 ) => {
     const { sectionTitle, dependsOn, ...rest } = props;
     if (dependsOn == null) return null;
@@ -167,4 +171,10 @@ const DetailSection = (
             {...rest}
         />
     );
+};
+
+const Notes = (props: { notes: string[] | null | undefined }) => {
+    const { notes } = props;
+    if (!notes) return null;
+    return <Property microformat={Microformat.P.Note} displayValue={notes} />;
 };

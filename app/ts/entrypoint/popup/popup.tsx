@@ -6,7 +6,7 @@ import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
-import { HorizontalAlignment, Row } from "ts/ui/layout";
+import { Alignment, Row } from "ts/ui/layout";
 import { ScrimLayout } from "ts/ui/layout/dialog";
 import {
     Feeds,
@@ -79,7 +79,7 @@ const QuickLinks = (props: PropsOf<RelatedLinks>) => {
     if (!data) return null;
 
     return (
-        <Row alignment={HorizontalAlignment.Center}>
+        <Row horizontal={Alignment.Center}>
             <Feeds feeds={data.feeds} />
             <WebmentionEndpoint links={data.webmention} />
             <PgpKey links={data.pgp} />
