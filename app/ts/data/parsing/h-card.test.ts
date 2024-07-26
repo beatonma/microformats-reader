@@ -8,7 +8,7 @@ const firstHCard = async (html: string) =>
 
 const makeHCard = async (content: string, name: string = "Sally Ride") =>
     firstHCard(
-        `<div class="h-card"><div class="p-name">${name}</div>${content}</div>`
+        `<div class="h-card"><div class="p-name">${name}</div>${content}</div>`,
     );
 
 // From example at https://microformats.org/wiki/h-card
@@ -119,20 +119,20 @@ describe("HCard parsing", () => {
         });
 
         test("Simple address", async () => {
-            const html = `<div class="h-card"><div class="p-adr">My address</div>`;
+            const html = `<div class="h-card"><div class="p-adr">My address</div></div>`;
             const hcard = await firstHCard(html);
 
-            expect(hcard?.location?.value).toBe("My address");
+            expect(hcard!.location!.value).toBe("My address");
         });
 
         test("Nested p-adr", async () => {
             const hcard = await firstHCard(SampleHCardNested);
-            const location = hcard?.location;
+            const location = hcard!.location!;
 
-            expect(location?.locality?.[0]).toBe("Los Angeles");
-            expect(location?.region?.[0]).toBe("California");
-            expect(location?.countryName?.[0]).toBe("U.S.A");
-            expect(location?.postalCode?.[0]).toBe("91316");
+            expect(location.locality?.[0]).toBe("Los Angeles");
+            expect(location.region?.[0]).toBe("California");
+            expect(location.countryName?.[0]).toBe("U.S.A");
+            expect(location.postalCode?.[0]).toBe("91316");
         });
 
         test("Address directly in h-card", async () => {
@@ -159,10 +159,10 @@ describe("HCard parsing", () => {
 
             expect(hcard?.job?.organisation?.name).toBe("Sally Ride Science");
             expect(hcard?.job?.organisation?.hcard?.name).toBe(
-                "Sally Ride Science"
+                "Sally Ride Science",
             );
             expect(hcard?.job?.organisation?.hcard?.contact?.url?.[0]).toBe(
-                "https://sallyridescience.com"
+                "https://sallyridescience.com",
             );
         });
     });

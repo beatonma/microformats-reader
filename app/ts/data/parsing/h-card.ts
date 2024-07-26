@@ -19,6 +19,7 @@ import {
 } from "ts/data/types/h-card";
 import { isEmpty, notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
+import { parseLocation } from "ts/data/parsing/location";
 
 /*
  * Parsing.
@@ -90,60 +91,6 @@ const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
         photo: photo,
         logo: logo,
     });
-};
-
-const parseLocation = (hcard: MicroformatProperties): HAdrData | null => {
-    const _parseLocation = (
-        obj?: MicroformatProperties | string | null,
-    ): HAdrData | null => {
-        if (obj == null) return null;
-
-        if (isString(obj)) {
-            return {
-                locality: null,
-                region: null,
-                countryName: null,
-                postalCode: null,
-                streetAddress: null,
-                extendedAddress: null,
-                postOfficeBox: null,
-                label: null,
-                geo: null,
-                latitude: null,
-                longitude: null,
-                altitude: null,
-                value: obj,
-            };
-        }
-
-        return nullable({
-            locality: Parse.get<string>(obj, Microformat.P.Locality),
-            region: Parse.get<string>(obj, Microformat.P.Region),
-            countryName: Parse.get<string>(obj, Microformat.P.Country_Name),
-            postalCode: Parse.get<string>(obj, Microformat.P.Postal_Code),
-            streetAddress: Parse.get<string>(obj, Microformat.P.Street_Address),
-            extendedAddress: Parse.get<string>(
-                obj,
-                Microformat.P.Extended_Address,
-            ),
-            postOfficeBox: Parse.get<string>(
-                obj,
-                Microformat.P.Post_Office_Box,
-            ),
-            label: Parse.get<string>(obj, Microformat.P.Label),
-            geo: Parse.get<string>(obj, Microformat.H.Geo),
-            latitude: Parse.first<string>(obj, Microformat.P.Latitude),
-            longitude: Parse.first<string>(obj, Microformat.P.Longitude),
-            altitude: Parse.first<string>(obj, Microformat.P.Altitude),
-            value: Parse.first<string>(obj, "value"),
-        });
-    };
-
-    const nestedAdr = (hcard.adr?.[0] as string | MicroformatRoot) ?? null;
-    if (isString(nestedAdr)) {
-        return _parseLocation(nestedAdr);
-    }
-    return _parseLocation(nestedAdr?.properties) ?? _parseLocation(hcard);
 };
 
 const parseNameDetails = (
