@@ -8,7 +8,6 @@ import { Icon, Icons } from "ts/ui/icon";
 import { LinkTo } from "ts/ui/link-to";
 import {
     PropertiesTable,
-    Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
@@ -20,7 +19,7 @@ export const Location = (props: NullablePropsOf<HAdrData>) => {
     const summary = addressSummary(location);
 
     return (
-        <Property
+        <PropertyRow
             icon={Icons.Location}
             microformat={Microformat.P.Adr}
             displayValue={summary}
@@ -28,7 +27,9 @@ export const Location = (props: NullablePropsOf<HAdrData>) => {
     );
 };
 
-export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
+export const LocationPropertiesTable = (
+    props: PropsOf<HAdrData> & PropertiesTable.TableProps,
+) => {
     const {
         countryName,
         extendedAddress,
@@ -45,64 +46,67 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
 
     return (
         <>
-            <LinkToMap href={getMapsUrl(props.data)} />
-            <PropertiesTable>
-                <PropertyRow
+            <PropertiesTable.Table inlineTableData={props.inlineTableData}>
+                <PropertiesTable.FullspanRow>
+                    <LinkToMap href={getMapsUrl(props.data)} />
+                </PropertiesTable.FullspanRow>
+
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Label}
                     displayName={_("hadr_label")}
                     displayValue={label}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Post_Office_Box}
                     displayName={_("hadr_post_office_box")}
                     displayValue={postOfficeBox}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Street_Address}
                     displayName={_("hadr_street_address")}
                     displayValue={streetAddress}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Extended_Address}
                     displayName={_("hadr_extended_address")}
                     displayValue={extendedAddress}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Locality}
                     displayName={_("hadr_locality")}
                     displayValue={locality}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Region}
                     displayName={_("hadr_region")}
                     displayValue={region}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Country_Name}
                     displayName={_("hadr_country_name")}
                     displayValue={countryName}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Postal_Code}
                     displayName={_("hadr_postal_code")}
                     displayValue={postalCode}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Latitude}
                     displayName={_("hadr_latitude")}
                     displayValue={latitude}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Longitude}
                     displayName={_("hadr_longitude")}
                     displayValue={longitude}
                 />
-                <PropertyRow
+                <PropertiesTable.PropertyRow
                     microformat={Microformat.P.Altitude}
                     displayName={_("hadr_altitude")}
                     displayValue={altitude}
                 />
-            </PropertiesTable>
+            </PropertiesTable.Table>
         </>
     );
 };

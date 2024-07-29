@@ -8,4 +8,6 @@ $space: 8px;
     --space-2x: #{calc($space * 2)};
     --space-3x: #{calc($space * 3)};
     --space-4x: #{calc($space * 4)};
+
+    --gap: var(--space);
 }

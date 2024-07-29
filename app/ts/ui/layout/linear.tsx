@@ -30,7 +30,7 @@ const LinearLayout = (
         wrap = false,
         scroll = false,
         children,
-        vertical = Alignment.Center,
+        vertical = layoutName === "row" ? Alignment.Center : Alignment.Start,
         horizontal = Alignment.Start,
         space = Space.Small,
         spaceAround = false,

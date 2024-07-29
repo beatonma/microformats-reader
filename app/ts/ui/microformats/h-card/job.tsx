@@ -7,7 +7,6 @@ import { Row, Space } from "ts/ui/layout";
 import { ConditionalContent } from "ts/ui/layout/conditional";
 import {
     PropertiesTable,
-    Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
@@ -19,7 +18,7 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
 
     return (
         <Row space={Space.Char}>
-            <Property
+            <PropertyRow
                 microformat={Microformat.P.Job_Title}
                 icon={Icons.Work}
                 displayValue={jobTitle}
@@ -32,37 +31,31 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
     );
 };
 
-export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
-    const { jobTitle, role } = props.data;
+export const JobPropertiesTable = (
+    props: PropsOf<HCardJobData> & PropertiesTable.TableProps,
+) => {
+    const { jobTitle, role, organisation } = props.data;
 
     return (
-        <PropertiesTable>
-            <PropertyRow
+        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.P.Job_Title}
                 displayName={_("hcard_job_title")}
                 displayValue={jobTitle}
             />
-            <PropertyRow
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.P.Role}
                 displayName={_("hcard_job_role")}
                 displayValue={role}
             />
-            <Organisation {...props.data} />
-        </PropertiesTable>
-    );
-};
-
-const Organisation = (props: HCardJobData) => {
-    const { organisation } = props;
-
-    return (
-        <PropertyRow
-            microformat={Microformat.P.Org}
-            href={`#${organisation?.id}`}
-            title={_("hcard_link_to_org_hcard")}
-            displayName={_("hcard_job_organisation")}
-            displayValue={organisation?.name}
-        />
+            <PropertiesTable.PropertyRow
+                microformat={Microformat.P.Org}
+                href={`#${organisation?.id}`}
+                title={_("hcard_link_to_org_hcard")}
+                displayName={_("hcard_job_organisation")}
+                displayValue={organisation?.name}
+            />
+        </PropertiesTable.Table>
     );
 };
 
@@ -75,7 +68,7 @@ const LinkToOrganisation = (props: HCardJobData) => {
     const icon = jobTitle ? undefined : Icons.Work;
 
     return (
-        <Property
+        <PropertyRow
             icon={icon}
             href={hcard == null ? null : `#${hcard.id}`}
             microformat={Microformat.P.Org}

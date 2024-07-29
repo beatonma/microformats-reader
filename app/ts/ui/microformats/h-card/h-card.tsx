@@ -1,4 +1,4 @@
-import React, { HTMLProps, ReactElement, ReactNode, useContext } from "react";
+import React, { HTMLProps, ReactElement, useContext } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
@@ -23,9 +23,11 @@ import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
 import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import { Microformat } from "ts/data/microformats";
-import { Property } from "ts/ui/microformats/common/properties";
-import { OptionsContext } from "ts/options";
-import { classes } from "ts/ui/util";
+import {
+    PropertiesTable,
+    PropertyColumn,
+} from "ts/ui/microformats/common/properties";
+import { AppOptions, OptionsContext } from "ts/options";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -105,6 +107,9 @@ const HCardTextDetail = (props: HCardData) => {
         ...rest
     } = props;
 
+    const options = useContext(OptionsContext);
+    const inlineTableData = !options.groupByType;
+
     return (
         <div className="hcard-detail" {...rest}>
             <Column space={Space.Medium} spaceAround>
@@ -112,52 +117,96 @@ const HCardTextDetail = (props: HCardData) => {
                 <Notes notes={notes} />
             </Column>
 
-            <DetailSection
-                sectionTitle={_("hcard_name_details")}
-                dependsOn={nameDetail}
-                render={data => <NamePropertiesTable data={data} />}
-            />
+            <PropertiesTable.Table inlineTableData={!inlineTableData}>
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_name_details")}
+                    dependsOn={nameDetail}
+                    render={data => (
+                        <NamePropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_gender_details")}
+                    dependsOn={gender}
+                    render={data => (
+                        <GenderPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
 
-            <DetailSection
-                sectionTitle={_("hcard_gender_details")}
-                dependsOn={gender}
-                render={data => <GenderPropertiesTable data={data} />}
-            />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_contact_detail")}
+                    dependsOn={contact}
+                    render={data => (
+                        <ContactPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
 
-            <DetailSection
-                sectionTitle={_("hcard_contact_detail")}
-                dependsOn={contact}
-                render={data => <ContactPropertiesTable data={data} />}
-            />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_location_detail")}
+                    dependsOn={location}
+                    render={data => (
+                        <LocationPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
 
-            <DetailSection
-                sectionTitle={_("hcard_location_detail")}
-                dependsOn={location}
-                render={data => <LocationPropertiesTable data={data} />}
-            />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_job_detail")}
+                    dependsOn={job}
+                    render={data => (
+                        <JobPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
 
-            <DetailSection
-                sectionTitle={_("hcard_job_detail")}
-                dependsOn={job}
-                render={data => <JobPropertiesTable data={data} />}
-            />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_dates_detail")}
+                    dependsOn={dates}
+                    render={data => (
+                        <DatesPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
 
-            <DetailSection
-                sectionTitle={_("hcard_dates_detail")}
-                dependsOn={dates}
-                render={data => <DatesPropertiesTable data={data} />}
-            />
-
-            <DetailSection
-                sectionTitle={_("hcard_extras_detail")}
-                dependsOn={extras}
-                render={data => <ExtrasPropertiesTable data={data} />}
-            />
+                <DetailSection
+                    options={options}
+                    sectionTitle={_("hcard_extras_detail")}
+                    dependsOn={extras}
+                    render={data => (
+                        <ExtrasPropertiesTable
+                            data={data}
+                            inlineTableData={inlineTableData}
+                        />
+                    )}
+                />
+            </PropertiesTable.Table>
         </div>
     );
 };
 
 interface RequiredObjectProps<T> {
+    options: AppOptions;
     sectionTitle: string;
     dependsOn: T | null;
     render: (data: T) => ReactElement;
@@ -165,12 +214,11 @@ interface RequiredObjectProps<T> {
 const DetailSection = <T extends any>(
     props: Omit<HTMLProps<HTMLDivElement>, "children"> & RequiredObjectProps<T>,
 ) => {
-    const { render, sectionTitle, dependsOn, className, ...rest } = props;
+    const { options, render, sectionTitle, dependsOn, className, ...rest } =
+        props;
     if (dependsOn == null) return null;
 
     const renderedContent = render(dependsOn);
-
-    const options = useContext(OptionsContext);
     if (options.groupByType) {
         return (
             <Dropdown
@@ -190,5 +238,7 @@ const DetailSection = <T extends any>(
 const Notes = (props: { notes: string[] | null | undefined }) => {
     const { notes } = props;
     if (!notes) return null;
-    return <Property microformat={Microformat.P.Note} displayValue={notes} />;
+    return (
+        <PropertyColumn microformat={Microformat.P.Note} displayValue={notes} />
+    );
 };

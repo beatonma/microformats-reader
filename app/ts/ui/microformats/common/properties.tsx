@@ -15,6 +15,7 @@ import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
 import { classes } from "ts/ui/util";
+import { Column, Row } from "ts/ui/layout";
 
 type DisplayValue = ReactNode | string[] | Date[];
 
@@ -111,14 +112,12 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         />
     );
 
-    const layout = layoutBuilder({
+    return layoutBuilder({
         layoutProps: layoutProps,
         propertyIcon: propertyIcon,
         propertyName: propertyName,
         propertyValue: propertyValue,
     });
-
-    return <>{layout}</>;
 };
 
 /**
@@ -148,46 +147,90 @@ const checkPropertyLayoutConfiguration = (props: PropertyLayoutProps) => {
     }
 };
 
-export const Property = (props: PropertyLayoutProps) => (
-    <PropertyLayout
-        {...props}
-        layoutBuilder={buildProps => (
-            <div {...buildProps.layoutProps}>
-                {buildProps.propertyIcon}
-                {buildProps.propertyName}
-                {buildProps.propertyValue}
-            </div>
-        )}
-    />
-);
-
-interface PropertiesTableProps {
-    tableHeader?: string;
-}
-export const PropertiesTable = (
-    props: HTMLProps<HTMLTableElement> & PropertiesTableProps,
-) => {
-    const { className, children, ...rest } = props;
-    return (
-        <table className={classes("properties", className)} {...rest}>
-            <TableHeader tableHeader={props.tableHeader} />
-            <tbody>{children}</tbody>
-        </table>
-    );
-};
-
+/**
+ * Standalone {@Link Row} representing a property.
+ *
+ * For use in a table context, see {@link PropertiesTable.PropertyRow}.
+ */
 export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
         layoutBuilder={buildProps => (
-            <tr {...buildProps.layoutProps}>
-                <td>{buildProps.propertyIcon}</td>
-                <td>{buildProps.propertyName}</td>
-                <td>{buildProps.propertyValue}</td>
-            </tr>
+            <Row {...buildProps.layoutProps}>
+                {buildProps.propertyIcon}
+                {buildProps.propertyName}
+                {buildProps.propertyValue}
+            </Row>
         )}
     />
 );
+
+export const PropertyColumn = (props: PropertyLayoutProps) => (
+    <PropertyLayout
+        {...props}
+        layoutBuilder={buildProps => (
+            <Column {...buildProps.layoutProps}>
+                <Row>
+                    {buildProps.propertyIcon}
+                    {buildProps.propertyName}
+                </Row>
+                {buildProps.propertyValue}
+            </Column>
+        )}
+    />
+);
+
+export namespace PropertiesTable {
+    /** Number of <td> elements per row. */
+    const PropertyRowSpan = 2;
+    export interface TableProps extends TableHeaderProps {
+        inlineTableData: boolean;
+    }
+    export const Table = <T extends any>(
+        props: HTMLProps<HTMLTableElement> & TableProps,
+    ) => {
+        const { inlineTableData = false, className, children, ...rest } = props;
+
+        if (inlineTableData) {
+            return (
+                <>
+                    <TableHeader tableHeader={props.tableHeader} />
+                    <tr className="group-start" />
+                    {children}
+                    <tr className="group-end" />
+                </>
+            );
+        }
+
+        return (
+            <table className={classes("properties", className)} {...rest}>
+                <TableHeader tableHeader={props.tableHeader} />
+                <tbody>{children}</tbody>
+            </table>
+        );
+    };
+
+    export const FullspanRow = (props: { children: ReactNode }) => (
+        <tr>
+            <td colSpan={PropertyRowSpan}>{props.children}</td>{" "}
+        </tr>
+    );
+
+    export const PropertyRow = (props: PropertyLayoutProps) => (
+        <PropertyLayout
+            {...props}
+            layoutBuilder={buildProps => (
+                <tr {...buildProps.layoutProps}>
+                    <td>
+                        <span>{buildProps.propertyIcon}</span>
+                        <span>{buildProps.propertyName}</span>
+                    </td>
+                    <td>{buildProps.propertyValue}</td>
+                </tr>
+            )}
+        />
+    );
+}
 
 const PropertyIcon = (props: PropertyIconProps) => {
     const { image, imageMicroformat, ...rest } = props;
@@ -207,7 +250,7 @@ const PropertyIcon = (props: PropertyIconProps) => {
 const PropertyName = (props: Named) => {
     const { name } = props;
     if (!name) return null;
-    return <div className="property-name">{name}</div>;
+    return <span className="property-name">{name}</span>;
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
@@ -248,23 +291,24 @@ interface MultiValuePropertyProps {
 const MultiValueProperty = (props: MultiValuePropertyProps) => {
     const { microformat, title, links, values } = props;
 
-    const properties =
-        (values ?? links)?.map((value, index) => {
-            const valueIsLink = isLink(value);
+    return (
+        <>
+            {(values ?? links)?.map((value, index) => {
+                const valueIsLink = isLink(value);
 
-            return (
-                <SingleValueProperty
-                    className="property-value-multi"
-                    key={index}
-                    href={valueIsLink ? value.href : null}
-                    microformat={microformat}
-                    title={title}
-                    displayValue={valueIsLink ? value.displayValue : value}
-                />
-            );
-        }) ?? null;
-
-    return <>{properties}</>;
+                return (
+                    <SingleValueProperty
+                        className="property-value-multi"
+                        key={index}
+                        href={valueIsLink ? value.href : null}
+                        microformat={microformat}
+                        title={title}
+                        displayValue={valueIsLink ? value.displayValue : value}
+                    />
+                );
+            })}
+        </>
+    );
 };
 
 interface SingleValuePropertyProps {
@@ -301,7 +345,10 @@ const SingleValueProperty = (props: SingleValuePropertyProps) => {
     );
 };
 
-const TableHeader = (props: PropertiesTableProps) => {
+interface TableHeaderProps {
+    tableHeader?: string;
+}
+const TableHeader = (props: TableHeaderProps) => {
     if (!props.tableHeader) return null;
     return <thead>{props.tableHeader}</thead>;
 };

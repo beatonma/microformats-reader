@@ -10,7 +10,7 @@ import { Alignment, Row, Space } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Author } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
-import { Property } from "ts/ui/microformats/common/properties";
+import { PropertyRow } from "ts/ui/microformats/common/properties";
 import { NullablePropsOf } from "ts/ui/props";
 
 export const HFeed = (props: NullablePropsOf<HFeedData>) => {
@@ -49,7 +49,7 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
     return (
         <div className="hfeed-about">
             <h1>
-                <Property
+                <PropertyRow
                     image={photo}
                     imageMicroformat={Microformat.U.Photo}
                     microformat={Microformat.P.Name}
@@ -60,14 +60,14 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
             <Row space={Space.Small} className="by-line">
                 <Author author={author} />
 
-                <Property
+                <PropertyRow
                     microformat={Microformat.U.Url}
                     icon={Icons.Link}
                     href={url}
                 />
             </Row>
 
-            <Property
+            <PropertyRow
                 microformat={Microformat.P.Summary}
                 displayValue={summary}
             />
@@ -100,19 +100,19 @@ const HEntry = (props: HEntryData) => {
     return (
         <div className={Microformat.H.Entry}>
             <Row horizontal={Alignment.SpaceBetween}>
-                <Property
+                <PropertyRow
                     microformat={Microformat.P.Name}
                     href={url}
                     displayValue={name}
                 />
-                <Property
+                <PropertyRow
                     microformat={Microformat.Dt.Published}
                     displayValue={dates?.published}
                     title={dateUpdated}
                 />
             </Row>
 
-            <Property
+            <PropertyRow
                 microformat={Microformat.P.Summary}
                 displayValue={summary}
             />

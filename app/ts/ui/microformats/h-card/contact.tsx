@@ -5,7 +5,6 @@ import { HCardContactData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
 import {
     PropertiesTable,
-    Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
@@ -15,7 +14,7 @@ export const Contact = (props: NullablePropsOf<HCardContactData>) => {
     if (!url) return null;
 
     return (
-        <Property
+        <PropertyRow
             icon={Icons.Link}
             microformat={Microformat.U.Url}
             href={url}
@@ -23,37 +22,39 @@ export const Contact = (props: NullablePropsOf<HCardContactData>) => {
     );
 };
 
-export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
+export const ContactPropertiesTable = (
+    props: PropsOf<HCardContactData> & PropertiesTable.TableProps,
+) => {
     const { url, email, phone, impp, publicKey } = props.data;
 
     return (
-        <PropertiesTable>
-            <PropertyRow
+        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.U.Url}
                 href={url}
                 displayName={_("hcard_contact_url")}
             />
-            <PropertyRow
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.U.Email}
                 href={email}
                 displayName={_("hcard_contact_email")}
             />
-            <PropertyRow
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.P.Tel}
                 href={buildUri("tel:", phone)}
                 displayName={_("hcard_contact_phone")}
             />
-            <PropertyRow
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.U.IMPP}
                 href={impp}
                 displayName={_("hcard_contact_impp")}
             />
-            <PropertyRow
+            <PropertiesTable.PropertyRow
                 microformat={Microformat.U.Key}
                 href={publicKey}
                 displayName={_("hcard_contact_key")}
             />
-        </PropertiesTable>
+        </PropertiesTable.Table>
     );
 };
 

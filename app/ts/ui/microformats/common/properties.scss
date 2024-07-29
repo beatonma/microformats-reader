@@ -2,7 +2,6 @@
 @use "styles/typography";
 
 .property {
-    display: flex;
     margin-block: var(--space-half);
     align-items: center;
 
@@ -25,35 +24,24 @@
     img.property-icon {
         @include size.fixedSize(1em);
     }
-    .property-icon {
-        margin-right: var(--space-half);
-    }
 }
 
 table.properties {
-    border-collapse: collapse;
+    tr {
+        &:empty {
+            height: 0;
+        }
+
+        &.group-end:not(:last-child) {
+            height: var(--space-half);
+        }
+    }
 
     td {
         vertical-align: baseline;
-        padding-bottom: var(--space-half);
-
-        &:empty {
-            display: none;
-        }
-
-        &:not(:empty) {
-            padding-right: 1ch;
-        }
     }
-    tr.property {
-        display: table-row;
-    }
+}
 
-    .property-value-multi {
-        display: block;
-
-        &:not(:last-child) {
-            padding-bottom: 4px;
-        }
-    }
+.property-value-multi {
+    display: block;
 }
