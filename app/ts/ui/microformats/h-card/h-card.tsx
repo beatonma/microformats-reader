@@ -2,7 +2,7 @@ import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
-import { Row, Space } from "ts/ui/layout";
+import { Column, Row, Space } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dialog, DialogProps } from "ts/ui/layout/dialog";
 import { Dropdown } from "ts/ui/layout/dropdown";
@@ -59,6 +59,7 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
 const HCardTextSummary = (props: HCardData) => {
     const {
         name,
+        notes,
         nameDetail,
         gender,
         contact,
@@ -83,7 +84,7 @@ const HCardTextSummary = (props: HCardData) => {
                 <Job data={job} />
             </Row>
 
-            <Notes notes={extras?.notes} />
+            <Notes notes={notes} />
         </div>
     );
 };
@@ -91,6 +92,7 @@ const HCardTextSummary = (props: HCardData) => {
 const HCardTextDetail = (props: HCardData) => {
     const {
         name,
+        notes,
         nameDetail,
         gender,
         contact,
@@ -103,7 +105,10 @@ const HCardTextDetail = (props: HCardData) => {
 
     return (
         <div className="hcard-detail" {...rest}>
-            <Name name={name} />
+            <Column space={Space.Medium} spaceAround>
+                <Name name={name} />
+                <Notes notes={notes} />
+            </Column>
 
             <DetailSection
                 sectionTitle={_("hcard_name_details")}

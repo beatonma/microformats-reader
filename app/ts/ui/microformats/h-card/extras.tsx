@@ -11,15 +11,10 @@ import { PropsOf } from "ts/ui/props";
 export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
     const extras = props.data;
     if (!extras) return null;
-    const { uid, category, notes } = extras;
+    const { category, uid } = extras;
 
     return (
         <PropertiesTable>
-            <PropertyRow
-                microformat={Microformat.P.Note}
-                displayName={_("hcard_extras_notes")}
-                displayValue={notes}
-            />
             <PropertyRow
                 microformat={Microformat.P.Category}
                 displayName={_("hcard_extras_category")}

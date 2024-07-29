@@ -57,6 +57,7 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
     if (hcard == null) return null;
 
     const name = Parse.first<string>(hcard, Microformat.P.Name);
+    const notes = Parse.get<string>(hcard, Microformat.P.Note);
     const nameDetail = parseNameDetails(hcard);
     const gender = parseGender(hcard);
     const location = parseLocation(hcard);
@@ -70,6 +71,7 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
         {
             id: generateId(),
             name: name,
+            notes: notes,
             nameDetail: nameDetail,
             gender: gender,
             location: location,
@@ -207,12 +209,10 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
 
 const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
     const uid = Parse.get<string>(hcard, Microformat.U.Uid);
-    const notes = Parse.get<string>(hcard, Microformat.P.Note);
     const category = Parse.get<string>(hcard, Microformat.P.Category);
 
     return nullable({
         uid: uid,
-        notes: notes,
         category: category,
     });
 };

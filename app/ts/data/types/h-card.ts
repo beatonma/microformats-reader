@@ -4,6 +4,7 @@ import { Image } from "@microformats-parser";
 export interface HCardData {
     id: string;
     name: string | null;
+    notes: string[] | null;
     nameDetail: HCardNameDetail | null;
     images: HCardImages | null;
     gender: HCardGenderIdentity | null;
@@ -64,5 +65,4 @@ export interface HCardDates {
 export interface HCardExtras {
     uid: string[] | null;
     category: string[] | null;
-    notes: string[] | null;
 }
