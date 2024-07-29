@@ -25,7 +25,10 @@ export const timeIt = (
     );
 };
 
-export const dump = <T extends any>(obj: T): T => {
-    console.log(JSON.stringify(obj, null, 2));
+export const dump = <T extends any>(obj: T, label?: string): T => {
+    const msg = [label, JSON.stringify(obj, null, 2)]
+        .filter(Boolean)
+        .join(": ");
+    console.log(msg);
     return obj;
 };
