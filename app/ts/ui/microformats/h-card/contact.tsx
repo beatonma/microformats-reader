@@ -8,9 +8,9 @@ import {
     Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Contact = (props: PropsOf<HCardContactData>) => {
+export const Contact = (props: NullablePropsOf<HCardContactData>) => {
     const url = props.data?.url;
     if (!url) return null;
 
@@ -24,10 +24,7 @@ export const Contact = (props: PropsOf<HCardContactData>) => {
 };
 
 export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
-    const contact = props.data;
-    if (!contact) return null;
-
-    const { url, email, phone, impp, publicKey } = contact;
+    const { url, email, phone, impp, publicKey } = props.data;
 
     return (
         <PropertiesTable>

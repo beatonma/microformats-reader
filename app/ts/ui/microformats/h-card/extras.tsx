@@ -9,9 +9,7 @@ import {
 import { PropsOf } from "ts/ui/props";
 
 export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
-    const extras = props.data;
-    if (!extras) return null;
-    const { category, uid } = extras;
+    const { category, uid } = props.data;
 
     return (
         <PropertiesTable>

@@ -1,4 +1,4 @@
-import React, { HTMLProps, useContext } from "react";
+import React, { HTMLProps, ReactElement, ReactNode, useContext } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
@@ -115,61 +115,60 @@ const HCardTextDetail = (props: HCardData) => {
             <DetailSection
                 sectionTitle={_("hcard_name_details")}
                 dependsOn={nameDetail}
-            >
-                <NamePropertiesTable data={nameDetail} />
-            </DetailSection>
+                render={data => <NamePropertiesTable data={data} />}
+            />
 
             <DetailSection
                 sectionTitle={_("hcard_gender_details")}
                 dependsOn={gender}
-            >
-                <GenderPropertiesTable data={gender} />
-            </DetailSection>
+                render={data => <GenderPropertiesTable data={data} />}
+            />
 
             <DetailSection
                 sectionTitle={_("hcard_contact_detail")}
                 dependsOn={contact}
-            >
-                <ContactPropertiesTable data={contact} />
-            </DetailSection>
+                render={data => <ContactPropertiesTable data={data} />}
+            />
 
             <DetailSection
                 sectionTitle={_("hcard_location_detail")}
                 dependsOn={location}
-            >
-                <LocationPropertiesTable data={location} />
-            </DetailSection>
+                render={data => <LocationPropertiesTable data={data} />}
+            />
 
-            <DetailSection sectionTitle={_("hcard_job_detail")} dependsOn={job}>
-                <JobPropertiesTable data={job} />
-            </DetailSection>
+            <DetailSection
+                sectionTitle={_("hcard_job_detail")}
+                dependsOn={job}
+                render={data => <JobPropertiesTable data={data} />}
+            />
 
             <DetailSection
                 sectionTitle={_("hcard_dates_detail")}
                 dependsOn={dates}
-            >
-                <DatesPropertiesTable data={dates} />
-            </DetailSection>
+                render={data => <DatesPropertiesTable data={data} />}
+            />
 
             <DetailSection
                 sectionTitle={_("hcard_extras_detail")}
                 dependsOn={extras}
-            >
-                <ExtrasPropertiesTable data={extras} />
-            </DetailSection>
+                render={data => <ExtrasPropertiesTable data={data} />}
+            />
         </div>
     );
 };
 
-interface RequiredObjectProps {
+interface RequiredObjectProps<T> {
     sectionTitle: string;
-    dependsOn: unknown;
+    dependsOn: T | null;
+    render: (data: T) => ReactElement;
 }
-const DetailSection = (
-    props: HTMLProps<HTMLDivElement> & RequiredObjectProps,
+const DetailSection = <T extends any>(
+    props: Omit<HTMLProps<HTMLDivElement>, "children"> & RequiredObjectProps<T>,
 ) => {
-    const { sectionTitle, dependsOn, className, ...rest } = props;
+    const { render, sectionTitle, dependsOn, className, ...rest } = props;
     if (dependsOn == null) return null;
+
+    const renderedContent = render(dependsOn);
 
     const options = useContext(OptionsContext);
     if (options.groupByType) {
@@ -179,16 +178,12 @@ const DetailSection = (
                 header={<span>{sectionTitle}</span>}
                 title={sectionTitle}
                 className={className}
+                children={renderedContent}
                 {...rest}
             />
         );
     } else {
-        return (
-            <div
-                className={classes(className, "detail-section--no-dropdown")}
-                {...rest}
-            />
-        );
+        return <>{renderedContent}</>;
     }
 };
 

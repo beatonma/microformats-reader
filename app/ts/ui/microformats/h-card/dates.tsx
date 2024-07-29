@@ -11,9 +11,7 @@ import { PropsOf } from "ts/ui/props";
 import { DateTime, DateTimeProps } from "ts/ui/time";
 
 export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
-    const dates = props.data;
-    if (!dates) return null;
-    const { birthday, anniversary } = dates;
+    const { birthday, anniversary } = props.data;
 
     return (
         <PropertiesTable>

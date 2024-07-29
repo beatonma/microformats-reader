@@ -11,9 +11,9 @@ import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Author } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
 import { Property } from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf } from "ts/ui/props";
 
-export const HFeed = (props: PropsOf<HFeedData>) => {
+export const HFeed = (props: NullablePropsOf<HFeedData>) => {
     const feed = props.data;
     if (!feed) return null;
     const { about, entries } = feed;
@@ -36,7 +36,7 @@ export const HFeed = (props: PropsOf<HFeedData>) => {
     );
 };
 
-const AboutHFeed = (props: PropsOf<HFeedAbout>) => {
+const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
     const about = props.data;
     if (!about)
         return (

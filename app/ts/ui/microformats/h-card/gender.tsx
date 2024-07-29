@@ -8,9 +8,9 @@ import {
     Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Gender = (props: PropsOf<HCardGenderIdentity>) => {
+export const Gender = (props: NullablePropsOf<HCardGenderIdentity>) => {
     const identity = props.data;
     if (!identity) return null;
 
@@ -18,9 +18,7 @@ export const Gender = (props: PropsOf<HCardGenderIdentity>) => {
 };
 
 export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
-    const identity = props.data;
-    if (!identity) return null;
-    const { genderIdentity, pronouns, sex } = identity;
+    const { genderIdentity, pronouns, sex } = props.data;
 
     return (
         <PropertiesTable>

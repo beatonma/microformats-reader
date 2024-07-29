@@ -11,9 +11,9 @@ import {
     Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Location = (props: PropsOf<HAdrData>) => {
+export const Location = (props: NullablePropsOf<HAdrData>) => {
     const location = props.data;
     if (!location) return null;
 
@@ -29,10 +29,6 @@ export const Location = (props: PropsOf<HAdrData>) => {
 };
 
 export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
-    const location = props.data;
-
-    if (!location) return null;
-
     const {
         countryName,
         extendedAddress,
@@ -45,11 +41,11 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
         latitude,
         longitude,
         altitude,
-    } = location;
+    } = props.data;
 
     return (
         <>
-            <LinkToMap href={getMapsUrl(location)} />
+            <LinkToMap href={getMapsUrl(props.data)} />
             <PropertiesTable>
                 <PropertyRow
                     microformat={Microformat.P.Label}

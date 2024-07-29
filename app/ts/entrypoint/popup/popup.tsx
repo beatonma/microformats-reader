@@ -16,7 +16,7 @@ import {
     WebmentionEndpoint,
 } from "ts/ui/microformats";
 import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import "ts/entrypoint/popup/popup.scss";
 
@@ -73,7 +73,7 @@ export const Popup = () => {
     return <PopupUI {...microformats} />;
 };
 
-const QuickLinks = (props: PropsOf<RelatedLinks>) => {
+const QuickLinks = (props: NullablePropsOf<RelatedLinks>) => {
     const { data } = props;
 
     if (!data) return null;

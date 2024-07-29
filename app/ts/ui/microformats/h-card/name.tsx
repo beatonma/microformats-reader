@@ -21,50 +21,57 @@ export const Name = (props: Named) => {
 };
 
 export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
-    const detail = props.data;
-    if (detail == null) return null;
-
+    const {
+        sound,
+        honorificPrefix,
+        honorificSuffix,
+        givenName,
+        additionalName,
+        familyName,
+        nickname,
+        sortBy,
+    } = props.data;
     return (
         <PropertiesTable>
             <PropertyRow
-                href={detail.sound}
+                href={sound}
                 microformat={Microformat.U.Sound}
                 displayName={_("hcard_name_sound")}
             />
             <PropertyRow
                 microformat={Microformat.P.Honorific_Prefix}
                 displayName={_("hcard_name_honorific_prefix")}
-                displayValue={detail.honorificPrefix}
+                displayValue={honorificPrefix}
             />
             <PropertyRow
                 microformat={Microformat.P.Honorific_Suffix}
                 displayName={_("hcard_name_honorific_suffix")}
-                displayValue={detail.honorificSuffix}
+                displayValue={honorificSuffix}
             />
             <PropertyRow
                 microformat={Microformat.P.Given_Name}
                 displayName={_("hcard_name_given")}
-                displayValue={detail.givenName}
+                displayValue={givenName}
             />
             <PropertyRow
                 microformat={Microformat.P.Additional_Name}
                 displayName={_("hcard_name_additional")}
-                displayValue={detail.additionalName}
+                displayValue={additionalName}
             />
             <PropertyRow
                 microformat={Microformat.P.Family_Name}
                 displayName={_("hcard_name_family")}
-                displayValue={detail.familyName}
+                displayValue={familyName}
             />
             <PropertyRow
                 microformat={Microformat.P.Nickname}
                 displayName={_("hcard_name_nickname")}
-                displayValue={detail.nickname}
+                displayValue={nickname}
             />
             <PropertyRow
                 microformat={Microformat.P.Sort_String}
                 displayName={_("hcard_name_sortby")}
-                displayValue={detail.sortBy}
+                displayValue={sortBy}
             />
         </PropertiesTable>
     );

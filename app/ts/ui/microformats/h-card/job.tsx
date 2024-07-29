@@ -10,9 +10,9 @@ import {
     Property,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Job = (props: PropsOf<HCardJobData>) => {
+export const Job = (props: NullablePropsOf<HCardJobData>) => {
     const job = props.data;
     if (!job) return null;
     const { jobTitle, organisation } = job;
@@ -33,9 +33,7 @@ export const Job = (props: PropsOf<HCardJobData>) => {
 };
 
 export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
-    const job = props.data;
-    if (!job) return null;
-    const { jobTitle, role } = job;
+    const { jobTitle, role } = props.data;
 
     return (
         <PropertiesTable>
@@ -49,7 +47,7 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
                 displayName={_("hcard_job_role")}
                 displayValue={role}
             />
-            <Organisation {...job} />
+            <Organisation {...props.data} />
         </PropertiesTable>
     );
 };
