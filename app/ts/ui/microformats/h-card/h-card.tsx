@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLProps, useContext } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
@@ -24,6 +24,8 @@ import { Location, LocationPropertiesTable } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import { Microformat } from "ts/data/microformats";
 import { Property } from "ts/ui/microformats/common/properties";
+import { OptionsContext } from "ts/options";
+import { classes } from "ts/ui/util";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -166,16 +168,28 @@ interface RequiredObjectProps {
 const DetailSection = (
     props: HTMLProps<HTMLDivElement> & RequiredObjectProps,
 ) => {
-    const { sectionTitle, dependsOn, ...rest } = props;
+    const { sectionTitle, dependsOn, className, ...rest } = props;
     if (dependsOn == null) return null;
 
-    return (
-        <Dropdown
-            header={<span>{sectionTitle}</span>}
-            title={sectionTitle}
-            {...rest}
-        />
-    );
+    const options = useContext(OptionsContext);
+    if (options.groupByType) {
+        return (
+            <Dropdown
+                defaultIsExpanded={options.dropdownExpandByDefault}
+                header={<span>{sectionTitle}</span>}
+                title={sectionTitle}
+                className={className}
+                {...rest}
+            />
+        );
+    } else {
+        return (
+            <div
+                className={classes(className, "detail-section--no-dropdown")}
+                {...rest}
+            />
+        );
+    }
 };
 
 const Notes = (props: { notes: string[] | null | undefined }) => {

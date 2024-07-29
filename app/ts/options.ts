@@ -11,11 +11,26 @@ export const AppConfig = {
 };
 
 export interface AppOptions {
+    /**
+     * Default state of dropdown widgets: expanded (true) or collapsed (false).
+     */
     dropdownExpandByDefault: boolean;
+
+    /**
+     * Data are always grouped near similar content, but this
+     * option alters how it is rendered.
+     *
+     * If true, groups of data have a header label describing them.
+     *   May be more readable when there are a lot of data to display.
+     * If false, groups have minimal separation and no header label.
+     *   May be more readable when there are only a few data to display.
+     */
+    groupByType: boolean;
 }
 
-export const defaultOptions: AppOptions = {
-    dropdownExpandByDefault: false,
+const defaultOptions: AppOptions = {
+    dropdownExpandByDefault: true,
+    groupByType: true,
 };
 
 export const OptionsContext = createContext<AppOptions>(defaultOptions);

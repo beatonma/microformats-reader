@@ -1,9 +1,17 @@
-import React, { HTMLProps, ReactNode, useEffect, useId, useState } from "react";
+import React, {
+    HTMLProps,
+    ReactNode,
+    useContext,
+    useEffect,
+    useId,
+    useState,
+} from "react";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { Row } from "ts/ui/layout";
 import { classes } from "ts/ui/util";
+import { OptionsContext } from "ts/options";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     contentDescription: string;
@@ -25,7 +33,10 @@ export const ExpandableCard = (
         ...rest
     } = props;
 
-    const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
+    const options = useContext(OptionsContext);
+    const [isExpanded, setExpanded] = useState(
+        defaultIsExpanded ?? options.dropdownExpandByDefault,
+    );
     const [isCollapsing, setIsCollapsing] = useState(false);
     const [isExpanding, setIsExpanding] = useState(false);
 

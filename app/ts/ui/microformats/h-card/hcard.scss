@@ -5,4 +5,8 @@
         font-size: var(--fs-default);
         line-height: 1.5;
     }
+
+    .detail-section--no-dropdown {
+        margin-block: var(--space);
+    }
 }
