@@ -1,4 +1,8 @@
+/**
+ * Overview: https://developer.mozilla.org/en-US/docs/Web/HTML/microformats
+ */
 export namespace Microformat {
+    /** Root container classes */
     export enum H {
         Adr = "h-adr",
         Card = "h-card",
@@ -7,6 +11,7 @@ export namespace Microformat {
         Geo = "h-geo",
     }
 
+    /** Plain text properties */
     export enum P {
         Additional_Name = "p-additional-name",
         Adr = "p-adr",
@@ -43,6 +48,7 @@ export namespace Microformat {
         Tel = "p-tel",
     }
 
+    /** Datetime properties */
     export enum Dt {
         Anniversary = "dt-anniversary",
         Bday = "dt-bday",
@@ -50,6 +56,7 @@ export namespace Microformat {
         Updated = "dt-updated",
     }
 
+    /** URL properties */
     export enum U {
         Email = "u-email",
         IMPP = "u-impp",
@@ -65,6 +72,7 @@ export namespace Microformat {
         RepostOf = "u-repost-of",
     }
 
+    /** Element tree */
     export enum E {
         Content = "e-content",
     }

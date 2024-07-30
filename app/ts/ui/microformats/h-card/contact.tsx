@@ -60,5 +60,7 @@ export const ContactPropertiesTable = (
 
 const buildUri = (prefix: string, values: string[] | null): string[] | null => {
     if (values == null || values.length === 0) return null;
-    return values.map(value => `${prefix}${value}`);
+    return values.map(value =>
+        value.startsWith(prefix) ? value : `${prefix}${value}`,
+    );
 };
