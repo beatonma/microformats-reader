@@ -40,6 +40,10 @@ export const ExpandableCard = (
     const [isCollapsing, setIsCollapsing] = useState(false);
     const [isExpanding, setIsExpanding] = useState(false);
 
+    const cardContentID = useId();
+    const summaryID = useId();
+    const detailID = useId();
+
     const toggleState = () => {
         const target = !isExpanded;
         setExpanded(target);
@@ -51,10 +55,6 @@ export const ExpandableCard = (
         setIsExpanding(false);
         setIsCollapsing(false);
     };
-
-    const cardContentID = useId();
-    const summaryID = useId();
-    const detailID = useId();
 
     addAnimationEndListener(summaryID, isExpanding, endAnimation);
     addAnimationEndListener(detailID, isCollapsing, endAnimation);
