@@ -10,9 +10,17 @@
     }
 }
 
-dialog {
-    z-index: 1000000;
-    padding: 0;
-    border: none;
-    border-radius: var(--border-radius-medium);
+#dialog_container:not(:empty) {
+    position: absolute;
+    inset: 0;
+
+    dialog {
+        min-width: 80vw;
+        inset: 0;
+        z-index: 1000000;
+        padding: 0;
+        border: none;
+        border-radius: var(--border-radius-medium);
+        background: none;
+    }
 }

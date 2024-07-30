@@ -9,7 +9,7 @@ import React, {
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
-import { Row } from "ts/ui/layout";
+import { Alignment, Row, Space } from "ts/ui/layout";
 import { classes } from "ts/ui/util";
 import { OptionsContext } from "ts/options";
 
@@ -67,7 +67,11 @@ export const ExpandableCard = (
                 data-collapsing={isCollapsing}
                 aria-expanded={isExpanded}
             >
-                <Row className="banner">
+                <Row
+                    className="banner"
+                    vertical={Alignment.Start}
+                    space={Space.Large}
+                >
                     {sharedContent}
 
                     <div

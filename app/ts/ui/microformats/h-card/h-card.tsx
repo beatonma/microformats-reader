@@ -2,7 +2,7 @@ import React, { HTMLProps, ReactElement, useContext } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
-import { Column, Row, Space } from "ts/ui/layout";
+import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dialog, DialogProps } from "ts/ui/layout/dialog";
 import { Dropdown } from "ts/ui/layout/dropdown";
@@ -45,15 +45,26 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
 };
 
 export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
-    const { id, hcard, open, onClose } = props;
+    const { hcard, open, onClose } = props;
 
     if (hcard == null) return null;
 
     return (
-        <Dialog id={`hcard_${id}`} open={open} onClose={onClose}>
+        <Dialog
+            id={`hcard_${hcard.id}`}
+            className="h-card"
+            open={open}
+            onClose={onClose}
+        >
             <CardLayout>
                 <CardContent>
-                    <HCardTextSummary {...hcard} />
+                    <Row vertical={Alignment.Start} space={Space.Large}>
+                        <Avatar
+                            name={hcard.name ?? "?"}
+                            images={hcard.images}
+                        />
+                        <HCardTextSummary {...hcard} />
+                    </Row>
                 </CardContent>
             </CardLayout>
         </Dialog>

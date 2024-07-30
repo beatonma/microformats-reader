@@ -35,6 +35,7 @@ interface PropertyValueProps {
     title?: string | null | undefined;
     microformat: Microformats;
     href?: string | string[] | null;
+    onClick?: () => void;
     displayValue?: DisplayValue;
     links?: Link[] | null;
 }
@@ -156,7 +157,7 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
         layoutBuilder={buildProps => (
-            <Row {...buildProps.layoutProps}>
+            <Row {...buildProps.layoutProps} onClick={props.onClick}>
                 {buildProps.propertyIcon}
                 {buildProps.propertyName}
                 {buildProps.propertyValue}
@@ -220,7 +221,7 @@ export namespace PropertiesTable {
         <PropertyLayout
             {...props}
             layoutBuilder={buildProps => (
-                <tr {...buildProps.layoutProps}>
+                <tr {...buildProps.layoutProps} onClick={props.onClick}>
                     <td>
                         <span>{buildProps.propertyIcon}</span>
                         <span>{buildProps.propertyName}</span>

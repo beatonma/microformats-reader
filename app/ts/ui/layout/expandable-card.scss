@@ -10,12 +10,6 @@
         cursor: pointer;
     }
 
-    .banner {
-        // Avatar + summary
-        align-items: start;
-        gap: var(--space-2x);
-    }
-
     .summary {
         &[data-visible="true"] {
             animation-name: expandSummary;
