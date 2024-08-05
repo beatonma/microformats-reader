@@ -1,6 +1,7 @@
 @use "./borders";
 @use "./dialog";
 @use "./animation";
+@use "./element";
 @use "./hover";
 @use "./size";
 @use "./spacing";
@@ -31,9 +32,7 @@ main {
 
 a,
 a:visited {
-    display: inline-block;
-    color: var(--vibrant);
-    text-decoration: none;
+    @include element.anchorStyle;
 }
 
 p {
@@ -63,12 +62,7 @@ section {
 }
 
 button {
-    background: none;
-    border: none;
-    margin-inline: 0;
-    padding-inline: 0;
-
-    color: var(--text-secondary);
+    @include element.buttonStyle;
 }
 
 option {

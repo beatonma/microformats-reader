@@ -157,7 +157,11 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
         layoutBuilder={buildProps => (
-            <Row {...buildProps.layoutProps} onClick={props.onClick}>
+            <Row
+                {...buildProps.layoutProps}
+                onClick={props.onClick}
+                data-clickable={!!props.onClick}
+            >
                 {buildProps.propertyIcon}
                 {buildProps.propertyName}
                 {buildProps.propertyValue}
@@ -221,7 +225,11 @@ export namespace PropertiesTable {
         <PropertyLayout
             {...props}
             layoutBuilder={buildProps => (
-                <tr {...buildProps.layoutProps} onClick={props.onClick}>
+                <tr
+                    {...buildProps.layoutProps}
+                    onClick={props.onClick}
+                    data-clickable={!!props.onClick}
+                >
                     <td>
                         <span>{buildProps.propertyIcon}</span>
                         <span>{buildProps.propertyName}</span>

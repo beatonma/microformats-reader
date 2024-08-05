@@ -1,3 +1,5 @@
+@use "styles/borders";
+@use "styles/element";
 @use "styles/size";
 @use "styles/typography";
 
@@ -23,6 +25,12 @@
     }
     img.property-icon {
         @include size.fixedSize(1em);
+    }
+
+    &[data-clickable="true"] .property-value {
+        @include element.buttonStyle;
+        @include borders.border-clickable;
+        color: var(--text-primary);
     }
 }
 
