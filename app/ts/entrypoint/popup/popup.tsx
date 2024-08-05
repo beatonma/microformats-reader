@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ParsedDocument } from "@microformats-parser";
 import { _, compatBrowser } from "ts/compat";
 import { HCardData } from "ts/data/types";
@@ -89,8 +89,17 @@ const QuickLinks = (props: NullablePropsOf<RelatedLinks>) => {
 
 const getMicroformatsFromCurrentTab = (): PopupProps | undefined => {
     const [props, setProps] = useState<PopupProps>();
+    const [retryFlag, setRetryFlag] = useState<boolean>(false);
+    const retryTimestamp = useRef(performance.now());
 
     useEffect(() => {
+        const now = performance.now();
+        if (now - retryTimestamp.current > 200) {
+            console.warn(
+                "Microformat loading failed: timeout exceeded. Please try reloading the tab.",
+            );
+            return;
+        }
         compatBrowser.tabs.currentTab().then(currentTab => {
             if (currentTab == null) {
                 console.debug("currentTab is null");
@@ -104,9 +113,10 @@ const getMicroformatsFromCurrentTab = (): PopupProps | undefined => {
                 .then((response: MessageResponse) => {
                     setProps(response);
                     injectTheme(null);
-                });
+                })
+                .catch(e => setRetryFlag(it => !it));
         });
-    }, []);
+    }, [retryFlag]);
 
     return props;
 };
