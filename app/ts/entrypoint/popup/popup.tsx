@@ -19,6 +19,8 @@ import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
 import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import "ts/entrypoint/popup/popup.scss";
+import { Loading } from "ts/ui/loading";
+import { Error } from "ts/ui/error";
 
 export interface PopupProps {
     microformats: ParsedDocument;
@@ -68,7 +70,9 @@ const NoContent = () => (
 export const Popup = () => {
     const microformats = getMicroformatsFromCurrentTab();
 
-    if (microformats == null) return null;
+    if (microformats === undefined) return <Loading />;
+    if (microformats === null)
+        return <Error message={_("error_loading_failed")} />;
 
     return <PopupUI {...microformats} />;
 };
@@ -87,17 +91,18 @@ const QuickLinks = (props: NullablePropsOf<RelatedLinks>) => {
     );
 };
 
-const getMicroformatsFromCurrentTab = (): PopupProps | undefined => {
-    const [props, setProps] = useState<PopupProps>();
+const getMicroformatsFromCurrentTab = (): PopupProps | null | undefined => {
+    const [props, setProps] = useState<PopupProps | null | undefined>();
     const [retryFlag, setRetryFlag] = useState<boolean>(false);
     const retryTimestamp = useRef(performance.now());
 
     useEffect(() => {
         const now = performance.now();
-        if (now - retryTimestamp.current > 200) {
+        if (now - retryTimestamp.current > 2000) {
             console.warn(
                 "Microformat loading failed: timeout exceeded. Please try reloading the tab.",
             );
+            setProps(null);
             return;
         }
         compatBrowser.tabs.currentTab().then(currentTab => {

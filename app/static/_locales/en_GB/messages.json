@@ -242,5 +242,8 @@
         "example": "15:32"
       }
     }
+  },
+  "error_loading_failed": {
+    "message": "Failed to load content."
   }
 }

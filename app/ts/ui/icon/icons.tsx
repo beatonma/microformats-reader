@@ -4,6 +4,8 @@ import BirthdaySvg from "ts/ui/icon/svg/outline-400/cake.svg";
 // @ts-ignore
 import AnniversarySvg from "ts/ui/icon/svg/outline-400/celebration.svg";
 // @ts-ignore
+import ErrorSvg from "ts/ui/icon/svg/outline-400/error.svg";
+// @ts-ignore
 import ExpandMoreSvg from "ts/ui/icon/svg/outline-400/expand_more.svg";
 // @ts-ignore
 import WebmentionEndpointSvg from "ts/ui/icon/svg/outline-400/forum.svg";
@@ -26,6 +28,7 @@ import { classes } from "ts/ui/util";
 export enum Icons {
     Anniversary = AnniversarySvg,
     Birthday = BirthdaySvg,
+    Error = ErrorSvg,
     ExpandMore = ExpandMoreSvg,
     Link = LinkSvg,
     Location = LocationSvg,
