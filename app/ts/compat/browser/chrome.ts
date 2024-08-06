@@ -3,6 +3,7 @@ import {
     BrowserI18n,
     BrowserProxy,
     BrowserRuntime,
+    BrowserStorage,
     BrowserTab,
     BrowserTabs,
     SetBadgeColorDetails,
@@ -63,6 +64,10 @@ export class ChromeBrowserProxy implements BrowserProxy {
                     }),
                 );
         },
+    };
+
+    storage: BrowserStorage = {
+        sync: chrome.storage.sync,
     };
 
     toString = () => "Chrome";

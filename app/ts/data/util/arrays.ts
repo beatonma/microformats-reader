@@ -30,3 +30,12 @@ export const takeIfNotEmpty = <T>(arr: T[] | null): T[] | null => {
     if (isEmptyOrNull(arr)) return null;
     return arr;
 };
+
+/**
+ * If value is in the list, remove it.
+ * If value is not in the list, append it.
+ */
+export const toggle = <T>(values: T[], value: T): T[] => {
+    if (values.includes(value)) return values.filter(it => it !== value);
+    return [...values, value];
+};

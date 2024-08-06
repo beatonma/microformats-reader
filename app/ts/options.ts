@@ -1,5 +1,12 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 import * as process from "process";
+import { compatBrowser } from "ts/compat";
+
+export enum PopupSection {
+    "h-card" = "h-card",
+    "h-feed" = "h-feed",
+    "relme" = "relme",
+}
 
 export const AppConfig = {
     isDebug: (process.env.DEBUG ?? "").toLowerCase() === "true",
@@ -26,11 +33,43 @@ export interface AppOptions {
      *   May be more readable when there are only a few data to display.
      */
     groupByType: boolean;
+
+    popupContents: PopupSection[];
 }
 
-const defaultOptions: AppOptions = {
+const defaultOptions = (): AppOptions => ({
     dropdownExpandByDefault: true,
-    groupByType: true,
-};
+    groupByType: false,
+    popupContents: [
+        PopupSection["h-card"],
+        PopupSection["h-feed"],
+        PopupSection.relme,
+    ],
+});
 
-export const OptionsContext = createContext<AppOptions>(defaultOptions);
+export const OptionsContext = createContext<AppOptions>(defaultOptions());
+
+export const loadOptions = async () =>
+    compatBrowser.storage.sync.get(defaultOptions());
+
+export const saveOptions = async (options: AppOptions) =>
+    compatBrowser.storage.sync.set(options);
+
+export const useOptions = (): [
+    AppOptions | undefined,
+    (options: AppOptions) => void,
+] => {
+    const [options, setOptions] = useState();
+    const [reloadSwitch, setReloadSwitch] = useState(false);
+
+    useEffect(() => {
+        loadOptions().then(setOptions);
+    }, [reloadSwitch]);
+
+    return [
+        options,
+        opts => {
+            saveOptions(opts).then(() => setReloadSwitch(it => !it));
+        },
+    ];
+};

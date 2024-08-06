@@ -245,5 +245,8 @@
   },
   "error_loading_failed": {
     "message": "Failed to load content."
+  },
+  "options_popup_sections": {
+    "message": "Sections"
   }
 }

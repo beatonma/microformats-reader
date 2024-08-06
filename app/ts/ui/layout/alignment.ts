@@ -5,4 +5,5 @@ export enum Alignment {
     SpaceBetween = "space-between",
     SpaceAround = "space-around",
     SpaceEnd = "space-evenly",
+    Baseline = "baseline",
 }

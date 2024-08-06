@@ -7,6 +7,7 @@ export interface BrowserProxy {
     runtime: BrowserRuntime;
     i18n: BrowserI18n;
     action: BrowserAction;
+    storage: BrowserStorage;
 }
 
 //
@@ -62,7 +63,7 @@ export interface BrowserRuntime {
     sendMessage: <T extends MessageRequest>(
         message: T,
         options?: object,
-    ) => Promise<any>;
+    ) => Promise<unknown | ErrorString>;
 }
 
 //
@@ -88,4 +89,19 @@ export interface SetBadgeTextDetails {
 export interface BrowserAction {
     setBadgeText: (details: SetBadgeTextDetails) => Promise<ErrorString>;
     setBadgeColors: (details: SetBadgeColorDetails) => Promise<ErrorString>;
+}
+
+//
+// Storage
+//
+interface StorageArea {
+    get: <T>(
+        keys: string | string[] | object | null,
+    ) => Promise<T | ErrorString>;
+    set: <T>(obj: T) => Promise<ErrorString>;
+    remove: (keys: string | string[]) => Promise<ErrorString>;
+    clear: (err?: unknown) => Promise<ErrorString>;
+}
+export interface BrowserStorage {
+    sync: StorageArea;
 }

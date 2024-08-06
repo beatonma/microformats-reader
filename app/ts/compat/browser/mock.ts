@@ -3,12 +3,16 @@ import {
     BrowserI18n,
     BrowserProxy,
     BrowserRuntime,
+    BrowserStorage,
     BrowserTabs,
 } from "ts/compat/browser/types";
 
 export class MockBrowserProxy implements BrowserProxy {
+    mockStorage: any;
+
     constructor() {
-        console.log("MockBrowserProxy should only be used in tests.");
+        console.debug("MockBrowserProxy should only be used in tests.");
+        this.mockStorage = {};
     }
 
     tabs: BrowserTabs = {
@@ -36,6 +40,30 @@ export class MockBrowserProxy implements BrowserProxy {
     action: BrowserAction = {
         setBadgeText: mock(undefined),
         setBadgeColors: mock(undefined),
+    };
+
+    storage: BrowserStorage = {
+        sync: {
+            get: async (key: string | string[]) => {
+                if (typeof key === "string") {
+                    return this.mockStorage[key];
+                }
+                return key.map(k => this.mockStorage[k]);
+            },
+            set: async (obj: any) => {
+                Object.entries(obj).forEach(([key, value]) => {
+                    this.mockStorage[key] = value;
+                });
+            },
+            remove: async (key: string | string[]) => {
+                if (typeof key === "string") {
+                    delete this.mockStorage[key];
+                }
+            },
+            clear: async () => {
+                this.mockStorage = {};
+            },
+        },
     };
 
     toString = () => "Mock";
