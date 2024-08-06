@@ -45,10 +45,6 @@ module.exports = {
                     },
                 ],
             },
-            {
-                test: /\.html/,
-                type: "asset/source",
-            },
         ],
     },
     resolve: {
@@ -66,7 +62,10 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: "./app/static" },
+                {
+                    from: "./app/static",
+                    filter: filepath => !filepath.includes(".dev."),
+                },
                 {
                     from: "./app/static/manifest.json",
                     transform(content, absoluteFrom) {

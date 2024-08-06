@@ -10,11 +10,12 @@ import { Message, MessageRequest, MessageResponse } from "ts/message";
 import { noneOf } from "ts/data/util/arrays";
 import { ActiveState, EmptyState } from "ts/ui/browser/toolbar";
 
-const loadMicroformats = () => {
-    const documentHtml = document.documentElement.innerHTML;
-
-    return mf2(documentHtml, {
-        baseUrl: document.URL,
+export const loadMicroformats = (
+    html: string = document.documentElement.innerHTML,
+    baseUrl: string = document.URL,
+) => {
+    return mf2(html, {
+        baseUrl: baseUrl,
         experimental: {
             lang: true,
             textContent: true,

@@ -6,10 +6,10 @@ declare const browser: any | undefined;
 declare const chrome: any | undefined;
 
 const getCompatBrowser = (): BrowserProxy => {
-    if (typeof chrome !== "undefined") {
+    if (typeof chrome !== "undefined" && typeof chrome.i18n !== "undefined") {
         return new ChromeBrowserProxy();
     }
-    if (typeof browser !== "undefined") {
+    if (typeof browser !== "undefined" && typeof browser.i18n !== "undefined") {
         return browser;
     }
 
