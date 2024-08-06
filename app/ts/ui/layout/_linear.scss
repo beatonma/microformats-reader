@@ -16,7 +16,7 @@
         }
 
         &-char {
-            --gap: 1ch;
+            --gap: var(--space-char);
         }
 
         &-small {
