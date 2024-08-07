@@ -5,3 +5,5 @@
 export interface Named {
     name?: string | null;
 }
+
+export type DateOrString = string | Date;

@@ -8,6 +8,7 @@ import {
 import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
 import { notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
+import { DateOrString } from "ts/data/types/common";
 
 export namespace Parse {
     export const getRootsOfType = (
@@ -45,10 +46,17 @@ export namespace Parse {
     export const getDate = (
         container: MicroformatProperties,
         key: string,
-    ): Date[] | null => {
+    ): DateOrString[] | null => {
         const dates = get<string>(container, key);
 
-        return dates?.map(it => new Date(it)) ?? null;
+        return (
+            dates
+                ?.map(it => {
+                    const d = new Date(it);
+                    return isNaN(d.valueOf()) ? it : d;
+                })
+                .filter(Boolean) ?? null
+        );
     };
 
     export const getEmbeddedValue = (

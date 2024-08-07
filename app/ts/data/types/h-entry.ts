@@ -2,6 +2,7 @@ import { HAdrData } from "ts/data/types/h-adr";
 import { EmbeddedHCard, HCardData } from "ts/data/types/h-card";
 import { HCiteData } from "ts/data/types/h-cite";
 import { HGeoData } from "ts/data/types/h-geo";
+import { DateOrString } from "ts/data/types/common";
 
 /**
  * https://microformats.org/wiki/h-entry
@@ -30,8 +31,8 @@ export interface HEntryInteractions {
 }
 
 export interface HEntryDates {
-    published: Date[] | null;
-    updated: Date[] | null;
+    published: DateOrString[] | null;
+    updated: DateOrString[] | null;
 }
 
 export enum RsvpValue {

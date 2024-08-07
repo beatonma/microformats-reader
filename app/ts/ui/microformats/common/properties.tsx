@@ -2,7 +2,7 @@ import React, { HTMLProps, MouseEvent, ReactNode } from "react";
 import { Image } from "@microformats-parser";
 import { Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
-import { Named } from "ts/data/types/common";
+import { DateOrString, Named } from "ts/data/types/common";
 import { notNullish } from "ts/data/util/arrays";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { formatUri } from "ts/ui/formatting";
@@ -17,7 +17,7 @@ import { MaybeLinkTo } from "ts/ui/link-to";
 import { classes } from "ts/ui/util";
 import { Column, Row } from "ts/ui/layout";
 
-type DisplayValue = ReactNode | string[] | Date[];
+type DisplayValue = ReactNode | DateOrString[];
 
 interface PropertyProps {
     microformat: Microformats;
@@ -295,7 +295,7 @@ interface MultiValuePropertyProps {
     microformat: Microformats;
     title: string | null | undefined;
     links: Link[] | null | undefined;
-    values: string[] | Date[] | null | undefined;
+    values: DateOrString[] | null | undefined;
 }
 const MultiValueProperty = (props: MultiValuePropertyProps) => {
     const { microformat, title, links, values } = props;
