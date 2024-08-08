@@ -39,7 +39,7 @@ export interface AppOptions {
 
 const defaultOptions = (): AppOptions => ({
     dropdownExpandByDefault: true,
-    groupByType: false,
+    groupByType: true,
     popupContents: [
         PopupSection["h-card"],
         PopupSection["h-feed"],

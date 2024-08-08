@@ -248,5 +248,11 @@
   },
   "options_popup_sections": {
     "message": "Sections"
+  },
+  "options_dropdown_expanded_by_default": {
+    "message": "Expand dropdowns by default"
+  },
+  "options_group_by_type": {
+    "message": "Group h-card content by type"
   }
 }

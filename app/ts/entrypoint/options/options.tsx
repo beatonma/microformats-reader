@@ -5,7 +5,6 @@ import { AppConfig, PopupSection, useOptions } from "ts/options";
 import "ts/entrypoint/options/options.scss";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Loading } from "ts/ui/loading";
-import { toggle } from "ts/data/util/arrays";
 
 const Options = () => {
     const [options, setOptions] = useOptions();
@@ -15,17 +14,37 @@ const Options = () => {
     return (
         <main>
             <section>
-                <MultipleChoice
-                    title={_("options_popup_sections")}
-                    values={Object.keys(PopupSection)}
-                    selected={options.popupContents}
-                    setSelected={it => {
-                        setOptions({
-                            ...options,
-                            popupContents: it as PopupSection[],
-                        });
-                    }}
-                />
+                <Column space={Space.Medium}>
+                    <Checkbox
+                        label={_("options_dropdown_expanded_by_default")}
+                        checked={options.dropdownExpandByDefault}
+                        onChange={checked =>
+                            setOptions({
+                                ...options,
+                                dropdownExpandByDefault: checked,
+                            })
+                        }
+                    />
+                    <Checkbox
+                        label={_("options_group_by_type")}
+                        checked={options.groupByType}
+                        onChange={checked =>
+                            setOptions({ ...options, groupByType: checked })
+                        }
+                    />
+
+                    <MultipleChoice
+                        title={_("options_popup_sections")}
+                        values={Object.keys(PopupSection)}
+                        selected={options.popupContents}
+                        setSelected={it => {
+                            setOptions({
+                                ...options,
+                                popupContents: it as PopupSection[],
+                            });
+                        }}
+                    />
+                </Column>
             </section>
 
             <Version />
@@ -48,6 +67,26 @@ const Version = () => {
     );
 };
 
+const Checkbox = (props: {
+    label: string;
+    checked: boolean;
+    onChange: (value: boolean) => void;
+}) => {
+    const id = useId();
+    const { label, checked, onChange } = props;
+    return (
+        <Row space={Space.Small} vertical={Alignment.Baseline}>
+            <input
+                id={id}
+                type="checkbox"
+                checked={checked}
+                onChange={ev => onChange(ev.target.checked)}
+            />
+            <label htmlFor={id}>{label}</label>
+        </Row>
+    );
+};
+
 const MultipleChoice = (props: {
     title: string;
     values: string[];
@@ -60,23 +99,18 @@ const MultipleChoice = (props: {
             <legend>{title}</legend>
             <Column>
                 {values.map(value => {
-                    const id = useId();
                     return (
-                        <Row
-                            key={value}
-                            space={Space.Small}
-                            vertical={Alignment.Baseline}
-                        >
-                            <input
-                                id={id}
-                                type="checkbox"
-                                checked={selected.includes(value)}
-                                onChange={ev =>
-                                    setSelected(toggle(selected, value))
-                                }
-                            />
-                            <label htmlFor={id}>{value}</label>
-                        </Row>
+                        <Checkbox
+                            label={value}
+                            checked={selected.includes(value)}
+                            onChange={checked =>
+                                setSelected(
+                                    checked
+                                        ? [...selected, value]
+                                        : selected.filter(it => it !== value),
+                                )
+                            }
+                        />
                     );
                 })}
             </Column>
