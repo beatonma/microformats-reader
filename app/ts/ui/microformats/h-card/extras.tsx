@@ -2,26 +2,27 @@ import React from "react";
 import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardExtras } from "ts/data/types/h-card";
-import { PropertiesTable } from "ts/ui/microformats/common/properties";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 
-export const ExtrasPropertiesTable = (
-    props: PropsOf<HCardExtras> & PropertiesTable.TableProps,
-) => {
+export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
     const { category, uid } = props.data;
 
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.P.Category}
-                displayName={_("hcard_extras_category")}
-                displayValue={category}
+                property={{ displayName: _("hcard_extras_category") }}
+                value={{ displayValue: category }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.U.Uid}
-                displayName={_("hcard_extras_uid")}
-                displayValue={uid}
+                property={{ displayName: _("hcard_extras_uid") }}
+                value={{ displayValue: uid }}
             />
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };

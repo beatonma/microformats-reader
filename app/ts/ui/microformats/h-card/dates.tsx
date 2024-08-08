@@ -3,31 +3,34 @@ import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardDates } from "ts/data/types/h-card";
 import { yearsSince } from "ts/ui/formatting/time";
-import { PropertiesTable } from "ts/ui/microformats/common/properties";
+import {
+    PropertiesTable,
+    PropertyRow,
+} from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 import { DateTime, DateTimeProps } from "ts/ui/time";
 
-export const DatesPropertiesTable = (
-    props: PropsOf<HCardDates> & PropertiesTable.TableProps,
-) => {
+export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
     const { birthday, anniversary } = props.data;
 
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.Dt.Bday}
-                displayName={_("hcard_dates_birthday")}
-                displayValue={birthday?.map(date => (
-                    <Birthday datetime={date} />
-                ))}
+                property={{ displayName: _("hcard_dates_birthday") }}
+                value={{
+                    displayValue: birthday?.map(date => (
+                        <Birthday datetime={date} />
+                    )),
+                }}
             />
 
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.Dt.Anniversary}
-                displayName={_("hcard_dates_anniversary")}
-                displayValue={anniversary}
+                property={{ displayName: _("hcard_dates_anniversary") }}
+                value={{ displayValue: anniversary }}
             />
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };
 

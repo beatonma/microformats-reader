@@ -1,5 +1,6 @@
-import React, { HTMLAttributes, HTMLProps } from "react";
+import React, { HTMLAttributes } from "react";
 import { compatBrowser } from "ts/compat";
+import { titles } from "ts/ui/util";
 
 interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
     href: string | null | undefined;
@@ -14,7 +15,7 @@ export const LinkTo = (props: LinkProps) => {
         return <LinkToSection {...props} />;
     }
 
-    const titleWithURL = [title, href].join("\n");
+    const titleWithURL = titles(title, href);
     const onClick = () =>
         compatBrowser.tabs.create({ active: true, url: href });
 

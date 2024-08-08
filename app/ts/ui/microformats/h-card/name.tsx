@@ -14,14 +14,15 @@ export const Name = (props: Named) => {
 
     return (
         <h1>
-            <PropertyRow microformat={Microformat.P.Name} displayValue={name} />
+            <PropertyRow
+                microformat={Microformat.P.Name}
+                value={{ displayValue: name }}
+            />
         </h1>
     );
 };
 
-export const NamePropertiesTable = (
-    props: PropsOf<HCardNameDetail> & PropertiesTable.TableProps,
-) => {
+export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
     const {
         sound,
         honorificPrefix,
@@ -33,47 +34,47 @@ export const NamePropertiesTable = (
         sortBy,
     } = props.data;
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
-                href={sound}
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.U.Sound}
-                displayName={_("hcard_name_sound")}
+                property={{ displayName: _("hcard_name_sound") }}
+                value={{ href: sound }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Honorific_Prefix}
-                displayName={_("hcard_name_honorific_prefix")}
-                displayValue={honorificPrefix}
+                property={{ displayName: _("hcard_name_honorific_prefix") }}
+                value={{ displayValue: honorificPrefix }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Honorific_Suffix}
-                displayName={_("hcard_name_honorific_suffix")}
-                displayValue={honorificSuffix}
+                property={{ displayName: _("hcard_name_honorific_suffix") }}
+                value={{ displayValue: honorificSuffix }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Given_Name}
-                displayName={_("hcard_name_given")}
-                displayValue={givenName}
+                property={{ displayName: _("hcard_name_given") }}
+                value={{ displayValue: givenName }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Additional_Name}
-                displayName={_("hcard_name_additional")}
-                displayValue={additionalName}
+                property={{ displayName: _("hcard_name_additional") }}
+                value={{ displayValue: additionalName }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Family_Name}
-                displayName={_("hcard_name_family")}
-                displayValue={familyName}
+                property={{ displayName: _("hcard_name_family") }}
+                value={{ displayValue: familyName }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Nickname}
-                displayName={_("hcard_name_nickname")}
-                displayValue={nickname}
+                property={{ displayName: _("hcard_name_nickname") }}
+                value={{ displayValue: nickname }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Sort_String}
-                displayName={_("hcard_name_sortby")}
-                displayValue={sortBy}
+                property={{ displayName: _("hcard_name_sortby") }}
+                value={{ displayValue: sortBy }}
             />
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };

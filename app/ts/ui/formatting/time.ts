@@ -57,7 +57,6 @@ export const formatShortDateTime = (
 
     const now = __now ?? new Date();
     const date = isString(datetime) ? new Date(datetime) : datetime;
-    console.log(date.valueOf());
     if (isNaN(date.valueOf())) return datetime.toString();
 
     if (isSameDay(date, now)) {

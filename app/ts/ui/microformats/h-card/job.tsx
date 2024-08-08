@@ -22,7 +22,7 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
             <PropertyRow
                 microformat={Microformat.P.Job_Title}
                 icon={Icons.Work}
-                displayValue={jobTitle}
+                value={{ displayValue: jobTitle }}
             />
             <ConditionalContent condition={() => !!jobTitle && !!organisation}>
                 <span>@</span>
@@ -32,30 +32,32 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
     );
 };
 
-export const JobPropertiesTable = (
-    props: PropsOf<HCardJobData> & PropertiesTable.TableProps,
-) => {
+export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
     const [isHcardOpen, setIsHcardOpen] = useState(false);
     const { jobTitle, role, organisation } = props.data;
 
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.P.Job_Title}
-                displayName={_("hcard_job_title")}
-                displayValue={jobTitle}
+                property={{ displayName: _("hcard_job_title") }}
+                value={{ displayValue: jobTitle }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Role}
-                displayName={_("hcard_job_role")}
-                displayValue={role}
+                property={{ displayName: _("hcard_job_role") }}
+                value={{ displayValue: role }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Org}
-                title={_("hcard_link_to_org_hcard")}
-                displayName={_("hcard_job_organisation")}
-                displayValue={organisation?.name}
-                onClick={() => setIsHcardOpen(true)}
+                property={{
+                    title: _("hcard_link_to_org_hcard"),
+                    displayName: _("hcard_job_organisation"),
+                }}
+                value={{
+                    displayValue: organisation?.name,
+                    onClick: () => setIsHcardOpen(true),
+                }}
             />
             {organisation ? (
                 <EmbeddedHCardDialog
@@ -66,7 +68,7 @@ export const JobPropertiesTable = (
                     onClose={() => setIsHcardOpen(false)}
                 />
             ) : null}
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };
 
@@ -84,9 +86,11 @@ const LinkToOrganisation = (props: HCardJobData) => {
             <PropertyRow
                 icon={icon}
                 microformat={Microformat.P.Org}
-                title={_("hcard_link_to_org_hcard")}
-                displayValue={name}
-                onClick={hcard == null ? undefined : () => setIsOpen(true)}
+                property={{ title: _("hcard_link_to_org_hcard") }}
+                value={{
+                    displayValue: name,
+                    onClick: hcard == null ? undefined : () => setIsOpen(true),
+                }}
             />
 
             <EmbeddedHCardDialog

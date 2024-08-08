@@ -17,44 +17,42 @@ export const Contact = (props: NullablePropsOf<HCardContactData>) => {
         <PropertyRow
             icon={Icons.Link}
             microformat={Microformat.U.Url}
-            href={url}
+            value={{ href: url }}
         />
     );
 };
 
-export const ContactPropertiesTable = (
-    props: PropsOf<HCardContactData> & PropertiesTable.TableProps,
-) => {
+export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
     const { url, email, phone, impp, publicKey } = props.data;
 
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.U.Url}
-                href={url}
-                displayName={_("hcard_contact_url")}
+                value={{ href: url }}
+                property={{ displayName: _("hcard_contact_url") }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.U.Email}
-                href={email}
-                displayName={_("hcard_contact_email")}
+                value={{ href: email }}
+                property={{ displayName: _("hcard_contact_email") }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Tel}
-                href={buildUri("tel:", phone)}
-                displayName={_("hcard_contact_phone")}
+                value={{ href: buildUri("tel:", phone) }}
+                property={{ displayName: _("hcard_contact_phone") }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.U.IMPP}
-                href={impp}
-                displayName={_("hcard_contact_impp")}
+                value={{ href: impp }}
+                property={{ displayName: _("hcard_contact_impp") }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.U.Key}
-                href={publicKey}
-                displayName={_("hcard_contact_key")}
+                value={{ href: publicKey }}
+                property={{ displayName: _("hcard_contact_key") }}
             />
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };
 

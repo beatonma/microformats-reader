@@ -22,14 +22,12 @@ export const Location = (props: NullablePropsOf<HAdrData>) => {
         <PropertyRow
             icon={Icons.Location}
             microformat={Microformat.P.Adr}
-            displayValue={summary}
+            value={{ displayValue: summary }}
         />
     );
 };
 
-export const LocationPropertiesTable = (
-    props: PropsOf<HAdrData> & PropertiesTable.TableProps,
-) => {
+export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
     const {
         countryName,
         extendedAddress,
@@ -46,67 +44,65 @@ export const LocationPropertiesTable = (
 
     return (
         <>
-            <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-                <PropertiesTable.FullspanRow>
-                    <LinkToMap href={getMapsUrl(props.data)} />
-                </PropertiesTable.FullspanRow>
+            <PropertiesTable>
+                <LinkToMap href={getMapsUrl(props.data)} />
 
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Label}
-                    displayName={_("hadr_label")}
-                    displayValue={label}
+                    property={{ displayName: _("hadr_label") }}
+                    value={{ displayValue: label }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Post_Office_Box}
-                    displayName={_("hadr_post_office_box")}
-                    displayValue={postOfficeBox}
+                    property={{ displayName: _("hadr_post_office_box") }}
+                    value={{ displayValue: postOfficeBox }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Street_Address}
-                    displayName={_("hadr_street_address")}
-                    displayValue={streetAddress}
+                    property={{ displayName: _("hadr_street_address") }}
+                    value={{ displayValue: streetAddress }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Extended_Address}
-                    displayName={_("hadr_extended_address")}
-                    displayValue={extendedAddress}
+                    property={{ displayName: _("hadr_extended_address") }}
+                    value={{ displayValue: extendedAddress }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Locality}
-                    displayName={_("hadr_locality")}
-                    displayValue={locality}
+                    property={{ displayName: _("hadr_locality") }}
+                    value={{ displayValue: locality }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Region}
-                    displayName={_("hadr_region")}
-                    displayValue={region}
+                    property={{ displayName: _("hadr_region") }}
+                    value={{ displayValue: region }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Country_Name}
-                    displayName={_("hadr_country_name")}
-                    displayValue={countryName}
+                    property={{ displayName: _("hadr_country_name") }}
+                    value={{ displayValue: countryName }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Postal_Code}
-                    displayName={_("hadr_postal_code")}
-                    displayValue={postalCode}
+                    property={{ displayName: _("hadr_postal_code") }}
+                    value={{ displayValue: postalCode }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Latitude}
-                    displayName={_("hadr_latitude")}
-                    displayValue={latitude}
+                    property={{ displayName: _("hadr_latitude") }}
+                    value={{ displayValue: latitude }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Longitude}
-                    displayName={_("hadr_longitude")}
-                    displayValue={longitude}
+                    property={{ displayName: _("hadr_longitude") }}
+                    value={{ displayValue: longitude }}
                 />
-                <PropertiesTable.PropertyRow
+                <PropertyRow
                     microformat={Microformat.P.Altitude}
-                    displayName={_("hadr_altitude")}
-                    displayValue={altitude}
+                    property={{ displayName: _("hadr_altitude") }}
+                    value={{ displayValue: altitude }}
                 />
-            </PropertiesTable.Table>
+            </PropertiesTable>
         </>
     );
 };

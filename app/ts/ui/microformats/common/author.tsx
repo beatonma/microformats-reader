@@ -20,7 +20,7 @@ export const Author = (props: AuthorProps) => {
                         <div {...state.collapsibleControllerProps}>
                             <PropertyRow
                                 microformat={Microformat.P.Author}
-                                displayValue={author.name}
+                                value={{ displayValue: author.name }}
                             />
                         </div>
 

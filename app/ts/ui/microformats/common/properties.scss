@@ -3,13 +3,33 @@
 @use "styles/size";
 @use "styles/typography";
 
+.properties {
+    display: grid;
+    width: stretch;
+    grid-template-columns: 12ch 1fr;
+
+    > * {
+        grid-column: 1 / -1;
+    }
+
+    > .properties {
+        margin-block: var(--space);
+    }
+
+    .property {
+        display: grid;
+        grid-template-columns: subgrid;
+    }
+}
+
 .property {
     margin-block: var(--space-half);
-    align-items: center;
+    overflow: visible;
 
     .property-name {
         @extend %caption;
-        margin-right: var(--space-1x);
+        overflow-x: hidden;
+        text-overflow: ellipsis;
 
         &::after {
             content: ":";
@@ -27,29 +47,17 @@
         @include size.fixedSize(1em);
     }
 
-    &[data-clickable="true"] .property-value {
+    .property-value {
+        width: fit-content;
+    }
+
+    .property-value[data-clickable="true"] {
         @include element.buttonStyle;
         @include borders.border-clickable;
         color: var(--text-primary);
     }
 }
 
-table.properties {
-    tr {
-        &:empty {
-            height: 0;
-        }
-
-        &.group-end:not(:last-child) {
-            height: var(--space-half);
-        }
-    }
-
-    td {
-        vertical-align: baseline;
-    }
-}
-
-.property-value-multi {
+.property-value-multi > * {
     display: block;
 }

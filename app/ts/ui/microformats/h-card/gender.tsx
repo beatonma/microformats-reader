@@ -16,29 +16,27 @@ export const Gender = (props: NullablePropsOf<HCardGenderIdentity>) => {
     return <GenderSummary {...identity} />;
 };
 
-export const GenderPropertiesTable = (
-    props: PropsOf<HCardGenderIdentity> & PropertiesTable.TableProps,
-) => {
+export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
     const { genderIdentity, pronouns, sex } = props.data;
 
     return (
-        <PropertiesTable.Table inlineTableData={props.inlineTableData}>
-            <PropertiesTable.PropertyRow
+        <PropertiesTable>
+            <PropertyRow
                 microformat={Microformat.P.Gender_Identity}
-                displayName={_("hcard_gender_identity")}
-                displayValue={genderIdentity}
+                property={{ displayName: _("hcard_gender_identity") }}
+                value={{ displayValue: genderIdentity }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Pronouns}
-                displayName={_("hcard_pronouns")}
-                displayValue={pronouns}
+                property={{ displayName: _("hcard_pronouns") }}
+                value={{ displayValue: pronouns }}
             />
-            <PropertiesTable.PropertyRow
+            <PropertyRow
                 microformat={Microformat.P.Sex}
-                displayName={_("hcard_sex")}
-                displayValue={sex}
+                property={{ displayName: _("hcard_sex") }}
+                value={{ displayValue: sex }}
             />
-        </PropertiesTable.Table>
+        </PropertiesTable>
     );
 };
 
@@ -50,17 +48,20 @@ const GenderSummary = (props: HCardGenderIdentity) => {
             <>
                 <PropertyRow
                     microformat={Microformat.P.Gender_Identity}
-                    displayValue={genderIdentity?.[0]}
+                    value={{ displayValue: genderIdentity?.[0] }}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Pronouns}
-                    displayValue={pronouns?.[0]}
+                    value={{ displayValue: pronouns?.[0] }}
                 />
             </>
         );
     }
 
     return (
-        <PropertyRow microformat={Microformat.P.Sex} displayValue={sex?.[0]} />
+        <PropertyRow
+            microformat={Microformat.P.Sex}
+            value={{ displayValue: sex?.[0] }}
+        />
     );
 };

@@ -28,6 +28,7 @@ import {
     PropertyColumn,
 } from "ts/ui/microformats/common/properties";
 import { AppOptions, OptionsContext } from "ts/options";
+import { classes } from "ts/ui/util";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -119,7 +120,6 @@ const HCardTextDetail = (props: HCardData) => {
     } = props;
 
     const options = useContext(OptionsContext);
-    const inlineTableData = !options.groupByType;
 
     return (
         <div className="hcard-detail" {...rest}>
@@ -128,90 +128,55 @@ const HCardTextDetail = (props: HCardData) => {
                 <Notes notes={notes} />
             </Column>
 
-            <PropertiesTable.Table inlineTableData={!inlineTableData}>
+            <PropertiesTable>
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_name_details")}
                     dependsOn={nameDetail}
-                    render={data => (
-                        <NamePropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <NamePropertiesTable data={data} />}
                 />
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_gender_details")}
                     dependsOn={gender}
-                    render={data => (
-                        <GenderPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <GenderPropertiesTable data={data} />}
                 />
 
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_contact_detail")}
                     dependsOn={contact}
-                    render={data => (
-                        <ContactPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <ContactPropertiesTable data={data} />}
                 />
 
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_location_detail")}
                     dependsOn={location}
-                    render={data => (
-                        <LocationPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <LocationPropertiesTable data={data} />}
                 />
 
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_job_detail")}
                     dependsOn={job}
-                    render={data => (
-                        <JobPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <JobPropertiesTable data={data} />}
                 />
 
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_dates_detail")}
                     dependsOn={dates}
-                    render={data => (
-                        <DatesPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <DatesPropertiesTable data={data} />}
                 />
 
                 <DetailSection
                     options={options}
                     sectionTitle={_("hcard_extras_detail")}
                     dependsOn={extras}
-                    render={data => (
-                        <ExtrasPropertiesTable
-                            data={data}
-                            inlineTableData={inlineTableData}
-                        />
-                    )}
+                    render={data => <ExtrasPropertiesTable data={data} />}
                 />
-            </PropertiesTable.Table>
+            </PropertiesTable>
         </div>
     );
 };
@@ -236,7 +201,7 @@ const DetailSection = <T extends any>(
                 defaultIsExpanded={options.dropdownExpandByDefault}
                 header={<span>{sectionTitle}</span>}
                 title={sectionTitle}
-                className={className}
+                className={classes("detail-section", className)}
                 children={renderedContent}
                 {...rest}
             />
@@ -250,6 +215,9 @@ const Notes = (props: { notes: string[] | null | undefined }) => {
     const { notes } = props;
     if (!notes) return null;
     return (
-        <PropertyColumn microformat={Microformat.P.Note} displayValue={notes} />
+        <PropertyColumn
+            microformat={Microformat.P.Note}
+            value={{ displayValue: notes }}
+        />
     );
 };

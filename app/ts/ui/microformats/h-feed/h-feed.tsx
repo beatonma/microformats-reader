@@ -50,10 +50,12 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
         <div className="hfeed-about">
             <h1>
                 <PropertyRow
-                    image={photo}
-                    imageMicroformat={Microformat.U.Photo}
+                    icon={{
+                        image: photo,
+                        imageMicroformat: Microformat.U.Photo,
+                    }}
                     microformat={Microformat.P.Name}
-                    displayValue={name ?? _("hfeed_unnamed")}
+                    value={{ displayValue: name ?? _("hfeed_unnamed") }}
                 />
             </h1>
 
@@ -63,13 +65,13 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
                 <PropertyRow
                     microformat={Microformat.U.Url}
                     icon={Icons.Link}
-                    href={url}
+                    value={{ href: url }}
                 />
             </Row>
 
             <PropertyRow
                 microformat={Microformat.P.Summary}
-                displayValue={summary}
+                value={{ displayValue: summary }}
             />
         </div>
     );
@@ -113,8 +115,12 @@ const HEntry = (props: HEntryData) => {
             </Row>
 
             <PropertyRow
+                microformat={Microformat.P.Name}
+                value={{ href: url, displayValue: name }}
+            />
+            <PropertyRow
                 microformat={Microformat.P.Summary}
-                displayValue={summary}
+                value={{ displayValue: summary }}
             />
 
             <Categories data={category} />

@@ -3,7 +3,6 @@ import { Image } from "@microformats-parser";
 import { Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
-import { notNullish } from "ts/data/util/arrays";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { formatUri } from "ts/ui/formatting";
 import {
@@ -14,26 +13,28 @@ import {
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
-import { classes } from "ts/ui/util";
-import { Column, Row } from "ts/ui/layout";
+import { classes, titles } from "ts/ui/util";
+import { Alignment, Column, Row, Space } from "ts/ui/layout";
 
 type DisplayValue = ReactNode | DateOrString[];
 
 interface PropertyProps {
-    microformat: Microformats;
     displayName?: string | null;
     title?: string | null | undefined;
 }
 
 interface PropertyIconProps {
-    icon?: Icons;
     image?: Image | null;
     imageMicroformat?: Microformats;
 }
+const isPropertyIconProps = (
+    value: Icons | PropertyIconProps,
+): value is PropertyIconProps => {
+    return typeof value === "object";
+};
 
 interface PropertyValueProps {
     title?: string | null | undefined;
-    microformat: Microformats;
     href?: string | string[] | null;
     onClick?: () => void;
     displayValue?: DisplayValue;
@@ -52,11 +53,16 @@ interface PropertyLayoutBuildProps {
     propertyIcon: ReactNode;
     propertyName: ReactNode;
     propertyValue: ReactNode;
+    isMultiValue: boolean;
 }
 
-type PropertyLayoutProps = PropertyProps &
-    PropertyValueProps &
-    PropertyIconProps;
+interface PropertyLayoutProps {
+    microformat: Microformats;
+    className?: string | undefined;
+    property?: PropertyProps;
+    value: PropertyValueProps;
+    icon?: PropertyIconProps | Icons;
+}
 
 interface LayoutBuilder {
     layoutBuilder: (buildProps: PropertyLayoutBuildProps) => ReactNode;
@@ -74,42 +80,33 @@ interface LayoutBuilder {
  *
  */
 const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
-    const {
-        microformat,
-        displayName,
-        title,
-        href,
-        icon,
-        image,
-        imageMicroformat,
-        displayValue,
-        links,
-        layoutBuilder,
-    } = props;
+    const { layoutBuilder, microformat, className, property, value, icon } =
+        props;
 
-    if (!displayValue && !href && !links) return null;
+    if (!value?.displayValue && !value?.href && !value?.links) return null;
 
     checkPropertyLayoutConfiguration(props);
 
+    const title = titles(microformat, property?.title);
+
     const layoutProps = {
-        className: "property",
-        title: title ?? microformat,
+        className: classes("property", microformat, className),
+        title: title,
         "data-microformat": microformat,
     };
-    const propertyIcon: ReactNode = (
-        <PropertyIcon
-            icon={icon}
-            image={image}
-            imageMicroformat={imageMicroformat}
-        />
+    const isMultiValue =
+        (Array.isArray(value.href) && value.href.length > 1) ||
+        (Array.isArray(value.displayValue) && value.displayValue.length > 1);
+    const propertyIcon: ReactNode = <PropertyIcon icon={icon} />;
+    const propertyName: ReactNode = (
+        <PropertyName name={property?.displayName} />
     );
-    const propertyName: ReactNode = <PropertyName name={displayName} />;
     const propertyValue: ReactNode = (
         <PropertyValue
             title={title}
-            displayValue={displayValue}
-            href={href}
-            microformat={microformat}
+            displayValue={value.displayValue}
+            href={value.href}
+            onClick={value.onClick}
         />
     );
 
@@ -118,6 +115,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         propertyIcon: propertyIcon,
         propertyName: propertyName,
         propertyValue: propertyValue,
+        isMultiValue: isMultiValue,
     });
 };
 
@@ -125,7 +123,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
  * Throw an exception if the given props contains an invalid combination of values.
  */
 const checkPropertyLayoutConfiguration = (props: PropertyLayoutProps) => {
-    const { links, href, displayValue } = props;
+    const { links, href, displayValue } = props?.value;
 
     if (
         !!displayValue &&
@@ -148,23 +146,27 @@ const checkPropertyLayoutConfiguration = (props: PropertyLayoutProps) => {
     }
 };
 
-/**
- * Standalone {@Link Row} representing a property.
- *
- * For use in a table context, see {@link PropertiesTable.PropertyRow}.
- */
 export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
-        layoutBuilder={buildProps => (
+        layoutBuilder={({
+            layoutProps,
+            propertyIcon,
+            propertyName,
+            propertyValue,
+            isMultiValue,
+        }) => (
             <Row
-                {...buildProps.layoutProps}
-                onClick={props.onClick}
-                data-clickable={!!props.onClick}
+                {...layoutProps}
+                vertical={isMultiValue ? Alignment.Baseline : Alignment.Center}
+                space={Space.Char}
             >
-                {buildProps.propertyIcon}
-                {buildProps.propertyName}
-                {buildProps.propertyValue}
+                <Row>
+                    {propertyIcon}
+                    {propertyName}
+                </Row>
+
+                {propertyValue}
             </Row>
         )}
     />
@@ -173,87 +175,54 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
 export const PropertyColumn = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
-        layoutBuilder={buildProps => (
-            <Column {...buildProps.layoutProps}>
+        layoutBuilder={({
+            layoutProps,
+            propertyIcon,
+            propertyName,
+            propertyValue,
+        }) => (
+            <Column {...layoutProps}>
                 <Row>
-                    {buildProps.propertyIcon}
-                    {buildProps.propertyName}
+                    {propertyIcon}
+                    {propertyName}
                 </Row>
-                {buildProps.propertyValue}
+                {propertyValue}
             </Column>
         )}
     />
 );
 
-export namespace PropertiesTable {
-    /** Number of <td> elements per row. */
-    const PropertyRowSpan = 2;
-    export interface TableProps extends TableHeaderProps {
-        inlineTableData: boolean;
-    }
-    export const Table = <T extends any>(
-        props: HTMLProps<HTMLTableElement> & TableProps,
-    ) => {
-        const { inlineTableData = false, className, children, ...rest } = props;
+export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
+    const { className, children, ...rest } = props;
 
-        if (inlineTableData) {
+    return (
+        <div className={classes(className, "properties")} {...rest}>
+            {children}
+        </div>
+    );
+};
+
+const PropertyIcon = (props: {
+    icon: PropertyIconProps | Icons | undefined;
+}) => {
+    const icon = props.icon;
+    if (!icon) return null;
+
+    if (isPropertyIconProps(icon)) {
+        const { image, imageMicroformat } = icon;
+
+        if (image) {
             return (
-                <>
-                    <TableHeader tableHeader={props.tableHeader} />
-                    <tr className="group-start" />
-                    {children}
-                    <tr className="group-end" />
-                </>
+                <Img
+                    image={image}
+                    title={imageMicroformat}
+                    className="property-icon"
+                />
             );
         }
-
-        return (
-            <table className={classes("properties", className)} {...rest}>
-                <TableHeader tableHeader={props.tableHeader} />
-                <tbody>{children}</tbody>
-            </table>
-        );
-    };
-
-    export const FullspanRow = (props: { children: ReactNode }) => (
-        <tr>
-            <td colSpan={PropertyRowSpan}>{props.children}</td>{" "}
-        </tr>
-    );
-
-    export const PropertyRow = (props: PropertyLayoutProps) => (
-        <PropertyLayout
-            {...props}
-            layoutBuilder={buildProps => (
-                <tr
-                    {...buildProps.layoutProps}
-                    onClick={props.onClick}
-                    data-clickable={!!props.onClick}
-                >
-                    <td>
-                        <span>{buildProps.propertyIcon}</span>
-                        <span>{buildProps.propertyName}</span>
-                    </td>
-                    <td>{buildProps.propertyValue}</td>
-                </tr>
-            )}
-        />
-    );
-}
-
-const PropertyIcon = (props: PropertyIconProps) => {
-    const { image, imageMicroformat, ...rest } = props;
-    if (image) {
-        return (
-            <Img
-                image={image}
-                title={imageMicroformat}
-                className="property-icon"
-            />
-        );
+    } else {
+        return <Icon icon={icon} className="property-icon" />;
     }
-
-    return <Icon {...rest} className="property-icon" />;
 };
 
 const PropertyName = (props: Named) => {
@@ -263,69 +232,87 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { displayValue, href, links, title, microformat } = props;
+    const { displayValue, href, links, title, onClick } = props;
 
-    if (!Array.isArray(href) && !Array.isArray(displayValue)) {
+    if (Array.isArray(href) || Array.isArray(displayValue)) {
+        if (href != null && !Array.isArray(href))
+            throw "Unexpected state: property href is not an array.";
+        if (displayValue != null && !Array.isArray(displayValue))
+            throw "Unexpected state: property displayValue is not an array.";
+
+        if ((href?.length ?? 0) === 1 || (displayValue?.length ?? 0) === 1) {
+            return (
+                <SingleValueProperty
+                    href={href?.[0]}
+                    title={title}
+                    displayValue={displayValue?.[0]}
+                    onClick={onClick}
+                />
+            );
+        }
+
         return (
-            <SingleValueProperty
-                href={href}
-                microformat={microformat}
+            <MultiValueProperty
                 title={title}
-                displayValue={displayValue}
+                links={links}
+                values={href ?? displayValue}
+                onClick={onClick}
             />
         );
     }
 
-    if (href != null && !Array.isArray(href))
-        throw "Unexpected state: property href is not an array.";
-    if (displayValue != null && !Array.isArray(displayValue))
-        throw "Unexpected state: property displayValue is not an array.";
-
     return (
-        <MultiValueProperty
-            microformat={microformat}
+        <SingleValueProperty
+            href={href}
             title={title}
-            links={links}
-            values={href ?? displayValue}
+            displayValue={displayValue}
+            onClick={onClick}
         />
     );
 };
 
 interface MultiValuePropertyProps {
-    microformat: Microformats;
     title: string | null | undefined;
     links: Link[] | null | undefined;
     values: DateOrString[] | null | undefined;
+    onClick?: () => void;
 }
 const MultiValueProperty = (props: MultiValuePropertyProps) => {
-    const { microformat, title, links, values } = props;
+    const { title, links, values, onClick } = props;
 
     return (
-        <>
-            {(values ?? links)?.map((value, index) => {
-                const valueIsLink = isLink(value);
+        <div className="property-value-multi">
+            {links?.map((value, index) => (
+                <SingleValueProperty
+                    key={index}
+                    href={value.href}
+                    title={title}
+                    displayValue={value.displayValue}
+                    onClick={onClick}
+                />
+            ))}
 
+            {values?.map((value, index) => {
                 return (
                     <SingleValueProperty
-                        className="property-value-multi"
                         key={index}
-                        href={valueIsLink ? value.href : null}
-                        microformat={microformat}
+                        href={null}
                         title={title}
-                        displayValue={valueIsLink ? value.displayValue : value}
+                        displayValue={value}
+                        onClick={onClick}
                     />
                 );
             })}
-        </>
+        </div>
     );
 };
 
 interface SingleValuePropertyProps {
     href: string | null | undefined;
-    microformat: Microformats;
     className?: string;
     title: string | null | undefined;
     displayValue: ReactNode | Date;
+    onClick?: () => void;
 }
 const SingleValueProperty = (props: SingleValuePropertyProps) => {
     const {
@@ -345,31 +332,25 @@ const SingleValueProperty = (props: SingleValuePropertyProps) => {
     return (
         <MaybeLinkTo
             href={resolvedHref ?? undefined}
-            className={resolvedClassName}
+            className={resolvedClassName ?? undefined}
             title={resolvedTitle ?? undefined}
             onContextMenu={onContextClick}
+            onClick={props.onClick}
+            data-clickable={!!props.onClick}
         >
             {resolvedDisplayValue ?? formatUri(resolvedHref)}
         </MaybeLinkTo>
     );
 };
 
-interface TableHeaderProps {
-    tableHeader?: string;
-}
-const TableHeader = (props: TableHeaderProps) => {
-    if (!props.tableHeader) return null;
-    return <thead>{props.tableHeader}</thead>;
-};
-
 interface ResolvedProperties {
-    resolvedClassName: string;
+    resolvedClassName: string | null;
     resolvedHref: string | null;
     resolvedTitle: string | null;
     resolvedDisplayValue: ReactNode | null;
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
-    const { displayValue, href, title, microformat, className } = props;
+    const { displayValue, href, title, className } = props;
 
     let resolvedHref: string | null = href ?? null;
     let resolvedDisplayValue: ReactNode = isDate(displayValue)
@@ -386,14 +367,10 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         extraTitle.push(formatDateTime(displayValue));
     }
 
-    const resolvedTitle = [microformat, ...extraTitle, title]
-        .filter(notNullish)
-        .join("\n");
-
     return {
-        resolvedClassName: classes("property-value", className, microformat),
+        resolvedClassName: classes("property-value", className) ?? null,
         resolvedDisplayValue: resolvedDisplayValue,
         resolvedHref: resolvedHref,
-        resolvedTitle: resolvedTitle,
+        resolvedTitle: titles(title, ...extraTitle) ?? null,
     };
 };
