@@ -7,3 +7,16 @@
         background-color: var(--hover);
     }
 }
+
+%hover-children {
+    background: none;
+    > * {
+        transition:
+            background-color 200ms,
+            borderr-radius 200ms;
+    }
+
+    &:hover > * {
+        background-color: var(--hover);
+    }
+}

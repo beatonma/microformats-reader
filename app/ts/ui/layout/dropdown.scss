@@ -1,7 +1,6 @@
 @use "styles";
 
 button .dropdown-icon {
-    margin-left: var(--space-1x);
     cursor: pointer;
     transition: all 200ms;
 
@@ -26,7 +25,9 @@ button .dropdown-icon {
 
 .dropdown {
     width: stretch;
-    transition: margin styles.$duration-long, padding styles.$duration-long;
+    transition:
+        margin styles.$duration-long,
+        padding styles.$duration-long;
 
     .dropdown-header {
         display: flex;
@@ -43,12 +44,16 @@ button .dropdown-icon {
         border: none;
     }
 
+    .dropdown-button:hover {
+        @extend %hover-children;
+    }
+
     &[data-expanded="true"] {
-        margin-block: var(--space-1-5x);
+        margin-block: var(--space);
     }
 
     .dropdown-content {
-        overflow-y: clip;
+        overflow-y: hidden;
         margin-block: var(--space-half);
 
         &[data-expanded="true"] {

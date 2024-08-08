@@ -3,11 +3,13 @@ import { _ } from "ts/compat";
 import { OptionsContext } from "ts/options";
 import { Icon, Icons } from "ts/ui/icon";
 import {
+    ExpandableDefaultProps,
     ExpandCollapseLayout,
     ExpandCollapseProps,
-    ExpandableDefaultProps,
 } from "ts/ui/layout/expand-collapse";
 import { classes } from "ts/ui/util";
+import { Row } from "ts/ui/layout/linear";
+import { Alignment } from "ts/ui/layout/alignment";
 
 export interface DropdownProps extends HTMLProps<HTMLDivElement> {
     header: ReactNode;
@@ -92,12 +94,14 @@ export const DropdownButton = (
             data-expanded={isExpanded}
             {...rest}
         >
-            {children}
-            <Icon
-                className="dropdown-icon"
-                data-expanded={isExpanded}
-                icon={Icons.ExpandMore}
-            />
+            <Row horizontal={Alignment.Center}>
+                {children}
+                <Icon
+                    className="dropdown-icon"
+                    data-expanded={isExpanded}
+                    icon={Icons.ExpandMore}
+                />
+            </Row>
         </button>
     );
 };
