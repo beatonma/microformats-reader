@@ -44,11 +44,21 @@ export class MockBrowserProxy implements BrowserProxy {
 
     storage: BrowserStorage = {
         sync: {
-            get: async (key: string | string[]) => {
+            get: async (key: string | string[] | Record<string, any>) => {
                 if (typeof key === "string") {
                     return this.mockStorage[key];
                 }
-                return key.map(k => this.mockStorage[k]);
+                if (Array.isArray(key)) {
+                    return key.map(k => this.mockStorage[k]);
+                }
+
+                const result = { ...key };
+                const keys = Object.keys(key);
+                keys.forEach(it => {
+                    const value = this.mockStorage[it];
+                    if (value !== undefined) result[it] = value;
+                });
+                return result;
             },
             set: async (obj: any) => {
                 Object.entries(obj).forEach(([key, value]) => {
@@ -88,7 +98,7 @@ const getStaticMessage = (name: string, ...substitutions: any): string => {
     const MessagesJson = require("static/_locales/en_GB/messages.json");
     const translation: TranslationMessage | null = MessagesJson[name];
 
-    if (!translation) return `__nostr:__${name}`;
+    if (!translation) return `__nostr__:${name}`;
 
     const placeholders = translation.placeholders;
     let message = translation.message;
