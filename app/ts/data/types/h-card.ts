@@ -1,5 +1,6 @@
 import { HAdrData } from "ts/data/types/h-adr";
 import { Image } from "@microformats-parser";
+import { DateOrString } from "ts/data/types/common";
 
 export interface HCardData {
     id: string;
@@ -58,8 +59,8 @@ export interface HCardJobData {
 }
 
 export interface HCardDates {
-    birthday: Date[] | null;
-    anniversary: Date[] | null;
+    birthday: DateOrString[] | null;
+    anniversary: DateOrString[] | null;
 }
 
 export interface HCardExtras {
