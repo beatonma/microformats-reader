@@ -1,10 +1,10 @@
 import React, { HTMLProps } from "react";
-import { notNullish } from "ts/data/util/arrays";
 import {
     formatDate,
     formatDateTime,
     formatShortDateTime,
 } from "ts/ui/formatting/time";
+import { titles } from "ts/ui/util";
 
 export interface DateTimeProps {
     datetime: Date | null;
@@ -17,10 +17,10 @@ export const DateTime = (props: DateTimeProps & HTMLProps<HTMLTimeElement>) => {
     if (!datetime) return null;
 
     const displayValue = (showTime ? formatShortDateTime : formatDate)(
-        datetime
+        datetime,
     );
     const metaValue = (showTime ? formatDateTime : formatDate)(datetime);
-    const resolvedTitle = [title, metaValue].filter(notNullish).join("\n");
+    const resolvedTitle = titles(title, metaValue);
 
     return (
         <time title={resolvedTitle} dateTime={metaValue ?? undefined}>
