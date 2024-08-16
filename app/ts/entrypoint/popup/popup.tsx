@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ParsedDocument } from "@microformats-parser";
 import { _, compatBrowser } from "ts/compat";
-import { HCardData } from "ts/data/types";
-import { HFeedData } from "ts/data/types/h-feed";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
@@ -23,14 +20,9 @@ import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { OptionsContext, PopupSection, useOptions } from "ts/options";
 import { onlyIf } from "ts/data/util";
+import { MicroformatData } from "ts/data/parsing";
 
-export interface PopupProps {
-    microformats: ParsedDocument;
-    relLinks: RelatedLinks | null;
-    hcards: HCardData[] | null;
-    feeds: HFeedData[] | null;
-}
-export const PopupUI = (props: PopupProps) => {
+export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds } = props;
     const isEmpty = noneOf([relLinks, hcards, feeds]);
     const options = useContext(OptionsContext);
@@ -109,8 +101,11 @@ const QuickLinks = (props: NullablePropsOf<RelatedLinks>) => {
     );
 };
 
-const getMicroformatsFromCurrentTab = (): PopupProps | null | undefined => {
-    const [props, setProps] = useState<PopupProps | null | undefined>();
+const getMicroformatsFromCurrentTab = ():
+    | MicroformatData
+    | null
+    | undefined => {
+    const [props, setProps] = useState<MicroformatData | null | undefined>();
     const [retryFlag, setRetryFlag] = useState<boolean>(false);
     const retryTimestamp = useRef(performance.now());
 

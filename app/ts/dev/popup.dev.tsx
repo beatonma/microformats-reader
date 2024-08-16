@@ -17,9 +17,9 @@ import SampleHFeedImplied from "ts/dev/samples/h-feed_implied.html";
 import SampleHFeedNoProperties from "ts/dev/samples/h-feed_no-properties.html";
 // @ts-ignore
 import SampleHCardHFeed from "ts/dev/samples/sample_h-card_h-feed.html";
-import { parseDocument } from "ts/entrypoint/content-script";
+import { parse, MicroformatData } from "ts/data/parsing";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
-import { Popup, PopupProps, PopupUI } from "ts/entrypoint/popup/popup";
+import { Popup, PopupUI } from "ts/entrypoint/popup/popup";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Row } from "ts/ui/layout";
 import { Loading } from "ts/ui/loading";
@@ -37,9 +37,8 @@ const Samples = {
 };
 
 interface DebugUIProps {
-    microformats: PopupProps | null;
-    parsedDocument: ParsedDocument | null;
-    setParsedDocument: (data: ParsedDocument) => void;
+    microformats: MicroformatData | null;
+    setParsedDocument: (data: MicroformatData) => void;
     onHide: () => void;
 }
 const DebugUI = (props: DebugUIProps) => {
@@ -47,8 +46,8 @@ const DebugUI = (props: DebugUIProps) => {
         "Sample: h-card, h-feed",
     );
     useEffect(() => {
-        props.setParsedDocument(
-            mf2(Samples[page], { baseUrl: "https://example.beatonma.org" }),
+        parse(Samples[page], "https://example.beatonma.org").then(
+            props.setParsedDocument,
         );
     }, [page]);
 
@@ -68,10 +67,6 @@ const DebugUI = (props: DebugUIProps) => {
                     ))}
                 </select>
 
-                <button onClick={() => copyToClipboard(props.parsedDocument)}>
-                    Copy ParsedDocument
-                </button>
-
                 <button onClick={() => copyToClipboard(props.microformats)}>
                     Copy result
                 </button>
@@ -84,16 +79,9 @@ const DebugUI = (props: DebugUIProps) => {
 
 const PopupDev = () => {
     const [showSamples, setShowSamples] = useState(true);
-    const [parsedDocument, setParsedDocument] = useState<ParsedDocument | null>(
+    const [microformats, setMicroformats] = useState<MicroformatData | null>(
         null,
     );
-    const [microformats, setMicroformats] = useState<PopupProps | null>(null);
-
-    useEffect(() => {
-        if (parsedDocument) {
-            parseDocument(parsedDocument).then(setMicroformats);
-        }
-    }, [parsedDocument]);
 
     if (!showSamples) {
         return <Popup />;
@@ -103,8 +91,7 @@ const PopupDev = () => {
         <>
             <DebugUI
                 microformats={microformats}
-                parsedDocument={parsedDocument}
-                setParsedDocument={setParsedDocument}
+                setParsedDocument={setMicroformats}
                 onHide={() => setShowSamples(false)}
             />
 

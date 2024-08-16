@@ -1,5 +1,5 @@
-import { PopupProps } from "ts/entrypoint/popup/popup";
 import { ToolbarIconState } from "ts/ui/browser/toolbar";
+import { MicroformatData } from "ts/data/parsing";
 
 export enum Message {
     getMicroformats = "get-microformats",
@@ -15,4 +15,4 @@ export interface UpdateBadgeMessage extends MessageRequest {
     state: ToolbarIconState;
 }
 
-export type MessageResponse = PopupProps;
+export type MessageResponse = MicroformatData;
