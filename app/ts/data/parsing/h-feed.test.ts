@@ -1,28 +1,27 @@
 import { describe, expect, test } from "@jest/globals";
-import { parseHFeeds } from "ts/data/parsing/h-feed";
 import { parseTestHtml } from "ts/test/test-util";
 
-const SampleHtmlHEntry = `<div class="h-entry">
-  <div class="p-name">Blog #1</div>
-  <div class="p-summary">About a thing</div>
-  <div class="e-content">Lorem ipsum</div>
-  <time class="dt-published" datetime="2022-02-07"/>
-  <time class="dt-updated" datetime="2023-01-06"/>
-  <div class="p-author">Sally Ride</div>
-  <a class="u-url" href="http://sally.example.com/posts/blah/">w</a>
-  <data class="p-rsvp" value="MAYBE"/>
-</div>`;
-
 const SampleHtmlHFeed = `<div class="h-feed">
-<div class="p-name">Posts</div>
-<div class="p-summary">Personal blogs</div>
-<div class="p-author">Sally Ride</div>
-<a class="u-url" href="http://sally.example.com/posts/">w</a>
-<img class="u-photo" src="http://sally.example.com/feed.png" alt="feed image"/>
-${SampleHtmlHEntry}
+    <div class="p-name">Posts</div>
+    <div class="p-summary">Personal blogs</div>
+    <div class="p-author">Sally Ride</div>
+    <a class="u-url" href="http://sally.example.com/posts/">w</a>
+    <img class="u-photo" src="http://sally.example.com/feed.png" alt="feed image"/>
+    
+    <div class="h-entry">
+      <div class="p-name">Blog #1</div>
+      <div class="p-summary">About a thing</div>
+      <div class="e-content">Lorem ipsum</div>
+      <time class="dt-published" datetime="2022-02-07"/>
+      <time class="dt-updated" datetime="2023-01-06"/>
+      <div class="p-author">Sally Ride</div>
+      <a class="u-url" href="http://sally.example.com/posts/blah/">w</a>
+      <data class="p-rsvp" value="MAYBE"/>
+    </div>
 </div>`;
 
-const parseTestFeeds = async (html: string) => parseHFeeds(parseTestHtml(html));
+const parseTestFeeds = async (html: string) =>
+    parseTestHtml(html).then(it => it.feeds);
 const firstHFeed = async (html: string) =>
     parseTestFeeds(html).then(data => data?.[0] ?? null);
 

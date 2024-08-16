@@ -1,9 +1,6 @@
-import { mf2 } from "microformats-parser";
+import { parse } from "ts/data/parsing";
 
 export const parseTestHtml = (html: string) =>
-    mf2(html, {
-        baseUrl: "https://sally.example.com",
-        experimental: { lang: true, textContent: true },
-    });
+    parse(html, "https://sally.example.com");
 
 Object.prototype.toString = () => JSON.stringify(this);
