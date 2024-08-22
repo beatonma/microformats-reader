@@ -2,13 +2,19 @@ import React from "react";
 import { Microformat } from "ts/data/microformats";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
 import { ExpandCollapseLayout } from "ts/ui/layout/expand-collapse";
-import { PropertyRow } from "ts/ui/microformats/common/properties";
+import {
+    displayValueProperties,
+    PropertyRow,
+} from "ts/ui/microformats/common/properties";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
+
+export const Authors = (props: { authors: EmbeddedHCardData[] | null }) =>
+    props.authors?.map(author => <Author author={author} />) ?? null;
 
 interface AuthorProps {
     author: EmbeddedHCardData | null;
 }
-export const Author = (props: AuthorProps) => {
+const Author = (props: AuthorProps) => {
     const { author } = props;
     if (author == null) return null;
 
@@ -20,7 +26,7 @@ export const Author = (props: AuthorProps) => {
                         <div {...state.collapsibleControllerProps}>
                             <PropertyRow
                                 microformat={Microformat.P.Author}
-                                value={{ displayValue: author.name }}
+                                values={displayValueProperties(author.name)}
                             />
                         </div>
 

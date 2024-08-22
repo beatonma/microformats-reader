@@ -7,7 +7,7 @@ interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
 }
 
 export const LinkTo = (props: LinkProps) => {
-    const { title, href, ...rest } = props;
+    const { title, href, onClick, ...rest } = props;
 
     if (!href) return null;
 
@@ -16,10 +16,17 @@ export const LinkTo = (props: LinkProps) => {
     }
 
     const titleWithURL = titles(title, href);
-    const onClick = () =>
+    const openUrl = () =>
         compatBrowser.tabs.create({ active: true, url: href });
 
-    return <a href={href} title={titleWithURL} onClick={onClick} {...rest} />;
+    return (
+        <a
+            href={href}
+            title={titleWithURL}
+            onClick={onClick ?? openUrl}
+            {...rest}
+        />
+    );
 };
 
 export const MaybeLinkTo = (props: LinkProps) => {

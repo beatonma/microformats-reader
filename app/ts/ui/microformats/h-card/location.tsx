@@ -1,28 +1,37 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
-import { Microformat } from "ts/data/microformats";
-import { HAdrData } from "ts/data/types";
-import { notNullish } from "ts/data/util/arrays";
+import { Microformat, Microformats } from "ts/data/microformats";
+import {
+    HAdrData,
+    HGeoData,
+    isHAdrData,
+    isHCardData,
+    isHGeoData,
+    isString,
+} from "ts/data/types";
 import { formatLatLong } from "ts/ui/formatting";
 import { Icon, Icons } from "ts/ui/icon";
 import { LinkTo } from "ts/ui/link-to";
 import {
+    displayValueProperties,
     PropertiesTable,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
-import { NullablePropsOf, PropsOf } from "ts/ui/props";
+import { PropsOf } from "ts/ui/props";
+import { LocationData } from "ts/data/types/h-adr";
 
-export const Location = (props: NullablePropsOf<HAdrData>) => {
-    const location = props.data;
-    if (!location) return null;
-
-    const summary = addressSummary(location);
-
+export const LocationSummary = (props: {
+    microformat: Microformats;
+    locations: LocationData[] | null;
+}) => {
     return (
         <PropertyRow
+            microformat={props.microformat}
             icon={Icons.Location}
-            microformat={Microformat.P.Adr}
-            value={{ displayValue: summary }}
+            values={props.locations?.map(it => ({
+                displayValue: addressSummary(it),
+                onClick: getMapsUrl(it),
+            }))}
         />
     );
 };
@@ -50,77 +59,86 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
                 <PropertyRow
                     microformat={Microformat.P.Label}
                     property={{ displayName: _("hadr_label") }}
-                    value={{ displayValue: label }}
+                    values={displayValueProperties(label)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Post_Office_Box}
                     property={{ displayName: _("hadr_post_office_box") }}
-                    value={{ displayValue: postOfficeBox }}
+                    values={displayValueProperties(postOfficeBox)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Street_Address}
                     property={{ displayName: _("hadr_street_address") }}
-                    value={{ displayValue: streetAddress }}
+                    values={displayValueProperties(streetAddress)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Extended_Address}
                     property={{ displayName: _("hadr_extended_address") }}
-                    value={{ displayValue: extendedAddress }}
+                    values={displayValueProperties(extendedAddress)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Locality}
                     property={{ displayName: _("hadr_locality") }}
-                    value={{ displayValue: locality }}
+                    values={displayValueProperties(locality)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Region}
                     property={{ displayName: _("hadr_region") }}
-                    value={{ displayValue: region }}
+                    values={displayValueProperties(region)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Country_Name}
                     property={{ displayName: _("hadr_country_name") }}
-                    value={{ displayValue: countryName }}
+                    values={displayValueProperties(countryName)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Postal_Code}
                     property={{ displayName: _("hadr_postal_code") }}
-                    value={{ displayValue: postalCode }}
+                    values={displayValueProperties(postalCode)}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Latitude}
                     property={{ displayName: _("hadr_latitude") }}
-                    value={{ displayValue: latitude }}
+                    values={{ displayValue: latitude }}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Longitude}
                     property={{ displayName: _("hadr_longitude") }}
-                    value={{ displayValue: longitude }}
+                    values={{ displayValue: longitude }}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Altitude}
                     property={{ displayName: _("hadr_altitude") }}
-                    value={{ displayValue: altitude }}
+                    values={{ displayValue: altitude }}
                 />
             </PropertiesTable>
         </>
     );
 };
 
-const addressSummary = (location: HAdrData): string | null => {
+const addressSummary = (location: LocationData): string | null => {
+    if (typeof location === "string") return location;
+    if (isHAdrData(location)) return summaryFromHAddr(location);
+    if (isHGeoData(location)) return summaryFromHGeo(location);
+
+    console.warn(
+        `Unhandled source for addressSummary: ${JSON.stringify(location)}`,
+    );
+
+    return null;
+};
+
+const summaryFromHAddr = (location: HAdrData): string | null => {
     const { countryName, locality, region, latitude, longitude } = location;
 
-    let fields: string[] = [
-        locality?.[0],
-        region?.[0],
-        countryName?.[0],
-    ].filter(notNullish);
-    if (fields) {
-        return fields.join(", ");
-    }
-
-    return formatLatLong(latitude, longitude) ?? null;
+    return (
+        [locality?.[0], region?.[0], countryName?.[0]]
+            .nullIfEmpty()
+            ?.join(", ") ?? summaryFromHGeo(location)
+    );
 };
+const summaryFromHGeo = (location: HGeoData): string | null =>
+    formatLatLong(location.latitude, location.longitude);
 
 const LinkToMap = (props: HTMLProps<HTMLAnchorElement>) => {
     const { href, className, ...rest } = props;
@@ -133,11 +151,21 @@ const LinkToMap = (props: HTMLProps<HTMLAnchorElement>) => {
     );
 };
 
-const getMapsUrl = (location: HAdrData): string | undefined => {
-    const query = (
-        formatLatLong(location.latitude, location.longitude) ??
-        addressSummary(location)
-    )?.replace(/\s+/g, "+");
+const getMapsUrl = (location: LocationData | null): string | undefined => {
+    if (!location) return undefined;
+    let query: string | undefined = undefined;
+    if (isString(location)) {
+        query = location;
+    }
+    if (isHGeoData(location)) {
+        query = (
+            formatLatLong(location.latitude, location.longitude) ??
+            addressSummary(location)
+        )?.replace(/\s+/g, "+");
+    }
+    if (isHCardData(location)) {
+        return getMapsUrl(location.location?.[0] ?? null);
+    }
 
     if (!query) return undefined;
 

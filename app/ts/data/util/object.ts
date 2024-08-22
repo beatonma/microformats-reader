@@ -1,4 +1,10 @@
 /**
+ * Return true if value is not null or undefined.
+ */
+export const notNullish = <T>(value: T | null | undefined): value is T =>
+    value != null;
+
+/**
  * Returns null if all properties of the given object are null or empty.
  * Otherwise, returns the given object.
  *
@@ -6,15 +12,17 @@
  * - requireAnyKey requires at least one key to be present and non-empty.
  * If ignoredKeys is provided, values under those keys will be ignored even if they are not empty.
  */
-export const nullable = <T extends Record<string, unknown | null>>(
-    obj: T,
+export const nullable = <T extends Record<string, any | null>>(
+    obj: T | null | undefined,
     options?: {
-        ignoredKeys?: string[];
-        requiredKeys?: string[];
-        requireAnyKey?: string[];
-    }
+        ignoredKeys?: (keyof T)[];
+        requiredKeys?: (keyof T)[];
+        requireAnyKey?: (keyof T)[];
+    },
 ): T | null => {
     const { ignoredKeys, requiredKeys, requireAnyKey } = options ?? {};
+
+    if (obj == null) return null;
 
     if (!hasRequiredKeys(obj, requiredKeys, requireAnyKey)) {
         return null;
@@ -34,24 +42,27 @@ export const nullable = <T extends Record<string, unknown | null>>(
     return obj;
 };
 
-export const hasRequiredKeys = <T extends Record<string, unknown | null>>(
+const hasRequiredKeys = <T extends Record<string, unknown | null>>(
     obj: T,
-    requiredKeys: string[] | undefined = undefined,
-    requireOneKey: string[] | undefined = undefined
+    requiredKeys: (keyof T)[] | undefined,
+    requireAnyKey: (keyof T)[] | undefined,
 ) => {
     const nonEmptyValues = Object.entries(obj)
         .filter(([, v]) => isNotEmpty(v))
-        .map(([k]) => k);
+        .map(([k]) => k as keyof T);
 
     if (requiredKeys) {
         for (const key of requiredKeys) {
-            if (!nonEmptyValues.includes(key)) return false;
+            if (!nonEmptyValues.includes(key)) {
+                return false;
+            }
         }
     }
 
-    if (requireOneKey) {
-        if (!requireOneKey.some(key => nonEmptyValues.includes(key)))
+    if (requireAnyKey) {
+        if (!requireAnyKey.some(key => nonEmptyValues.includes(key))) {
             return false;
+        }
     }
 
     return true;
@@ -63,4 +74,27 @@ const isEmpty = (obj: unknown): obj is null | undefined => {
     if (obj == null) return true;
     if (Array.isArray(obj)) return obj.length === 0;
     return false;
+};
+
+export const withNotNull = <T, R>(
+    obj: T | null | undefined,
+    block: (obj: T) => R,
+): R | undefined => {
+    if (obj) {
+        return block(obj);
+    }
+};
+
+export const registerObjectExtensions = () => {
+    const addExtension = <T>(name: string, func: (...args: any) => T) => {
+        Object.defineProperty(Object.prototype, name, { value: func });
+    };
+
+    addExtension("let", function <T, R>(block: (self: T) => R) {
+        return block(this);
+    });
+};
+
+export const _private = {
+    hasRequiredKeys: hasRequiredKeys,
 };

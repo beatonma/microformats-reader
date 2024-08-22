@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { mf2 } from "microformats-parser";
-import { ParsedDocument } from "@microformats-parser";
 // @ts-ignore
 import SampleEmpty from "ts/dev/samples/empty.html";
 // @ts-ignore

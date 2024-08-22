@@ -1,4 +1,10 @@
-import React, { HTMLProps, MouseEvent, ReactNode } from "react";
+import React, {
+    ComponentProps,
+    MouseEvent,
+    ReactElement,
+    ReactNode,
+    useState,
+} from "react";
 import { Image } from "@microformats-parser";
 import { Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
@@ -15,8 +21,10 @@ import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
 import { classes, titles } from "ts/ui/util";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
-
-type DisplayValue = ReactNode | DateOrString[];
+import { nullable } from "ts/data/util/object";
+import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
+import { EmbeddedHCard } from "ts/data/types/h-card";
+import { asArray } from "ts/data/util/arrays";
 
 interface PropertyProps {
     displayName?: string | null;
@@ -25,7 +33,7 @@ interface PropertyProps {
 
 interface PropertyIconProps {
     image?: Image | null;
-    imageMicroformat?: Microformats;
+    imageMicroformat: Microformats;
 }
 const isPropertyIconProps = (
     value: Icons | PropertyIconProps,
@@ -33,20 +41,27 @@ const isPropertyIconProps = (
     return typeof value === "object";
 };
 
+type DisplayValue = ReactElement | DateOrString;
+type HRef = string;
+type HRefOrOnClick = (() => void) | HRef;
 interface PropertyValueProps {
     title?: string | null | undefined;
-    href?: string | string[] | null;
-    onClick?: () => void;
-    displayValue?: DisplayValue;
-    links?: Link[] | null;
+    values?: PropertyValue[] | null;
 }
 
-interface Link {
-    href: string | null | undefined;
-    displayValue: ReactNode | Date | null | undefined;
+interface PropertyValue {
+    displayValue?: DisplayValue | null | undefined;
+    onClick?: HRefOrOnClick | null | undefined;
 }
-const isLink = (obj: any | undefined): obj is Link =>
-    obj?.hasOwnProperty("href") && obj?.hasOwnProperty("displayValue");
+export const displayValueProperties = (
+    values: DateOrString[] | null | undefined,
+): PropertyValue[] | null =>
+    values?.map(it => ({ displayValue: it }))?.nullIfEmpty() ?? null;
+
+export const onClickValueProperties = (
+    values: (string | null)[] | null | undefined,
+): PropertyValue[] | null =>
+    values?.map(it => ({ onClick: it }))?.nullIfEmpty() ?? null;
 
 interface PropertyLayoutBuildProps {
     layoutProps: Record<string, any>;
@@ -60,7 +75,7 @@ interface PropertyLayoutProps {
     microformat: Microformats;
     className?: string | undefined;
     property?: PropertyProps;
-    value: PropertyValueProps;
+    values: PropertyValue | PropertyValue[] | null | undefined;
     icon?: PropertyIconProps | Icons;
 }
 
@@ -80,34 +95,28 @@ interface LayoutBuilder {
  *
  */
 const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
-    const { layoutBuilder, microformat, className, property, value, icon } =
+    const { layoutBuilder, microformat, className, property, values, icon } =
         props;
 
-    if (!value?.displayValue && !value?.href && !value?.links) return null;
+    const resolvedValues = asArray(values)
+        .map(it => nullable(it))
+        .nullIfEmpty<PropertyValue>();
+    if (resolvedValues == null) return null;
 
-    checkPropertyLayoutConfiguration(props);
-
-    const title = titles(microformat, property?.title);
+    const resolvedTitle = titles(microformat, property?.title);
 
     const layoutProps = {
         className: classes("property", microformat, className),
-        title: title,
+        title: resolvedTitle,
         "data-microformat": microformat,
     };
-    const isMultiValue =
-        (Array.isArray(value.href) && value.href.length > 1) ||
-        (Array.isArray(value.displayValue) && value.displayValue.length > 1);
+    const isMultiValue = resolvedValues.length > 1;
     const propertyIcon: ReactNode = <PropertyIcon icon={icon} />;
     const propertyName: ReactNode = (
         <PropertyName name={property?.displayName} />
     );
     const propertyValue: ReactNode = (
-        <PropertyValue
-            title={title}
-            displayValue={value.displayValue}
-            href={value.href}
-            onClick={value.onClick}
-        />
+        <PropertyValue title={resolvedTitle} values={resolvedValues} />
     );
 
     return layoutBuilder({
@@ -117,33 +126,6 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         propertyValue: propertyValue,
         isMultiValue: isMultiValue,
     });
-};
-
-/**
- * Throw an exception if the given props contains an invalid combination of values.
- */
-const checkPropertyLayoutConfiguration = (props: PropertyLayoutProps) => {
-    const { links, href, displayValue } = props?.value;
-
-    if (
-        !!displayValue &&
-        !!href &&
-        (Array.isArray(displayValue) || Array.isArray(href))
-    ) {
-        throw (
-            "Property error: " +
-            "Both [href, displayValue] are defined and contain multiple values. " +
-            "This should be replaced with the 'links' property."
-        );
-    }
-
-    if (!!links && (!!displayValue || !!href)) {
-        throw (
-            "Property error: " +
-            "[links] should be used instead of [href, displayValue], " +
-            "not in combination with them."
-        );
-    }
 };
 
 export const PropertyRow = (props: PropertyLayoutProps) => (
@@ -192,13 +174,44 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
     />
 );
 
-export const PropertiesTable = (props: HTMLProps<HTMLTableElement>) => {
+export const PropertiesTable = (props: ComponentProps<"div">) => {
     const { className, children, ...rest } = props;
 
     return (
         <div className={classes(className, "properties")} {...rest}>
             {children}
         </div>
+    );
+};
+
+interface EmbeddedHCardPropertyProps
+    extends Omit<PropertyLayoutProps, "values"> {
+    embeddedHCards: EmbeddedHCard[] | null;
+}
+export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
+    const [focussedHCardId, setFocussedHCardId] = useState<
+        string | undefined
+    >();
+    const { embeddedHCards, ...rest } = props;
+    if (!embeddedHCards) return null;
+
+    return (
+        <>
+            <PropertyRow
+                values={embeddedHCards.map((it, index) => ({
+                    displayValue: it.name?.join(" "),
+                    onClick: () =>
+                        setFocussedHCardId(embeddedHCards?.[index]?.id),
+                }))}
+                {...rest}
+            />
+            {embeddedHCards
+                ?.find(it => it.id === focussedHCardId)
+                ?.let<
+                    EmbeddedHCard,
+                    ReactElement
+                >((card: EmbeddedHCard) => <EmbeddedHCardDialog {...card} open={!!card} onClose={() => setFocussedHCardId(undefined)} />)}
+        </>
     );
 };
 
@@ -232,100 +245,41 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { displayValue, href, links, title, onClick } = props;
-
-    if (Array.isArray(href) || Array.isArray(displayValue)) {
-        if (href != null && !Array.isArray(href))
-            throw "Unexpected state: property href is not an array.";
-        if (displayValue != null && !Array.isArray(displayValue))
-            throw "Unexpected state: property displayValue is not an array.";
-
-        if ((href?.length ?? 0) === 1 || (displayValue?.length ?? 0) === 1) {
-            return (
-                <SingleValueProperty
-                    href={href?.[0]}
-                    title={title}
-                    displayValue={displayValue?.[0]}
-                    onClick={onClick}
-                />
-            );
-        }
-
-        return (
-            <MultiValueProperty
-                title={title}
-                links={links}
-                values={href ?? displayValue}
-                onClick={onClick}
-            />
-        );
-    }
-
-    return (
-        <SingleValueProperty
-            href={href}
-            title={title}
-            displayValue={displayValue}
-            onClick={onClick}
-        />
-    );
-};
-
-interface MultiValuePropertyProps {
-    title: string | null | undefined;
-    links: Link[] | null | undefined;
-    values: DateOrString[] | null | undefined;
-    onClick?: () => void;
-}
-const MultiValueProperty = (props: MultiValuePropertyProps) => {
-    const { title, links, values, onClick } = props;
+    const { title, values } = props;
 
     return (
         <div className="property-value-multi">
-            {links?.map((value, index) => (
-                <SingleValueProperty
+            {values?.map((value, index) => (
+                <SinglePropertyValue
                     key={index}
-                    href={value.href}
                     title={title}
                     displayValue={value.displayValue}
-                    onClick={onClick}
+                    onClick={value.onClick}
                 />
             ))}
-
-            {values?.map((value, index) => {
-                return (
-                    <SingleValueProperty
-                        key={index}
-                        href={null}
-                        title={title}
-                        displayValue={value}
-                        onClick={onClick}
-                    />
-                );
-            })}
         </div>
     );
 };
 
 interface SingleValuePropertyProps {
-    href: string | null | undefined;
-    className?: string;
     title: string | null | undefined;
-    displayValue: ReactNode | Date;
-    onClick?: () => void;
+    displayValue: DisplayValue | null | undefined;
+    onClick: HRefOrOnClick | null | undefined;
+    className?: string;
 }
-const SingleValueProperty = (props: SingleValuePropertyProps) => {
+const SinglePropertyValue = (props: SingleValuePropertyProps) => {
     const {
         resolvedHref,
         resolvedTitle,
         resolvedDisplayValue,
         resolvedClassName,
+        resolvedOnClick,
     } = resolveValues(props);
 
     const onContextClick = (e: MouseEvent) => {
         if (e.ctrlKey) {
             e.preventDefault();
-            copyToClipboard(props.href ?? props.displayValue);
+            copyToClipboard(resolvedHref ?? resolvedDisplayValue);
         }
     };
 
@@ -335,8 +289,8 @@ const SingleValueProperty = (props: SingleValuePropertyProps) => {
             className={resolvedClassName ?? undefined}
             title={resolvedTitle ?? undefined}
             onContextMenu={onContextClick}
-            onClick={props.onClick}
-            data-clickable={!!props.onClick}
+            onClick={resolvedOnClick ?? undefined}
+            data-clickable={!!resolvedOnClick}
         >
             {resolvedDisplayValue ?? formatUri(resolvedHref)}
         </MaybeLinkTo>
@@ -348,11 +302,13 @@ interface ResolvedProperties {
     resolvedHref: string | null;
     resolvedTitle: string | null;
     resolvedDisplayValue: ReactNode | null;
+    resolvedOnClick: (() => void) | null;
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
-    const { displayValue, href, title, className } = props;
+    const { displayValue, onClick, title, className } = props;
 
-    let resolvedHref: string | null = href ?? null;
+    const resolvedOnClick = typeof onClick === "function" ? onClick : null;
+    let resolvedHref: string | null = isString(onClick) ? onClick : null;
     let resolvedDisplayValue: ReactNode = isDate(displayValue)
         ? formatShortDateTime(displayValue)
         : displayValue;
@@ -372,5 +328,6 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         resolvedDisplayValue: resolvedDisplayValue,
         resolvedHref: resolvedHref,
         resolvedTitle: titles(title, ...extraTitle) ?? null,
+        resolvedOnClick: resolvedOnClick,
     };
 };

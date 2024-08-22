@@ -2,7 +2,6 @@ import { ParsedDocument } from "@microformats-parser";
 import { parseRelatedLinks } from "ts/data/parsing/related-links";
 import { parseHCards } from "ts/data/parsing/h-card";
 import { parseHFeeds } from "ts/data/parsing/h-feed";
-import { dump } from "ts/dev";
 import { mf2 } from "microformats-parser";
 import { RelatedLinks } from "ts/data/types/rel";
 import { HCardData, HFeedData } from "ts/data/types";
@@ -34,8 +33,6 @@ const parseDocument = async (
     const relatedLinks = await parseRelatedLinks(parsed);
     const hCards = await parseHCards(parsed);
     const hFeeds = await parseHFeeds(parsed);
-
-    dump(parsed);
 
     return {
         microformats: parsed,

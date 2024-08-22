@@ -7,7 +7,6 @@ import {
 } from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
-import { notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 import { DateOrString } from "ts/data/types/common";
 
 export namespace Parse {
@@ -19,31 +18,45 @@ export namespace Parse {
     export const get = <T extends MicroformatProperty>(
         container: MicroformatProperties,
         key: string,
-    ): T[] | null => {
-        const value = container?.[key.replace(/^(dt|e|h|p|u)-/, "")];
-        return takeIfNotEmpty(value) as T[];
-    };
+    ): T[] | null =>
+        container?.[key.replace(/^(dt|e|h|p|u)-/, "")]?.nullIfEmpty();
 
-    export const first = <T extends MicroformatProperty>(
+    /**
+     * All microformat property values are parsed generically as arrays, but
+     * some properties only make sense as a single value.
+     *
+     * e.g. an `h-geo` with 2 values for `p-latitude` is not useful.
+     *
+     * @returns unwrapped single value from the property value array,
+     *          or null if the value array has length !== 1.
+     */
+    export const single = <T extends MicroformatProperty>(
         container: MicroformatProperties,
         key: string,
-    ): T | null => (get(container, key)?.find(notNullish) as T) ?? null;
-
-    export const firstImage = (
-        container: MicroformatProperties,
-        key: string,
-    ): Image | null => {
-        const result = first(container, key);
-        if (isString(result)) {
-            return {
-                value: result,
-                alt: "",
-            };
-        }
-        return result as Image;
+    ): T | null => {
+        const value = get(container, key);
+        if (!value) return null;
+        if (value.length === 1)
+            return (value[0] as T | null | undefined) ?? null;
+        return null;
     };
 
-    export const getDate = (
+    /**
+     * @returns the property values interpreted as Images.
+     */
+    export const getImages = (
+        container: MicroformatProperties,
+        key: string,
+    ): Image[] | null =>
+        get(container, key)
+            ?.map(it => (isString(it) ? { value: it, alt: "" } : (it as Image)))
+            ?.nullIfEmpty() ?? null;
+
+    /**
+     * @returns the property values, each coerced to a Date object if possible,
+     * or kept as a string if not.
+     */
+    export const getDates = (
         container: MicroformatProperties,
         key: string,
     ): DateOrString[] | null => {
@@ -59,6 +72,9 @@ export namespace Parse {
         );
     };
 
+    /**
+     * @returns the plain text content of an `e-` container.
+     */
     export const getEmbeddedValue = (
         container: MicroformatProperties,
         key: string,

@@ -20,10 +20,11 @@ import {
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
-import { Location, LocationPropertiesTable } from "./location";
+import { LocationPropertiesTable, LocationSummary } from "./location";
 import { Name, NamePropertiesTable } from "./name";
 import { Microformat } from "ts/data/microformats";
 import {
+    displayValueProperties,
     PropertiesTable,
     PropertyColumn,
 } from "ts/ui/microformats/common/properties";
@@ -38,7 +39,9 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
             defaultIsExpanded={defaultIsExpanded}
             className="h-card"
             contentDescription="h-card"
-            sharedContent={<Avatar name={props.name ?? "?"} images={images} />}
+            sharedContent={
+                <Avatar name={props.name?.[0] ?? "?"} images={images} />
+            }
             summaryContent={<HCardTextSummary {...props} />}
             detailContent={<HCardTextDetail {...props} />}
         />
@@ -49,6 +52,7 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
     const { hcard, open, onClose } = props;
 
     if (hcard == null) return null;
+    if (!open) return null;
 
     return (
         <Dialog
@@ -61,7 +65,7 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
                 <CardContent>
                     <Row vertical={Alignment.Start} space={Space.Large}>
                         <Avatar
-                            name={hcard.name ?? "?"}
+                            name={hcard.name?.[0] ?? "?"}
                             images={hcard.images}
                         />
                         <HCardTextSummary {...hcard} />
@@ -96,7 +100,10 @@ const HCardTextSummary = (props: HCardData) => {
             </Row>
 
             <Row wrap space={Space.Small}>
-                <Location data={location} />
+                <LocationSummary
+                    microformat={Microformat.P.Adr}
+                    locations={location}
+                />
                 <Job data={job} />
             </Row>
 
@@ -153,7 +160,16 @@ const HCardTextDetail = (props: HCardData) => {
                     options={options}
                     sectionTitle={_("hcard_location_detail")}
                     dependsOn={location}
-                    render={data => <LocationPropertiesTable data={data} />}
+                    render={data => {
+                        return (
+                            <>
+                                {data.map(it => (
+                                    <LocationPropertiesTable data={it} />
+                                ))}
+                            </>
+                        );
+                        // return <LocationPropertiesTable data={data} />;
+                    }}
                 />
 
                 <DetailSection
@@ -217,7 +233,7 @@ const Notes = (props: { notes: string[] | null | undefined }) => {
     return (
         <PropertyColumn
             microformat={Microformat.P.Note}
-            value={{ displayValue: notes }}
+            values={displayValueProperties(notes)}
         />
     );
 };

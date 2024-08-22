@@ -1,10 +1,10 @@
 import { describe, expect, test } from "@jest/globals";
 import { parseLocation } from "ts/data/parsing/location";
+import "ts/test/test-util";
 
-const HCard = {
-    name: ["Michael Beaton"],
-    addr: [
-        {
+describe("Location parsing", () => {
+    test("simple h-card", () => {
+        const loc = parseLocation({
             type: ["h-adr"],
             properties: {
                 locality: ["Inverness"],
@@ -12,16 +12,7 @@ const HCard = {
                 "country-name": ["UK"],
             },
             value: "Inverness | Scotland | UK",
-        },
-    ],
-    url: [],
-    logo: [],
-    bday: [],
-};
-
-describe("Location parsing", () => {
-    test("", () => {
-        const loc = parseLocation(HCard)!;
+        })!;
 
         expect(loc.locality).toEqual(["Inverness"]);
         expect(loc.region).toEqual(["Scotland"]);

@@ -1,8 +1,7 @@
-import { HAdrData } from "ts/data/types/h-adr";
-import { EmbeddedHCard, HCardData } from "ts/data/types/h-card";
+import { EmbeddedHCard } from "ts/data/types/h-card";
 import { HCiteData } from "ts/data/types/h-cite";
-import { HGeoData } from "ts/data/types/h-geo";
 import { DateOrString } from "ts/data/types/common";
+import { LocationData } from "ts/data/types/h-adr";
 
 /**
  * https://microformats.org/wiki/h-entry
@@ -10,24 +9,24 @@ import { DateOrString } from "ts/data/types/common";
  * Lots of proposed and experimental properties which we'll hopefully deal with later.
  */
 export interface HEntryData {
-    name: string | null;
-    author: EmbeddedHCard | null;
-    summary: string | null;
+    name: string[] | null;
+    author: EmbeddedHCard[] | null;
+    summary: string[] | null;
     content: string[] | null;
     dates: HEntryDates | null;
     category: string[] | null;
-    url: string | null;
-    uid: string | null;
-    location: string | HCardData | HAdrData | HGeoData | null;
+    url: string[] | null;
+    uid: string[] | null;
+    location: LocationData[] | null;
     interactions: HEntryInteractions | null;
 }
 
 export interface HEntryInteractions {
     syndication: string[] | null;
-    inReplyTo: string | HCiteData | null;
+    inReplyTo: string[] | HCiteData | null;
     rsvp: RsvpValue | null;
-    likeOf: string | HCiteData | null;
-    repostOf: string | HCiteData | null;
+    likeOf: string[] | HCiteData | null;
+    repostOf: string[] | HCiteData | null;
 }
 
 export interface HEntryDates {

@@ -5,9 +5,10 @@ import {
     formatShortDateTime,
 } from "ts/ui/formatting/time";
 import { titles } from "ts/ui/util";
+import { DateOrString } from "ts/data/types/common";
 
 export interface DateTimeProps {
-    datetime: Date | null;
+    datetime: DateOrString | null;
     showTime?: boolean;
 }
 export const DateTime = (props: DateTimeProps & HTMLProps<HTMLTimeElement>) => {

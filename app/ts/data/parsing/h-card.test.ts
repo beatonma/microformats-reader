@@ -21,8 +21,8 @@ const SampleHCardFlat = `
     <span class="p-honorific-suffix">Ph.D.</span>,
     <span class="p-nickname">sallykride</span> (IRC)
     <div class="p-org">Sally Ride Science</div>
-    <img class="u-photo" src="http://example.com/sk.jpg" alt=""/>
-    <a class="u-url" href="http://sally.example.com">w</a>,
+    <img class="u-photo" src="https://example.com/sk.jpg" alt=""/>
+    <a class="u-url" href="https://sally.example.com">w</a>,
     <a class="u-email" href="mailto:sally@example.com">e</a>
     <div class="p-tel">+1.818.555.1212</div>
     <div class="p-street-address">123 Main st.</div>
@@ -50,8 +50,8 @@ const SampleHCardNested = `
         <div class="p-name">Sally Ride Science</div>
         <a href="https://sallyridescience.com" class="u-url">sallyridescience.com</a>
     </div>
-    <img class="u-photo" src="http://example.com/sk.jpg" alt="photo"/>
-    <a class="u-url" href="http://sally.example.com">w</a>,
+    <img class="u-photo" src="https://example.com/sk.jpg" alt="photo"/>
+    <a class="u-url" href="https://sally.example.com">w</a>,
     <a class="u-email" href="mailto:sally@example.com">e</a>
     <div class="p-tel">+1.818.555.1212</div>
     <div class="p-street-address">123 Main st.</div> 
@@ -59,7 +59,7 @@ const SampleHCardNested = `
     <abbr class="p-region" title="California">CA</abbr>,
     <span class="p-postal-code">91316</span>
     <div class="p-country-name">U.S.A</div>
-    <div class="p-geo">
+    <div class="p-geo h-geo">
       <div class="p-latitude">34.06648088793238</div>
       <div class="p-longitude">-118.22042689866892</div>
     </div>
@@ -81,33 +81,33 @@ describe("HCard parsing", () => {
             const html = '<div class="h-card">Sally Ride</div>';
             const hcard = await firstHCard(html);
 
-            expect(hcard?.name).toBe("Sally Ride");
+            expect(hcard?.name).toEqual(["Sally Ride"]);
         });
 
         test("Name detail", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
-            const nameDetail = hcard?.nameDetail;
+            const nameDetail = hcard!.nameDetail!;
 
-            expect(hcard?.name).toBe("Sally Ride");
-            expect(nameDetail?.honorificPrefix?.[0]).toBe("Dr.");
-            expect(nameDetail?.honorificSuffix?.[0]).toBe("Ph.D.");
-            expect(nameDetail?.givenName?.[0]).toBe("Sally");
-            expect(nameDetail?.additionalName?.[0]).toBe("K.");
-            expect(nameDetail?.familyName?.[0]).toBe("Ride");
-            expect(nameDetail?.nickname?.[0]).toBe("sallykride");
+            expect(hcard?.name).toEqual(["Sally Ride"]);
+            expect(nameDetail.honorificPrefix).toEqual(["Dr."]);
+            expect(nameDetail.honorificSuffix).toEqual(["Ph.D."]);
+            expect(nameDetail.givenName).toEqual(["Sally"]);
+            expect(nameDetail.additionalName).toEqual(["K."]);
+            expect(nameDetail.familyName).toEqual(["Ride"]);
+            expect(nameDetail.nickname).toEqual(["sallykride"]);
         });
     });
 
     describe("Locations", () => {
         const testLocation = (hcard: HCardData | null) => {
-            const location = hcard?.location;
+            const location = hcard!.location![0];
 
-            expect(location?.locality?.[0]).toBe("Los Angeles");
-            expect(location?.region?.[0]).toBe("California");
-            expect(location?.postalCode?.[0]).toBe("91316");
-            expect(location?.countryName?.[0]).toBe("U.S.A");
-            expect(location?.latitude).toBe("34.06648088793238");
-            expect(location?.longitude).toBe("-118.22042689866892");
+            expect(location.locality).toEqual(["Los Angeles"]);
+            expect(location.region).toEqual(["California"]);
+            expect(location.postalCode).toEqual(["91316"]);
+            expect(location.countryName).toEqual(["U.S.A"]);
+            expect(location.latitude).toBe("34.06648088793238");
+            expect(location.longitude).toBe("-118.22042689866892");
         };
 
         test("No location", async () => {
@@ -121,17 +121,25 @@ describe("HCard parsing", () => {
             const html = `<div class="h-card"><div class="p-adr">My address</div></div>`;
             const hcard = await firstHCard(html);
 
-            expect(hcard!.location!.value).toBe("My address");
+            expect(hcard!.location![0].value).toBe("My address");
         });
 
         test("Nested p-adr", async () => {
-            const hcard = await firstHCard(SampleHCardNested);
-            const location = hcard!.location!;
+            const hcard = await firstHCard(`<div class="h-card">
+<div class="p-adr h-adr">
+    <div class="p-street-address">123 Main st.</div>
+    <span class="p-locality">Los Angeles</span>,
+    <abbr class="p-region" title="California">CA</abbr>,
+    <span class="p-postal-code">91316</span>
+    <div class="p-country-name">U.S.A</div>
+</div>
+</div>`);
+            const location = hcard!.location![0];
 
-            expect(location.locality?.[0]).toBe("Los Angeles");
-            expect(location.region?.[0]).toBe("California");
-            expect(location.countryName?.[0]).toBe("U.S.A");
-            expect(location.postalCode?.[0]).toBe("91316");
+            expect(location.locality).toEqual(["Los Angeles"]);
+            expect(location.region).toEqual(["California"]);
+            expect(location.countryName).toEqual(["U.S.A"]);
+            expect(location.postalCode).toEqual(["91316"]);
         });
 
         test("Address directly in h-card", async () => {
@@ -142,7 +150,8 @@ describe("HCard parsing", () => {
 
         test("Address with nested p-geo", async () => {
             const hcard = await firstHCard(SampleHCardNested);
-            testLocation(hcard);
+            expect(hcard?.location?.[0]?.latitude).toBe("34.06648088793238");
+            expect(hcard?.location?.[0]?.longitude).toBe("-118.22042689866892");
         });
     });
 
@@ -150,19 +159,20 @@ describe("HCard parsing", () => {
         test("Simple name", async () => {
             const hcard = await firstHCard(SampleHCardFlat);
 
-            expect(hcard?.job?.organisation?.name).toBe("Sally Ride Science");
+            expect(hcard?.job?.organisation?.[0]?.name).toEqual([
+                "Sally Ride Science",
+            ]);
         });
 
         test("Nested h-card", async () => {
             const hcard = await firstHCard(SampleHCardNested);
+            const org = hcard!.job!.organisation![0];
 
-            expect(hcard?.job?.organisation?.name).toBe("Sally Ride Science");
-            expect(hcard?.job?.organisation?.hcard?.name).toBe(
-                "Sally Ride Science",
-            );
-            expect(hcard?.job?.organisation?.hcard?.contact?.url?.[0]).toBe(
+            expect(org.name).toEqual(["Sally Ride Science"]);
+            expect(org.hcard?.name).toEqual(["Sally Ride Science"]);
+            expect(org.hcard?.contact?.url).toEqual([
                 "https://sallyridescience.com",
-            );
+            ]);
         });
     });
 

@@ -4,6 +4,7 @@ import { Microformat } from "ts/data/microformats";
 import { HCardContactData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
 import {
+    onClickValueProperties,
     PropertiesTable,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
@@ -17,7 +18,7 @@ export const Contact = (props: NullablePropsOf<HCardContactData>) => {
         <PropertyRow
             icon={Icons.Link}
             microformat={Microformat.U.Url}
-            value={{ href: url }}
+            values={onClickValueProperties(url)}
         />
     );
 };
@@ -29,36 +30,39 @@ export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
         <PropertiesTable>
             <PropertyRow
                 microformat={Microformat.U.Url}
-                value={{ href: url }}
                 property={{ displayName: _("hcard_contact_url") }}
+                values={onClickValueProperties(url)}
             />
             <PropertyRow
                 microformat={Microformat.U.Email}
-                value={{ href: email }}
                 property={{ displayName: _("hcard_contact_email") }}
+                values={onClickValueProperties(email)}
             />
             <PropertyRow
                 microformat={Microformat.P.Tel}
-                value={{ href: buildUri("tel:", phone) }}
                 property={{ displayName: _("hcard_contact_phone") }}
+                values={onClickValueProperties(buildUri("tel:", phone))}
             />
             <PropertyRow
                 microformat={Microformat.U.IMPP}
-                value={{ href: impp }}
                 property={{ displayName: _("hcard_contact_impp") }}
+                values={onClickValueProperties(impp)}
             />
             <PropertyRow
                 microformat={Microformat.U.Key}
-                value={{ href: publicKey }}
                 property={{ displayName: _("hcard_contact_key") }}
+                values={onClickValueProperties(publicKey)}
             />
         </PropertiesTable>
     );
 };
 
 const buildUri = (prefix: string, values: string[] | null): string[] | null => {
-    if (values == null || values.length === 0) return null;
-    return values.map(value =>
-        value.startsWith(prefix) ? value : `${prefix}${value}`,
+    return (
+        values
+            ?.map(value =>
+                value.startsWith(prefix) ? value : `${prefix}${value}`,
+            )
+            ?.nullIfEmpty() ?? null
     );
 };

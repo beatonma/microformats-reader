@@ -17,9 +17,11 @@ import {
     HCardJobData,
     HCardNameDetail,
 } from "ts/data/types/h-card";
-import { isEmpty, notNullish, takeIfNotEmpty } from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
-import { parseLocation } from "ts/data/parsing/location";
+import {
+    parseLocation,
+    parseLocationFromProperties,
+} from "ts/data/parsing/location";
 
 /*
  * Parsing.
@@ -28,44 +30,26 @@ import { parseLocation } from "ts/data/parsing/location";
 export const parseHCards = async (
     microformats: ParsedDocument,
 ): Promise<HCardData[] | null> =>
-    new Promise((resolve, reject) => {
-        const items = Parse.getRootsOfType(
-            microformats.items,
-            Microformat.H.Card,
-        ).map(item => item.properties);
-
-        const primaryHcards = items.map(parseHCard).filter(notNullish);
-        if (isEmpty(primaryHcards)) {
-            resolve(null);
-            return;
-        }
-
-        resolve(primaryHcards);
-
-        // const hcards: HCardData[] = [];
-        // primaryHcards.forEach((hcard, index) => {
-        //     hcards.push(hcard);
-        //     if (hcard.job?.orgHCard != null) hcards.push(hcard.job.orgHCard);
-        // });
-
-        // resolve(hcards);
-    });
+    Parse.getRootsOfType(microformats.items, Microformat.H.Card)
+        .map(parseHCard)
+        .nullIfEmpty() ?? null;
 
 const generateId = () => Math.random().toString().replace(".", "");
 
-const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
+const parseHCard = (hcard: MicroformatRoot): HCardData | null => {
     if (hcard == null) return null;
+    const properties = hcard.properties;
 
-    const name = Parse.first<string>(hcard, Microformat.P.Name);
-    const notes = Parse.get<string>(hcard, Microformat.P.Note);
-    const nameDetail = parseNameDetails(hcard);
-    const gender = parseGender(hcard);
-    const location = parseLocation(hcard);
-    const contact = parseContact(hcard);
-    const job = parseJob(hcard);
-    const dates = parseDates(hcard);
-    const images = parseImages(hcard);
-    const extras = parseExtras(hcard);
+    const name = Parse.get<string>(properties, Microformat.P.Name);
+    const notes = Parse.get<string>(properties, Microformat.P.Note);
+    const nameDetail = parseNameDetails(properties);
+    const gender = parseGender(properties);
+    const location = parseHCardLocation(hcard);
+    const contact = parseContact(properties);
+    const job = parseJob(properties);
+    const dates = parseDates(properties);
+    const images = parseImages(properties);
+    const extras = parseExtras(properties);
 
     return nullable(
         {
@@ -86,8 +70,8 @@ const parseHCard = (hcard: MicroformatProperties): HCardData | null => {
 };
 
 const parseImages = (hcard: MicroformatProperties): HCardImages | null => {
-    const photo = Parse.firstImage(hcard, Microformat.U.Photo);
-    const logo = Parse.firstImage(hcard, Microformat.U.Logo);
+    const photo = Parse.getImages(hcard, Microformat.U.Photo);
+    const logo = Parse.getImages(hcard, Microformat.U.Logo);
 
     return nullable({
         photo: photo,
@@ -146,7 +130,7 @@ const parsePronouns = (hcard: MicroformatProperties): string[] | null => {
     const possessive =
         Parse.getExperimental<string>(hcard, "pronoun-possessive") ?? [];
 
-    return takeIfNotEmpty([...nominative, ...oblique, ...possessive]);
+    return [...nominative, ...oblique, ...possessive].nullIfEmpty();
 };
 
 const parseGender = (
@@ -167,8 +151,8 @@ const parseGender = (
 };
 
 const parseDates = (hcard: MicroformatProperties): HCardDates | null => {
-    const birthday = Parse.getDate(hcard, Microformat.Dt.Bday);
-    const anniversary = Parse.getDate(hcard, Microformat.Dt.Anniversary);
+    const birthday = Parse.getDates(hcard, Microformat.Dt.Bday);
+    const anniversary = Parse.getDates(hcard, Microformat.Dt.Anniversary);
 
     return nullable({
         birthday: birthday,
@@ -195,7 +179,7 @@ const parseContact = (
 };
 
 const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
-    const org = parseEmbeddedHCard(hcard, Microformat.P.Org);
+    const org = parseEmbeddedHCards(hcard, Microformat.P.Org);
 
     const jobTitle = Parse.get<string>(hcard, Microformat.P.Job_Title);
     const role = Parse.get<string>(hcard, Microformat.P.Role);
@@ -217,25 +201,67 @@ const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
     });
 };
 
-export const parseEmbeddedHCard = (
+/**
+ * Location may be found:
+ * - property `p-adr` as a string or embedded `h-adr`
+ * - property `p-geo` or `u-geo`, as a string or embedded `h-geo`
+ * - Directly in the `h-card` properties, as the `h-card` spec includes all fields from the `h-adr` spec
+ * - child `h-adr` object
+ */
+const parseHCardLocation = (hcard: MicroformatRoot): HAdrData[] | null => {
+    return (
+        parseLocationFromProperties(hcard.properties, [
+            Microformat.P.Adr,
+            Microformat.H.Geo,
+        ]) ??
+        [parseLocation(hcard)].nullIfEmpty() ??
+        Parse.getRootsOfType(hcard.children ?? [], Microformat.H.Adr)
+            ?.map(parseHCardLocation)
+            ?.flat()
+            ?.nullIfEmpty() ??
+        null
+    );
+};
+
+export const parseEmbeddedHCards = (
     container: MicroformatProperties,
     key: string,
-): EmbeddedHCard | null => {
-    const obj = Parse.first<MicroformatRoot | string>(container, key);
-    if (obj == null) return null;
+): EmbeddedHCard[] | null => {
+    const objs = Parse.get<MicroformatRoot | string>(container, key);
+    if (!objs) return null;
 
-    if (isString(obj)) {
-        return {
-            id: generateId(),
-            name: obj,
-            hcard: null,
-        };
-    }
+    return objs
+        .map(it => {
+            if (isString(it)) {
+                return {
+                    id: generateId(),
+                    name: [it],
+                    hcard: null,
+                };
+            }
 
-    const hcard = parseHCard(obj.properties);
-    return {
-        id: generateId(),
-        name: hcard?.name ?? null,
-        hcard: hcard,
-    };
+            const hcard = parseHCard(it);
+            if (!hcard) return null;
+            return {
+                id: generateId(),
+                name: hcard.name ?? null,
+                hcard: hcard,
+            };
+        })
+        .nullIfEmpty();
+
+    // if (isString(obj)) {
+    //     return {
+    //         id: generateId(),
+    //         name: [obj],
+    //         hcard: null,
+    //     };
+    // }
+
+    // const hcard = parseHCard(obj.properties);
+    // return {
+    //     id: generateId(),
+    //     name: hcard?.name ?? null,
+    //     hcard: hcard,
+    // };
 };

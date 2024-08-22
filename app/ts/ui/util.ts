@@ -1,15 +1,9 @@
-export const joinNotNull = (
-    joiner: string,
-    ...values: (string | null | undefined)[]
-): string | undefined => {
-    const result = values.filter(Boolean).join(joiner);
-    if (result) return result;
-};
+import { joinNotEmpty } from "ts/data/util/arrays";
 
 export const classes = (
     ...classNames: (string | null | undefined)[]
-): string | undefined => joinNotNull(" ", ...classNames);
+): string | undefined => joinNotEmpty(" ", classNames);
 
 export const titles = (
     ...titles: (string | null | undefined)[]
-): string | undefined => joinNotNull("\n", ...titles);
+): string | undefined => joinNotEmpty("\n", titles);

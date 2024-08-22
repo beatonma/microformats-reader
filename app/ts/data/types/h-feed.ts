@@ -11,9 +11,9 @@ export interface HFeedData {
 }
 
 export interface HFeedAbout {
-    name: string | null;
-    author: EmbeddedHCard | null;
-    url: string | null;
-    summary: string | null;
-    photo: Image | null;
+    name: string[] | null;
+    author: EmbeddedHCard[] | null;
+    url: string[] | null;
+    summary: string[] | null;
+    photo: Image[] | null;
 }

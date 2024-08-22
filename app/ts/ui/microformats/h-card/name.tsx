@@ -1,22 +1,23 @@
 import React from "react";
 import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
-import { Named } from "ts/data/types/common";
 import { HCardNameDetail } from "ts/data/types/h-card";
 import {
+    displayValueProperties,
+    onClickValueProperties,
     PropertiesTable,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 
-export const Name = (props: Named) => {
+export const Name = (props: { name: string[] | null }) => {
     const { name } = props;
 
     return (
         <h1>
             <PropertyRow
                 microformat={Microformat.P.Name}
-                value={{ displayValue: name }}
+                values={displayValueProperties(name)}
             />
         </h1>
     );
@@ -38,42 +39,42 @@ export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
             <PropertyRow
                 microformat={Microformat.U.Sound}
                 property={{ displayName: _("hcard_name_sound") }}
-                value={{ href: sound }}
+                values={onClickValueProperties(sound)}
             />
             <PropertyRow
                 microformat={Microformat.P.Honorific_Prefix}
                 property={{ displayName: _("hcard_name_honorific_prefix") }}
-                value={{ displayValue: honorificPrefix }}
+                values={displayValueProperties(honorificPrefix)}
             />
             <PropertyRow
                 microformat={Microformat.P.Honorific_Suffix}
                 property={{ displayName: _("hcard_name_honorific_suffix") }}
-                value={{ displayValue: honorificSuffix }}
+                values={displayValueProperties(honorificSuffix)}
             />
             <PropertyRow
                 microformat={Microformat.P.Given_Name}
                 property={{ displayName: _("hcard_name_given") }}
-                value={{ displayValue: givenName }}
+                values={displayValueProperties(givenName)}
             />
             <PropertyRow
                 microformat={Microformat.P.Additional_Name}
                 property={{ displayName: _("hcard_name_additional") }}
-                value={{ displayValue: additionalName }}
+                values={displayValueProperties(additionalName)}
             />
             <PropertyRow
                 microformat={Microformat.P.Family_Name}
                 property={{ displayName: _("hcard_name_family") }}
-                value={{ displayValue: familyName }}
+                values={displayValueProperties(familyName)}
             />
             <PropertyRow
                 microformat={Microformat.P.Nickname}
                 property={{ displayName: _("hcard_name_nickname") }}
-                value={{ displayValue: nickname }}
+                values={displayValueProperties(nickname)}
             />
             <PropertyRow
                 microformat={Microformat.P.Sort_String}
                 property={{ displayName: _("hcard_name_sortby") }}
-                value={{ displayValue: sortBy }}
+                values={displayValueProperties(sortBy)}
             />
         </PropertiesTable>
     );

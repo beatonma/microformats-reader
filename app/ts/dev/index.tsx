@@ -1,5 +1,7 @@
 import React from "react";
 
+import { notNullish } from "ts/data/util/object";
+
 export const TODO = (message?: string) => {
     console.debug(`[TODO]: ${message}`);
 };
@@ -27,8 +29,8 @@ export const timeIt = (
 
 export const dump = <T extends any>(obj: T, label?: string): T => {
     const msg = [label, JSON.stringify(obj, null, 2)]
-        .filter(Boolean)
+        .filter(notNullish)
         .join(": ");
-    console.log(msg);
+    console.debug(msg);
     return obj;
 };

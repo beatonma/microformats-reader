@@ -22,12 +22,14 @@ export const Avatar = (
     const onError = () => setLoadingError(true);
 
     if (!!photo && !!logo)
-        return <PhotoWithLogo photo={photo} logo={logo} onError={onError} />;
+        return (
+            <PhotoWithLogo photo={photo[0]} logo={logo[0]} onError={onError} />
+        );
 
     if (photo) {
         return (
             <SingleImageAvatar
-                image={photo}
+                image={photo[0]}
                 imageClassName={Microformat.U.Photo}
                 onError={onError}
             />
@@ -37,7 +39,7 @@ export const Avatar = (
     if (logo) {
         return (
             <SingleImageAvatar
-                image={logo}
+                image={logo[0]}
                 imageClassName={Microformat.U.Logo}
                 onError={onError}
             />

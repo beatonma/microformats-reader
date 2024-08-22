@@ -6,12 +6,17 @@ import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 import { TODO } from "ts/dev";
 import { formatDateTime } from "ts/ui/formatting/time";
 import { Icons } from "ts/ui/icon";
-import { Alignment, Row, Space } from "ts/ui/layout";
+import { Row, Space } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
-import { Author } from "ts/ui/microformats/common/author";
+import { Authors } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
-import { PropertyRow } from "ts/ui/microformats/common/properties";
+import {
+    displayValueProperties,
+    onClickValueProperties,
+    PropertyRow,
+} from "ts/ui/microformats/common/properties";
 import { NullablePropsOf } from "ts/ui/props";
+import { LocationSummary } from "ts/ui/microformats/h-card/location";
 
 export const HFeed = (props: NullablePropsOf<HFeedData>) => {
     const feed = props.data;
@@ -51,27 +56,29 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
             <h1>
                 <PropertyRow
                     icon={{
-                        image: photo,
+                        image: photo?.[0],
                         imageMicroformat: Microformat.U.Photo,
                     }}
                     microformat={Microformat.P.Name}
-                    value={{ displayValue: name ?? _("hfeed_unnamed") }}
+                    values={displayValueProperties(
+                        name ?? [_("hfeed_unnamed")],
+                    )}
                 />
             </h1>
 
             <Row space={Space.Small} className="by-line">
-                <Author author={author} />
+                <Authors authors={author} />
 
                 <PropertyRow
                     microformat={Microformat.U.Url}
                     icon={Icons.Link}
-                    value={{ href: url }}
+                    values={onClickValueProperties(url)}
                 />
             </Row>
 
             <PropertyRow
                 microformat={Microformat.P.Summary}
-                value={{ displayValue: summary }}
+                values={displayValueProperties(summary)}
             />
         </div>
     );
@@ -93,37 +100,38 @@ const HEntry = (props: HEntryData) => {
 
     TODO("interactions");
     TODO("embedded author hcard, if different from h-feed author");
-    TODO("location");
 
     const dateUpdated = dates?.updated
         ?.map(dt => _("date_updated", formatDateTime(dt)))
-        .join(", ");
+        ?.join(", ");
 
     return (
         <div className={Microformat.H.Entry}>
-            <Row horizontal={Alignment.SpaceBetween}>
-                <PropertyRow
-                    microformat={Microformat.P.Name}
-                    href={url}
-                    displayValue={name}
-                />
+            <Row className="h-entry--metadata" wrap space={Space.Medium}>
                 <PropertyRow
                     microformat={Microformat.Dt.Published}
-                    displayValue={dates?.published}
-                    title={dateUpdated}
+                    values={dates?.published?.map(it => ({ displayValue: it }))}
+                    property={{ title: dateUpdated }}
+                />
+
+                <Categories data={category} />
+                <LocationSummary
+                    microformat={Microformat.P.Location}
+                    locations={location}
                 />
             </Row>
 
             <PropertyRow
                 microformat={Microformat.P.Name}
-                value={{ href: url, displayValue: name }}
+                values={name?.map((it, index) => ({
+                    displayValue: it,
+                    onClick: url?.[index] ?? null,
+                }))}
             />
             <PropertyRow
                 microformat={Microformat.P.Summary}
-                value={{ displayValue: summary }}
+                values={displayValueProperties(summary)}
             />
-
-            <Categories data={category} />
         </div>
     );
 };

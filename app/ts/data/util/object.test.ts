@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { hasRequiredKeys, nullable } from "ts/data/util/object";
+import { _private, nullable } from "ts/data/util/object";
 
 describe("nullable", () => {
     test("No ignored keys, no required keys", () => {
@@ -16,8 +16,8 @@ describe("nullable", () => {
         expect(
             nullable(
                 { one: null, ignored: "useless value" },
-                { ignoredKeys: ["ignored"] }
-            )
+                { ignoredKeys: ["ignored"] },
+            ),
         ).toBeNull();
 
         expect(
@@ -25,8 +25,8 @@ describe("nullable", () => {
                 { one: "some values", ignored: "useless value" },
                 {
                     ignoredKeys: ["ignored"],
-                }
-            )
+                },
+            ),
         ).toEqual({ one: "some values", ignored: "useless value" });
     });
 
@@ -35,6 +35,8 @@ describe("nullable", () => {
         expect(nullable(data, { requiredKeys: ["one"] })).toBeNull();
         expect(nullable(data, { requiredKeys: ["one", "two"] })).toBeNull();
         expect(nullable(data, { requiredKeys: ["two"] })).toEqual(data);
+
+        // @ts-ignore TS2322: Type "missing" is not assignable to type "one" | "two"
         expect(nullable(data, { requiredKeys: ["missing"] })).toBeNull();
     });
 
@@ -48,19 +50,22 @@ describe("nullable", () => {
             nullable(data, {
                 ignoredKeys: ["ignored"],
                 requiredKeys: ["required"],
-            })
+            }),
         ).toEqual(data);
         expect(
             nullable(data, {
                 ignoredKeys: ["ignored"],
                 requiredKeys: ["one", "required"],
-            })
+            }),
         ).toBeNull();
         expect(
-            nullable(data, { ignoredKeys: ["one"], requiredKeys: ["required"] })
+            nullable(data, {
+                ignoredKeys: ["one"],
+                requiredKeys: ["required"],
+            }),
         ).toEqual(data);
         expect(
-            nullable(data, { ignoredKeys: ["ignored"], requiredKeys: ["one"] })
+            nullable(data, { ignoredKeys: ["ignored"], requiredKeys: ["one"] }),
         ).toBeNull();
     });
 
@@ -72,7 +77,7 @@ describe("nullable", () => {
             four: null,
         };
         expect(nullable(data, { requireAnyKey: ["two", "three"] })).toEqual(
-            data
+            data,
         );
         expect(nullable(data, { requireAnyKey: ["one", "two"] })).toEqual(data);
         expect(nullable(data, { requireAnyKey: ["one", "four"] })).toBeNull();
@@ -96,10 +101,16 @@ test("hasRequiredKeys", () => {
         address: undefined,
     };
 
-    expect(hasRequiredKeys(data, ["age", "hobbies", "pet"])).toBeTruthy();
-    expect(hasRequiredKeys(data, ["friends"])).toBeFalsy();
-    expect(hasRequiredKeys(data, ["name", "job"])).toBeFalsy();
-    expect(hasRequiredKeys(data, [], ["name", "job"])).toBeTruthy();
+    expect(
+        _private.hasRequiredKeys(data, ["age", "hobbies", "pet"], undefined),
+    ).toBeTruthy();
+    expect(_private.hasRequiredKeys(data, ["friends"], undefined)).toBeFalsy();
+    expect(
+        _private.hasRequiredKeys(data, ["name", "job"], undefined),
+    ).toBeFalsy();
+    expect(
+        _private.hasRequiredKeys(data, undefined, ["name", "job"]),
+    ).toBeTruthy();
 
-    expect(hasRequiredKeys(data)).toBeTruthy();
+    expect(_private.hasRequiredKeys(data, undefined, undefined)).toBeTruthy();
 });
