@@ -53,9 +53,9 @@
 
     button.property-value {
         @include element.buttonStyle;
-        @include borders.border-clickable;
         font-size: inherit;
         color: var(--text-primary);
+        @include borders.border-clickable;
     }
 }
 

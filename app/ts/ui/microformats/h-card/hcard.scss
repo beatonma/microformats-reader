@@ -11,11 +11,12 @@
 
     .p-note {
         .property-value {
+            white-space: pre-line;
+            line-height: 1.2;
+
             &:not(:last-child) {
                 margin-bottom: var(--space);
             }
-            white-space: pre-line;
-            line-height: 1.2;
         }
     }
 }
