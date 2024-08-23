@@ -49,12 +49,12 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
                 values={displayValueProperties(role)}
             />
             <EmbeddedHCardProperty
+                microformat={Microformat.P.Org}
+                embeddedHCards={organisation}
                 property={{
-                    title: _("hcard_link_to_org_hcard"),
                     displayName: _("hcard_job_organisation"),
                 }}
-                embeddedHCards={organisation}
-                microformat={Microformat.P.Org}
+                title={() => _("hcard_link_to_org_hcard")}
             />
         </PropertiesTable>
     );

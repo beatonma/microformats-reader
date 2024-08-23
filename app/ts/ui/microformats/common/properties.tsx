@@ -45,31 +45,32 @@ type DisplayValue = ReactElement | DateOrString;
 type HRef = string;
 type HRefOrOnClick = (() => void) | HRef;
 interface PropertyValueProps {
-    title?: string | null | undefined;
-    values?: PropertyValue[] | null;
+    title: string | null | undefined;
+    values: PropertyValue[] | null;
 }
 
 interface PropertyValue {
+    title?: string | null | undefined;
     displayValue?: DisplayValue | null | undefined;
     onClick?: HRefOrOnClick | null | undefined;
 }
+
+/**
+ * Helper function to build PropertyValues with only `displayValue`.
+ * @param values
+ */
 export const displayValueProperties = (
     values: DateOrString[] | null | undefined,
 ): PropertyValue[] | null =>
     values?.map(it => ({ displayValue: it }))?.nullIfEmpty() ?? null;
 
+/**
+ * Helper function to build PropertyValues with only `onClick`.
+ */
 export const onClickValueProperties = (
     values: (string | null)[] | null | undefined,
 ): PropertyValue[] | null =>
     values?.map(it => ({ onClick: it }))?.nullIfEmpty() ?? null;
-
-interface PropertyLayoutBuildProps {
-    layoutProps: Record<string, any>;
-    propertyIcon: ReactNode;
-    propertyName: ReactNode;
-    propertyValue: ReactNode;
-    isMultiValue: boolean;
-}
 
 interface PropertyLayoutProps {
     microformat: Microformats;
@@ -77,6 +78,14 @@ interface PropertyLayoutProps {
     property?: PropertyProps;
     values: PropertyValue | PropertyValue[] | null | undefined;
     icon?: PropertyIconProps | Icons;
+}
+
+interface PropertyLayoutBuildProps {
+    layoutProps: Record<string, any>;
+    propertyIcon: ReactNode;
+    propertyName: ReactNode;
+    propertyValue: ReactNode;
+    isMultiValue: boolean;
 }
 
 interface LayoutBuilder {
@@ -187,6 +196,7 @@ export const PropertiesTable = (props: ComponentProps<"div">) => {
 interface EmbeddedHCardPropertyProps
     extends Omit<PropertyLayoutProps, "values"> {
     embeddedHCards: EmbeddedHCard[] | null;
+    title?: (card: EmbeddedHCard) => string;
 }
 export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
     const [focussedHCardId, setFocussedHCardId] = useState<
@@ -202,6 +212,7 @@ export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
                     displayValue: it.name?.join(" "),
                     onClick: () =>
                         setFocussedHCardId(embeddedHCards?.[index]?.id),
+                    title: props.title?.(it),
                 }))}
                 {...rest}
             />
@@ -252,7 +263,7 @@ const PropertyValue = (props: PropertyValueProps) => {
             {values?.map((value, index) => (
                 <SinglePropertyValue
                     key={index}
-                    title={title}
+                    title={titles(title, value.title)}
                     displayValue={value.displayValue}
                     onClick={value.onClick}
                 />
