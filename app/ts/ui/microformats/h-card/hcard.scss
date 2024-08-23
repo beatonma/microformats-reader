@@ -8,4 +8,14 @@
     .detail-section--no-dropdown {
         margin-block: var(--space);
     }
+
+    .p-note {
+        .property-value {
+            &:not(:last-child) {
+                margin-bottom: var(--space);
+            }
+            white-space: pre-line;
+            line-height: 1.2;
+        }
+    }
 }
