@@ -11,7 +11,6 @@ export class MockBrowserProxy implements BrowserProxy {
     mockStorage: any;
 
     constructor() {
-        console.debug("MockBrowserProxy should only be used in tests.");
         this.mockStorage = {};
     }
 

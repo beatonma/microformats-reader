@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { useContext } from "react";
 import { _ } from "ts/compat";
 import { Microformat, Microformats } from "ts/data/microformats";
 import {
@@ -10,7 +10,7 @@ import {
     isString,
 } from "ts/data/types";
 import { formatLatLong } from "ts/ui/formatting";
-import { Icon, Icons } from "ts/ui/icon";
+import { Icons } from "ts/ui/icon";
 import { LinkTo } from "ts/ui/link-to";
 import {
     displayValueProperties,
@@ -19,18 +19,22 @@ import {
 } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 import { LocationData } from "ts/data/types/h-adr";
+import { MapsProvider, OptionsContext } from "ts/options";
+import { IconWithText } from "ts/ui/icon/icons";
 
 export const LocationSummary = (props: {
     microformat: Microformats;
     locations: LocationData[] | null;
 }) => {
+    const options = useContext(OptionsContext);
+
     return (
         <PropertyRow
             microformat={props.microformat}
             icon={Icons.Location}
             values={props.locations?.map(it => ({
                 displayValue: addressSummary(it),
-                onClick: getMapsUrl(it),
+                onClick: getMapsUrl(it, options.mapsProvider),
             }))}
         />
     );
@@ -54,7 +58,7 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
     return (
         <>
             <PropertiesTable>
-                <LinkToMap href={getMapsUrl(props.data)} />
+                <LinkToMap {...props.data} />
 
                 <PropertyRow
                     microformat={Microformat.P.Label}
@@ -140,34 +144,45 @@ const summaryFromHAddr = (location: HAdrData): string | null => {
 const summaryFromHGeo = (location: HGeoData): string | null =>
     formatLatLong(location.latitude, location.longitude);
 
-const LinkToMap = (props: HTMLProps<HTMLAnchorElement>) => {
-    const { href, className, ...rest } = props;
-    if (!href) return null;
+const LinkToMap = (props: HAdrData) => {
+    const options = useContext(OptionsContext);
+    const mapsProvider = options.mapsProvider;
+    const url = getMapsUrl(props, mapsProvider);
+
+    if (!url) return null;
 
     return (
-        <LinkTo href={href} className="maps" {...rest}>
-            <Icon icon={Icons.Map} /> Open in Google Maps
+        <LinkTo href={url} className="maps">
+            <IconWithText
+                icon={Icons.Map}
+                text={`Open in ${mapsProvider.uiName}`}
+            />
         </LinkTo>
     );
 };
 
-const getMapsUrl = (location: LocationData | null): string | undefined => {
+const getMapsUrl = (
+    location: LocationData | null,
+    provider: MapsProvider,
+): string | undefined => {
     if (!location) return undefined;
     let query: string | undefined = undefined;
     if (isString(location)) {
         query = location;
-    }
-    if (isHGeoData(location)) {
-        query = (
+    } else if (isHGeoData(location)) {
+        query =
             formatLatLong(location.latitude, location.longitude) ??
-            addressSummary(location)
-        )?.replace(/\s+/g, "+");
-    }
-    if (isHCardData(location)) {
-        return getMapsUrl(location.location?.[0] ?? null);
+            addressSummary(location) ??
+            undefined;
+    } else if (isHCardData(location)) {
+        return getMapsUrl(location.location?.[0] ?? null, provider);
     }
 
     if (!query) return undefined;
 
-    return `https://www.google.com/maps/search/${query}`;
+    return provider.search.replace("{query}", encodeURIComponent(query));
+};
+
+export const _private = {
+    getMapsUrl: getMapsUrl,
 };

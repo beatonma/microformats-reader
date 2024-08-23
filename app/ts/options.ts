@@ -1,11 +1,48 @@
 import { createContext, useEffect, useState } from "react";
 import * as process from "process";
-import { compatBrowser } from "ts/compat";
+import { _, compatBrowser } from "ts/compat";
 
-export enum PopupSection {
-    "h-card" = "h-card",
-    "h-feed" = "h-feed",
-    "relme" = "relme",
+export interface MapsProvider {
+    /**
+     * Unique const name used in code
+     */
+    apiName: string;
+
+    /**
+     * Translatable name used in UI.
+     */
+    uiName: string;
+
+    /**
+     * A URL with `{query}` placeholder.
+     */
+    search: string;
+}
+
+export namespace AppOptions {
+    export enum PopupSection {
+        "h-card" = "h-card",
+        "h-feed" = "h-feed",
+        "relme" = "relme",
+    }
+
+    export const MapProvider = {
+        GoogleEarth: {
+            apiName: "google-earth",
+            uiName: _("options_maps_provider_googleearth"),
+            search: "https://earth.google.com/web/search/{query}/",
+        },
+        GoogleMaps: {
+            apiName: "google-maps",
+            uiName: _("options_maps_provider_googlemaps"),
+            search: "https://www.google.com/maps/search/{query}",
+        },
+        OpenStreetMap: {
+            apiName: "open-street-map",
+            uiName: _("options_maps_provider_openstreetmap"),
+            search: "https://www.openstreetmap.org/search?query={query}",
+        },
+    };
 }
 
 export const AppConfig = {
@@ -34,17 +71,20 @@ export interface AppOptions {
      */
     groupByType: boolean;
 
-    popupContents: PopupSection[];
+    popupContents: AppOptions.PopupSection[];
+
+    mapsProvider: MapsProvider;
 }
 
 const defaultOptions = (): AppOptions => ({
     dropdownExpandByDefault: true,
     groupByType: true,
     popupContents: [
-        PopupSection["h-card"],
-        PopupSection["h-feed"],
-        PopupSection.relme,
+        AppOptions.PopupSection["h-card"],
+        AppOptions.PopupSection["h-feed"],
+        AppOptions.PopupSection.relme,
     ],
+    mapsProvider: AppOptions.MapProvider.OpenStreetMap,
 });
 
 export const OptionsContext = createContext<AppOptions>(defaultOptions());

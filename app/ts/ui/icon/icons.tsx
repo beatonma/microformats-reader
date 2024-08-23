@@ -1,4 +1,9 @@
-import React, { HTMLProps, ReactElement } from "react";
+import React, {
+    ComponentProps,
+    HTMLProps,
+    ReactElement,
+    ReactNode,
+} from "react";
 // @ts-ignore
 import BirthdaySvg from "ts/ui/icon/svg/outline-400/cake.svg";
 // @ts-ignore
@@ -24,6 +29,7 @@ import TagSvg from "ts/ui/icon/svg/outline-400/tag.svg";
 // @ts-ignore
 import WorkSvg from "ts/ui/icon/svg/outline-400/work.svg";
 import { classes } from "ts/ui/util";
+import { Row, Space } from "ts/ui/layout";
 
 export enum Icons {
     Anniversary = AnniversarySvg,
@@ -41,7 +47,7 @@ export enum Icons {
     WebmentionEndpoint = WebmentionEndpointSvg,
 }
 
-export interface IconProps extends HTMLProps<SVGElement> {
+export interface IconProps extends ComponentProps<"svg"> {
     icon?: Icons | null;
 }
 
@@ -60,5 +66,15 @@ export const Icon = (props: IconProps) => {
             aria-hidden={true}
             {...rest}
         />
+    );
+};
+
+export const IconWithText = (props: IconProps & { text: ReactNode }) => {
+    const { text, className, ...icon } = props;
+    return (
+        <Row className={className} space={Space.Char}>
+            <Icon {...icon} />
+            <span className="icon-text">{text}</span>
+        </Row>
     );
 };

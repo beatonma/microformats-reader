@@ -18,7 +18,7 @@ import { injectTheme } from "ts/ui/theme";
 import "ts/entrypoint/popup/popup.scss";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
-import { OptionsContext, PopupSection, useOptions } from "ts/options";
+import { AppOptions, OptionsContext, useOptions } from "ts/options";
 import { onlyIf } from "ts/data/util";
 import { MicroformatData } from "ts/data/parsing";
 
@@ -39,27 +39,36 @@ export const PopupUI = (props: MicroformatData) => {
                     <QuickLinks data={relLinks} />
                 </section>
 
-                {onlyIf(sections.includes(PopupSection["h-card"]), () => (
-                    <section id="h_cards">
-                        {hcards?.map(hcard => (
-                            <HCard {...hcard} key={hcard.id} />
-                        ))}
-                    </section>
-                ))}
+                {onlyIf(
+                    sections.includes(AppOptions.PopupSection["h-card"]),
+                    () => (
+                        <section id="h_cards">
+                            {hcards?.map(hcard => (
+                                <HCard {...hcard} key={hcard.id} />
+                            ))}
+                        </section>
+                    ),
+                )}
 
-                {onlyIf(sections.includes(PopupSection["h-feed"]), () => (
-                    <section id="h_feeds">
-                        {feeds?.map((feed, index) => (
-                            <HFeed data={feed} key={index} />
-                        ))}
-                    </section>
-                ))}
+                {onlyIf(
+                    sections.includes(AppOptions.PopupSection["h-feed"]),
+                    () => (
+                        <section id="h_feeds">
+                            {feeds?.map((feed, index) => (
+                                <HFeed data={feed} key={index} />
+                            ))}
+                        </section>
+                    ),
+                )}
 
-                {onlyIf(sections.includes(PopupSection["relme"]), () => (
-                    <section id="rel_me">
-                        <RelmeLinks links={relLinks?.relme} />
-                    </section>
-                ))}
+                {onlyIf(
+                    sections.includes(AppOptions.PopupSection["relme"]),
+                    () => (
+                        <section id="rel_me">
+                            <RelmeLinks links={relLinks?.relme} />
+                        </section>
+                    ),
+                )}
             </main>
         </ScrimLayout>
     );
@@ -75,8 +84,10 @@ export const Popup = () => {
     const microformats = getMicroformatsFromCurrentTab();
     const [options] = useOptions();
 
-    if (microformats === undefined) return <Loading />;
-    if (options === undefined) return <Loading />;
+    if (microformats === undefined)
+        return <Loading reason="microformats === undefined" />;
+    if (options === undefined)
+        return <Loading reason="options === undefined" />;
     if (microformats === null)
         return <Error message={_("error_loading_failed")} />;
 
@@ -105,7 +116,7 @@ const getMicroformatsFromCurrentTab = ():
     | MicroformatData
     | null
     | undefined => {
-    const [props, setProps] = useState<MicroformatData | null | undefined>();
+    const [data, setData] = useState<MicroformatData | null | undefined>();
     const [retryFlag, setRetryFlag] = useState<boolean>(false);
     const retryTimestamp = useRef(performance.now());
 
@@ -115,7 +126,7 @@ const getMicroformatsFromCurrentTab = ():
             console.warn(
                 "Microformat loading failed: timeout exceeded. Please try reloading the tab.",
             );
-            setProps(null);
+            setData(null);
             return;
         }
         compatBrowser.tabs.currentTab().then(currentTab => {
@@ -129,12 +140,12 @@ const getMicroformatsFromCurrentTab = ():
                     action: Message.getMicroformats,
                 })
                 .then((response: MessageResponse) => {
-                    setProps(response);
+                    setData(response);
                     injectTheme(null);
                 })
                 .catch(e => setRetryFlag(it => !it));
         });
     }, [retryFlag]);
 
-    return props;
+    return data;
 };

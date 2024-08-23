@@ -93,6 +93,10 @@ export const registerObjectExtensions = () => {
     addExtension("let", function <T, R>(block: (self: T) => R) {
         return block(this);
     });
+
+    addExtension("toJson", function () {
+        return JSON.stringify(this, null, 2);
+    });
 };
 
 export const _private = {

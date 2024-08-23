@@ -254,5 +254,18 @@
   },
   "options_group_by_type": {
     "message": "Group h-card content by type"
+  },
+
+  "options_maps_provider": {
+    "message": "Open maps with:"
+  },
+  "options_maps_provider_googleearth": {
+    "message": "Google Earth"
+  },
+  "options_maps_provider_googlemaps": {
+    "message": "Google Maps"
+  },
+  "options_maps_provider_openstreetmap": {
+    "message": "OpenStreetMap"
   }
 }
