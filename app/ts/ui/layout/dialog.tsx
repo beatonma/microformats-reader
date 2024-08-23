@@ -21,12 +21,13 @@ interface ScrimProps {
 }
 export const ScrimLayout = (props: ScrimProps) => {
     const dialogState = useState<ReactNode>(undefined);
+    const dialogContent = dialogState?.[0];
 
     return (
         <DialogContext.Provider value={dialogState}>
-            <div id={ScrimId} data-visible={dialogState[0] !== undefined} />
+            <div id={ScrimId} data-visible={dialogContent !== undefined} />
             {props.children}
-            <div id={DialogId} children={dialogState[0]} />
+            <div id={DialogId} children={dialogContent} />
         </DialogContext.Provider>
     );
 };
@@ -39,13 +40,21 @@ export const Dialog = (props: HTMLProps<HTMLDialogElement> & DialogProps) => {
     const { open, onClose, ...rest } = props;
     const [_, setDialog] = useContext(DialogContext);
 
+    const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+            onClose();
+        }
+    };
+
     useEffect(() => {
         document.getElementById(ScrimId)?.addEventListener("click", onClose);
+        window.addEventListener("keydown", onKeyDown);
 
         return () => {
             document
                 .getElementById(ScrimId)
                 ?.removeEventListener("click", onClose);
+            window.removeEventListener("keydown", onKeyDown);
         };
     }, []);
 

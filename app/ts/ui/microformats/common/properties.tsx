@@ -143,7 +143,7 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
                 vertical={isMultiValue ? Alignment.Baseline : Alignment.Center}
                 space={Space.Char}
             >
-                <Row>
+                <Row space={Space.Char}>
                     {propertyIcon}
                     {propertyName}
                 </Row>
@@ -283,14 +283,25 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
         }
     };
 
+    if (resolvedOnClick != null) {
+        return (
+            <button
+                className={resolvedClassName ?? undefined}
+                title={resolvedTitle ?? undefined}
+                onContextMenu={onContextClick}
+                onClick={resolvedOnClick}
+            >
+                {resolvedDisplayValue}
+            </button>
+        );
+    }
+
     return (
         <MaybeLinkTo
             href={resolvedHref ?? undefined}
             className={resolvedClassName ?? undefined}
             title={resolvedTitle ?? undefined}
             onContextMenu={onContextClick}
-            onClick={resolvedOnClick ?? undefined}
-            data-clickable={!!resolvedOnClick}
         >
             {resolvedDisplayValue ?? formatUri(resolvedHref)}
         </MaybeLinkTo>
