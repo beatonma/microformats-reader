@@ -12,7 +12,6 @@
 
 .h-entry {
     @extend %border-left;
-    margin-block: var(--space-1x);
 
     .property {
         margin-block: 0;

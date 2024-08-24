@@ -33,7 +33,7 @@ interface ExpandCollapseInternalProps {
 }
 
 export const ExpandCollapseLayout = (
-    props: ExpandableDefaultProps & ExpandCollapseInternalProps
+    props: ExpandableDefaultProps & ExpandCollapseInternalProps,
 ) => {
     const { defaultIsExpanded, layout } = props;
     const [isExpanded, setExpanded] = useState(defaultIsExpanded ?? false);
@@ -77,15 +77,11 @@ export const ExpandCollapseLayout = (
         }
     }, [isClosing]);
 
-    return (
-        <>
-            {layout({
-                isExpanded: isExpanded,
-                isClosing: isClosing,
-                collapsibleControllerProps: collapsibleControllerProps,
-                collapsibleContentProps: collapsibleContentProps,
-                setState: setExpanded,
-            })}
-        </>
-    );
+    return layout({
+        isExpanded: isExpanded,
+        isClosing: isClosing,
+        collapsibleControllerProps: collapsibleControllerProps,
+        collapsibleContentProps: collapsibleContentProps,
+        setState: setExpanded,
+    });
 };

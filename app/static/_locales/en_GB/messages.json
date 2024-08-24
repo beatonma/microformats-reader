@@ -204,6 +204,9 @@
   "hfeed_unnamed": {
     "message": "h-feed"
   },
+  "hfeed_dropdown_content_description": {
+    "message": "h-feed contents"
+  },
   "direction_cardinal_north": {
     "message": "N"
   },

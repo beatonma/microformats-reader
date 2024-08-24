@@ -6,17 +6,19 @@ import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 import { TODO } from "ts/dev";
 import { formatDateTime } from "ts/ui/formatting/time";
 import { Icons } from "ts/ui/icon";
-import { Row, Space } from "ts/ui/layout";
+import { Column, Row, Space } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
-import { Authors } from "ts/ui/microformats/common/author";
 import { Categories } from "ts/ui/microformats/common/categories";
 import {
     displayValueProperties,
+    EmbeddedHCardProperty,
+    linkedValueProperties,
     onClickValueProperties,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { NullablePropsOf } from "ts/ui/props";
 import { LocationSummary } from "ts/ui/microformats/h-card/location";
+import { EmbeddedHCard } from "ts/data/types/h-card";
 
 export const HFeed = (props: NullablePropsOf<HFeedData>) => {
     const feed = props.data;
@@ -27,15 +29,19 @@ export const HFeed = (props: NullablePropsOf<HFeedData>) => {
         <ExpandableCard
             className={Microformat.H.Feed}
             defaultIsExpanded={true}
-            contentDescription={""}
+            contentDescription={_("hfeed_dropdown_content_description")}
             sharedContent={<AboutHFeed data={about} />}
             summaryContent={null}
             detailContent={
-                <div className="entries">
+                <Column className="entries" space={Space.Large}>
                     {entries?.map((entry, index) => (
-                        <HEntry {...entry} key={index} />
+                        <HEntry
+                            key={index}
+                            hFeedAuthor={about?.author ?? null}
+                            entry={entry}
+                        />
                     ))}
-                </div>
+                </Column>
             }
         />
     );
@@ -52,7 +58,7 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
 
     const { name, author, summary, url, photo } = about;
     return (
-        <div className="hfeed-about">
+        <Column className="hfeed-about">
             <h1>
                 <PropertyRow
                     icon={{
@@ -60,14 +66,18 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
                         imageMicroformat: Microformat.U.Photo,
                     }}
                     microformat={Microformat.P.Name}
-                    values={displayValueProperties(
+                    values={linkedValueProperties(
                         name ?? [_("hfeed_unnamed")],
+                        url,
                     )}
                 />
             </h1>
 
             <Row space={Space.Small} className="by-line">
-                <Authors authors={author} />
+                <EmbeddedHCardProperty
+                    microformat={Microformat.P.Author}
+                    embeddedHCards={author}
+                />
 
                 <PropertyRow
                     microformat={Microformat.U.Url}
@@ -80,11 +90,16 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
                 microformat={Microformat.P.Summary}
                 values={displayValueProperties(summary)}
             />
-        </div>
+        </Column>
     );
 };
 
-const HEntry = (props: HEntryData) => {
+interface HEntryProps {
+    hFeedAuthor: EmbeddedHCard[] | null;
+    entry: HEntryData;
+}
+const HEntry = (props: HEntryProps) => {
+    const { entry, hFeedAuthor } = props;
     const {
         name,
         summary,
@@ -96,42 +111,50 @@ const HEntry = (props: HEntryData) => {
         url,
         location,
         category,
-    } = props;
+    } = entry;
 
     TODO("interactions");
-    TODO("embedded author hcard, if different from h-feed author");
 
     const dateUpdated = dates?.updated
         ?.map(dt => _("date_updated", formatDateTime(dt)))
         ?.join(", ");
 
     return (
-        <div className={Microformat.H.Entry}>
-            <Row className="h-entry--metadata" wrap space={Space.Medium}>
-                <PropertyRow
-                    microformat={Microformat.Dt.Published}
-                    values={dates?.published?.map(it => ({ displayValue: it }))}
-                    property={{ title: dateUpdated }}
-                />
-
-                <Categories data={category} />
-                <LocationSummary
-                    microformat={Microformat.P.Location}
-                    locations={location}
-                />
-            </Row>
-
+        <Column className={Microformat.H.Entry}>
             <PropertyRow
-                microformat={Microformat.P.Name}
-                values={name?.map((it, index) => ({
-                    displayValue: it,
-                    onClick: url?.[index] ?? null,
-                }))}
+                microformat={[Microformat.P.Name, Microformat.U.Url]}
+                values={linkedValueProperties(name, url)}
             />
             <PropertyRow
                 microformat={Microformat.P.Summary}
                 values={displayValueProperties(summary)}
             />
-        </div>
+
+            <Row className="h-entry--metadata" wrap space={Space.Large}>
+                <PropertyRow
+                    microformat={Microformat.Dt.Published}
+                    values={dates?.published?.map(it => ({ displayValue: it }))}
+                    property={{ title: dateUpdated }}
+                />
+                {author === hFeedAuthor ? null : (
+                    <Row wrap space={Space.Char}>
+                        <EmbeddedHCardProperty
+                            icon={Icons.Author}
+                            microformat={Microformat.P.Author}
+                            embeddedHCards={author}
+                        />
+                    </Row>
+                )}
+                <LocationSummary
+                    microformat={Microformat.P.Location}
+                    locations={location}
+                />
+                <Categories data={category} />
+                <PropertyRow
+                    microformat={Microformat.U.Uid}
+                    values={onClickValueProperties(uid)}
+                />
+            </Row>
+        </Column>
     );
 };

@@ -72,8 +72,20 @@ export const onClickValueProperties = (
 ): PropertyValue[] | null =>
     values?.map(it => ({ onClick: it }))?.nullIfEmpty() ?? null;
 
+export const linkedValueProperties = (
+    displayValues: DateOrString[] | null | undefined,
+    links: HRef[] | null,
+): PropertyValue[] | null => {
+    const length = Math.max(displayValues?.length ?? 0, links?.length ?? 0);
+    let values = [];
+    for (let i = 0; i < length; i++) {
+        values.push({ displayValue: displayValues?.[i], onClick: links?.[i] });
+    }
+    return values.nullIfEmpty();
+};
+
 interface PropertyLayoutProps {
-    microformat: Microformats;
+    microformat: Microformats | Microformats[];
     className?: string | undefined;
     property?: PropertyProps;
     values: PropertyValue | PropertyValue[] | null | undefined;
@@ -107,15 +119,17 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
     const { layoutBuilder, microformat, className, property, values, icon } =
         props;
 
+    const resolvedMicroformats = asArray(microformat);
+
     const resolvedValues = asArray(values)
         .map(it => nullable(it))
         .nullIfEmpty<PropertyValue>();
     if (resolvedValues == null) return null;
 
-    const resolvedTitle = titles(microformat, property?.title);
+    const resolvedTitle = titles(...resolvedMicroformats, property?.title);
 
     const layoutProps = {
-        className: classes("property", microformat, className),
+        className: classes("property", ...resolvedMicroformats, className),
         title: resolvedTitle,
         "data-microformat": microformat,
     };
