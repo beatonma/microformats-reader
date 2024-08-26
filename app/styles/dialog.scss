@@ -6,7 +6,7 @@
         inset: 0;
 
         background-color: var(--scrim);
-        z-index: 100000;
+        z-index: var(--elevation-dialog-scrim);
     }
 }
 
@@ -17,7 +17,7 @@
     dialog {
         min-width: 80vw;
         inset: 0;
-        z-index: 1000000;
+        z-index: var(--elevation-dialog);
         padding: 0;
         border: none;
         border-radius: var(--border-radius-medium);
