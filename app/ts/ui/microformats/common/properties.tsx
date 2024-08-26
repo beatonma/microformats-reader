@@ -6,7 +6,7 @@ import React, {
     useState,
 } from "react";
 import { Image } from "@microformats-parser";
-import { Microformats } from "ts/data/microformats";
+import { Microformat, Microformats } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
@@ -44,15 +44,15 @@ const isPropertyIconProps = (
 type DisplayValue = ReactElement | DateOrString;
 type HRef = string;
 type HRefOrOnClick = (() => void) | HRef;
-interface PropertyValueProps {
-    title: string | null | undefined;
-    values: PropertyValue[] | null;
-}
-
 interface PropertyValue {
     title?: string | null | undefined;
     displayValue?: DisplayValue | null | undefined;
     onClick?: HRefOrOnClick | null | undefined;
+}
+interface PropertyValueProps {
+    title: string | null | undefined;
+    values: PropertyValue[] | null;
+    hrefMicroformat: Microformat.U | undefined;
 }
 
 /**
@@ -85,7 +85,8 @@ export const linkedValueProperties = (
 };
 
 interface PropertyLayoutProps {
-    microformat: Microformats | Microformats[];
+    microformat: Microformats;
+    hrefMicroformat?: Microformat.U;
     className?: string | undefined;
     property?: PropertyProps;
     values: PropertyValue | PropertyValue[] | null | undefined;
@@ -116,20 +117,25 @@ interface LayoutBuilder {
  *
  */
 const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
-    const { layoutBuilder, microformat, className, property, values, icon } =
-        props;
-
-    const resolvedMicroformats = asArray(microformat);
+    const {
+        layoutBuilder,
+        microformat,
+        hrefMicroformat,
+        className,
+        property,
+        values,
+        icon,
+    } = props;
 
     const resolvedValues = asArray(values)
         .map(it => nullable(it))
         .nullIfEmpty<PropertyValue>();
     if (resolvedValues == null) return null;
 
-    const resolvedTitle = titles(...resolvedMicroformats, property?.title);
+    const resolvedTitle = titles(microformat, property?.title);
 
     const layoutProps = {
-        className: classes("property", ...resolvedMicroformats, className),
+        className: classes("property", microformat, className),
         title: resolvedTitle,
         "data-microformat": microformat,
     };
@@ -139,7 +145,11 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         <PropertyName name={property?.displayName} />
     );
     const propertyValue: ReactNode = (
-        <PropertyValue title={resolvedTitle} values={resolvedValues} />
+        <PropertyValue
+            title={resolvedTitle}
+            values={resolvedValues}
+            hrefMicroformat={hrefMicroformat}
+        />
     );
 
     return layoutBuilder({
@@ -270,7 +280,7 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { title, values } = props;
+    const { title, values, hrefMicroformat } = props;
 
     return (
         <div className="property-value-multi">
@@ -280,6 +290,7 @@ const PropertyValue = (props: PropertyValueProps) => {
                     title={titles(title, value.title)}
                     displayValue={value.displayValue}
                     onClick={value.onClick}
+                    hrefMicroformat={hrefMicroformat}
                 />
             ))}
         </div>
@@ -290,6 +301,7 @@ interface SingleValuePropertyProps {
     title: string | null | undefined;
     displayValue: DisplayValue | null | undefined;
     onClick: HRefOrOnClick | null | undefined;
+    hrefMicroformat: Microformat.U | undefined;
     className?: string;
 }
 const SinglePropertyValue = (props: SingleValuePropertyProps) => {
@@ -341,7 +353,7 @@ interface ResolvedProperties {
     resolvedOnClick: (() => void) | null;
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
-    const { displayValue, onClick, title, className } = props;
+    const { displayValue, onClick, hrefMicroformat, title, className } = props;
 
     const resolvedOnClick = typeof onClick === "function" ? onClick : null;
     let resolvedHref: string | null = isString(onClick) ? onClick : null;
@@ -353,6 +365,10 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     if (isString(displayValue) && isUri(displayValue)) {
         resolvedHref = displayValue;
         resolvedDisplayValue = formatUri(displayValue);
+    }
+
+    if (resolvedHref) {
+        extraTitle.push(hrefMicroformat ?? null);
     }
 
     if (isDate(displayValue)) {
