@@ -1,14 +1,4 @@
-@use "ts/ui/layout/card";
-
-.h-feed {
-    .dropdown-header {
-        font-size: var(--fs-default);
-    }
-
-    .by-line {
-        font-size: var(--fs-caption);
-    }
-}
+@use "styles/borders";
 
 .h-entry {
     @extend %border-left;
@@ -21,7 +11,8 @@
         font-size: var(--fs-large);
     }
 
-    &--metadata {
+    &--metadata,
+    &--interactions {
         font-size: var(--fs-caption);
     }
 }

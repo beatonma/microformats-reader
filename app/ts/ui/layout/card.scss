@@ -1,14 +1,19 @@
 @use "styles";
 @use "styles/animation";
 
-.card {
-    background-color: var(--surface);
-    color: var(--on-surface);
+@mixin card($backgroundColor, $color) {
+    background-color: $backgroundColor;
+    color: $color;
     margin-block: var(--space-1x);
     border-radius: var(--border-radius-medium);
-    box-shadow: rgba(9, 30, 66, 0.25) 0 1px 1px,
+    box-shadow:
+        rgba(9, 30, 66, 0.25) 0 1px 1px,
         rgba(9, 30, 66, 0.13) 0 0 1px 1px;
     transition: all animation.$duration-long;
+}
+
+.card {
+    @include card(var(--surface), var(--on-surface));
 }
 
 .card-content {

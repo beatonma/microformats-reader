@@ -270,5 +270,23 @@
   },
   "options_maps_provider_openstreetmap": {
     "message": "OpenStreetMap"
+  },
+  "interaction_rsvp": {
+    "message": "RSVP"
+  },
+  "interaction_rsvp_yes": {
+    "message": "Yes"
+  },
+  "interaction_rsvp_no": {
+    "message": "No"
+  },
+  "interaction_rsvp_maybe": {
+    "message": "Maybe"
+  },
+  "interaction_rsvp_interested": {
+    "message": "Interested"
+  },
+  "interaction_syndication": {
+    "message": "Syndication"
   }
 }

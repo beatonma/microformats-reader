@@ -35,10 +35,10 @@ export interface HEntryDates {
 }
 
 export enum RsvpValue {
-    Yes,
-    No,
-    Maybe,
-    Interested,
+    Yes = "yes",
+    No = "no",
+    Maybe = "maybe",
+    Interested = "interested",
 }
 export const rsvpValueOf = (name?: string | null): RsvpValue | null => {
     if (!name) return null;

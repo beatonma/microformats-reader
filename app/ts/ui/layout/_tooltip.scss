@@ -1,0 +1,61 @@
+@use "./card";
+
+.tooltip-root {
+    $animation-duration: 120ms;
+    $max-width: 180px;
+    $max-height: $max-width;
+    position: relative;
+
+    .tooltip-wrapper {
+        max-width: 0;
+        max-height: 0;
+        display: block;
+
+        .tooltip {
+            @include card.card(var(--background), var(--on-background));
+            margin-top: 0;
+            position: absolute;
+            transform-origin: top center;
+            text-align: center;
+            animation-duration: $animation-duration;
+            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            animation-fill-mode: forwards;
+
+            max-width: 0;
+            max-height: 0;
+            left: 50%;
+            opacity: 0;
+            scale: 0;
+            translate: -50%;
+        }
+    }
+
+    &:hover {
+        .tooltip {
+            display: block;
+            cursor: default;
+            width: fit-content;
+            animation-name: tooltip;
+
+            @keyframes tooltip {
+                0% {
+                    max-width: 0;
+                    max-height: 0;
+                    left: 0;
+                    opacity: 0;
+                    scale: 0;
+                    padding: 0;
+                }
+
+                100% {
+                    max-width: $max-width;
+                    max-height: $max-height;
+                    left: 50%;
+                    opacity: 1;
+                    scale: 1;
+                    padding: var(--space);
+                }
+            }
+        }
+    }
+}
