@@ -18,8 +18,8 @@ import "ts/entrypoint/popup/popup.scss";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { AppOptions, OptionsContext, useOptions } from "ts/options";
-import { onlyIf } from "ts/data/util";
 import { MicroformatData } from "ts/data/parsing";
+import { onlyIf } from "ts/data/util/object";
 
 export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds } = props;
