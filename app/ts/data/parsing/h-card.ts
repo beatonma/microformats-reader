@@ -249,19 +249,4 @@ export const parseEmbeddedHCards = (
             };
         })
         .nullIfEmpty();
-
-    // if (isString(obj)) {
-    //     return {
-    //         id: generateId(),
-    //         name: [obj],
-    //         hcard: null,
-    //     };
-    // }
-
-    // const hcard = parseHCard(obj.properties);
-    // return {
-    //     id: generateId(),
-    //     name: hcard?.name ?? null,
-    //     hcard: hcard,
-    // };
 };
