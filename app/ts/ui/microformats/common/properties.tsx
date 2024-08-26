@@ -52,6 +52,7 @@ interface PropertyValue {
 interface PropertyValueProps {
     title: string | null | undefined;
     values: PropertyValue[] | null;
+    microformat: Microformats | undefined;
     hrefMicroformat: Microformat.U | undefined;
 }
 
@@ -132,11 +133,9 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         .nullIfEmpty<PropertyValue>();
     if (resolvedValues == null) return null;
 
-    const resolvedTitle = titles(microformat, property?.title);
-
     const layoutProps = {
-        className: classes("property", microformat, className),
-        title: resolvedTitle,
+        className: classes("property", className),
+        title: titles(microformat, property?.title),
         "data-microformat": microformat,
     };
     const isMultiValue = resolvedValues.length > 1;
@@ -146,8 +145,9 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
     );
     const propertyValue: ReactNode = (
         <PropertyValue
-            title={resolvedTitle}
+            title={property?.title}
             values={resolvedValues}
+            microformat={microformat}
             hrefMicroformat={hrefMicroformat}
         />
     );
@@ -280,7 +280,7 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { title, values, hrefMicroformat } = props;
+    const { title, values, microformat, hrefMicroformat } = props;
 
     return (
         <div className="property-value-multi">
@@ -289,6 +289,7 @@ const PropertyValue = (props: PropertyValueProps) => {
                     key={index}
                     title={titles(title, value.title)}
                     displayValue={value.displayValue}
+                    microformat={microformat}
                     onClick={value.onClick}
                     hrefMicroformat={hrefMicroformat}
                 />
@@ -301,6 +302,7 @@ interface SingleValuePropertyProps {
     title: string | null | undefined;
     displayValue: DisplayValue | null | undefined;
     onClick: HRefOrOnClick | null | undefined;
+    microformat: Microformats | undefined;
     hrefMicroformat: Microformat.U | undefined;
     className?: string;
 }
@@ -353,14 +355,21 @@ interface ResolvedProperties {
     resolvedOnClick: (() => void) | null;
 }
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
-    const { displayValue, onClick, hrefMicroformat, title, className } = props;
+    const {
+        displayValue,
+        onClick,
+        microformat,
+        hrefMicroformat,
+        title,
+        className,
+    } = props;
 
     const resolvedOnClick = typeof onClick === "function" ? onClick : null;
     let resolvedHref: string | null = isString(onClick) ? onClick : null;
     let resolvedDisplayValue: ReactNode = isDate(displayValue)
         ? formatShortDateTime(displayValue)
         : displayValue;
-    const extraTitle: (string | null)[] = [];
+    const extraTitle: (string | null | undefined)[] = [microformat];
 
     if (isString(displayValue) && isUri(displayValue)) {
         resolvedHref = displayValue;
@@ -368,7 +377,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     }
 
     if (resolvedHref) {
-        extraTitle.push(hrefMicroformat ?? null);
+        extraTitle.push(hrefMicroformat);
     }
 
     if (isDate(displayValue)) {
@@ -376,10 +385,16 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     }
 
     return {
-        resolvedClassName: classes("property-value", className) ?? null,
+        resolvedClassName:
+            classes(
+                "property-value",
+                className,
+                microformat,
+                resolvedHref ? hrefMicroformat : null,
+            ) ?? null,
         resolvedDisplayValue: resolvedDisplayValue,
         resolvedHref: resolvedHref,
-        resolvedTitle: titles(title, ...extraTitle) ?? null,
+        resolvedTitle: titles(...extraTitle, title) ?? null,
         resolvedOnClick: resolvedOnClick,
     };
 };
