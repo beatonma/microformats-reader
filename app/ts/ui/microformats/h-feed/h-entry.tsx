@@ -51,20 +51,17 @@ export const HEntry = (props: HEntryProps) => {
 
     return (
         <Column className={Microformat.H.Entry}>
-            <PropertyRow
-                microformat={Microformat.P.Name}
-                hrefMicroformat={Microformat.U.Url}
-                values={linkedValueProperties(name, url)}
-            />
-            <PropertyRow
-                microformat={Microformat.P.Summary}
-                values={displayValueProperties(summary)}
+            <NameSummaryContentLink
+                name={name}
+                summary={summary}
+                content={content}
+                url={url}
             />
 
             <Row className="h-entry--metadata" wrap space={Space.Large}>
                 <PropertyRow
                     microformat={Microformat.Dt.Published}
-                    values={dates?.published?.map(it => ({ displayValue: it }))}
+                    values={displayValueProperties(dates?.published)}
                     property={{ title: dateUpdated }}
                 />
                 {author === hFeedAuthor ? null : (
@@ -91,6 +88,58 @@ export const HEntry = (props: HEntryProps) => {
                 <Interactions data={interactions} />
             </Row>
         </Column>
+    );
+};
+
+const NameSummaryContentLink = (props: {
+    name: string[] | null;
+    summary: string[] | null;
+    content: string[] | null;
+    url: string[] | null;
+}) => {
+    const { name, summary, content, url } = props;
+
+    if (name) {
+        return (
+            <>
+                <PropertyRow
+                    microformat={Microformat.P.Name}
+                    hrefMicroformat={Microformat.U.Url}
+                    values={linkedValueProperties(name, url)}
+                />
+                <PropertyRow
+                    microformat={Microformat.P.Summary}
+                    values={displayValueProperties(summary)}
+                />
+            </>
+        );
+    }
+
+    if (summary) {
+        return (
+            <PropertyRow
+                microformat={Microformat.P.Summary}
+                hrefMicroformat={Microformat.U.Url}
+                values={linkedValueProperties(summary, url)}
+            />
+        );
+    }
+
+    if (content) {
+        return (
+            <PropertyRow
+                microformat={Microformat.E.Content}
+                hrefMicroformat={Microformat.U.Url}
+                values={linkedValueProperties(content, url)}
+            />
+        );
+    }
+
+    return (
+        <PropertyRow
+            microformat={Microformat.U.Url}
+            values={onClickValueProperties(url)}
+        />
     );
 };
 

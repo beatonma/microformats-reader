@@ -79,7 +79,11 @@ export namespace Parse {
         container: MicroformatProperties,
         key: string,
     ): string[] | null => {
-        return get(container, key)?.map((it: Html) => it["value"]) ?? null;
+        return (
+            get(container, key)
+                ?.map((it: Html) => it["value"])
+                .nullIfEmpty() ?? null
+        );
     };
 
     /**

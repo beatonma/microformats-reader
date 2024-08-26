@@ -340,7 +340,7 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
             title={resolvedTitle ?? undefined}
             onContextMenu={onContextClick}
         >
-            {resolvedDisplayValue ?? formatUri(resolvedHref)}
+            {resolvedDisplayValue}
         </MaybeLinkTo>
     );
 };

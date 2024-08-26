@@ -1,4 +1,4 @@
-@use "styles/borders";
+@use "styles";
 
 .h-entry {
     @extend %border-left;
@@ -14,5 +14,13 @@
     &--metadata,
     &--interactions {
         font-size: var(--fs-caption);
+    }
+
+    .property-value {
+        &.p-name,
+        &.p-summary,
+        &.e-content {
+            @include styles.line-clamp(2);
+        }
     }
 }

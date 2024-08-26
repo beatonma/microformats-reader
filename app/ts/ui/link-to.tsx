@@ -1,13 +1,14 @@
 import React, { HTMLAttributes } from "react";
 import { compatBrowser } from "ts/compat";
 import { titles } from "ts/ui/util";
+import { formatUri } from "ts/ui/formatting";
 
 interface LinkProps extends HTMLAttributes<HTMLAnchorElement> {
     href: string | null | undefined;
 }
 
 export const LinkTo = (props: LinkProps) => {
-    const { title, href, onClick, ...rest } = props;
+    const { children, title, href, onClick, ...rest } = props;
 
     if (!href) return null;
 
@@ -24,6 +25,11 @@ export const LinkTo = (props: LinkProps) => {
             href={href}
             title={titleWithURL}
             onClick={onClick ?? openUrl}
+            children={
+                React.Children.count(children) === 0
+                    ? formatUri(href)
+                    : children
+            }
             {...rest}
         />
     );
