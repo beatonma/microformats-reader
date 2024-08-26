@@ -1,1 +1,1 @@
-export { HCard } from "./h-card";
+export { HCard as default } from "./h-card";

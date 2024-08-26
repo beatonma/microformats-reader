@@ -1,8 +1,8 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import { classes } from "ts/ui/util";
-import { onlyIf } from "ts/data/util";
 import { Alignment } from "ts/ui/layout/alignment";
 import { Space } from "ts/ui/layout/space";
+import { onlyIf } from "ts/data/util/object";
 
 interface LinearLayoutProps extends HTMLAttributes<HTMLDivElement> {
     className?: string;

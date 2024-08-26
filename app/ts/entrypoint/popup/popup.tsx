@@ -7,12 +7,11 @@ import { Alignment, Row } from "ts/ui/layout";
 import { ScrimLayout } from "ts/ui/layout/dialog";
 import {
     Feeds,
-    HCard,
     PgpKey,
     RelmeLinks,
     WebmentionEndpoint,
-} from "ts/ui/microformats";
-import { HFeed } from "ts/ui/microformats/h-feed/h-feed";
+} from "ts/ui/microformats/rel";
+import { HCard, HFeed } from "ts/ui/microformats";
 import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import "ts/entrypoint/popup/popup.scss";

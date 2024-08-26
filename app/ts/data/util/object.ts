@@ -76,6 +76,19 @@ const isEmpty = (obj: unknown): obj is null | undefined => {
     return false;
 };
 
+/**
+ * @returns `undefined` if condition is falsy. Otherwise return `value`, or the result of calling `value()` if it is a function.
+ */
+export const onlyIf = <T>(condition: boolean, value: T) => {
+    if (typeof value === "function") {
+        return condition ? value() : undefined;
+    }
+    return condition ? value : undefined;
+};
+
+/**
+ * @returns the result of calling `block(obj)`, or `undefined` if `obj` is falsy.
+ */
 export const withNotNull = <T, R>(
     obj: T | null | undefined,
     block: (obj: T) => R,

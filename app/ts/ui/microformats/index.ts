@@ -1,8 +1,4 @@
-export { HCard } from "./h-card";
-export {
-    RelmeLinks,
-    PgpKey,
-    Feeds,
-    WebmentionEndpoint,
-} from "ts/ui/microformats/rel/rel";
-export { MicroformatsRaw } from "./raw";
+import HCard from "ts/ui/microformats/h-card";
+import HFeed from "ts/ui/microformats/h-feed";
+
+export { HCard, HFeed };
