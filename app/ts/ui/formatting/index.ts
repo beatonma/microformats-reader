@@ -2,7 +2,7 @@ import { _ } from "ts/compat";
 
 export const formatLatLong = (
     latitude: string | null | undefined,
-    longitude: string | null | undefined
+    longitude: string | null | undefined,
 ): string | null => {
     if (latitude == null || longitude == null) return null;
 
@@ -30,5 +30,5 @@ export const formatLatLong = (
 export const formatUri = (uri: string | null | undefined): string | null => {
     if (!uri) return null;
 
-    return uri?.replace(/^(https?|irc[s6]?|mailto|tel):(\/\/)?/g, "") ?? null;
+    return uri?.replace(/^(https|mailto|tel):(\/\/)?/g, "") ?? null;
 };

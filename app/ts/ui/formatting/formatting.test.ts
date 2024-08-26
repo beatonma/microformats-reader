@@ -6,12 +6,15 @@ describe("Data formatting for display", () => {
         expect(formatUri(null)).toBe(null);
         expect(formatUri("")).toBe(null);
 
-        expect(formatUri("beatonma.org")).toBe("beatonma.org");
-        expect(formatUri("http://beatonma.org")).toBe("beatonma.org");
         expect(formatUri("https://beatonma.org/some/path")).toBe(
-            "beatonma.org/some/path"
+            "beatonma.org/some/path",
         );
         expect(formatUri("tel:0123456789")).toBe("0123456789");
-        expect(formatUri("irc://beatonma.org")).toBe("beatonma.org");
+        expect(formatUri("mailto:fake@beatonma.org")).toBe("fake@beatonma.org");
+
+        // Keep other schemes as-is.
+        expect(formatUri("http://beatonma.org")).toBe("http://beatonma.org");
+        expect(formatUri("irc://beatonma.org")).toBe("irc://beatonma.org");
+        expect(formatUri("beatonma.org")).toBe("beatonma.org");
     });
 });
