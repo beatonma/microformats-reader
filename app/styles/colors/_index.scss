@@ -31,6 +31,9 @@
     --on-muted: var(--text-light);
     --on-vibrant: var(--text-light);
 
+    --tooltip-surface: var(--background);
+    --on-tooltip-surface: var(--on-background);
+
     accent-color: var(--vibrant);
 }
 

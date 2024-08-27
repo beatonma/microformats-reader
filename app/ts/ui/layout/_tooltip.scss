@@ -1,63 +1,41 @@
+@use "styles/animation";
 @use "./card";
 
 .tooltip-root {
-    $animation-duration: 120ms;
-    $max-width: 180px;
+    $animation-duration: animation.$duration-short;
+    $max-width: 100ch;
     $max-height: $max-width;
     position: relative;
+    cursor: default;
+    transition: background-color $animation-duration;
 
-    .tooltip-wrapper {
-        max-width: 0;
+    .tooltip {
+        @include card.card(var(--tooltip-surface), var(--on-tooltip-surface));
+        cursor: default;
+        margin-block: 0;
+        border-radius: var(--border-radius-small);
+        position: absolute;
+        transform-origin: top center;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: $max-width;
         max-height: 0;
-        display: block;
-
-        .tooltip {
-            @include card.card(var(--background), var(--on-background));
-            margin-top: 0;
-            border-radius: var(--border-radius-small);
-            position: absolute;
-            transform-origin: top center;
-            text-align: center;
-            animation-duration: $animation-duration;
-            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-            animation-fill-mode: forwards;
-
-            max-width: 0;
-            max-height: 0;
-            left: 50%;
-            opacity: 0;
-            scale: 0;
-            translate: -50%;
-            z-index: var(--elevation-tooltip);
-        }
+        width: max-content;
+        opacity: 0;
+        z-index: var(--elevation-tooltip);
+        transition:
+            opacity $animation-duration,
+            scale $animation-duration;
     }
 
     &:hover {
+        background-color: var(--tooltip-surface);
+
         .tooltip {
-            display: block;
-            cursor: default;
-            width: fit-content;
-            animation-name: tooltip;
-
-            @keyframes tooltip {
-                0% {
-                    max-width: 0;
-                    max-height: 0;
-                    left: 0;
-                    opacity: 0;
-                    scale: 0;
-                    padding: 0;
-                }
-
-                100% {
-                    max-width: $max-width;
-                    max-height: $max-height;
-                    left: 50%;
-                    opacity: 1;
-                    scale: 1;
-                    padding: var(--space);
-                }
-            }
+            padding: var(--space);
+            opacity: 1;
+            max-height: $max-height;
         }
     }
 }
