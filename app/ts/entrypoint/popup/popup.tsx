@@ -18,7 +18,7 @@ import "ts/entrypoint/popup/popup.scss";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { AppOptions, OptionsContext, useOptions } from "ts/options";
-import { MicroformatData } from "ts/data/parsing";
+import { MicroformatData, parse } from "ts/data/parsing";
 import { onlyIf } from "ts/data/util/object";
 
 export const PopupUI = (props: MicroformatData) => {
@@ -136,10 +136,13 @@ const getMicroformatsFromCurrentTab = ():
 
             compatBrowser.tabs
                 .sendMessage(currentTab.id, {
-                    action: Message.getMicroformats,
+                    action: Message.getDocument,
                 })
-                .then((response: MessageResponse) => {
-                    setData(response);
+                .then((response: MessageResponse) =>
+                    parse(response.html, response.baseUrl),
+                )
+                .then(data => {
+                    setData(data);
                     injectTheme(null);
                 })
                 .catch(e => setRetryFlag(it => !it));

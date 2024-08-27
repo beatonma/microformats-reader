@@ -15,8 +15,11 @@ compatBrowser.runtime.onMessage.addListener(
         sender,
         sendResponse: (response: MessageResponse) => void,
     ) => {
-        if (request.action === Message.getMicroformats) {
-            return microformats.then(sendResponse);
+        if (request.action === Message.getDocument) {
+            sendResponse({
+                html: document.documentElement.innerHTML,
+                baseUrl: document.URL,
+            });
         }
         return false;
     },

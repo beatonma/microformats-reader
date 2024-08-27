@@ -1,9 +1,8 @@
 import { ToolbarIconState } from "ts/ui/browser/toolbar";
-import { MicroformatData } from "ts/data/parsing";
 
 export enum Message {
-    getMicroformats = "get-microformats",
     showBadge = "show-badge",
+    getDocument = "get-document",
 }
 
 export interface MessageRequest {
@@ -15,4 +14,7 @@ export interface UpdateBadgeMessage extends MessageRequest {
     state: ToolbarIconState;
 }
 
-export type MessageResponse = MicroformatData;
+export interface MessageResponse {
+    html: string;
+    baseUrl: string;
+}
