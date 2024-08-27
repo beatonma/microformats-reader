@@ -22,12 +22,11 @@ body {
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     width: 64ch;
     height: max-content;
-    margin-inline: auto;
-    transition: all 200ms;
 }
 
 main {
     padding: 1ch;
+    overflow: hidden;
 }
 
 a,
