@@ -21,7 +21,7 @@ import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
 import { classes, titles } from "ts/ui/util";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
-import { nullable } from "ts/data/util/object";
+import { nullable, withNotNull } from "ts/data/util/object";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
 import { asArray } from "ts/data/util/arrays";
@@ -234,8 +234,11 @@ export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
             <PropertyRow
                 values={embeddedHCards.map((it, index) => ({
                     displayValue: it.name?.join(" "),
-                    onClick: () =>
-                        setFocussedHCardId(embeddedHCards?.[index]?.id),
+                    onClick: withNotNull(embeddedHCards?.[index], card =>
+                        card.hcard
+                            ? () => setFocussedHCardId(card.id)
+                            : undefined,
+                    ),
                     title: props.title?.(it),
                 }))}
                 {...rest}
