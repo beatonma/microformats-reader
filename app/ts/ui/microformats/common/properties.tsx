@@ -104,6 +104,7 @@ interface PropertyLayoutBuildProps {
 
 interface LayoutBuilder {
     layoutBuilder: (buildProps: PropertyLayoutBuildProps) => ReactNode;
+    allowNullValue?: boolean;
 }
 
 /**
@@ -126,19 +127,20 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         property,
         values,
         icon,
+        allowNullValue = false,
     } = props;
 
     const resolvedValues = asArray(values)
         .map(it => nullable(it))
         .nullIfEmpty<PropertyValue>();
-    if (resolvedValues == null) return null;
+    if (resolvedValues == null && !allowNullValue) return null;
 
     const layoutProps = {
         className: classes("property", className),
         title: titles(microformat, property?.title),
         "data-microformat": microformat,
     };
-    const isMultiValue = resolvedValues.length > 1;
+    const isMultiValue = (resolvedValues?.length ?? 0) > 1;
     const propertyIcon: ReactNode = <PropertyIcon icon={icon} />;
     const propertyName: ReactNode = (
         <PropertyName name={property?.displayName} />
@@ -202,6 +204,30 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
                     {propertyName}
                 </Row>
                 {propertyValue}
+            </Column>
+        )}
+    />
+);
+
+/**
+ * A <Column/> which shares the structure of <PropertyColumn /> but has
+ * arbitrary content. i.e. a column with the property name and icon as a
+ * header row.
+ */
+export const PropertyContainerColumn = (
+    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
+) => (
+    <PropertyLayout
+        allowNullValue={true}
+        values={null}
+        {...props}
+        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
+            <Column {...layoutProps}>
+                <Row>
+                    {propertyIcon}
+                    {propertyName}
+                </Row>
+                {props.children}
             </Column>
         )}
     />
@@ -286,7 +312,7 @@ const PropertyValue = (props: PropertyValueProps) => {
     const { title, values, microformat, hrefMicroformat } = props;
 
     return (
-        <div className="property-value-multi">
+        <div className="property-values">
             {values?.map((value, index) => (
                 <SinglePropertyValue
                     key={index}

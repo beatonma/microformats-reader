@@ -3,24 +3,40 @@
 .h-entry {
     @extend %border-left;
 
-    .property {
-        margin-block: 0;
-    }
-
-    .p-name {
-        font-size: var(--fs-large);
-    }
-
     &--metadata,
     &--interactions {
         font-size: var(--fs-caption);
     }
 
-    .property-value {
-        &.p-name,
-        &.p-summary,
-        &.e-content {
-            @include styles.line-clamp(2);
+    &--interactions {
+        font-stretch: extra-condensed;
+        color: var(--text-secondary);
+        transition: color styles.$duration-short;
+
+        > *:hover {
+            color: var(--text-primary);
         }
+    }
+
+    > .property {
+        margin-block: 0;
+
+        .property-value {
+            &.p-name,
+            &.p-summary,
+            &.e-content {
+                @include styles.line-clamp(2);
+            }
+
+            &.p-name {
+                font-size: var(--fs-large);
+            }
+        }
+    }
+}
+
+.h-cite {
+    .by-line {
+        font-size: var(--fs-caption);
     }
 }

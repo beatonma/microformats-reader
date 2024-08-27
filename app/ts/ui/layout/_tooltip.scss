@@ -7,7 +7,6 @@
     $max-height: $max-width;
     position: relative;
     cursor: default;
-    transition: background-color $animation-duration;
 
     .tooltip {
         @include card.card(var(--tooltip-surface), var(--on-tooltip-surface));
@@ -30,8 +29,6 @@
     }
 
     &:hover {
-        background-color: var(--tooltip-surface);
-
         .tooltip {
             padding: var(--space);
             opacity: 1;

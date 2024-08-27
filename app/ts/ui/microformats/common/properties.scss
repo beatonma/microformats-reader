@@ -48,6 +48,7 @@
     }
 
     .property-value {
+        display: block;
         width: fit-content;
     }
 
@@ -57,8 +58,4 @@
         color: var(--text-primary);
         @include borders.border-clickable;
     }
-}
-
-.property-value-multi > * {
-    display: block;
 }

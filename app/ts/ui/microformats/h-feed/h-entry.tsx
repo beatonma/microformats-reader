@@ -1,15 +1,15 @@
-import { EmbeddedHCard } from "ts/data/types/h-card";
 import { HEntryData } from "ts/data/types";
-import { Todo, TODO } from "ts/dev";
+import { TODO } from "ts/dev";
 import { _ } from "ts/compat";
-import { formatDateTime } from "ts/ui/formatting/time";
 import { Column, Row, Space } from "ts/ui/layout";
-import { Microformat } from "ts/data/microformats";
+import { Microformat, Microformats } from "ts/data/microformats";
 import {
     displayValueProperties,
     EmbeddedHCardProperty,
     linkedValueProperties,
     onClickValueProperties,
+    PropertyColumn,
+    PropertyContainerColumn,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { Icons } from "ts/ui/icon";
@@ -21,10 +21,10 @@ import { Tooltip } from "ts/ui/layout/tooltip";
 import React, { ReactNode } from "react";
 import { isEmptyOrNull, joinNotEmpty } from "ts/data/util/arrays";
 import { HCiteData } from "ts/data/types/h-cite";
-import { LinkTo } from "ts/ui/link-to";
+import { Author } from "ts/data/types/common";
 
 interface HEntryProps {
-    hFeedAuthor: EmbeddedHCard[] | null;
+    hFeedAuthor: Author[] | null;
     entry: HEntryData;
 }
 export const HEntry = (props: HEntryProps) => {
@@ -42,15 +42,10 @@ export const HEntry = (props: HEntryProps) => {
         category,
     } = entry;
 
-    TODO("interactions");
     TODO("photo or video");
 
-    const dateUpdated = dates?.updated
-        ?.map(dt => _("date_updated", formatDateTime(dt)))
-        ?.join(", ");
-
     return (
-        <Column className={Microformat.H.Entry}>
+        <Column className={Microformat.H.Entry} space={Space.None}>
             <NameSummaryContentLink
                 name={name}
                 summary={summary}
@@ -58,11 +53,10 @@ export const HEntry = (props: HEntryProps) => {
                 url={url}
             />
 
-            <Row className="h-entry--metadata" wrap space={Space.Large}>
+            <Row className="h-entry--metadata" wrap space={Space.Medium}>
                 <PropertyRow
                     microformat={Microformat.Dt.Published}
                     values={displayValueProperties(dates?.published)}
-                    property={{ title: dateUpdated }}
                 />
                 {author === hFeedAuthor ? null : (
                     <Row wrap space={Space.Char}>
@@ -164,24 +158,44 @@ const Interactions = (props: NullablePropsOf<HEntryInteractions>) => {
 
     return (
         <>
+            <CitationTooltip
+                microformat={Microformat.U.LikeOf}
+                name={_("interaction_like_of")}
+                data={likeOf}
+            />
+            <CitationTooltip
+                microformat={Microformat.U.RepostOf}
+                name={_("interaction_repost_of")}
+                data={repostOf}
+            />
+            <CitationTooltip
+                microformat={Microformat.U.InReplyTo}
+                name={_("interaction_reply_to")}
+                data={inReplyTo}
+            />
             <InteractionTooltip
                 value={rsvp}
-                tooltip={it => _(`interaction_rsvp_${it}`)}
-                content={() => _("interaction_rsvp")}
+                tooltip={values => (
+                    <PropertyColumn
+                        property={{ displayName: _("interaction_rsvp") }}
+                        microformat={Microformat.P.Rsvp}
+                        values={displayValueProperties(
+                            values.map(it => _(`interaction_rsvp_${it}`)),
+                        )}
+                    />
+                )}
+                content={() => <span>{_("interaction_rsvp")}</span>}
             />
-            <Citation cite={likeOf} />
-            <Citation cite={repostOf} />
-            <Citation cite={inReplyTo} />
             <InteractionTooltip
                 value={syndication}
                 tooltip={links => (
-                    <>
-                        {links.map(link => (
-                            <LinkTo href={link} key={link} />
-                        ))}
-                    </>
+                    <PropertyColumn
+                        property={{ displayName: _("interaction_syndication") }}
+                        microformat={Microformat.U.Syndication}
+                        values={onClickValueProperties(links)}
+                    />
                 )}
-                content={() => _("interaction_syndication")}
+                content={() => <span>{_("interaction_syndication")}</span>}
             />
         </>
     );
@@ -196,8 +210,68 @@ const InteractionTooltip = <T extends any>(props: {
         <Tooltip tooltip={props.tooltip(it)}>{props.content(it)}</Tooltip>
     ));
 
-const Citation = (props: { cite: string[] | HCiteData | null }) => {
-    const { cite } = props;
+const CitationTooltip = (props: {
+    name: string;
+    microformat: Microformats;
+    data: HCiteData[] | null;
+}) => {
+    const { name, data } = props;
 
-    return <Todo message="citation" />;
+    return (
+        <InteractionTooltip
+            value={data}
+            tooltip={cite => (
+                <PropertyContainerColumn
+                    microformat={props.microformat}
+                    property={{ displayName: name }}
+                >
+                    {cite.map(item => (
+                        <Citation {...item} />
+                    ))}
+                </PropertyContainerColumn>
+            )}
+            content={() => <span>{name}</span>}
+        />
+    );
+};
+
+const Citation = (props: HCiteData) => {
+    const {
+        name,
+        uid,
+        url,
+        author,
+        content,
+        dateAccessed,
+        datePublished,
+        publication,
+    } = props;
+    return (
+        <Column
+            className={Microformat.H.Cite}
+            data-microformat={Microformat.H.Cite}
+            title={Microformat.H.Cite}
+        >
+            <PropertyRow
+                microformat={Microformat.P.Name}
+                hrefMicroformat={url ? Microformat.U.Url : Microformat.U.Uid}
+                values={linkedValueProperties(name, url ?? uid)}
+            />
+            <Row space={Space.Medium} className="by-line">
+                <PropertyRow
+                    microformat={Microformat.Dt.Accessed}
+                    values={displayValueProperties(dateAccessed)}
+                />
+                <EmbeddedHCardProperty
+                    icon={Icons.Author}
+                    microformat={Microformat.P.Author}
+                    embeddedHCards={author}
+                />
+                <PropertyRow
+                    microformat={Microformat.P.Publication}
+                    values={displayValueProperties(publication)}
+                />
+            </Row>
+        </Column>
+    );
 };

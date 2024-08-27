@@ -15,7 +15,8 @@ import {
     parseLocation,
     parseLocationFromProperties,
 } from "ts/data/parsing/location";
-import { HAdrData } from "ts/data/types";
+import { HAdrData, isString } from "ts/data/types";
+import { HCiteData } from "ts/data/types/h-cite";
 
 export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
     const properties = entry.properties;
@@ -65,37 +66,76 @@ const parseLocationFromChildren = (
 const parseInteractions = (
     entry: MicroformatProperties,
 ): HEntryInteractions | null => {
-    const inReplyTo = Parse.get<string>(entry, Microformat.U.InReplyTo);
-    const likeOf = Parse.get<string>(entry, Microformat.U.LikeOf);
-    const repostOf = Parse.get<string>(entry, Microformat.U.RepostOf);
+    const inReplyTo = parseCitation(entry, Microformat.U.InReplyTo);
+    const likeOf = parseCitation(entry, Microformat.U.LikeOf);
+    const repostOf = parseCitation(entry, Microformat.U.RepostOf);
     const rsvp = parseRsvp(entry);
     const syndication = Parse.get<string>(entry, Microformat.U.Syndication);
 
-    if (noneOf([inReplyTo, likeOf, repostOf, rsvp, syndication])) return null;
-
-    return {
+    return nullable({
         inReplyTo: inReplyTo,
         likeOf: likeOf,
         repostOf: repostOf,
         rsvp: rsvp,
         syndication: syndication,
-    };
+    });
 };
 
-const parseRsvp = (entry: MicroformatProperties): RsvpValue | null => {
-    const value = Parse.single<string>(entry, Microformat.P.Rsvp);
-    if (!value) return null;
-    return rsvpValueOf(value);
-};
+const parseRsvp = (entry: MicroformatProperties): RsvpValue[] | null =>
+    Parse.get<string>(entry, Microformat.P.Rsvp)
+        ?.map(rsvpValueOf)
+        ?.nullIfEmpty() ?? null;
 
 const parseDates = (entry: MicroformatProperties): HEntryDates | null => {
     const published = Parse.getDates(entry, Microformat.Dt.Published);
     const updated = Parse.getDates(entry, Microformat.Dt.Updated);
 
-    if (noneOf([published, updated])) return null;
-
-    return {
+    return nullable({
         published: published,
         updated: updated,
-    };
+    });
+};
+
+const parseCitation = (
+    entry: MicroformatProperties,
+    key: string,
+): HCiteData[] | null => {
+    const data = Parse.get<MicroformatRoot | string>(entry, key);
+
+    return (
+        data
+            ?.map(obj => {
+                if (isString(obj)) {
+                    return {
+                        author: null,
+                        content: null,
+                        dateAccessed: null,
+                        datePublished: null,
+                        name: null,
+                        publication: null,
+                        uid: null,
+                        url: [obj],
+                    };
+                }
+
+                const cite = obj.properties;
+                return {
+                    author: parseEmbeddedHCards(cite, Microformat.P.Author),
+                    content: Parse.get<string>(cite, Microformat.P.Content),
+                    dateAccessed: Parse.getDates(cite, Microformat.Dt.Accessed),
+                    datePublished: Parse.getDates(
+                        cite,
+                        Microformat.Dt.Published,
+                    ),
+                    name: Parse.get<string>(cite, Microformat.P.Name),
+                    publication: Parse.get<string>(
+                        cite,
+                        Microformat.P.Publication,
+                    ),
+                    uid: Parse.get<string>(cite, Microformat.U.Uid),
+                    url: Parse.get<string>(cite, Microformat.U.Url),
+                };
+            })
+            .nullIfEmpty() ?? null
+    );
 };

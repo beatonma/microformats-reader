@@ -9,6 +9,7 @@ export namespace Microformat {
         Entry = "h-entry",
         Feed = "h-feed",
         Geo = "h-geo",
+        Cite = "h-cite",
     }
 
     /** Plain text properties */
@@ -18,6 +19,7 @@ export namespace Microformat {
         Altitude = "p-altitude",
         Author = "p-author",
         Category = "p-category",
+        Content = "p-content",
         Country_Name = "p-country-name",
         Extended_Address = "p-extended-address",
         Family_Name = "p-family-name",
@@ -38,6 +40,7 @@ export namespace Microformat {
         Post_Office_Box = "p-post-office-box",
         Postal_Code = "p-postal-code",
         Pronouns = "p-pronouns",
+        Publication = "p-publication",
         Region = "p-region",
         Role = "p-role",
         Rsvp = "p-rsvp",
@@ -50,6 +53,7 @@ export namespace Microformat {
 
     /** Datetime properties */
     export enum Dt {
+        Accessed = "dt-accessed",
         Anniversary = "dt-anniversary",
         Bday = "dt-bday",
         Published = "dt-published",

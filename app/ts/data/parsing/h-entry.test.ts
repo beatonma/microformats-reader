@@ -28,7 +28,7 @@ describe("HEntry parsing", () => {
         const entry = await SampleHtmlHEntry;
         expect(entry?.name).toEqual(["Blog #1"]);
 
-        expect(entry?.interactions?.rsvp).toBe(RsvpValue.Maybe);
+        expect(entry?.interactions?.rsvp).toEqual([RsvpValue.Maybe]);
     });
 
     test("dates", async () => {

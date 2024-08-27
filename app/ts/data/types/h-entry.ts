@@ -1,6 +1,5 @@
-import { EmbeddedHCard } from "ts/data/types/h-card";
 import { HCiteData } from "ts/data/types/h-cite";
-import { DateOrString } from "ts/data/types/common";
+import { Author, DateOrString } from "ts/data/types/common";
 import { LocationData } from "ts/data/types/h-adr";
 
 /**
@@ -10,7 +9,7 @@ import { LocationData } from "ts/data/types/h-adr";
  */
 export interface HEntryData {
     name: string[] | null;
-    author: EmbeddedHCard[] | null;
+    author: Author[] | null;
     summary: string[] | null;
     content: string[] | null;
     dates: HEntryDates | null;
@@ -22,11 +21,11 @@ export interface HEntryData {
 }
 
 export interface HEntryInteractions {
+    inReplyTo: HCiteData[] | null;
+    likeOf: HCiteData[] | null;
+    repostOf: HCiteData[] | null;
+    rsvp: RsvpValue[] | null;
     syndication: string[] | null;
-    inReplyTo: string[] | HCiteData | null;
-    rsvp: RsvpValue | null;
-    likeOf: string[] | HCiteData | null;
-    repostOf: string[] | HCiteData | null;
 }
 
 export interface HEntryDates {

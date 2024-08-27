@@ -288,5 +288,14 @@
   },
   "interaction_syndication": {
     "message": "Syndication"
+  },
+  "interaction_like_of": {
+    "message": "Like"
+  },
+  "interaction_repost_of": {
+    "message": "Repost"
+  },
+  "interaction_reply_to": {
+    "message": "Response"
   }
 }
