@@ -82,6 +82,10 @@
     &.space-around {
         margin-inline: var(--gap);
     }
+
+    &.fill-available {
+        width: stretch;
+    }
 }
 
 %column {
@@ -126,6 +130,10 @@
 
     &.space-around {
         margin-block: var(--gap);
+    }
+
+    &.fill-available {
+        height: stretch;
     }
 }
 

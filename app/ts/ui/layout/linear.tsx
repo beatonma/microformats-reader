@@ -12,6 +12,7 @@ interface LinearLayoutProps extends HTMLAttributes<HTMLDivElement> {
     horizontal?: Alignment;
     space?: Space;
     spaceAround?: boolean;
+    stretch?: boolean;
     children: ReactNode | ReactNode[];
 }
 export const Row = (props: LinearLayoutProps) => (
@@ -34,6 +35,7 @@ const LinearLayout = (
         horizontal = Alignment.Start,
         space = Space.Small,
         spaceAround = false,
+        stretch = false,
         ...rest
     } = props;
 
@@ -46,6 +48,7 @@ const LinearLayout = (
         `horizontal-${horizontal}`,
         `space-${space}`,
         onlyIf(spaceAround, `space-around`),
+        onlyIf(stretch, "fill-available"),
     );
 
     return (
