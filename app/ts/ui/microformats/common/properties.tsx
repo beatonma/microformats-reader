@@ -431,9 +431,11 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
 
     const resolvedOnClick = typeof onClick === "function" ? onClick : null;
     let resolvedHref: string | null = isString(onClick) ? onClick : null;
-    let resolvedDisplayValue: ReactNode = isDate(displayValue)
-        ? formatShortDateTime(displayValue)
-        : displayValue;
+    let resolvedDisplayValue: ReactNode = isDate(displayValue) ? (
+        <FormattedDatetime datetime={displayValue} />
+    ) : (
+        displayValue
+    );
     const extraTitle: (string | null | undefined)[] = [microformat];
 
     if (isString(displayValue) && isUri(displayValue)) {
@@ -463,3 +465,9 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         resolvedOnClick: resolvedOnClick,
     };
 };
+
+const FormattedDatetime = (props: { datetime: Date }) => (
+    <time dateTime={props.datetime.toISOString()}>
+        {formatShortDateTime(props.datetime)}
+    </time>
+);
