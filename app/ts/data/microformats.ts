@@ -74,6 +74,7 @@ export namespace Microformat {
         Url = "u-url",
         LikeOf = "u-like-of",
         RepostOf = "u-repost-of",
+        Video = "u-video",
     }
 
     /** Element tree */

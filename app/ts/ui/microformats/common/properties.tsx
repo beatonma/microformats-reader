@@ -26,6 +26,15 @@ import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
 import { asArray } from "ts/data/util/arrays";
 
+enum Css {
+    Property = "property",
+    PropertyValue = "property-value",
+    PropertyName = "property-name",
+    PropertyIcon = "property-icon",
+    PropertiesTable = "properties",
+    PropertyValues = "property-values",
+}
+
 interface PropertyProps {
     displayName?: string | null;
     title?: string | null | undefined;
@@ -135,11 +144,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         .nullIfEmpty<PropertyValue>();
     if (resolvedValues == null && !allowNullValue) return null;
 
-    const layoutProps = {
-        className: classes("property", className),
-        title: titles(microformat, property?.title),
-        "data-microformat": microformat,
-    };
+    const layoutProps = getLayoutProps(microformat, className, property?.title);
     const isMultiValue = (resolvedValues?.length ?? 0) > 1;
     const propertyIcon: ReactNode = <PropertyIcon icon={icon} />;
     const propertyName: ReactNode = (
@@ -162,6 +167,16 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         isMultiValue: isMultiValue,
     });
 };
+
+const getLayoutProps = (
+    microformat: Microformats,
+    className: string | undefined,
+    title: string | null | undefined,
+) => ({
+    className: classes(Css.Property, className),
+    title: titles(microformat, title),
+    "data-microformat": microformat,
+});
 
 export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
@@ -209,6 +224,27 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
     />
 );
 
+export const PropertyImage = (
+    props: Omit<
+        PropertyLayoutProps,
+        "values" | "property" | "hrefMicroformat"
+    > & { value: Image | null },
+) => {
+    const { microformat, className, value } = props;
+    if (!value) return null;
+
+    const layoutProps = getLayoutProps(microformat, className, value?.alt);
+
+    return (
+        <div {...layoutProps}>
+            <Img
+                className={classes(Css.PropertyValue, microformat)}
+                image={value}
+            />
+        </div>
+    );
+};
+
 /**
  * A <Column/> which shares the structure of <PropertyColumn /> but has
  * arbitrary content. i.e. a column with the property name and icon as a
@@ -237,7 +273,7 @@ export const PropertiesTable = (props: ComponentProps<"div">) => {
     const { className, children, ...rest } = props;
 
     return (
-        <div className={classes(className, "properties")} {...rest}>
+        <div className={classes(className, Css.PropertiesTable)} {...rest}>
             {children}
         </div>
     );
@@ -293,26 +329,26 @@ const PropertyIcon = (props: {
                 <Img
                     image={image}
                     title={imageMicroformat}
-                    className="property-icon"
+                    className={Css.PropertyIcon}
                 />
             );
         }
     } else {
-        return <Icon icon={icon} className="property-icon" />;
+        return <Icon icon={icon} className={Css.PropertyIcon} />;
     }
 };
 
 const PropertyName = (props: Named) => {
     const { name } = props;
     if (!name) return null;
-    return <span className="property-name">{name}</span>;
+    return <span className={Css.PropertyName}>{name}</span>;
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
     const { title, values, microformat, hrefMicroformat } = props;
 
     return (
-        <div className="property-values">
+        <div className={Css.PropertyValues}>
             {values?.map((value, index) => (
                 <SinglePropertyValue
                     key={index}
@@ -416,7 +452,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     return {
         resolvedClassName:
             classes(
-                "property-value",
+                Css.PropertyValue,
                 className,
                 microformat,
                 resolvedHref ? hrefMicroformat : null,

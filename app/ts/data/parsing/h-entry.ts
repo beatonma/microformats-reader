@@ -9,7 +9,6 @@ import {
     RsvpValue,
     rsvpValueOf,
 } from "ts/data/types/h-entry";
-import { noneOf } from "ts/data/util/arrays";
 import { nullable } from "ts/data/util/object";
 import {
     parseLocation,
@@ -35,6 +34,8 @@ export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
         parseLocationFromChildren(entry.children) ??
         parseEmbeddedHCards(properties, Microformat.P.Location) ??
         null;
+    const photo = Parse.getImages(properties, Microformat.U.Photo);
+    const video = Parse.getImages(properties, Microformat.U.Video);
 
     return nullable(
         {
@@ -48,6 +49,8 @@ export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
             dates: dates,
             author: author,
             location: location,
+            photo: photo,
+            video: video,
         },
         { requireAnyKey: ["name", "summary", "url"] },
     );

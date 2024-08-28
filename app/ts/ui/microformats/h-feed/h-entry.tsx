@@ -1,7 +1,6 @@
 import { HEntryData } from "ts/data/types";
-import { TODO } from "ts/dev";
 import { _ } from "ts/compat";
-import { Column, Row, Space } from "ts/ui/layout";
+import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Microformat, Microformats } from "ts/data/microformats";
 import {
     displayValueProperties,
@@ -10,6 +9,7 @@ import {
     onClickValueProperties,
     PropertyColumn,
     PropertyContainerColumn,
+    PropertyImage,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { Icons } from "ts/ui/icon";
@@ -22,6 +22,7 @@ import React, { ReactNode } from "react";
 import { isEmptyOrNull, joinNotEmpty } from "ts/data/util/arrays";
 import { HCiteData } from "ts/data/types/h-cite";
 import { Author } from "ts/data/types/common";
+import { Image } from "@microformats-parser";
 
 interface HEntryProps {
     hFeedAuthor: Author[] | null;
@@ -40,48 +41,62 @@ export const HEntry = (props: HEntryProps) => {
         url,
         location,
         category,
+        photo,
+        video,
     } = entry;
 
-    TODO("photo or video");
-
     return (
-        <Column className={Microformat.H.Entry} space={Space.None}>
-            <NameSummaryContentLink
-                name={name}
-                summary={summary}
-                content={content}
-                url={url}
-            />
+        <Row
+            className={Microformat.H.Entry}
+            title={Microformat.H.Entry}
+            space={Space.Large}
+            horizontal={Alignment.SpaceBetween}
+            stretch
+        >
+            <Column
+                className="h-entry--main"
+                vertical={Alignment.Start}
+                space={Space.None}
+            >
+                <NameSummaryContentLink
+                    name={name}
+                    summary={summary}
+                    content={content}
+                    url={url}
+                />
 
-            <Row className="h-entry--metadata" wrap space={Space.Medium}>
-                <PropertyRow
-                    microformat={Microformat.Dt.Published}
-                    values={displayValueProperties(dates?.published)}
-                />
-                {author === hFeedAuthor ? null : (
-                    <Row wrap space={Space.Char}>
-                        <EmbeddedHCardProperty
-                            icon={Icons.Author}
-                            microformat={Microformat.P.Author}
-                            embeddedHCards={author}
-                        />
-                    </Row>
-                )}
-                <LocationSummary
-                    microformat={Microformat.P.Location}
-                    locations={location}
-                />
-                <CategoriesRow data={category} />
-                <PropertyRow
-                    microformat={Microformat.U.Uid}
-                    values={onClickValueProperties(uid)}
-                />
-            </Row>
+                <Row className="h-entry--metadata" wrap space={Space.Medium}>
+                    <PropertyRow
+                        microformat={Microformat.Dt.Published}
+                        values={displayValueProperties(dates?.published)}
+                    />
+                    {author === hFeedAuthor ? null : (
+                        <Row wrap space={Space.Char}>
+                            <EmbeddedHCardProperty
+                                icon={Icons.Author}
+                                microformat={Microformat.P.Author}
+                                embeddedHCards={author}
+                            />
+                        </Row>
+                    )}
+                    <LocationSummary
+                        microformat={Microformat.P.Location}
+                        locations={location}
+                    />
+                    <CategoriesRow data={category} />
+                    <PropertyRow
+                        microformat={Microformat.U.Uid}
+                        values={onClickValueProperties(uid)}
+                    />
+                </Row>
 
-            <Row className="h-entry--interactions">
-                <Interactions data={interactions} />
-            </Row>
-        </Column>
+                <Row className="h-entry--interactions">
+                    <Interactions data={interactions} />
+                </Row>
+            </Column>
+
+            <Photo photo={photo} />
+        </Row>
     );
 };
 
@@ -144,7 +159,6 @@ const CategoriesRow = (props: NullablePropsOf<string[]>) => {
 
     return (
         <PropertyRow
-            className="categories"
             microformat={Microformat.P.Category}
             icon={Icons.Tag}
             values={{ displayValue: joinNotEmpty(", ", categories) }}
@@ -184,7 +198,12 @@ const Interactions = (props: NullablePropsOf<HEntryInteractions>) => {
                         )}
                     />
                 )}
-                content={() => <span>{_("interaction_rsvp")}</span>}
+                content={() => (
+                    <TooltipRoot
+                        microformat={Microformat.P.Rsvp}
+                        text={_("interaction_rsvp")}
+                    />
+                )}
             />
             <InteractionTooltip
                 value={syndication}
@@ -195,7 +214,12 @@ const Interactions = (props: NullablePropsOf<HEntryInteractions>) => {
                         values={onClickValueProperties(links)}
                     />
                 )}
-                content={() => <span>{_("interaction_syndication")}</span>}
+                content={() => (
+                    <TooltipRoot
+                        microformat={Microformat.U.Syndication}
+                        text={_("interaction_syndication")}
+                    />
+                )}
             />
         </>
     );
@@ -215,14 +239,14 @@ const CitationTooltip = (props: {
     microformat: Microformats;
     data: HCiteData[] | null;
 }) => {
-    const { name, data } = props;
+    const { name, data, microformat } = props;
 
     return (
         <InteractionTooltip
             value={data}
             tooltip={cite => (
                 <PropertyContainerColumn
-                    microformat={props.microformat}
+                    microformat={microformat}
                     property={{ displayName: name }}
                 >
                     {cite.map(item => (
@@ -230,10 +254,16 @@ const CitationTooltip = (props: {
                     ))}
                 </PropertyContainerColumn>
             )}
-            content={() => <span>{name}</span>}
+            content={() => (
+                <TooltipRoot microformat={microformat} text={name} />
+            )}
         />
     );
 };
+
+const TooltipRoot = (props: { microformat: Microformats; text: string }) => (
+    <span title={props.microformat}>{props.text}</span>
+);
 
 const Citation = (props: HCiteData) => {
     const {
@@ -274,4 +304,11 @@ const Citation = (props: HCiteData) => {
             </Row>
         </Column>
     );
+};
+
+const Photo = (props: { photo: Image[] | null }) => {
+    const { photo } = props;
+    if (!photo) return null;
+
+    return <PropertyImage microformat={Microformat.U.Photo} value={photo[0]} />;
 };

@@ -1,6 +1,7 @@
 import { HCiteData } from "ts/data/types/h-cite";
 import { Author, DateOrString } from "ts/data/types/common";
 import { LocationData } from "ts/data/types/h-adr";
+import { Image } from "@microformats-parser";
 
 /**
  * https://microformats.org/wiki/h-entry
@@ -18,6 +19,8 @@ export interface HEntryData {
     uid: string[] | null;
     location: LocationData[] | null;
     interactions: HEntryInteractions | null;
+    photo: Image[] | null;
+    video: Image[] | null;
 }
 
 export interface HEntryInteractions {

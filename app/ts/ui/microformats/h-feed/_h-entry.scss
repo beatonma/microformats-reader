@@ -18,7 +18,7 @@
         }
     }
 
-    > .property {
+    .h-entry--main > .property {
         margin-block: 0;
 
         .property-value {
@@ -32,6 +32,13 @@
                 font-size: var(--fs-large);
             }
         }
+    }
+
+    .u-photo {
+        height: 3em;
+        aspect-ratio: 1;
+        object-fit: cover;
+        object-position: center;
     }
 }
 
