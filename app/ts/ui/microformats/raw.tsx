@@ -11,7 +11,7 @@ export const MicroformatsRaw = (props: MicroformatsProps | null) => {
     if (!props) return null;
     const { microformats } = props;
     return (
-        <Dropdown header="Raw microformats" title="">
+        <Dropdown header="Raw microformats">
             <pre>{`${JSON.stringify(microformats, null, 2)}`}</pre>
         </Dropdown>
     );
@@ -19,7 +19,7 @@ export const MicroformatsRaw = (props: MicroformatsProps | null) => {
 
 export const HCardRaw = (props: HCardData) => {
     return (
-        <Dropdown header="Raw h-card" title="">
+        <Dropdown header="Raw h-card">
             <pre>{`${JSON.stringify(props, null, 2)}`}</pre>
         </Dropdown>
     );

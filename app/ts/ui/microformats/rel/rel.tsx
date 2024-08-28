@@ -5,7 +5,6 @@ import { isEmptyOrNull } from "ts/data/util/arrays";
 import { Icon, Icons } from "ts/ui/icon";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
-import { TODO } from "ts/dev";
 import { Alignment, Column, Space } from "ts/ui/layout";
 
 interface RelLinkProps {
@@ -16,32 +15,15 @@ export const RelmeLinks = (props: RelLinkProps) => {
 
     if (isEmptyOrNull(links)) return null;
 
-    const onClickVerify = () => {
-        TODO("verify rel=me links");
-    };
-
     return (
-        <Dropdown
-            header={
-                <>
-                    <span>rel=me</span>
-                </>
-            }
-            title="rel=me links"
-            className="relme-links"
-        >
-            <button
-                onClick={onClickVerify}
-                title='Check each claimed rel="me" for return links.'
-            >
-                TODO Verify
-            </button>
-
-            {links.map(link => (
-                <LinkTo href={link.href} title={link.title} key={link.href}>
-                    {link.text}
-                </LinkTo>
-            ))}
+        <Dropdown header='rel="me"' className="relme-links" title='rel="me"'>
+            <Column>
+                {links.map(link => (
+                    <LinkTo href={link.href} title={link.title} key={link.href}>
+                        {link.text}
+                    </LinkTo>
+                ))}
+            </Column>
         </Dropdown>
     );
 };

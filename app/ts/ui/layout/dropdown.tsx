@@ -14,7 +14,7 @@ import { Alignment } from "ts/ui/layout/alignment";
 export interface DropdownProps extends HTMLProps<HTMLDivElement> {
     header: ReactNode;
     headerClassName?: string;
-    title: string | undefined;
+    dropdownButtonTitle?: string | undefined;
 }
 export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     const options = useContext(OptionsContext);
@@ -37,6 +37,7 @@ const DropdownLayout = (
         headerClassName,
         header,
         title,
+        dropdownButtonTitle,
         children,
         isExpanded,
         collapsibleControllerProps,
@@ -47,9 +48,10 @@ const DropdownLayout = (
         <div
             className={classes("dropdown", className)}
             data-expanded={isExpanded}
+            title={title}
         >
             <DropdownButton
-                title={title ?? undefined}
+                title={dropdownButtonTitle}
                 className={classes("dropdown-header", headerClassName)}
                 isExpanded={isExpanded}
                 {...collapsibleControllerProps}

@@ -218,7 +218,7 @@ const DetailSection = <T extends any>(
             <Dropdown
                 defaultIsExpanded={options.dropdownExpandByDefault}
                 header={<span>{sectionTitle}</span>}
-                title={sectionTitle}
+                dropdownButtonTitle={sectionTitle}
                 className={classes("detail-section", className)}
                 children={renderedContent}
                 {...rest}
