@@ -37,8 +37,9 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     return (
         <ExpandableCard
             defaultIsExpanded={defaultIsExpanded}
-            className="h-card"
-            contentDescription="h-card"
+            className={Microformat.H.Card}
+            title={Microformat.H.Card}
+            contentDescription={Microformat.H.Card}
             sharedContent={
                 <Avatar name={props.name?.[0] ?? "?"} images={images} />
             }
@@ -57,7 +58,8 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
     return (
         <Dialog
             id={`hcard_${hcard.id}`}
-            className="h-card"
+            className={Microformat.H.Card}
+            title={Microformat.H.Card}
             open={open}
             onClose={onClose}
         >
