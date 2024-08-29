@@ -2,8 +2,7 @@
 @use "styles/animation";
 
 .expandable-card {
-    button.toggle-detail {
-        @extend %hover;
+    button.expandable-card--toggle {
         display: block;
         width: stretch;
         font-size: var(--fs-large);

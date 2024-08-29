@@ -85,10 +85,10 @@ export const ExpandableCard = (
                 </Row>
 
                 <DropdownButton
-                    title={contentDescription}
-                    className="toggle-detail"
+                    className="expandable-card--toggle"
                     isExpanded={isExpanded}
                     onClick={toggleState}
+                    dropdownButtonTitle={contentDescription}
                     aria-controls={cardContentID}
                 />
 

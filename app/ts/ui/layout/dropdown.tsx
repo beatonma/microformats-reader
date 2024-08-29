@@ -14,7 +14,7 @@ import { Alignment } from "ts/ui/layout/alignment";
 export interface DropdownProps extends HTMLProps<HTMLDivElement> {
     header: ReactNode;
     headerClassName?: string;
-    dropdownButtonTitle?: string | undefined;
+    dropdownButtonTitle: string;
 }
 export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     const options = useContext(OptionsContext);
@@ -51,7 +51,7 @@ const DropdownLayout = (
             title={title}
         >
             <DropdownButton
-                title={dropdownButtonTitle}
+                dropdownButtonTitle={dropdownButtonTitle}
                 className={classes("dropdown-header", headerClassName)}
                 isExpanded={isExpanded}
                 {...collapsibleControllerProps}
@@ -67,15 +67,22 @@ const DropdownLayout = (
 };
 
 interface DropdownButtonProps {
-    title: string | undefined;
+    dropdownButtonTitle: string;
     "aria-controls": string;
     isExpanded: boolean;
     onClick: () => void;
 }
 export const DropdownButton = (
-    props: ComponentProps<"button"> & DropdownButtonProps,
+    props: Omit<ComponentProps<"button">, "title"> & DropdownButtonProps,
 ) => {
-    const { title, isExpanded, onClick, className, children, ...rest } = props;
+    const {
+        dropdownButtonTitle,
+        isExpanded,
+        onClick,
+        className,
+        children,
+        ...rest
+    } = props;
 
     return (
         <button
@@ -84,13 +91,13 @@ export const DropdownButton = (
             onClick={onClick}
             title={
                 isExpanded
-                    ? _("dropdown_collapse", title)
-                    : _("dropdown_expand", title)
+                    ? _("dropdown_collapse", dropdownButtonTitle)
+                    : _("dropdown_expand", dropdownButtonTitle)
             }
             aria-label={
                 isExpanded
-                    ? _("dropdown_collapse_label", title)
-                    : _("dropdown_expand_label", title)
+                    ? _("dropdown_collapse_label", dropdownButtonTitle)
+                    : _("dropdown_expand_label", dropdownButtonTitle)
             }
             aria-expanded={isExpanded}
             data-expanded={isExpanded}

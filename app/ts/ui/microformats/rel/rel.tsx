@@ -14,9 +14,15 @@ export const RelmeLinks = (props: RelLinkProps) => {
     const { links } = props;
 
     if (isEmptyOrNull(links)) return null;
+    const title = 'rel="me"';
 
     return (
-        <Dropdown header='rel="me"' className="relme-links" title='rel="me"'>
+        <Dropdown
+            header={title}
+            title={title}
+            dropdownButtonTitle={title}
+            className="relme-links"
+        >
             <Column>
                 {links.map(link => (
                     <LinkTo href={link.href} title={link.title} key={link.href}>
