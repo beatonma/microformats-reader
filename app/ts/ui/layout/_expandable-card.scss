@@ -6,6 +6,16 @@
         display: block;
         width: stretch;
         font-size: var(--fs-large);
+        background: none;
+
+        .dropdown-button--content {
+            @extend %hover-children;
+
+            .dropdown-icon {
+                border-radius: var(--border-radius-small);
+                padding: var(--space);
+            }
+        }
     }
 
     .summary {

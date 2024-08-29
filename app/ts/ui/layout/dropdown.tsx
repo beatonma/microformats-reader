@@ -103,7 +103,10 @@ export const DropdownButton = (
             data-expanded={isExpanded}
             {...rest}
         >
-            <Row horizontal={Alignment.Center}>
+            <Row
+                className="dropdown-button--content"
+                horizontal={Alignment.Center}
+            >
                 {children}
                 <Icon
                     className="dropdown-icon"
