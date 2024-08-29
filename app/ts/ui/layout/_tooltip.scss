@@ -20,19 +20,21 @@
         text-overflow: ellipsis;
         max-width: $max-width;
         max-height: 0;
-        width: max-content;
         opacity: 0;
+        width: max-content;
         z-index: var(--elevation-tooltip);
         transition:
             opacity $animation-duration,
             scale $animation-duration;
     }
 
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus-within {
         .tooltip {
-            padding: var(--space);
-            opacity: 1;
             max-height: $max-height;
+            opacity: 1;
+            padding: var(--space);
         }
     }
 }

@@ -1,4 +1,10 @@
-import React, { ComponentProps, ReactNode, useEffect, useRef } from "react";
+import React, {
+    ComponentProps,
+    ReactNode,
+    useEffect,
+    useId,
+    useRef,
+} from "react";
 import { classes } from "ts/ui/util";
 import { Column } from "ts/ui/layout/linear";
 
@@ -7,6 +13,7 @@ interface TooltipProps extends Omit<ComponentProps<"div">, "title"> {
 }
 export const Tooltip = (props: TooltipProps) => {
     const { tooltip, className, children, ...rest } = props;
+    const tooltipId = useId();
 
     if (React.Children.count(tooltip) === 0) return <>{children}</>;
     const ref = useRef<HTMLDivElement>(null);
@@ -14,7 +21,11 @@ export const Tooltip = (props: TooltipProps) => {
     useEffect(() => {
         const parent = ref.current?.parentElement;
 
-        const nudgeTooltip = () => {
+        /**
+         * Center the tooltip on its root element, adjusted to keep it
+         * within the viewport boundary.
+         * */
+        const showTooltip = () => {
             const tooltip = ref.current;
             if (!parent) return;
             if (!tooltip) return;
@@ -41,18 +52,30 @@ export const Tooltip = (props: TooltipProps) => {
             }
             tooltip.style.left = `${offsetLeft}px`;
         };
+        const escapeTooltip = (el: KeyboardEvent) => {
+            if (el.key === "Escape") {
+                parent?.blur();
+            }
+        };
 
-        parent?.addEventListener("mouseover", nudgeTooltip);
+        parent?.addEventListener("mouseover", showTooltip);
+        parent?.addEventListener("keydown", escapeTooltip);
 
         return () => {
-            parent?.removeEventListener("mouseover", nudgeTooltip);
+            parent?.removeEventListener("mouseover", showTooltip);
+            parent?.removeEventListener("keydown", escapeTooltip);
         };
     }, [ref]);
 
     return (
-        <div className={classes("tooltip-root", className)} {...rest}>
+        <div
+            aria-describedby={tooltipId}
+            className={classes("tooltip-root", className)}
+            tabIndex={0}
+            {...rest}
+        >
             {children}
-            <div ref={ref} className="tooltip">
+            <div id={tooltipId} ref={ref} className="tooltip" role="tooltip">
                 <Column>{tooltip}</Column>
             </div>
         </div>
