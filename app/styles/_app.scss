@@ -2,20 +2,37 @@
 @forward "ts/ui";
 @use "./element";
 
+/**
+ * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
+ */
+$popup-min-width: 600px;
+$popup-min-height: 600px;
+$popup-max-width: 800px;
+$popup-max-height: 600px;
+
 html {
+    max-width: $popup-max-width;
+    max-height: $popup-max-height;
+    overflow-x: hidden;
+    overflow-y: scroll;
     color: var(--on-background);
     background-color: var(--background);
 }
 
 body {
+    min-width: $popup-min-width;
+    min-height: $popup-min-height;
+    max-width: $popup-max-width;
+    max-height: $popup-max-height;
+    width: 64ch;
+    overflow-x: hidden;
+    overflow-y: scroll;
     color: var(--on-background);
     background-color: var(--background);
     margin: 0;
     padding: 0;
     font-size: var(--fs-default);
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    width: 64ch;
-    height: max-content;
 }
 
 main {

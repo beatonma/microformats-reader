@@ -1,28 +1,5 @@
 @use "styles/app";
 
-/**
- * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
- */
-$popup-min-width: 25px;
-$popup-min-height: 25px;
-$popup-max-width: 800px;
-$popup-max-height: 600px;
-
-html {
-    max-height: $popup-max-height;
-    overflow-y: scroll;
-    background-color: black;
-}
-
-body {
-    min-width: $popup-min-width;
-    min-height: $popup-min-height;
-    max-width: $popup-max-width;
-    max-height: $popup-max-height;
-    overflow-x: clip;
-    overflow-y: scroll;
-}
-
 #quick_links {
     margin-block: var(--space-1x);
 }
