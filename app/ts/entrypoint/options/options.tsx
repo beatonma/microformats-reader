@@ -2,9 +2,9 @@ import React, { useId } from "react";
 import { _ } from "ts/compat";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import { AppConfig, AppOptions, useOptions } from "ts/options";
-import "ts/entrypoint/options/options.scss";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Loading } from "ts/ui/loading";
+import "./options.scss";
 
 const Options = () => {
     const [options, setOptions] = useOptions();

@@ -1,12 +1,6 @@
-@use "./borders";
-@use "./dialog";
-@use "./animation";
+@forward "./index";
+@forward "ts/ui";
 @use "./element";
-@use "./hover";
-@use "./size";
-@use "./spacing";
-@use "./typography";
-@use "ts/ui";
 
 html {
     color: var(--on-background);

@@ -14,12 +14,12 @@ import {
 import { HCard, HFeed } from "ts/ui/microformats";
 import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
-import "ts/entrypoint/popup/popup.scss";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { AppOptions, OptionsContext, useOptions } from "ts/options";
 import { MicroformatData, parse } from "ts/data/parsing";
 import { onlyIf } from "ts/data/util/object";
+import "./popup.scss";
 
 export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds } = props;
