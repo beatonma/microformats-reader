@@ -1,3 +1,4 @@
+@use "styles/typography";
 @use "./hcard-avatar";
 
 .h-card {
@@ -9,14 +10,11 @@
         margin-block: var(--space);
     }
 
-    .p-note {
-        .property-value {
-            white-space: pre-line;
-            line-height: 1.2;
+    .property-value.p-note {
+        @extend %text-block;
 
-            &:not(:last-child) {
-                margin-bottom: var(--space);
-            }
+        &:not(:last-child) {
+            margin-bottom: var(--space);
         }
     }
 }

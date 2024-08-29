@@ -1,9 +1,17 @@
+@use "styles/typography";
+
 .h-feed {
     .dropdown-header {
         font-size: var(--fs-default);
     }
 
-    .hfeed-about .by-line {
-        font-size: var(--fs-caption);
+    .hfeed-about {
+        .p-summary {
+            @extend %text-block;
+        }
+
+        .by-line {
+            font-size: var(--fs-caption);
+        }
     }
 }

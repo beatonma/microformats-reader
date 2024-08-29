@@ -13,6 +13,10 @@
     letter-spacing: 0.1ch;
     font-weight: bold;
 }
+%text-block {
+    white-space: pre-line;
+    line-height: 1.2;
+}
 
 @mixin line-clamp($lines) {
     overflow: hidden;
