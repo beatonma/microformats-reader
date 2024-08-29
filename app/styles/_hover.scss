@@ -1,7 +1,8 @@
+@use "./animation";
 %hover {
     transition:
-        background-color 200ms,
-        borderr-radius 200ms;
+        background-color animation.$duration-short,
+        borderr-radius animation.$duration-short;
 
     &:hover {
         background-color: var(--hover);
@@ -12,8 +13,8 @@
     background: none;
     > * {
         transition:
-            background-color 200ms,
-            borderr-radius 200ms;
+            background-color animation.$duration-short,
+            borderr-radius animation.$duration-short;
     }
 
     &:hover > * {
