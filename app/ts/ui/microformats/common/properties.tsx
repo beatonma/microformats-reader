@@ -11,11 +11,7 @@ import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { formatUri } from "ts/ui/formatting";
-import {
-    formatDateTime,
-    formatShortDateTime,
-    isDate,
-} from "ts/ui/formatting/time";
+import { formatDateTime, isDate } from "ts/ui/formatting/time";
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
 import { MaybeLinkTo } from "ts/ui/link-to";
@@ -25,6 +21,7 @@ import { nullable, withNotNull } from "ts/data/util/object";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
 import { asArray } from "ts/data/util/arrays";
+import { DateTime } from "ts/ui/time";
 
 enum Css {
     Property = "property",
@@ -432,7 +429,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     const resolvedOnClick = typeof onClick === "function" ? onClick : null;
     let resolvedHref: string | null = isString(onClick) ? onClick : null;
     let resolvedDisplayValue: ReactNode = isDate(displayValue) ? (
-        <FormattedDatetime datetime={displayValue} />
+        <DateTime datetime={displayValue} />
     ) : (
         displayValue
     );
@@ -465,9 +462,3 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         resolvedOnClick: resolvedOnClick,
     };
 };
-
-const FormattedDatetime = (props: { datetime: Date }) => (
-    <time dateTime={props.datetime.toISOString()}>
-        {formatShortDateTime(props.datetime)}
-    </time>
-);

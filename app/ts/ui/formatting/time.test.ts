@@ -14,19 +14,19 @@ describe("Date & Time Formatting", () => {
     describe("formatShortDate", () => {
         test("Today: show time", () => {
             expect(formatShortDateTime("2023-02-01 12:01", now)).toBe(
-                "12:01 today"
+                "12:01 today",
             );
         });
 
         test("Yesterday: show time", () => {
             expect(formatShortDateTime("2023-01-31 15:02", now)).toBe(
-                "15:02 yesterday"
+                "15:02 yesterday",
             );
         });
 
         test("Any other date: no time", () => {
             expect(formatShortDateTime("2022-01-31 15:02", now)).toBe(
-                "31 January 2022"
+                "31 January 2022",
             );
         });
     });
@@ -36,12 +36,12 @@ describe("Date & Time Formatting", () => {
     });
 
     test("formatTime", () => {
-        expect(formatTime("2022-01-31 15:43")).toBe("15:43");
+        expect(formatTime(new Date("2022-01-31 15:43"))).toBe("15:43");
     });
 
     test("formatDateTime", () => {
         expect(formatDateTime("2022-01-31 15:43")).toBe(
-            "15:43 31 January 2022"
+            "15:43 31 January 2022",
         );
     });
 

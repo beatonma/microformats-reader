@@ -45,6 +45,12 @@ export const yearsSince = (
 };
 
 export const isDate = (obj: any): obj is Date => obj instanceof Date;
+const toDate = (dt: DateOrString | null | undefined): Date | null => {
+    if (dt == null) return null;
+    const date = dt instanceof Date ? dt : new Date(dt);
+    if (isNaN(date.valueOf())) return null;
+    return date;
+};
 
 /**
  * Abbreviated date/time for UI display.
@@ -53,12 +59,14 @@ export const formatShortDateTime = (
     datetime: DateOrString | null | undefined,
     __now?: Date,
 ): string | null => {
-    if (datetime == null) return null;
+    const date = toDate(datetime);
+    if (!date) return datetime?.toString() ?? null;
+    // if (datetime == null) return null;
+    //
+    // const date = isString(datetime) ? new Date(datetime) : datetime;
+    // if (isNaN(date.valueOf())) return datetime.toString();
 
     const now = __now ?? new Date();
-    const date = isString(datetime) ? new Date(datetime) : datetime;
-    if (isNaN(date.valueOf())) return datetime.toString();
-
     if (isSameDay(date, now)) {
         return _("datetime_time_today", formatTime(date));
     }
@@ -73,9 +81,8 @@ export const formatShortDateTime = (
 export const formatDate = (
     datetime: DateOrString | null | undefined,
 ): string | null => {
-    if (datetime == null) return null;
-    const date = isString(datetime) ? new Date(datetime) : datetime;
-    if (isNaN(date.valueOf())) return datetime.toString();
+    const date = toDate(datetime);
+    if (!date) return datetime?.toString() ?? null;
 
     return date.toLocaleDateString(
         compatBrowser.i18n.getUILanguage(),
@@ -84,11 +91,10 @@ export const formatDate = (
 };
 
 export const formatTime = (
-    datetime: DateOrString | null | undefined,
+    datetime: Date | null | undefined,
 ): string | null => {
-    if (datetime == null) return null;
-    const date = isString(datetime) ? new Date(datetime) : datetime;
-    if (isNaN(date.valueOf())) return datetime.toString();
+    const date = toDate(datetime);
+    if (!date) return datetime?.toString() ?? null;
 
     return date.toLocaleTimeString(
         compatBrowser.i18n.getUILanguage(),
@@ -102,10 +108,12 @@ export const formatTime = (
 export const formatDateTime = (
     datetime: DateOrString | null | undefined,
 ): string | null => {
-    if (datetime == null) return null;
+    const date = toDate(datetime);
+    if (!date) return datetime?.toString() ?? null;
 
-    const timeStr = formatTime(datetime);
-    const dateStr = formatDate(datetime);
-
-    return [timeStr, dateStr].join(" ");
+    return (
+        [formatTime(date), formatDate(date)].nullIfEmpty()?.join(" ") ??
+        datetime?.toString() ??
+        null
+    );
 };
