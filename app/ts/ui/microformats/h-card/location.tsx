@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { _ } from "ts/compat";
-import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 import {
     HAdrData,
     HGeoData,
@@ -23,7 +23,7 @@ import { MapsProvider, OptionsContext } from "ts/options";
 import { IconWithText } from "ts/ui/icon/icons";
 
 export const LocationSummary = (props: {
-    microformat: Microformats;
+    microformat: Microformat;
     locations: LocationData[] | null;
 }) => {
     const options = useContext(OptionsContext);

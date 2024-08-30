@@ -6,7 +6,7 @@ import React, {
     useState,
 } from "react";
 import { Image } from "@microformats-parser";
-import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
@@ -39,7 +39,7 @@ interface PropertyProps {
 
 interface PropertyIconProps {
     image?: Image | null;
-    imageMicroformat: Microformats;
+    imageMicroformat: Microformat;
 }
 const isPropertyIconProps = (
     value: Icons | PropertyIconProps,
@@ -58,7 +58,7 @@ interface PropertyValue {
 interface PropertyValueProps {
     title: string | null | undefined;
     values: PropertyValue[] | null;
-    microformat: Microformats | undefined;
+    microformat: Microformat | undefined;
     hrefMicroformat: Microformat.U | undefined;
 }
 
@@ -92,7 +92,7 @@ export const linkedValueProperties = (
 };
 
 interface PropertyLayoutProps {
-    microformat: Microformats;
+    microformat: Microformat;
     hrefMicroformat?: Microformat.U;
     className?: string | undefined;
     property?: PropertyProps;
@@ -166,7 +166,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
 };
 
 const getLayoutProps = (
-    microformat: Microformats,
+    microformat: Microformat,
     className: string | undefined,
     title: string | null | undefined,
 ) => ({
@@ -364,7 +364,7 @@ interface SingleValuePropertyProps {
     title: string | null | undefined;
     displayValue: DisplayValue | null | undefined;
     onClick: HRefOrOnClick | null | undefined;
-    microformat: Microformats | undefined;
+    microformat: Microformat | undefined;
     hrefMicroformat: Microformat.U | undefined;
     className?: string;
 }

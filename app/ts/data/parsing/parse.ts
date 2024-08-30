@@ -5,7 +5,7 @@ import {
     MicroformatProperty,
     MicroformatRoot,
 } from "@microformats-parser";
-import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 import { isString } from "ts/data/types";
 import { DateOrString } from "ts/data/types/common";
 
@@ -17,7 +17,7 @@ export namespace Parse {
 
     export const get = <T extends MicroformatProperty>(
         container: MicroformatProperties,
-        key: string,
+        key: Microformat,
     ): T[] | null =>
         container?.[key.replace(/^(dt|e|h|p|u)-/, "")]?.nullIfEmpty() ?? null;
 
@@ -32,7 +32,7 @@ export namespace Parse {
      */
     export const single = <T extends MicroformatProperty>(
         container: MicroformatProperties,
-        key: Microformats,
+        key: Microformat,
     ): T | null => {
         const value = get(container, key);
         if (!value) return null;
@@ -46,7 +46,7 @@ export namespace Parse {
      */
     export const getImages = (
         container: MicroformatProperties,
-        key: Microformats,
+        key: Microformat.U,
     ): Image[] | null =>
         get(container, key)
             ?.map(it => (isString(it) ? { value: it, alt: "" } : (it as Image)))
@@ -91,6 +91,9 @@ export namespace Parse {
         key: Microformat.X.All,
     ): T[] | null => {
         const keyRoot = key.replace(/^((dt|e|h|p|u)-)?(x-)?/, "");
-        return get(hcard, keyRoot) ?? get(hcard, `x-${keyRoot}`);
+        return (
+            get(hcard, keyRoot as Microformat.X.All) ??
+            get(hcard, `x-${keyRoot}` as Microformat.X.All)
+        );
     };
 }

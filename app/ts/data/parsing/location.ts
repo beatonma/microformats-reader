@@ -3,6 +3,7 @@ import { HAdrData, isString } from "ts/data/types";
 import { nullable } from "ts/data/util/object";
 import { Parse } from "ts/data/parsing/parse";
 import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 
 /**
  * @param obj representing an `h-adr` or `h-geo` parsed object.
@@ -65,6 +66,7 @@ export const parseLocation = (
 export const parseLocationFromProperties = (
     props: MicroformatProperties,
     keys: Microformats[],
+    keys: Microformat[],
 ): HAdrData[] | null => {
     return keys
         .map(key =>

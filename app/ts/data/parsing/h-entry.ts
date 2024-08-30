@@ -101,7 +101,7 @@ const parseDates = (entry: MicroformatProperties): HEntryDates | null => {
 
 const parseCitation = (
     entry: MicroformatProperties,
-    key: string,
+    key: Microformat.U,
 ): HCiteData[] | null => {
     const data = Parse.get<MicroformatRoot | string>(entry, key);
 

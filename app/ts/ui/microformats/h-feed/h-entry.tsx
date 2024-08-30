@@ -1,7 +1,7 @@
 import { HEntryData } from "ts/data/types";
 import { _ } from "ts/compat";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
-import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 import {
     displayValueProperties,
     EmbeddedHCardProperty,
@@ -236,7 +236,7 @@ const InteractionTooltip = <T extends any>(props: {
 
 const CitationTooltip = (props: {
     name: string;
-    microformat: Microformats;
+    microformat: Microformat.U;
     data: HCiteData[] | null;
 }) => {
     const { name, data, microformat } = props;
@@ -261,7 +261,7 @@ const CitationTooltip = (props: {
     );
 };
 
-const TooltipRoot = (props: { microformat: Microformats; text: string }) => (
+const TooltipRoot = (props: { microformat: Microformat; text: string }) => (
     <span title={props.microformat}>{props.text}</span>
 );
 

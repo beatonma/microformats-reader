@@ -3,7 +3,7 @@ import {
     MicroformatRoot,
     ParsedDocument,
 } from "@microformats-parser";
-import { Microformat, Microformats } from "ts/data/microformats";
+import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing/parse";
 import { HAdrData, isString } from "ts/data/types";
 import {
@@ -223,7 +223,7 @@ const parseHCardLocation = (hcard: MicroformatRoot): HAdrData[] | null =>
 
 export const parseEmbeddedHCards = (
     container: MicroformatProperties,
-    key: Microformats,
+    key: Microformat,
 ): EmbeddedHCard[] | null => {
     const objs = Parse.get<MicroformatRoot | string>(container, key);
     if (!objs) return null;

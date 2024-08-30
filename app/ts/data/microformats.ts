@@ -101,7 +101,7 @@ export namespace Microformat {
     }
 }
 
-export type Microformats =
+export type Microformat =
     | Microformat.Dt
     | Microformat.E
     | Microformat.H
