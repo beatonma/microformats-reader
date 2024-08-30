@@ -42,27 +42,27 @@ export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
                 values={onClickValueProperties(sound)}
             />
             <PropertyRow
-                microformat={Microformat.P.Honorific_Prefix}
+                microformat={Microformat.P.HonorificPrefix}
                 property={{ displayName: _("hcard_name_honorific_prefix") }}
                 values={displayValueProperties(honorificPrefix)}
             />
             <PropertyRow
-                microformat={Microformat.P.Honorific_Suffix}
+                microformat={Microformat.P.HonorificSuffix}
                 property={{ displayName: _("hcard_name_honorific_suffix") }}
                 values={displayValueProperties(honorificSuffix)}
             />
             <PropertyRow
-                microformat={Microformat.P.Given_Name}
+                microformat={Microformat.P.GivenName}
                 property={{ displayName: _("hcard_name_given") }}
                 values={displayValueProperties(givenName)}
             />
             <PropertyRow
-                microformat={Microformat.P.Additional_Name}
+                microformat={Microformat.P.AdditionalName}
                 property={{ displayName: _("hcard_name_additional") }}
                 values={displayValueProperties(additionalName)}
             />
             <PropertyRow
-                microformat={Microformat.P.Family_Name}
+                microformat={Microformat.P.FamilyName}
                 property={{ displayName: _("hcard_name_family") }}
                 values={displayValueProperties(familyName)}
             />
@@ -72,7 +72,7 @@ export const NamePropertiesTable = (props: PropsOf<HCardNameDetail>) => {
                 values={displayValueProperties(nickname)}
             />
             <PropertyRow
-                microformat={Microformat.P.Sort_String}
+                microformat={Microformat.P.SortString}
                 property={{ displayName: _("hcard_name_sortby") }}
                 values={displayValueProperties(sortBy)}
             />

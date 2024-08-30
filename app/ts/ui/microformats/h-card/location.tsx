@@ -66,17 +66,17 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
                 values={displayValueProperties(label)}
             />
             <PropertyRow
-                microformat={Microformat.P.Post_Office_Box}
+                microformat={Microformat.P.PostOfficeBox}
                 property={{ displayName: _("hadr_post_office_box") }}
                 values={displayValueProperties(postOfficeBox)}
             />
             <PropertyRow
-                microformat={Microformat.P.Street_Address}
+                microformat={Microformat.P.StreetAddress}
                 property={{ displayName: _("hadr_street_address") }}
                 values={displayValueProperties(streetAddress)}
             />
             <PropertyRow
-                microformat={Microformat.P.Extended_Address}
+                microformat={Microformat.P.ExtendedAddress}
                 property={{ displayName: _("hadr_extended_address") }}
                 values={displayValueProperties(extendedAddress)}
             />
@@ -91,12 +91,12 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
                 values={displayValueProperties(region)}
             />
             <PropertyRow
-                microformat={Microformat.P.Country_Name}
+                microformat={Microformat.P.CountryName}
                 property={{ displayName: _("hadr_country_name") }}
                 values={displayValueProperties(countryName)}
             />
             <PropertyRow
-                microformat={Microformat.P.Postal_Code}
+                microformat={Microformat.P.PostalCode}
                 property={{ displayName: _("hadr_postal_code") }}
                 values={displayValueProperties(postalCode)}
             />

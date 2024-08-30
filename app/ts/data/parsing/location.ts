@@ -51,19 +51,19 @@ export const parseLocation = (
     return nullable({
         locality: Parse.get<string>(properties, Microformat.P.Locality),
         region: Parse.get<string>(properties, Microformat.P.Region),
-        countryName: Parse.get<string>(properties, Microformat.P.Country_Name),
-        postalCode: Parse.get<string>(properties, Microformat.P.Postal_Code),
+        countryName: Parse.get<string>(properties, Microformat.P.CountryName),
+        postalCode: Parse.get<string>(properties, Microformat.P.PostalCode),
         streetAddress: Parse.get<string>(
             properties,
-            Microformat.P.Street_Address,
+            Microformat.P.StreetAddress,
         ),
         extendedAddress: Parse.get<string>(
             properties,
-            Microformat.P.Extended_Address,
+            Microformat.P.ExtendedAddress,
         ),
         postOfficeBox: Parse.get<string>(
             properties,
-            Microformat.P.Post_Office_Box,
+            Microformat.P.PostOfficeBox,
         ),
         label: Parse.get<string>(properties, Microformat.P.Label),
         geo: parseGeo(properties),

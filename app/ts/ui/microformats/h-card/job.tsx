@@ -21,7 +21,7 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
     return (
         <Row space={Space.Char}>
             <PropertyRow
-                microformat={Microformat.P.Job_Title}
+                microformat={Microformat.P.JobTitle}
                 icon={Icons.Work}
                 values={displayValueProperties(jobTitle)}
             />
@@ -39,7 +39,7 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                microformat={Microformat.P.Job_Title}
+                microformat={Microformat.P.JobTitle}
                 property={{ displayName: _("hcard_job_title") }}
                 values={displayValueProperties(jobTitle)}
             />

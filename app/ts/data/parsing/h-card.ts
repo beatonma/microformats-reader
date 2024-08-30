@@ -84,19 +84,19 @@ const parseNameDetails = (
 ): HCardNameDetail | null => {
     const honorificPrefix = Parse.get<string>(
         hcard,
-        Microformat.P.Honorific_Prefix,
+        Microformat.P.HonorificPrefix,
     );
     const honorificSuffix = Parse.get<string>(
         hcard,
-        Microformat.P.Honorific_Suffix,
+        Microformat.P.HonorificSuffix,
     );
-    const givenName = Parse.get<string>(hcard, Microformat.P.Given_Name);
+    const givenName = Parse.get<string>(hcard, Microformat.P.GivenName);
     const additionalName = Parse.get<string>(
         hcard,
-        Microformat.P.Additional_Name,
+        Microformat.P.AdditionalName,
     );
-    const familyName = Parse.get<string>(hcard, Microformat.P.Family_Name);
-    const sortBy = Parse.get<string>(hcard, Microformat.P.Sort_String);
+    const familyName = Parse.get<string>(hcard, Microformat.P.FamilyName);
+    const sortBy = Parse.get<string>(hcard, Microformat.P.SortString);
     const nickname = Parse.get<string>(hcard, Microformat.P.Nickname);
     const sound = Parse.get<string>(hcard, Microformat.U.Sound);
 
@@ -140,7 +140,7 @@ const parseGender = (
     const pronouns = parsePronouns(hcard);
     const genderIdentity = Parse.get<string>(
         hcard,
-        Microformat.P.Gender_Identity,
+        Microformat.P.GenderIdentity,
     );
     const sex = Parse.get<string>(hcard, Microformat.P.Sex);
 
@@ -182,7 +182,7 @@ const parseContact = (
 const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
     const org = parseEmbeddedHCards(hcard, Microformat.P.Org);
 
-    const jobTitle = Parse.get<string>(hcard, Microformat.P.Job_Title);
+    const jobTitle = Parse.get<string>(hcard, Microformat.P.JobTitle);
     const role = Parse.get<string>(hcard, Microformat.P.Role);
 
     return nullable({

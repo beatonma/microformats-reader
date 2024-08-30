@@ -22,7 +22,7 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
     return (
         <PropertiesTable>
             <PropertyRow
-                microformat={Microformat.P.Gender_Identity}
+                microformat={Microformat.P.GenderIdentity}
                 property={{ displayName: _("hcard_gender_identity") }}
                 values={displayValueProperties(genderIdentity)}
             />
@@ -47,7 +47,7 @@ const GenderSummary = (props: HCardGenderIdentity) => {
         return (
             <>
                 <PropertyRow
-                    microformat={Microformat.P.Gender_Identity}
+                    microformat={Microformat.P.GenderIdentity}
                     values={displayValueProperties(genderIdentity)}
                 />
                 <PropertyRow
