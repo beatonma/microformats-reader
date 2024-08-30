@@ -170,7 +170,6 @@ const HCardTextDetail = (props: HCardData) => {
                                 ))}
                             </>
                         );
-                        // return <LocationPropertiesTable data={data} />;
                     }}
                 />
 

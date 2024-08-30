@@ -1,7 +1,7 @@
 import { HGeoData } from "ts/data/types/h-geo";
 import { EmbeddedHCard } from "ts/data/types/h-card";
 
-export interface HAdrData extends HGeoData {
+export interface HAdrData {
     locality: string[] | null;
     region: string[] | null;
     countryName: string[] | null;
@@ -10,7 +10,7 @@ export interface HAdrData extends HGeoData {
     extendedAddress: string[] | null;
     postOfficeBox: string[] | null;
     label: string[] | null;
-    geo: string[] | null;
+    geo: (HGeoData | string)[] | null;
     value: string | null;
 }
 

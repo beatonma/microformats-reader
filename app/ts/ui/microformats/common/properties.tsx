@@ -201,6 +201,26 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
     />
 );
 
+export const PropertyContainerRow = (
+    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
+) => (
+    <PropertyLayout
+        allowNullValue={true}
+        values={null}
+        {...props}
+        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
+            <Row {...layoutProps} space={Space.Char}>
+                <Row space={Space.Char}>
+                    {propertyIcon}
+                    {propertyName}
+                </Row>
+
+                {props.children}
+            </Row>
+        )}
+    />
+);
+
 export const PropertyColumn = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
@@ -216,6 +236,30 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
                     {propertyName}
                 </Row>
                 {propertyValue}
+            </Column>
+        )}
+    />
+);
+
+/**
+ * A <Column/> which shares the structure of <PropertyColumn /> but has
+ * arbitrary content. i.e. a column with the property name and icon as a
+ * header row.
+ */
+export const PropertyContainerColumn = (
+    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
+) => (
+    <PropertyLayout
+        allowNullValue={true}
+        values={null}
+        {...props}
+        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
+            <Column {...layoutProps}>
+                <Row>
+                    {propertyIcon}
+                    {propertyName}
+                </Row>
+                {props.children}
             </Column>
         )}
     />
@@ -241,30 +285,6 @@ export const PropertyImage = (
         </div>
     );
 };
-
-/**
- * A <Column/> which shares the structure of <PropertyColumn /> but has
- * arbitrary content. i.e. a column with the property name and icon as a
- * header row.
- */
-export const PropertyContainerColumn = (
-    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
-) => (
-    <PropertyLayout
-        allowNullValue={true}
-        values={null}
-        {...props}
-        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
-            <Column {...layoutProps}>
-                <Row>
-                    {propertyIcon}
-                    {propertyName}
-                </Row>
-                {props.children}
-            </Column>
-        )}
-    />
-);
 
 export const PropertiesTable = (props: ComponentProps<"div">) => {
     const { className, children, ...rest } = props;

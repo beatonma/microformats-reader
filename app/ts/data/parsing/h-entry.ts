@@ -10,11 +10,8 @@ import {
     rsvpValueOf,
 } from "ts/data/types/h-entry";
 import { nullable } from "ts/data/util/object";
-import {
-    parseLocation,
-    parseLocationFromProperties,
-} from "ts/data/parsing/location";
-import { HAdrData, isString } from "ts/data/types";
+import { parsePLocation } from "ts/data/parsing/location";
+import { isString } from "ts/data/types";
 import { HCiteData } from "ts/data/types/h-cite";
 
 export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
@@ -29,11 +26,7 @@ export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
     const interactions = parseInteractions(properties);
     const dates = parseDates(properties);
     const author = parseEmbeddedHCards(properties, Microformat.P.Author);
-    const location =
-        parseLocationFromProperties(properties, [Microformat.P.Location]) ??
-        parseLocationFromChildren(entry.children) ??
-        parseEmbeddedHCards(properties, Microformat.P.Location) ??
-        null;
+    const location = parsePLocation(entry);
     const photo = Parse.getImages(properties, Microformat.U.Photo);
     const video = Parse.getImages(properties, Microformat.U.Video);
 
@@ -55,16 +48,6 @@ export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
         { requireAnyKey: ["name", "summary", "url"] },
     );
 };
-
-const parseLocationFromChildren = (
-    children: MicroformatRoot[] | undefined,
-): HAdrData[] | null =>
-    (
-        Parse.getRootsOfType(children ?? [], Microformat.H.Adr) ??
-        Parse.getRootsOfType(children ?? [], Microformat.H.Adr)
-    )
-        ?.map(it => parseLocation(it))
-        ?.nullIfEmpty() ?? null;
 
 const parseInteractions = (
     entry: MicroformatProperties,

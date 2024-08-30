@@ -189,13 +189,16 @@
   "hadr_country_name": {
     "message": "Country"
   },
-  "hadr_latitude": {
+  "hgeo": {
+    "message": "Position"
+  },
+  "hgeo_latitude": {
     "message": "Latitude"
   },
-  "hadr_longitude": {
+  "hgeo_longitude": {
     "message": "Longitude"
   },
-  "hadr_altitude": {
+  "hgeo_altitude": {
     "message": "Altitude"
   },
   "hadr_label": {

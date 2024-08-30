@@ -37,6 +37,7 @@ export namespace Microformat {
         Nickname = "p-nickname",
         Note = "p-note",
         Org = "p-org",
+        Geo = "p-geo",
         Post_Office_Box = "p-post-office-box",
         Postal_Code = "p-postal-code",
         Pronouns = "p-pronouns",
@@ -63,6 +64,7 @@ export namespace Microformat {
     /** URL properties */
     export enum U {
         Email = "u-email",
+        Geo = "u-geo",
         IMPP = "u-impp",
         InReplyTo = "u-in-reply-to",
         Key = "u-key",

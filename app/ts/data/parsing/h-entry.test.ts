@@ -85,7 +85,7 @@ describe("HEntry parsing", () => {
             const entry = await hEntry(
                 `<div class="p-location h-geo"><span class="p-latitude">57.849545107892126</span><span class="p-longitude">-3.545199942488553</span><span class="p-altitude">0</span></div>`,
             );
-            const geo = entry!.location![0] as HGeoData;
+            const geo = (entry!.location![0]! as HAdrData).geo![0] as HGeoData;
             expect(geo.latitude).toBe("57.849545107892126");
             expect(geo.longitude).toBe("-3.545199942488553");
             expect(geo.altitude).toBe("0");

@@ -1,12 +1,30 @@
 import { MicroformatProperties, MicroformatRoot } from "@microformats-parser";
-import { HAdrData, isString } from "ts/data/types";
+import { HAdrData, HGeoData, isString } from "ts/data/types";
 import { nullable } from "ts/data/util/object";
 import { Parse } from "ts/data/parsing/parse";
-import { Microformat, Microformats } from "ts/data/microformats";
 import { Microformat } from "ts/data/microformats";
+import { parseEmbeddedHCards } from "ts/data/parsing/h-card";
+import { LocationData } from "ts/data/types/h-adr";
 
 /**
- * @param obj representing an `h-adr` or `h-geo` parsed object.
+ * Parse contents of `p-location` which may have embedded `h-card`, `h-adr`,
+ * `h-geo`, or just be a string.
+ */
+export const parsePLocation = (root: MicroformatRoot): LocationData[] | null =>
+    parseLocationFromProperties(root.properties, [Microformat.P.Location]) ??
+    parseLocationFromChildren(root.children) ??
+    parseEmbeddedHCards(root.properties, Microformat.P.Location) ??
+    null;
+
+const parseLocationFromChildren = (
+    children: MicroformatRoot[] | undefined,
+): HAdrData[] | null =>
+    Parse.getRootsOfType(children ?? [], Microformat.H.Adr)
+        ?.map(parseLocation)
+        ?.nullIfEmpty() ?? null;
+
+/**
+ * @param obj an `h-adr`, `h-geo`, or `h-card`.
  */
 export const parseLocation = (
     obj: MicroformatRoot | string | null,
@@ -25,9 +43,6 @@ export const parseLocation = (
             postOfficeBox: null,
             label: null,
             geo: null,
-            latitude: null,
-            longitude: null,
-            altitude: null,
         };
     }
 
@@ -51,10 +66,7 @@ export const parseLocation = (
             Microformat.P.Post_Office_Box,
         ),
         label: Parse.get<string>(properties, Microformat.P.Label),
-        geo: Parse.get<string>(properties, Microformat.H.Geo),
-        latitude: Parse.single<string>(properties, Microformat.P.Latitude),
-        longitude: Parse.single<string>(properties, Microformat.P.Longitude),
-        altitude: Parse.single<string>(properties, Microformat.P.Altitude),
+        geo: parseGeo(properties),
         value:
             obj.type?.includes(Microformat.H.Adr) ||
             obj.type?.includes(Microformat.H.Geo)
@@ -63,14 +75,36 @@ export const parseLocation = (
     });
 };
 
+const parseGeo = (
+    rootProperties: MicroformatProperties,
+): (HGeoData | string)[] | null => {
+    const _parse = (value: MicroformatProperties): HGeoData | null =>
+        nullable({
+            latitude: Parse.single(value, Microformat.P.Latitude),
+            longitude: Parse.single(value, Microformat.P.Longitude),
+            altitude: Parse.single(value, Microformat.P.Altitude),
+        });
+
+    const inlineGeo: HGeoData | null = _parse(rootProperties);
+    const nestedGeo: HGeoData[] =
+        Parse.get(rootProperties, Microformat.P.Geo)
+            ?.map((it: string | MicroformatRoot) =>
+                isString(it) ? it : _parse(it.properties),
+            )
+            .nullIfEmpty() ?? [];
+
+    return [...nestedGeo, inlineGeo].nullIfEmpty();
+};
+
 export const parseLocationFromProperties = (
-    props: MicroformatProperties,
-    keys: Microformats[],
+    properties: MicroformatProperties,
     keys: Microformat[],
 ): HAdrData[] | null => {
     return keys
         .map(key =>
-            Parse.get<MicroformatRoot | string>(props, key)?.map(parseLocation),
+            Parse.get<MicroformatRoot | string>(properties, key)?.map(
+                parseLocation,
+            ),
         )
         .flat()
         .nullIfEmpty();

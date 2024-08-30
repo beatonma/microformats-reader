@@ -212,7 +212,7 @@ const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
 const parseHCardLocation = (hcard: MicroformatRoot): HAdrData[] | null =>
     parseLocationFromProperties(hcard.properties, [
         Microformat.P.Adr,
-        Microformat.H.Geo,
+        Microformat.P.Geo,
     ]) ??
     [parseLocation(hcard)].nullIfEmpty() ??
     Parse.getRootsOfType(hcard.children ?? [], Microformat.H.Adr)

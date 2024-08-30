@@ -15,12 +15,14 @@ import { LinkTo } from "ts/ui/link-to";
 import {
     displayValueProperties,
     PropertiesTable,
+    PropertyContainerRow,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
 import { LocationData } from "ts/data/types/h-adr";
 import { MapsProvider, OptionsContext } from "ts/options";
 import { IconWithText } from "ts/ui/icon/icons";
+import { Row, Space } from "ts/ui/layout";
 
 export const LocationSummary = (props: {
     microformat: Microformat;
@@ -50,73 +52,98 @@ export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
         postOfficeBox,
         region,
         streetAddress,
-        latitude,
-        longitude,
-        altitude,
+        geo,
+        value,
     } = props.data;
 
     return (
-        <>
-            <PropertiesTable>
-                <LinkToMap {...props.data} />
+        <PropertiesTable>
+            <LinkToMap {...props.data} />
 
-                <PropertyRow
-                    microformat={Microformat.P.Label}
-                    property={{ displayName: _("hadr_label") }}
-                    values={displayValueProperties(label)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Post_Office_Box}
-                    property={{ displayName: _("hadr_post_office_box") }}
-                    values={displayValueProperties(postOfficeBox)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Street_Address}
-                    property={{ displayName: _("hadr_street_address") }}
-                    values={displayValueProperties(streetAddress)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Extended_Address}
-                    property={{ displayName: _("hadr_extended_address") }}
-                    values={displayValueProperties(extendedAddress)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Locality}
-                    property={{ displayName: _("hadr_locality") }}
-                    values={displayValueProperties(locality)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Region}
-                    property={{ displayName: _("hadr_region") }}
-                    values={displayValueProperties(region)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Country_Name}
-                    property={{ displayName: _("hadr_country_name") }}
-                    values={displayValueProperties(countryName)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Postal_Code}
-                    property={{ displayName: _("hadr_postal_code") }}
-                    values={displayValueProperties(postalCode)}
-                />
+            <PropertyRow
+                microformat={Microformat.P.Label}
+                property={{ displayName: _("hadr_label") }}
+                values={displayValueProperties(label)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Post_Office_Box}
+                property={{ displayName: _("hadr_post_office_box") }}
+                values={displayValueProperties(postOfficeBox)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Street_Address}
+                property={{ displayName: _("hadr_street_address") }}
+                values={displayValueProperties(streetAddress)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Extended_Address}
+                property={{ displayName: _("hadr_extended_address") }}
+                values={displayValueProperties(extendedAddress)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Locality}
+                property={{ displayName: _("hadr_locality") }}
+                values={displayValueProperties(locality)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Region}
+                property={{ displayName: _("hadr_region") }}
+                values={displayValueProperties(region)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Country_Name}
+                property={{ displayName: _("hadr_country_name") }}
+                values={displayValueProperties(countryName)}
+            />
+            <PropertyRow
+                microformat={Microformat.P.Postal_Code}
+                property={{ displayName: _("hadr_postal_code") }}
+                values={displayValueProperties(postalCode)}
+            />
+            {geo?.map((it, index) => <Geo geo={it} key={`geo_${index}`} />)}
+        </PropertiesTable>
+    );
+};
+
+const Geo = (props: { geo: HGeoData | string }) => {
+    const { geo } = props;
+    if (isString(geo)) {
+        return (
+            <PropertyRow
+                microformat={Microformat.P.Geo}
+                hrefMicroformat={Microformat.U.Geo}
+                property={{ displayName: _("hgeo") }}
+                values={displayValueProperties([geo])}
+            />
+        );
+    }
+
+    return (
+        <PropertyContainerRow
+            microformat={Microformat.H.Geo}
+            property={{ displayName: _("hgeo") }}
+        >
+            <Row space={Space.Char}>
                 <PropertyRow
                     microformat={Microformat.P.Latitude}
-                    property={{ displayName: _("hadr_latitude") }}
-                    values={{ displayValue: latitude }}
+                    values={displayValueProperties(
+                        [geo.latitude].nullIfEmpty(),
+                    )}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Longitude}
-                    property={{ displayName: _("hadr_longitude") }}
-                    values={{ displayValue: longitude }}
+                    values={displayValueProperties(
+                        [geo.longitude].nullIfEmpty(),
+                    )}
                 />
                 <PropertyRow
                     microformat={Microformat.P.Altitude}
-                    property={{ displayName: _("hadr_altitude") }}
-                    values={{ displayValue: altitude }}
+                    values={displayValueProperties(
+                        [geo.altitude].nullIfEmpty(),
+                    )}
                 />
-            </PropertiesTable>
-        </>
+            </Row>
+        </PropertyContainerRow>
     );
 };
 
@@ -133,12 +160,12 @@ const addressSummary = (location: LocationData): string | null => {
 };
 
 const summaryFromHAddr = (location: HAdrData): string | null => {
-    const { countryName, locality, region, latitude, longitude } = location;
+    const { countryName, locality, region } = location;
 
     return (
         [locality?.[0], region?.[0], countryName?.[0]]
             .nullIfEmpty()
-            ?.join(", ") ?? summaryFromHGeo(location)
+            ?.join(", ") ?? null
     );
 };
 const summaryFromHGeo = (location: HGeoData): string | null =>
@@ -166,16 +193,22 @@ const getMapsUrl = (
     provider: MapsProvider,
 ): string | undefined => {
     if (!location) return undefined;
-    let query: string | undefined = undefined;
+    let query: string | null | undefined = undefined;
     if (isString(location)) {
         query = location;
     } else if (isHGeoData(location)) {
-        query =
-            formatLatLong(location.latitude, location.longitude) ??
-            addressSummary(location) ??
-            undefined;
+        query = formatLatLong(location.latitude, location.longitude);
+    } else if (isHAdrData(location)) {
+        const geo = location.geo?.[0];
+        if (geo) {
+            return getMapsUrl(geo, provider);
+        }
     } else if (isHCardData(location)) {
         return getMapsUrl(location.location?.[0] ?? null, provider);
+    }
+
+    if (!query) {
+        query = addressSummary(location);
     }
 
     if (!query) return undefined;

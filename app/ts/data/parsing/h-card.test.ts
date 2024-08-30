@@ -106,8 +106,13 @@ describe("HCard parsing", () => {
             expect(location.region).toEqual(["California"]);
             expect(location.postalCode).toEqual(["91316"]);
             expect(location.countryName).toEqual(["U.S.A"]);
-            expect(location.latitude).toBe("34.06648088793238");
-            expect(location.longitude).toBe("-118.22042689866892");
+            expect(location.geo).toEqual([
+                {
+                    latitude: "34.06648088793238",
+                    longitude: "-118.22042689866892",
+                    altitude: null,
+                },
+            ]);
         };
 
         test("No location", async () => {
@@ -150,8 +155,13 @@ describe("HCard parsing", () => {
 
         test("Address with nested p-geo", async () => {
             const hcard = await firstHCard(SampleHCardNested);
-            expect(hcard?.location?.[0]?.latitude).toBe("34.06648088793238");
-            expect(hcard?.location?.[0]?.longitude).toBe("-118.22042689866892");
+            expect(hcard!.location![0].geo).toEqual([
+                {
+                    latitude: "34.06648088793238",
+                    longitude: "-118.22042689866892",
+                    altitude: null,
+                },
+            ]);
         });
     });
 
