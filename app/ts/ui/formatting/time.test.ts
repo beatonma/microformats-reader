@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import "ts/test/test-util";
+import "ts/test";
 import {
     formatDate,
     formatDateTime,

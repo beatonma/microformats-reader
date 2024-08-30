@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { parseLocation } from "ts/data/parsing/location";
-import "ts/test/test-util";
+import "ts/test";
 
 describe("Location parsing", () => {
     test("simple h-card", () => {

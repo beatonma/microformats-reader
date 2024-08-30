@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { HEntryData, RsvpValue, rsvpValueOf } from "ts/data/types/h-entry";
-import { parseTestHtml } from "ts/test/test-util";
+import { parseTestHtml } from "ts/test";
 import { DateOrString } from "ts/data/types/common";
 import { HAdrData, HGeoData } from "ts/data/types";
 import { EmbeddedHCard } from "ts/data/types/h-card";

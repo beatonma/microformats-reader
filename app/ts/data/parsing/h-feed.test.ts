@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { parseTestHtml } from "ts/test/test-util";
+import { parseTestHtml } from "ts/test";
 
 const SampleHtmlHFeed = `<div class="h-feed">
     <div class="p-name">Posts</div>

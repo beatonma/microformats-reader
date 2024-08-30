@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { HCardData } from "ts/data/types";
-import { parseTestHtml } from "ts/test/test-util";
+import { parseTestHtml } from "ts/test";
 
 const firstHCard = async (html: string) =>
     parseTestHtml(html).then(data => data.hcards?.[0] ?? null);
