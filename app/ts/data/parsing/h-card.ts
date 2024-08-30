@@ -3,7 +3,7 @@ import {
     MicroformatRoot,
     ParsedDocument,
 } from "@microformats-parser";
-import { Microformat } from "ts/data/microformats";
+import { Microformat, Microformats } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing/parse";
 import { HAdrData, isString } from "ts/data/types";
 import {
@@ -118,17 +118,18 @@ const parseNameDetails = (
  * @param hcard
  */
 const parsePronouns = (hcard: MicroformatProperties): string[] | null => {
+    const Pronouns = Microformat.X.Pronouns;
     const pronouns =
-        Parse.getExperimental<string>(hcard, "pronouns") ??
-        Parse.getExperimental<string>(hcard, "pronoun");
+        Parse.getExperimental<string>(hcard, Pronouns.Pronouns) ??
+        Parse.getExperimental<string>(hcard, Pronouns.Pronoun);
     if (pronouns) return pronouns;
 
     const nominative =
-        Parse.getExperimental<string>(hcard, "pronoun-nominative") ?? [];
+        Parse.getExperimental<string>(hcard, Pronouns.Nominative) ?? [];
     const oblique =
-        Parse.getExperimental<string>(hcard, "pronoun-oblique") ?? [];
+        Parse.getExperimental<string>(hcard, Pronouns.Oblique) ?? [];
     const possessive =
-        Parse.getExperimental<string>(hcard, "pronoun-possessive") ?? [];
+        Parse.getExperimental<string>(hcard, Pronouns.Possessive) ?? [];
 
     return [...nominative, ...oblique, ...possessive].nullIfEmpty();
 };
@@ -208,24 +209,21 @@ const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
  * - Directly in the `h-card` properties, as the `h-card` spec includes all fields from the `h-adr` spec
  * - child `h-adr` object
  */
-const parseHCardLocation = (hcard: MicroformatRoot): HAdrData[] | null => {
-    return (
-        parseLocationFromProperties(hcard.properties, [
-            Microformat.P.Adr,
-            Microformat.H.Geo,
-        ]) ??
-        [parseLocation(hcard)].nullIfEmpty() ??
-        Parse.getRootsOfType(hcard.children ?? [], Microformat.H.Adr)
-            ?.map(parseHCardLocation)
-            ?.flat()
-            ?.nullIfEmpty() ??
-        null
-    );
-};
+const parseHCardLocation = (hcard: MicroformatRoot): HAdrData[] | null =>
+    parseLocationFromProperties(hcard.properties, [
+        Microformat.P.Adr,
+        Microformat.H.Geo,
+    ]) ??
+    [parseLocation(hcard)].nullIfEmpty() ??
+    Parse.getRootsOfType(hcard.children ?? [], Microformat.H.Adr)
+        ?.map(parseHCardLocation)
+        ?.flat()
+        ?.nullIfEmpty() ??
+    null;
 
 export const parseEmbeddedHCards = (
     container: MicroformatProperties,
-    key: string,
+    key: Microformats,
 ): EmbeddedHCard[] | null => {
     const objs = Parse.get<MicroformatRoot | string>(container, key);
     if (!objs) return null;

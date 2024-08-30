@@ -5,7 +5,7 @@ import {
     MicroformatProperty,
     MicroformatRoot,
 } from "@microformats-parser";
-import { Microformat } from "ts/data/microformats";
+import { Microformat, Microformats } from "ts/data/microformats";
 import { isString } from "ts/data/types";
 import { DateOrString } from "ts/data/types/common";
 
@@ -19,7 +19,7 @@ export namespace Parse {
         container: MicroformatProperties,
         key: string,
     ): T[] | null =>
-        container?.[key.replace(/^(dt|e|h|p|u)-/, "")]?.nullIfEmpty();
+        container?.[key.replace(/^(dt|e|h|p|u)-/, "")]?.nullIfEmpty() ?? null;
 
     /**
      * All microformat property values are parsed generically as arrays, but
@@ -32,7 +32,7 @@ export namespace Parse {
      */
     export const single = <T extends MicroformatProperty>(
         container: MicroformatProperties,
-        key: string,
+        key: Microformats,
     ): T | null => {
         const value = get(container, key);
         if (!value) return null;
@@ -46,7 +46,7 @@ export namespace Parse {
      */
     export const getImages = (
         container: MicroformatProperties,
-        key: string,
+        key: Microformats,
     ): Image[] | null =>
         get(container, key)
             ?.map(it => (isString(it) ? { value: it, alt: "" } : (it as Image)))
@@ -58,7 +58,7 @@ export namespace Parse {
      */
     export const getDates = (
         container: MicroformatProperties,
-        key: string,
+        key: Microformat.Dt,
     ): DateOrString[] | null => {
         const dates = get<string>(container, key);
 
@@ -77,20 +77,20 @@ export namespace Parse {
      */
     export const getEmbeddedValue = (
         container: MicroformatProperties,
-        key: string,
-    ): string[] | null => {
-        return (
-            get(container, key)
-                ?.map((it: Html) => it["value"])
-                .nullIfEmpty() ?? null
-        );
-    };
+        key: Microformat.E,
+    ): string[] | null =>
+        get(container, key)
+            ?.map((it: Html) => it["value"])
+            .nullIfEmpty() ?? null;
 
     /**
      * Try to read 'key' or 'x-key' values for non-standardised properties.
      */
     export const getExperimental = <T extends MicroformatProperty>(
         hcard: MicroformatProperties,
-        key: string,
-    ): T[] | null => get(hcard, key) ?? get(hcard, `x-${key}`);
+        key: Microformat.X.All,
+    ): T[] | null => {
+        const keyRoot = key.replace(/^((dt|e|h|p|u)-)?(x-)?/, "");
+        return get(hcard, keyRoot) ?? get(hcard, `x-${keyRoot}`);
+    };
 }

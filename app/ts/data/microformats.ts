@@ -81,6 +81,24 @@ export namespace Microformat {
     export enum E {
         Content = "e-content",
     }
+
+    /**
+     * Experimental
+     */
+    export namespace X {
+        export type All = Pronouns;
+
+        /**
+         * https://microformats.org/wiki/pronouns-brainstorming
+         */
+        export enum Pronouns {
+            Pronoun = "u-pronoun",
+            Pronouns = "u-pronouns",
+            Nominative = "p-x-pronoun-nominative", // he / she / they
+            Oblique = "p-x-pronoun-oblique", // him / her / them
+            Possessive = "p-x-pronoun-possessive", // his / her / their
+        }
+    }
 }
 
 export type Microformats =
@@ -88,4 +106,5 @@ export type Microformats =
     | Microformat.E
     | Microformat.H
     | Microformat.P
-    | Microformat.U;
+    | Microformat.U
+    | Microformat.X.All;
