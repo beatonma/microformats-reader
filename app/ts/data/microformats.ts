@@ -10,6 +10,7 @@ export namespace Microformat {
         Feed = "h-feed",
         Geo = "h-geo",
         Cite = "h-cite",
+        Event = "h-event",
     }
 
     /** Plain text properties */
@@ -49,6 +50,7 @@ export namespace Microformat {
         SortString = "p-sort-string",
         StreetAddress = "p-street-address",
         Summary = "p-summary",
+        Description = "p-description",
         Tel = "p-tel",
     }
 
@@ -59,6 +61,9 @@ export namespace Microformat {
         Bday = "dt-bday",
         Published = "dt-published",
         Updated = "dt-updated",
+        Start = "dt-start",
+        End = "dt-end",
+        Duration = "dt-duration",
     }
 
     /** URL properties */
@@ -93,7 +98,7 @@ export namespace Microformat {
         SexualOrientation = "p-x-sexual-orientation",
     }
     export namespace X {
-        export type All = Pronouns | X;
+        export type All = Event | Pronouns | X;
 
         /**
          * https://microformats.org/wiki/pronouns-brainstorming
@@ -104,6 +109,14 @@ export namespace Microformat {
             Nominative = "p-x-pronoun-nominative", // he / she / they
             Oblique = "p-x-pronoun-oblique", // him / her / them
             Possessive = "p-x-pronoun-possessive", // his / her / their
+        }
+
+        /**
+         * https://microformats.org/wiki/h-event#Experimental_Properties
+         */
+        export enum Event {
+            Attendee = "p-attendee",
+            Organizer = "p-organizer",
         }
     }
 }

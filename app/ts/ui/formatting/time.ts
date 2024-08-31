@@ -61,10 +61,6 @@ export const formatShortDateTime = (
 ): string | null => {
     const date = toDate(datetime);
     if (!date) return datetime?.toString() ?? null;
-    // if (datetime == null) return null;
-    //
-    // const date = isString(datetime) ? new Date(datetime) : datetime;
-    // if (isNaN(date.valueOf())) return datetime.toString();
 
     const now = __now ?? new Date();
     if (isSameDay(date, now)) {
@@ -116,4 +112,31 @@ export const formatDateTime = (
         datetime?.toString() ??
         null
     );
+};
+
+export const formatTimeDelta = (start: Date, end: Date): string | null => {
+    const delta = end.valueOf() - start.valueOf();
+
+    if (delta < 0) {
+        console.warn("formatTimeDelta `start` must be before than `end`");
+        return null;
+    }
+
+    const seconds = delta / 1000;
+    if (seconds < 60 || (seconds > 60 && seconds < 120))
+        return _("datetime_duration_seconds", seconds);
+
+    const minutes = seconds / 60;
+    if (minutes < 60 || (minutes > 60 && minutes < 120))
+        return _("datetime_duration_minutes", minutes);
+
+    const hours = minutes / 60;
+    if (hours < 23 || (hours > 24 && hours < 48))
+        return _("datetime_duration_hours", hours);
+
+    const days = hours / 24;
+    if (days < 365) return _("datetime_duration_days", days);
+
+    const years = days / 365;
+    return _("datetime_duration_years", years);
 };

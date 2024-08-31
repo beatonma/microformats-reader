@@ -233,7 +233,7 @@
     "placeholders": {
       "when": {
         "content": "$1",
-        "example": ""
+        "example": "yesterday"
       }
     }
   },
@@ -252,6 +252,66 @@
       "time": {
         "content": "$1",
         "example": "15:32"
+      }
+    }
+  },
+  "datetime_duration_seconds":{
+    "message": {
+      "one": "$SECONDS$ second",
+      "other": "$SECONDS$ seconds"
+    },
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_minutes":{
+    "message": {
+      "one": "$MINUTES$ minute",
+      "other": "$MINUTES$ minutes"
+    },
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_hours":{
+    "message": {
+      "one": "$HOURS$ hour",
+      "other": "$HOURS$ hours"
+    },
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_days":{
+    "message": {
+      "one": "$DAYS$ day",
+      "other": "$DAYS$ days"
+    },
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_years":{
+    "message": {
+      "one": "$YEARS$ year",
+      "other": "$YEARS$ years"
+    },
+    "placeholders": {
+      "years": {
+        "content": "$1",
+        "example": "6"
       }
     }
   },

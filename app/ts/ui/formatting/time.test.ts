@@ -5,6 +5,7 @@ import {
     formatDateTime,
     formatShortDateTime,
     formatTime,
+    formatTimeDelta,
     yearsSince,
 } from "ts/ui/formatting/time";
 
@@ -61,5 +62,38 @@ describe("Date & Time Formatting", () => {
             expect(yearsSince(new Date("2021-03-01"), now)).toBe(1);
             expect(yearsSince(new Date("2022-03-01"), now)).toBe(0);
         });
+    });
+
+    describe("formatTimeDelta", () => {
+        expect(
+            formatTimeDelta(
+                new Date(2022, 5, 11, 15, 0, 0),
+                new Date(2022, 5, 11, 15, 0, 30),
+            ),
+        ).toBe("30 seconds");
+        expect(
+            formatTimeDelta(
+                new Date(2022, 5, 11, 15, 0, 0),
+                new Date(2022, 5, 11, 15, 1, 0),
+            ),
+        ).toBe("1 minute");
+        expect(
+            formatTimeDelta(
+                new Date(2022, 5, 11, 15, 0, 0),
+                new Date(2022, 5, 11, 16, 0, 0),
+            ),
+        ).toBe("1 hour");
+        expect(
+            formatTimeDelta(
+                new Date(2022, 5, 11, 15, 0, 0),
+                new Date(2022, 5, 11, 16, 30, 0),
+            ),
+        ).toBe("90 minutes");
+        expect(
+            formatTimeDelta(
+                new Date(2022, 5, 11, 15, 0, 0),
+                new Date(2022, 5, 12, 15, 0, 0),
+            ),
+        ).toBe("1 day");
     });
 });
