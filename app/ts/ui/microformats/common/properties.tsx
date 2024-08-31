@@ -20,7 +20,7 @@ import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { nullable, withNotNull } from "ts/data/util/object";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
-import { asArray } from "ts/data/util/arrays";
+import { asArray, zip } from "ts/data/util/arrays";
 import { DateTime } from "ts/ui/time";
 
 enum Css {
@@ -82,14 +82,10 @@ export const onClickValueProperties = (
 export const linkedValueProperties = (
     displayValues: DateOrString[] | null | undefined,
     links: HRef[] | null,
-): PropertyValue[] | null => {
-    const length = Math.max(displayValues?.length ?? 0, links?.length ?? 0);
-    let values = [];
-    for (let i = 0; i < length; i++) {
-        values.push({ displayValue: displayValues?.[i], onClick: links?.[i] });
-    }
-    return values.nullIfEmpty();
-};
+): PropertyValue[] | null =>
+    zip(displayValues, links)
+        ?.map(([display, link]) => ({ displayValue: display, onClick: link }))
+        ?.nullIfEmpty() ?? null;
 
 interface PropertyLayoutProps {
     microformat: Microformat;

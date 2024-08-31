@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { anyOf, noneOf } from "ts/data/util/arrays";
+import { anyOf, noneOf, zip } from "ts/data/util/arrays";
 
 describe("noneOf", () => {
     test("All empty values", () => {
@@ -28,5 +28,19 @@ describe("anyOf", () => {
         expect(
             anyOf([null, null, null, null, undefined, null, [0]]),
         ).toBeTruthy();
+    });
+});
+
+describe("zip", () => {
+    test("Valid lists", () => {
+        expect(zip(["a", "b", "c"], [1, 2, 3])).toEqual([
+            ["a", 1],
+            ["b", 2],
+            ["c", 3],
+        ]);
+    });
+
+    test("Different cardinality lists returns null", () => {
+        expect(zip(["a", "b", "c"], [1, 2])).toBeNull();
     });
 });

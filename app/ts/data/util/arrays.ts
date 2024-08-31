@@ -46,6 +46,16 @@ export const joinNotEmpty = (
     if (result) return result;
 };
 
+export const zip = <A, B>(
+    a: A[] | null | undefined,
+    b: B[] | null | undefined,
+): [A, B][] | null => {
+    if (!a || !b) return null;
+    if (a.length !== b.length) return null;
+
+    return a.map((it, index) => [it, b[index]]);
+};
+
 export const registerArrayExtensions = () => {
     const addExtension = <T>(name: string, func: (...args: any) => T) => {
         Object.defineProperty(Array.prototype, name, { value: func });
