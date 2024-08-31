@@ -66,4 +66,6 @@ export interface HCardDates {
 export interface HCardExtras {
     uid: string[] | null;
     category: string[] | null;
+    dietaryPreferences: string[] | null;
+    sexualOrientation: string[] | null;
 }

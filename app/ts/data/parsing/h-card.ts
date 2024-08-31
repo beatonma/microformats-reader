@@ -195,10 +195,20 @@ const parseJob = (hcard: MicroformatProperties): HCardJobData | null => {
 const parseExtras = (hcard: MicroformatProperties): HCardExtras | null => {
     const uid = Parse.get<string>(hcard, Microformat.U.Uid);
     const category = Parse.get<string>(hcard, Microformat.P.Category);
+    const dietaryPreferences = Parse.get<string>(
+        hcard,
+        Microformat.X.DietaryPreference,
+    );
+    const sexualOrientation = Parse.get<string>(
+        hcard,
+        Microformat.X.SexualOrientation,
+    );
 
     return nullable({
         uid: uid,
         category: category,
+        dietaryPreferences: dietaryPreferences,
+        sexualOrientation: sexualOrientation,
     });
 };
 

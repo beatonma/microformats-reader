@@ -86,9 +86,14 @@ export namespace Microformat {
 
     /**
      * Experimental
+     * https://microformats.org/wiki/microformats2-experimental-properties
      */
+    export enum X {
+        DietaryPreference = "p-x-dietary-preference",
+        SexualOrientation = "p-x-sexual-orientation",
+    }
     export namespace X {
-        export type All = Pronouns;
+        export type All = Pronouns | X;
 
         /**
          * https://microformats.org/wiki/pronouns-brainstorming

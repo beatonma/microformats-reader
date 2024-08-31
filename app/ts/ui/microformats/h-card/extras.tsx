@@ -10,7 +10,7 @@ import {
 import { PropsOf } from "ts/ui/props";
 
 export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
-    const { category, uid } = props.data;
+    const { category, dietaryPreferences, sexualOrientation, uid } = props.data;
 
     return (
         <PropertiesTable>
@@ -23,6 +23,20 @@ export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
                 microformat={Microformat.U.Uid}
                 property={{ displayName: _("hcard_extras_uid") }}
                 values={displayValueProperties(uid)}
+            />
+            <PropertyRow
+                microformat={Microformat.X.DietaryPreference}
+                property={{
+                    displayName: _("hcard_extras_dietary_preferences"),
+                }}
+                values={displayValueProperties(dietaryPreferences)}
+            />
+            <PropertyRow
+                microformat={Microformat.X.SexualOrientation}
+                property={{
+                    displayName: _("hcard_extras_sexual_orientation"),
+                }}
+                values={displayValueProperties(sexualOrientation)}
             />
         </PropertiesTable>
     );

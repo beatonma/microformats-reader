@@ -165,6 +165,12 @@
   "hcard_extras_category": {
     "message": "Category"
   },
+  "hcard_extras_dietary_preferences": {
+    "message": "Dietary preferences"
+  },
+  "hcard_extras_sexual_orientation": {
+    "message": "Sexual orientation"
+  },
   "hcard_location_detail": {
     "message": "Location"
   },
