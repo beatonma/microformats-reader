@@ -20,7 +20,7 @@ import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { nullable, withNotNull } from "ts/data/util/object";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
-import { asArray, zip } from "ts/data/util/arrays";
+import { asArray, zipOrNull } from "ts/data/util/arrays";
 import { DateTime } from "ts/ui/time";
 
 enum Css {
@@ -83,7 +83,7 @@ export const linkedValueProperties = (
     displayValues: DateOrString[] | null | undefined,
     links: HRef[] | null,
 ): PropertyValue[] | null =>
-    zip(displayValues, links)
+    zipOrNull(displayValues, links)
         ?.map(([display, link]) => ({ displayValue: display, onClick: link }))
         ?.nullIfEmpty() ?? null;
 

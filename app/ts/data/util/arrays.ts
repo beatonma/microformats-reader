@@ -46,14 +46,39 @@ export const joinNotEmpty = (
     if (result) return result;
 };
 
+/**
+ * @returns a new array of the same length as a, b, where the value at each
+ * position is tuple of the values from a, b, at that index.
+ *
+ * @returns or `null` if the arrays do not share the same length
+ */
 export const zip = <A, B>(
     a: A[] | null | undefined,
     b: B[] | null | undefined,
 ): [A, B][] | null => {
-    if (!a || !b) return null;
+    if (a == null || b == null) return null;
     if (a.length !== b.length) return null;
 
     return a.map((it, index) => [it, b[index]]);
+};
+
+/**
+ * Like `zip`, returns a new array by combing values from the given arrays.
+ * Unlike `zip`, the given arrays do not need to be equal in length.
+ * The returned array will have the same length as the longest given array
+ * with null values inserted when a value cannot be retrieved from either of
+ * the source arrays.
+ */
+export const zipOrNull = <A, B>(
+    a: A[] | null | undefined,
+    b: B[] | null | undefined,
+): [A | null, B | null][] | null => {
+    if (a == null && b == null) return null;
+
+    const len = Math.max(a?.length ?? 0, b?.length ?? 0);
+    return [...Array(len).keys()].map(index => {
+        return [a?.[index] ?? null, b?.[index] ?? null];
+    });
 };
 
 export const registerArrayExtensions = () => {
