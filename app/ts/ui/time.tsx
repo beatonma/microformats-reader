@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { ComponentProps } from "react";
 import {
     formatDate,
     formatDateTime,
@@ -12,7 +12,7 @@ export interface DateTimeProps {
     datetime: DateOrString | null;
     showTime?: boolean;
 }
-export const DateTime = (props: DateTimeProps & HTMLProps<HTMLTimeElement>) => {
+export const DateTime = (props: DateTimeProps & ComponentProps<"time">) => {
     const { datetime, title, showTime = false } = props;
 
     if (!datetime) return null;
