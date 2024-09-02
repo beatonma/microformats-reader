@@ -14,7 +14,7 @@ import { formatUri } from "ts/ui/formatting";
 import { formatDateTime, isDate } from "ts/ui/formatting/time";
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
-import { MaybeLinkTo } from "ts/ui/link-to";
+import { LinkTo } from "ts/ui/link-to";
 import { classes, titles } from "ts/ui/util";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { nullable, withNotNull } from "ts/data/util/object";
@@ -47,7 +47,7 @@ const isPropertyIconProps = (
     return typeof value === "object";
 };
 
-type DisplayValue = ReactElement | DateOrString;
+type DisplayValue = DateOrString;
 type HRef = string;
 type HRefOrOnClick = (() => void) | HRef;
 interface PropertyValue {
@@ -55,11 +55,14 @@ interface PropertyValue {
     displayValue?: DisplayValue | null | undefined;
     onClick?: HRefOrOnClick | null | undefined;
 }
+type ValueRenderer<T extends DisplayValue> = (value: T) => ReactElement;
 interface PropertyValueProps {
     title: string | null | undefined;
     values: PropertyValue[] | null;
     microformat: Microformat | undefined;
     hrefMicroformat: Microformat.U | undefined;
+    renderString?: ValueRenderer<string> | undefined;
+    renderDate?: ValueRenderer<Date> | undefined;
 }
 
 /**
@@ -67,7 +70,7 @@ interface PropertyValueProps {
  * @param values
  */
 export const displayValueProperties = (
-    values: DateOrString[] | null | undefined,
+    values: DisplayValue[] | null | undefined,
 ): PropertyValue[] | null =>
     values?.map(it => ({ displayValue: it }))?.nullIfEmpty() ?? null;
 
@@ -94,6 +97,8 @@ interface PropertyLayoutProps {
     property?: PropertyProps;
     values: PropertyValue | PropertyValue[] | null | undefined;
     icon?: PropertyIconProps | Icons;
+    renderString?: ValueRenderer<string>;
+    renderDate?: ValueRenderer<Date>;
 }
 
 type LayoutProps = Record<string, any>;
@@ -130,6 +135,8 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         property,
         values,
         icon,
+        renderString,
+        renderDate,
         allowNullValue = false,
     } = props;
 
@@ -140,6 +147,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
 
     const layoutProps = getLayoutProps(microformat, className, property?.title);
     const isMultiValue = (resolvedValues?.length ?? 0) > 1;
+
     const propertyIcon: ReactNode = <PropertyIcon icon={icon} />;
     const propertyName: ReactNode = (
         <PropertyName name={property?.displayName} />
@@ -150,6 +158,8 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
             values={resolvedValues}
             microformat={microformat}
             hrefMicroformat={hrefMicroformat}
+            renderString={renderString}
+            renderDate={renderDate}
         />
     );
 
@@ -361,7 +371,14 @@ const PropertyName = (props: Named) => {
 };
 
 const PropertyValue = (props: PropertyValueProps) => {
-    const { title, values, microformat, hrefMicroformat } = props;
+    const {
+        title,
+        values,
+        microformat,
+        hrefMicroformat,
+        renderString,
+        renderDate,
+    } = props;
 
     return (
         <div className={Css.PropertyValues}>
@@ -373,6 +390,8 @@ const PropertyValue = (props: PropertyValueProps) => {
                     microformat={microformat}
                     onClick={value.onClick}
                     hrefMicroformat={hrefMicroformat}
+                    renderString={renderString}
+                    renderDate={renderDate}
                 />
             ))}
         </div>
@@ -386,6 +405,8 @@ interface SingleValuePropertyProps {
     microformat: Microformat | undefined;
     hrefMicroformat: Microformat.U | undefined;
     className?: string;
+    renderString: ValueRenderer<string> | undefined;
+    renderDate: ValueRenderer<Date> | undefined;
 }
 const SinglePropertyValue = (props: SingleValuePropertyProps) => {
     const {
@@ -396,45 +417,42 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
         resolvedOnClick,
     } = resolveValues(props);
 
-    const onContextClick = (e: MouseEvent) => {
-        if (e.ctrlKey) {
-            e.preventDefault();
-            copyToClipboard(resolvedHref ?? resolvedDisplayValue);
-        }
+    const commonProps = {
+        className: resolvedClassName ?? undefined,
+        title: resolvedTitle ?? undefined,
+        onContextMenu: (e: MouseEvent) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                e.stopPropagation();
+                copyToClipboard(resolvedHref ?? resolvedDisplayValue);
+            }
+        },
+        children: resolvedDisplayValue,
     };
 
     if (resolvedOnClick != null) {
         return (
-            <button
-                className={resolvedClassName ?? undefined}
-                title={resolvedTitle ?? undefined}
-                onContextMenu={onContextClick}
-                onClick={resolvedOnClick}
-            >
+            <button onClick={resolvedOnClick} {...commonProps}>
                 {resolvedDisplayValue}
             </button>
         );
     }
 
-    return (
-        <MaybeLinkTo
-            href={resolvedHref ?? undefined}
-            className={resolvedClassName ?? undefined}
-            title={resolvedTitle ?? undefined}
-            onContextMenu={onContextClick}
-        >
-            {resolvedDisplayValue}
-        </MaybeLinkTo>
-    );
+    if (resolvedHref != null) {
+        return <LinkTo href={resolvedHref} {...commonProps} />;
+    }
+
+    return <span {...commonProps} />;
 };
 
 interface ResolvedProperties {
-    resolvedClassName: string | null;
-    resolvedHref: string | null;
-    resolvedTitle: string | null;
-    resolvedDisplayValue: ReactNode | null;
-    resolvedOnClick: (() => void) | null;
+    resolvedClassName: string | undefined;
+    resolvedHref: string | undefined;
+    resolvedTitle: string | undefined;
+    resolvedDisplayValue: ReactElement | string;
+    resolvedOnClick: (() => void) | undefined;
 }
+
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     const {
         displayValue,
@@ -443,41 +461,60 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         hrefMicroformat,
         title,
         className,
+        renderString,
+        renderDate,
     } = props;
+    const classParts: (string | null | undefined)[] = [];
+    const titleParts: (string | null | undefined)[] = [microformat];
 
-    const resolvedOnClick = typeof onClick === "function" ? onClick : null;
-    let resolvedHref: string | null = isString(onClick) ? onClick : null;
-    let resolvedDisplayValue: ReactNode = isDate(displayValue) ? (
-        <DateTime datetime={displayValue} />
-    ) : (
-        displayValue
-    );
-    const extraTitle: (string | null | undefined)[] = [microformat];
+    const resolvedOnClick = typeof onClick === "function" ? onClick : undefined;
 
-    if (isString(displayValue) && isUri(displayValue)) {
-        resolvedHref = displayValue;
-        resolvedDisplayValue = formatUri(displayValue);
-    }
+    const resolvedHref = (() => {
+        let href: string | undefined = undefined;
+        if (isString(onClick) && isUri(onClick)) href = onClick;
+        if (isString(displayValue) && isUri(displayValue)) href = displayValue;
+        if (href) {
+            titleParts.push(hrefMicroformat);
+            titleParts.push(href);
+        }
+        return href;
+    })();
 
-    if (resolvedHref) {
-        extraTitle.push(hrefMicroformat);
-    }
+    const resolvedDisplayValue = (() => {
+        let resolved;
 
-    if (isDate(displayValue)) {
-        extraTitle.push(formatDateTime(displayValue));
-    }
+        if (isDate(displayValue)) {
+            resolved = renderDate?.(displayValue) ?? (
+                <DateTime datetime={displayValue} />
+            );
+            titleParts.push(formatDateTime(displayValue));
+        } else if (isString(displayValue) && isUri(displayValue)) {
+            resolved = formatUri(displayValue);
+            titleParts.push(displayValue);
+        } else {
+            resolved = displayValue ?? resolvedHref?.let(formatUri);
+        }
+
+        if (isString(resolved)) {
+            resolved = renderString?.(resolved) ?? resolved;
+        }
+
+        if (!resolved) {
+            resolved = "__UNRESOLVED_DISPLAY_VALUE__";
+        }
+
+        return resolved;
+    })();
 
     return {
-        resolvedClassName:
-            classes(
-                Css.PropertyValue,
-                className,
-                microformat,
-                resolvedHref ? hrefMicroformat : null,
-            ) ?? null,
-        resolvedDisplayValue: resolvedDisplayValue,
         resolvedHref: resolvedHref,
-        resolvedTitle: titles(...extraTitle, title) ?? null,
         resolvedOnClick: resolvedOnClick,
+        resolvedDisplayValue: resolvedDisplayValue,
+        resolvedTitle: titles(...titleParts, title),
+        resolvedClassName: classes(Css.PropertyValue, className, ...classParts),
     };
+};
+
+export const _testOnly = {
+    resolveValues: resolveValues,
 };

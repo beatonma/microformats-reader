@@ -55,20 +55,19 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
     return (
         <Column className="hfeed-about">
             <Row vertical={Alignment.Baseline} space={Space.Large} wrap>
-                <h1>
-                    <PropertyRow
-                        icon={{
-                            image: photo?.[0],
-                            imageMicroformat: Microformat.U.Photo,
-                        }}
-                        microformat={Microformat.P.Name}
-                        hrefMicroformat={Microformat.U.Url}
-                        values={linkedValueProperties(
-                            name ?? [_("hfeed_unnamed")],
-                            url,
-                        )}
-                    />
-                </h1>
+                <PropertyRow
+                    icon={{
+                        image: photo?.[0],
+                        imageMicroformat: Microformat.U.Photo,
+                    }}
+                    microformat={Microformat.P.Name}
+                    hrefMicroformat={Microformat.U.Url}
+                    values={linkedValueProperties(
+                        name ?? [_("hfeed_unnamed")],
+                        url,
+                    )}
+                    renderString={node => <h1>{node}</h1>}
+                />
 
                 <EmbeddedHCardProperty
                     className="by-line"
