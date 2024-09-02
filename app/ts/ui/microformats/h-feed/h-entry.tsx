@@ -8,7 +8,7 @@ import {
     linkedValueProperties,
     onClickValueProperties,
     PropertyColumn,
-    PropertyContainerColumn,
+    CustomPropertyColumn,
     PropertyImage,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
@@ -245,14 +245,14 @@ const CitationTooltip = (props: {
         <InteractionTooltip
             value={data}
             tooltip={cite => (
-                <PropertyContainerColumn
+                <CustomPropertyColumn
                     microformat={microformat}
                     property={{ displayName: name }}
                 >
                     {cite.map(item => (
                         <Citation {...item} />
                     ))}
-                </PropertyContainerColumn>
+                </CustomPropertyColumn>
             )}
             content={() => (
                 <TooltipRoot microformat={microformat} text={name} />

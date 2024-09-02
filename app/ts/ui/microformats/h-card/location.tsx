@@ -15,7 +15,7 @@ import { LinkTo } from "ts/ui/link-to";
 import {
     displayValueProperties,
     PropertiesTable,
-    PropertyContainerRow,
+    CustomPropertyRow,
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { PropsOf } from "ts/ui/props";
@@ -119,7 +119,7 @@ const Geo = (props: { geo: HGeoData | string }) => {
     }
 
     return (
-        <PropertyContainerRow
+        <CustomPropertyRow
             microformat={Microformat.H.Geo}
             property={{ displayName: _("hgeo") }}
         >
@@ -143,7 +143,7 @@ const Geo = (props: { geo: HGeoData | string }) => {
                     )}
                 />
             </Row>
-        </PropertyContainerRow>
+        </CustomPropertyRow>
     );
 };
 

@@ -96,8 +96,9 @@ interface PropertyLayoutProps {
     icon?: PropertyIconProps | Icons;
 }
 
+type LayoutProps = Record<string, any>;
 interface PropertyLayoutBuildProps {
-    layoutProps: Record<string, any>;
+    layoutProps: LayoutProps;
     propertyIcon: ReactNode;
     propertyName: ReactNode;
     propertyValue: ReactNode;
@@ -174,66 +175,74 @@ const getLayoutProps = (
 export const PropertyRow = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
-        layoutBuilder={({
-            layoutProps,
-            propertyIcon,
-            propertyName,
-            propertyValue,
-            isMultiValue,
-        }) => (
-            <Row
-                {...layoutProps}
-                vertical={isMultiValue ? Alignment.Baseline : Alignment.Center}
-                space={Space.Char}
-            >
-                <Row space={Space.Char}>
-                    {propertyIcon}
-                    {propertyName}
-                </Row>
-
-                {propertyValue}
-            </Row>
-        )}
+        layoutBuilder={buildProps => <PropertyRowLayout {...buildProps} />}
     />
 );
 
-export const PropertyContainerRow = (
+/**
+ * A <Row/> which shares the structure of <PropertyRow /> but has
+ * arbitrary content. i.e. a row that starts with the property name and icon.
+ */
+export const CustomPropertyRow = (
     props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
 ) => (
     <PropertyLayout
         allowNullValue={true}
         values={null}
         {...props}
-        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
-            <Row {...layoutProps} space={Space.Char}>
-                <Row space={Space.Char}>
-                    {propertyIcon}
-                    {propertyName}
-                </Row>
-
-                {props.children}
-            </Row>
+        layoutBuilder={({ propertyValue, ...rest }) => (
+            <PropertyRowLayout {...rest} propertyValue={props.children} />
         )}
     />
 );
 
+const PropertyRowLayout = (props: PropertyLayoutBuildProps) => {
+    const {
+        layoutProps,
+        propertyIcon,
+        propertyName,
+        propertyValue,
+        isMultiValue,
+    } = props;
+    return (
+        <Row
+            {...layoutProps}
+            space={Space.Char}
+            vertical={isMultiValue ? Alignment.Baseline : Alignment.Center}
+        >
+            <Row space={Space.Char}>
+                {propertyIcon}
+                {propertyName}
+            </Row>
+
+            {propertyValue}
+        </Row>
+    );
+};
+
+const PropertyColumnLayout = (props: PropertyLayoutBuildProps) => {
+    const {
+        layoutProps,
+        propertyIcon,
+        propertyName,
+        propertyValue,
+        isMultiValue,
+    } = props;
+    return (
+        <Column {...layoutProps}>
+            <Row space={Space.Char}>
+                {propertyIcon}
+                {propertyName}
+            </Row>
+            {propertyValue}
+        </Column>
+    );
+};
+
 export const PropertyColumn = (props: PropertyLayoutProps) => (
     <PropertyLayout
         {...props}
-        layoutBuilder={({
-            layoutProps,
-            propertyIcon,
-            propertyName,
-            propertyValue,
-        }) => (
-            <Column {...layoutProps}>
-                <Row>
-                    {propertyIcon}
-                    {propertyName}
-                </Row>
-                {propertyValue}
-            </Column>
-        )}
+        layoutBuilder={buildProps => <PropertyColumnLayout {...buildProps} />}
     />
 );
 
@@ -242,21 +251,15 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
  * arbitrary content. i.e. a column with the property name and icon as a
  * header row.
  */
-export const PropertyContainerColumn = (
+export const CustomPropertyColumn = (
     props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
 ) => (
     <PropertyLayout
         allowNullValue={true}
         values={null}
         {...props}
-        layoutBuilder={({ layoutProps, propertyIcon, propertyName }) => (
-            <Column {...layoutProps}>
-                <Row>
-                    {propertyIcon}
-                    {propertyName}
-                </Row>
-                {props.children}
-            </Column>
+        layoutBuilder={({ propertyValue, ...rest }) => (
+            <PropertyColumnLayout {...rest} propertyValue={props.children} />
         )}
     />
 );
