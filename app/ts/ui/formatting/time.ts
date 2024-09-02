@@ -1,4 +1,4 @@
-import { _, compatBrowser } from "ts/compat";
+import { _, _pluralize, compatBrowser } from "ts/compat";
 import { isString } from "ts/data/types";
 import { DateOrString } from "ts/data/types/common";
 
@@ -124,19 +124,19 @@ export const formatTimeDelta = (start: Date, end: Date): string | null => {
 
     const seconds = delta / 1000;
     if (seconds < 60 || (seconds > 60 && seconds < 120))
-        return _("datetime_duration_seconds", seconds);
+        return _pluralize(seconds, "datetime_duration_second");
 
     const minutes = seconds / 60;
     if (minutes < 60 || (minutes > 60 && minutes < 120))
-        return _("datetime_duration_minutes", minutes);
+        return _pluralize(minutes, "datetime_duration_minute");
 
     const hours = minutes / 60;
     if (hours < 23 || (hours > 24 && hours < 48))
-        return _("datetime_duration_hours", hours);
+        return _pluralize(hours, "datetime_duration_hour");
 
     const days = hours / 24;
-    if (days < 365) return _("datetime_duration_days", days);
+    if (days < 365) return _pluralize(days, "datetime_duration_day");
 
     const years = days / 365;
-    return _("datetime_duration_years", years);
+    return _pluralize(years, "datetime_duration_year");
 };

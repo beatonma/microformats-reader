@@ -255,11 +255,8 @@
       }
     }
   },
-  "datetime_duration_seconds":{
-    "message": {
-      "one": "$SECONDS$ second",
-      "other": "$SECONDS$ seconds"
-    },
+  "datetime_duration_second":{
+    "message": "$SECONDS$ second",
     "placeholders": {
       "seconds": {
         "content": "$1",
@@ -267,11 +264,17 @@
       }
     }
   },
-  "datetime_duration_minutes":{
-    "message": {
-      "one": "$MINUTES$ minute",
-      "other": "$MINUTES$ minutes"
-    },
+  "datetime_duration_seconds":{
+    "message": "$SECONDS$ seconds",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_minute":{
+    "message": "$MINUTES$ minute",
     "placeholders": {
       "minutes": {
         "content": "$1",
@@ -279,11 +282,17 @@
       }
     }
   },
-  "datetime_duration_hours":{
-    "message": {
-      "one": "$HOURS$ hour",
-      "other": "$HOURS$ hours"
-    },
+  "datetime_duration_minutes":{
+    "message": "$MINUTES$ minutes",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_hour":{
+    "message": "$HOURS$ hour",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -291,11 +300,17 @@
       }
     }
   },
-  "datetime_duration_days":{
-    "message": {
-      "one": "$DAYS$ day",
-      "other": "$DAYS$ days"
-    },
+  "datetime_duration_hours":{
+    "message": "$HOURS$ hours",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_day":{
+    "message": "$DAYS$ day",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -303,11 +318,26 @@
       }
     }
   },
+  "datetime_duration_days":{
+    "message": "$DAYS$ days",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_year":{
+    "message": "$YEARS$ year",
+    "placeholders": {
+      "years": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
   "datetime_duration_years":{
-    "message": {
-      "one": "$YEARS$ year",
-      "other": "$YEARS$ years"
-    },
+    "message": "$YEARS$ years",
     "placeholders": {
       "years": {
         "content": "$1",

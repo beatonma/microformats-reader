@@ -79,7 +79,7 @@ export class MockBrowserProxy implements BrowserProxy {
 }
 
 interface TranslationMessage {
-    message: string | { one: string; other: string; zero?: string };
+    message: string;
     placeholders?: Record<string, { content: string; example?: string }>;
 }
 
@@ -103,15 +103,6 @@ const getStaticMessage = (name: string, ...substitutions: any): string => {
     let message = translation.message;
 
     if (substitutions && placeholders) {
-        if (typeof message !== "string") {
-            const n = parseInt(substitutions[0]);
-            if (isNaN(n))
-                throw "Pluralisation requires first substitution to be a number";
-            if (n === 1) message = message.one;
-            else if (n === 0) message = message.zero ?? message.other;
-            else message = message.other;
-        }
-        message = message as string;
         message = message.replace(/\$(\w+)\$/g, (substring, argName) => {
             // Replace $ARGS$ with substitutions according to placeholders definitions.
             const content = placeholders[
@@ -119,16 +110,15 @@ const getStaticMessage = (name: string, ...substitutions: any): string => {
             ]?.content?.replace(/^\$/, "");
 
             if (content) {
-                const index = parseInt(content);
+                const index = parseInt(content) - 1;
                 if (!isNaN(index)) {
-                    return substitutions[index - 1];
+                    return substitutions[index];
                 }
             }
-            console.log(name, argName, content, message);
-            return `__bad_substitution__-${name}-${argName}`;
+            return "__bad_substitution__";
         });
         return message;
     }
 
-    return (message as string).replace(/\$(\w+)\$/, "_");
+    return message.replace(/\$(\w+)\$/, "_");
 };
