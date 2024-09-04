@@ -8,16 +8,14 @@ import {
 } from "ts/ui/microformats/common";
 
 export const HAdr = (props: {
-    microformat: Microformat;
+    microformat: Microformat.H;
     location: HAdrData;
 }) => {
     const { microformat, location } = props;
 
     return (
         <ExpandableCard
-            className={microformat}
-            title={microformat}
-            contentDescription={microformat}
+            microformat={microformat}
             sharedContent={null}
             summaryContent={
                 <LocationProperty

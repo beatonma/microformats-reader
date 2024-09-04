@@ -38,9 +38,7 @@ export const HEvent = (props: HEventProps) => {
 
     return (
         <ExpandableCard
-            className={Microformat.H.Event}
-            title={Microformat.H.Event}
-            contentDescription={_("hevent_dropdown_content_description")}
+            microformat={Microformat.H.Event}
             bannerLayout="column"
             sharedContent={<Shared {...event} />}
             summaryContent={

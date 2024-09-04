@@ -1,6 +1,10 @@
 @use "styles";
 @use "styles/animation";
 
+.expandable-card--label {
+    font-size: var(--fs-caption);
+    font-family: monospace;
+}
 .expandable-card {
     button.expandable-card--toggle {
         display: block;

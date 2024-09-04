@@ -10,12 +10,14 @@ import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { Alignment, Space } from "ts/ui/layout";
-import { classes } from "ts/ui/util";
+import { classes, titles } from "ts/ui/util";
 import { OptionsContext } from "ts/options";
 import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
+import { Microformat } from "ts/data/microformats";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
-    contentDescription: string;
+    microformat: Microformat.H;
+    contentDescription?: string;
     sharedContent: ReactNode | null;
     summaryContent: ReactNode | null;
     detailContent: ReactNode | null;
@@ -27,12 +29,14 @@ export const ExpandableCard = (
     } & ComponentProps<"div">,
 ) => {
     const {
-        contentDescription,
+        microformat,
+        contentDescription = microformat,
         defaultIsExpanded,
         sharedContent,
         summaryContent,
         detailContent,
         className,
+        title,
         bannerLayout = "row",
         ...rest
     } = props;
@@ -64,49 +68,56 @@ export const ExpandableCard = (
     addAnimationEndListener(detailID, isCollapsing, endAnimation);
 
     return (
-        <CardLayout className={classes("expandable-card", className)} {...rest}>
-            <CardContent
-                id={cardContentID}
-                data-expanding={isExpanding}
-                data-collapsing={isCollapsing}
-                aria-expanded={isExpanded}
+        <>
+            <div className="expandable-card--label">{microformat}:</div>
+            <CardLayout
+                className={classes("expandable-card", microformat, className)}
+                title={titles(microformat, title)}
+                {...rest}
             >
-                <RowOrColumn
-                    layoutName={bannerLayout}
-                    className="banner"
-                    vertical={Alignment.Start}
-                    space={Space.Large}
+                <CardContent
+                    id={cardContentID}
+                    data-expanding={isExpanding}
+                    data-collapsing={isCollapsing}
+                    aria-expanded={isExpanded}
                 >
-                    {sharedContent}
+                    <RowOrColumn
+                        layoutName={bannerLayout}
+                        className="banner"
+                        vertical={Alignment.Start}
+                        space={Space.Large}
+                    >
+                        {sharedContent}
+
+                        <div
+                            id={summaryID}
+                            className="summary"
+                            data-visible={!isExpanded}
+                            data-closing={isExpanding}
+                        >
+                            {summaryContent}
+                        </div>
+                    </RowOrColumn>
+
+                    <DropdownButton
+                        className="expandable-card--toggle"
+                        isExpanded={isExpanded}
+                        onClick={toggleState}
+                        dropdownButtonTitle={contentDescription}
+                        aria-controls={cardContentID}
+                    />
 
                     <div
-                        id={summaryID}
-                        className="summary"
-                        data-visible={!isExpanded}
-                        data-closing={isExpanding}
+                        id={detailID}
+                        className="detail"
+                        data-visible={isExpanded}
+                        data-closing={isCollapsing}
                     >
-                        {summaryContent}
+                        {detailContent}
                     </div>
-                </RowOrColumn>
-
-                <DropdownButton
-                    className="expandable-card--toggle"
-                    isExpanded={isExpanded}
-                    onClick={toggleState}
-                    dropdownButtonTitle={contentDescription}
-                    aria-controls={cardContentID}
-                />
-
-                <div
-                    id={detailID}
-                    className="detail"
-                    data-visible={isExpanded}
-                    data-closing={isCollapsing}
-                >
-                    {detailContent}
-                </div>
-            </CardContent>
-        </CardLayout>
+                </CardContent>
+            </CardLayout>
+        </>
     );
 };
 

@@ -21,8 +21,7 @@ export const HFeed = (props: NullablePropsOf<HFeedData>) => {
 
     return (
         <ExpandableCard
-            className={Microformat.H.Feed}
-            title={Microformat.H.Feed}
+            microformat={Microformat.H.Feed}
             defaultIsExpanded={true}
             contentDescription={_("hfeed_dropdown_content_description")}
             sharedContent={<AboutHFeed data={about} />}

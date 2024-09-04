@@ -38,10 +38,8 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
 
     return (
         <ExpandableCard
+            microformat={Microformat.H.Card}
             defaultIsExpanded={defaultIsExpanded}
-            className={Microformat.H.Card}
-            title={Microformat.H.Card}
-            contentDescription={Microformat.H.Card}
             sharedContent={
                 <Avatar name={props.name?.[0] ?? "?"} images={images} />
             }
