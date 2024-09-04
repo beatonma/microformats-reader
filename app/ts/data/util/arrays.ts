@@ -81,6 +81,29 @@ export const zipOrNull = <A, B>(
     });
 };
 
+/**
+ * Split the given list into two lists:
+ * - first, the values for which predicate(value) returns true
+ * - last, the values for which predicate(value) returns false
+ */
+export const partition = <T>(
+    values: T[],
+    predicate: (obj: T) => boolean,
+): [T[], T[]] => {
+    const positive: T[] = [];
+    const negative: T[] = [];
+
+    values.forEach(it => {
+        if (predicate(it)) {
+            positive.push(it);
+        } else {
+            negative.push(it);
+        }
+    });
+
+    return [positive, negative];
+};
+
 export const registerArrayExtensions = () => {
     const addExtension = <T>(name: string, func: (...args: any) => T) => {
         Object.defineProperty(Array.prototype, name, { value: func });

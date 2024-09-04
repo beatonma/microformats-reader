@@ -7,7 +7,7 @@ import {
     onClickValueProperties,
     PropertiesTable,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+} from "ts/ui/microformats/common";
 import { PropsOf } from "ts/ui/props";
 
 export const Name = (props: { name: string[] | null }) => {

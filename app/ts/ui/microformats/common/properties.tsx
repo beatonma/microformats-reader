@@ -3,7 +3,6 @@ import React, {
     MouseEvent,
     ReactElement,
     ReactNode,
-    useState,
 } from "react";
 import { Image } from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
@@ -17,9 +16,7 @@ import { Img } from "ts/ui/image";
 import { LinkTo } from "ts/ui/link-to";
 import { classes, titles } from "ts/ui/util";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
-import { nullable, withNotNull } from "ts/data/util/object";
-import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
-import { EmbeddedHCard } from "ts/data/types/h-card";
+import { nullable } from "ts/data/util/object";
 import { asArray, zipOrNull } from "ts/data/util/arrays";
 import { DateTime } from "ts/ui/time";
 import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
@@ -33,7 +30,7 @@ enum Css {
     PropertyValues = "property-values",
 }
 
-interface PropertyProps {
+export interface PropertyProps {
     displayName?: string | null;
     title?: string | null | undefined;
 }
@@ -92,7 +89,7 @@ export const linkedValueProperties = (
         ?.map(([display, link]) => ({ displayValue: display, onClick: link }))
         ?.nullIfEmpty() ?? null;
 
-interface PropertyLayoutProps {
+export interface PropertyLayoutProps {
     microformat: Microformat;
     hrefMicroformat?: Microformat.U;
     className?: string | undefined;
@@ -201,9 +198,7 @@ export type CustomPropertyProps = Omit<PropertyLayoutProps, "values"> & {
  * A <Row/> which shares the structure of <PropertyRow /> but has
  * arbitrary content. i.e. a row that starts with the property name and icon.
  */
-export const CustomPropertyRow = (
-    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
-) => (
+export const CustomPropertyRow = (props: CustomPropertyProps) => (
     <PropertyLayout
         allowNullValue={true}
         values={null}
@@ -269,9 +264,7 @@ export const PropertyColumn = (props: PropertyLayoutProps) => (
  * arbitrary content. i.e. a column with the property name and icon as a
  * header row.
  */
-export const CustomPropertyColumn = (
-    props: Omit<PropertyLayoutProps, "values"> & { children: ReactNode },
-) => (
+export const CustomPropertyColumn = (props: CustomPropertyProps) => (
     <PropertyLayout
         allowNullValue={true}
         values={null}
@@ -310,42 +303,6 @@ export const PropertiesTable = (props: ComponentProps<"div">) => {
         <div className={classes(className, Css.PropertiesTable)} {...rest}>
             {children}
         </div>
-    );
-};
-
-interface EmbeddedHCardPropertyProps
-    extends Omit<PropertyLayoutProps, "values"> {
-    embeddedHCards: EmbeddedHCard[] | null;
-    title?: (card: EmbeddedHCard) => string;
-}
-export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
-    const [focussedHCardId, setFocussedHCardId] = useState<
-        string | undefined
-    >();
-    const { embeddedHCards, ...rest } = props;
-    if (!embeddedHCards) return null;
-
-    return (
-        <>
-            <PropertyRow
-                values={embeddedHCards.map((it, index) => ({
-                    displayValue: it.name?.join(" "),
-                    onClick: withNotNull(embeddedHCards?.[index], card =>
-                        card.hcard
-                            ? () => setFocussedHCardId(card.id)
-                            : undefined,
-                    ),
-                    title: props.title?.(it),
-                }))}
-                {...rest}
-            />
-            {embeddedHCards
-                ?.find(it => it.id === focussedHCardId)
-                ?.let<
-                    EmbeddedHCard,
-                    ReactElement
-                >((card: EmbeddedHCard) => <EmbeddedHCardDialog {...card} open={!!card} onClose={() => setFocussedHCardId(undefined)} />)}
-        </>
     );
 };
 

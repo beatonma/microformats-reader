@@ -5,14 +5,14 @@ import { HFeedAbout, HFeedData } from "ts/data/types/h-feed";
 import { Icons } from "ts/ui/icon";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
-import {
-    displayValueProperties,
-    EmbeddedHCardProperty,
-    linkedValueProperties,
-    PropertyRow,
-} from "ts/ui/microformats/common/properties";
 import { NullablePropsOf } from "ts/ui/props";
 import { HEntry } from "ts/ui/microformats/h-feed/h-entry";
+import {
+    displayValueProperties,
+    linkedValueProperties,
+    PropertyRow,
+    EmbeddedHCardProperty,
+} from "ts/ui/microformats/common";
 
 export const HFeed = (props: NullablePropsOf<HFeedData>) => {
     const feed = props.data;

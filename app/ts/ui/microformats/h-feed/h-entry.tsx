@@ -4,16 +4,16 @@ import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Microformat } from "ts/data/microformats";
 import {
     displayValueProperties,
-    EmbeddedHCardProperty,
     linkedValueProperties,
     onClickValueProperties,
     PropertyColumn,
     CustomPropertyColumn,
     PropertyImage,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+    EmbeddedHCardProperty,
+    LocationProperty,
+} from "ts/ui/microformats/common";
 import { Icons } from "ts/ui/icon";
-import { LocationSummary } from "ts/ui/microformats/h-adr/location";
 import { NullablePropsOf } from "ts/ui/props";
 import { HEntryInteractions } from "ts/data/types/h-entry";
 import { withNotNull } from "ts/data/util/object";
@@ -79,7 +79,7 @@ export const HEntry = (props: HEntryProps) => {
                             />
                         </Row>
                     )}
-                    <LocationSummary
+                    <LocationProperty
                         microformat={Microformat.P.Location}
                         locations={location}
                     />

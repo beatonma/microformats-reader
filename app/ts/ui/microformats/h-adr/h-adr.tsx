@@ -4,8 +4,8 @@ import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Microformat } from "ts/data/microformats";
 import {
     LocationPropertiesTable,
-    LocationSummary,
-} from "ts/ui/microformats/h-adr/location";
+    LocationProperty,
+} from "ts/ui/microformats/common";
 
 export const HAdr = (props: {
     microformat: Microformat;
@@ -20,7 +20,7 @@ export const HAdr = (props: {
             contentDescription={microformat}
             sharedContent={null}
             summaryContent={
-                <LocationSummary
+                <LocationProperty
                     microformat={microformat}
                     locations={[location]}
                 />

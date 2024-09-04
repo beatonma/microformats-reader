@@ -6,7 +6,7 @@ import {
     displayValueProperties,
     PropertiesTable,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+} from "ts/ui/microformats/common";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
 export const Gender = (props: NullablePropsOf<HCardGenderIdentity>) => {

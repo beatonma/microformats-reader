@@ -4,10 +4,11 @@ import { Microformat } from "ts/data/microformats";
 import { HCardDates } from "ts/data/types/h-card";
 import { yearsSince } from "ts/ui/formatting/time";
 import {
+    CustomPropertyRow,
     displayValueProperties,
     PropertiesTable,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+} from "ts/ui/microformats/common";
 import { PropsOf } from "ts/ui/props";
 import { DateTime, DateTimeProps } from "ts/ui/time";
 import { Row, Space } from "ts/ui/layout";
@@ -17,13 +18,12 @@ export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
 
     return (
         <PropertiesTable>
-            <PropertyRow
+            <CustomPropertyRow
                 microformat={Microformat.Dt.Bday}
                 property={{ displayName: _("hcard_dates_birthday") }}
-                values={birthday?.map(date => ({
-                    displayValue: <Birthday datetime={date} />,
-                }))}
-            />
+            >
+                {birthday?.map(date => <Birthday datetime={date} />)}
+            </CustomPropertyRow>
 
             <PropertyRow
                 microformat={Microformat.Dt.Anniversary}
@@ -40,11 +40,7 @@ const Birthday = (props: DateTimeProps) => {
 
     return (
         <Row space={Space.Char}>
-            <DateTime
-                title={Microformat.Dt.Bday}
-                datetime={birthday}
-                showTime={false}
-            />
+            <DateTime title={Microformat.Dt.Bday} datetime={birthday} />
             <Age datetime={birthday} />
         </Row>
     );

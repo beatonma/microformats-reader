@@ -6,7 +6,7 @@ import {
     displayValueProperties,
     PropertiesTable,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+} from "ts/ui/microformats/common";
 import { PropsOf } from "ts/ui/props";
 
 export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {

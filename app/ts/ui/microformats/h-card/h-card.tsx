@@ -1,11 +1,10 @@
-import React, { HTMLProps, ReactElement, useContext } from "react";
+import React, { useContext } from "react";
 import { _ } from "ts/compat";
 import { HCardData } from "ts/data/types";
 import { EmbeddedHCard as EmbeddedHCardData } from "ts/data/types/h-card";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { Dialog, DialogProps } from "ts/ui/layout/dialog";
-import { Dropdown } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Avatar } from "ts/ui/microformats/h-card/avatar";
@@ -22,17 +21,17 @@ import {
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
 import {
     LocationPropertiesTable,
-    LocationSummary,
-} from "ts/ui/microformats/h-adr/location";
+    LocationProperty,
+} from "ts/ui/microformats/common";
 import { Name, NamePropertiesTable } from "./name";
 import { Microformat } from "ts/data/microformats";
 import {
+    DetailSection,
     displayValueProperties,
     PropertiesTable,
     PropertyColumn,
-} from "ts/ui/microformats/common/properties";
-import { AppOptions, OptionsContext } from "ts/options";
-import { classes } from "ts/ui/util";
+} from "ts/ui/microformats/common";
+import { OptionsContext } from "ts/options";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -105,7 +104,7 @@ const HCardTextSummary = (props: HCardData) => {
             </Row>
 
             <Row wrap space={Space.Small}>
-                <LocationSummary
+                <LocationProperty
                     microformat={Microformat.P.Adr}
                     locations={location}
                 />
@@ -199,36 +198,6 @@ const HCardTextDetail = (props: HCardData) => {
             </PropertiesTable>
         </div>
     );
-};
-
-interface RequiredObjectProps<T> {
-    options: AppOptions;
-    sectionTitle: string;
-    dependsOn: T | null;
-    render: (data: T) => ReactElement;
-}
-const DetailSection = <T extends any>(
-    props: Omit<HTMLProps<HTMLDivElement>, "children"> & RequiredObjectProps<T>,
-) => {
-    const { options, render, sectionTitle, dependsOn, className, ...rest } =
-        props;
-    if (dependsOn == null) return null;
-
-    const renderedContent = render(dependsOn);
-    if (options.groupByType) {
-        return (
-            <Dropdown
-                defaultIsExpanded={options.dropdownExpandByDefault}
-                header={<span>{sectionTitle}</span>}
-                dropdownButtonTitle={sectionTitle}
-                className={classes("detail-section", className)}
-                children={renderedContent}
-                {...rest}
-            />
-        );
-    } else {
-        return <>{renderedContent}</>;
-    }
 };
 
 const Notes = (props: { notes: string[] | null | undefined }) => {

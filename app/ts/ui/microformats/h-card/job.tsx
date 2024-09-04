@@ -7,10 +7,10 @@ import { Row, Space } from "ts/ui/layout";
 import { ConditionalContent } from "ts/ui/layout/conditional";
 import {
     displayValueProperties,
-    EmbeddedHCardProperty,
     PropertiesTable,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
+    EmbeddedHCardProperty,
+} from "ts/ui/microformats/common";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
 export const Job = (props: NullablePropsOf<HCardJobData>) => {

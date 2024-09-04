@@ -17,32 +17,58 @@ import {
     PropertiesTable,
     CustomPropertyRow,
     PropertyRow,
-} from "ts/ui/microformats/common/properties";
-import { PropsOf } from "ts/ui/props";
+    PropertyProps,
+} from "./properties";
+import { NullablePropsOf } from "ts/ui/props";
 import { LocationData } from "ts/data/types/h-adr";
 import { MapsProvider, OptionsContext } from "ts/options";
 import { IconWithText } from "ts/ui/icon/icons";
-import { Row, Space } from "ts/ui/layout";
+import { Column, Row, Space } from "ts/ui/layout";
+import { partition } from "ts/data/util/arrays";
+import { EmbeddedHCard } from "ts/data/types/h-card";
+import { EmbeddedHCardProperty } from "./embedded-hcard";
 
-export const LocationSummary = (props: {
+export const LocationProperty = (props: {
     microformat: Microformat;
     locations: LocationData[] | null;
+    property?: PropertyProps;
 }) => {
     const options = useContext(OptionsContext);
+    const { microformat, locations, property } = props;
+
+    if (!locations) return null;
+
+    const [adrs, cards]: [HAdrData[], EmbeddedHCard[]] = partition(
+        locations,
+        isHAdrData,
+    );
 
     return (
-        <PropertyRow
-            microformat={props.microformat}
-            icon={Icons.Location}
-            values={props.locations?.map(it => ({
-                displayValue: addressSummary(it),
-                onClick: getMapsUrl(it, options.mapsProvider),
-            }))}
-        />
+        <CustomPropertyRow microformat={microformat} property={property}>
+            <Column>
+                <PropertyRow
+                    microformat={microformat}
+                    icon={Icons.Location}
+                    values={adrs?.map(it => ({
+                        displayValue: addressSummary(it),
+                        onClick: getMapsUrl(it, options.mapsProvider),
+                    }))}
+                />
+            </Column>
+            <Row>
+                <EmbeddedHCardProperty
+                    microformat={microformat}
+                    icon={Icons.Location}
+                    embeddedHCards={cards}
+                />
+            </Row>
+        </CustomPropertyRow>
     );
 };
 
-export const LocationPropertiesTable = (props: PropsOf<HAdrData>) => {
+export const LocationPropertiesTable = (props: NullablePropsOf<HAdrData>) => {
+    if (props.data == null) return null;
+
     const {
         countryName,
         extendedAddress,
@@ -147,7 +173,9 @@ const Geo = (props: { geo: HGeoData | string }) => {
     );
 };
 
-const addressSummary = (location: LocationData): string | null => {
+const addressSummary = (
+    location: LocationData | HGeoData | string | null,
+): string | null => {
     if (typeof location === "string") return location;
     if (isHAdrData(location)) return summaryFromHAddr(location);
     if (isHGeoData(location)) return summaryFromHGeo(location);
@@ -195,7 +223,7 @@ const LinkToMap = (props: HAdrData) => {
 };
 
 const getMapsUrl = (
-    location: LocationData | null,
+    location: LocationData | HGeoData | string | null,
     provider: MapsProvider,
 ): string | undefined => {
     if (!location) return undefined;

@@ -17,4 +17,9 @@ export interface HAdrData extends HData {
     value: string | null;
 }
 
-export type LocationData = string | EmbeddedHCard | HAdrData | HGeoData;
+/**
+ * Source data may be `h-adr`, `h-geo`, `h-card` or just a string.
+ * `h-adr`, `h-geo` and string are all coerced into `HAdrData`.
+ * `h-card` is handled as `EmbeddedHCard`.
+ */
+export type LocationData = HAdrData | EmbeddedHCard;
