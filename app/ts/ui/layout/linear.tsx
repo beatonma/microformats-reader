@@ -15,15 +15,10 @@ interface LinearLayoutProps extends HTMLAttributes<HTMLDivElement> {
     stretch?: boolean;
     children: ReactNode | ReactNode[];
 }
-export const Row = (props: LinearLayoutProps) => (
-    <LinearLayout layoutName="row" {...props} />
-);
-export const Column = (props: LinearLayoutProps) => (
-    <LinearLayout layoutName="column" {...props} />
-);
 
+export type LinearLayout = "row" | "column";
 const LinearLayout = (
-    props: LinearLayoutProps & { layoutName: "row" | "column" },
+    props: LinearLayoutProps & { layoutName: LinearLayout },
 ) => {
     const {
         layoutName,
@@ -57,3 +52,11 @@ const LinearLayout = (
         </div>
     );
 };
+
+export const Row = (props: LinearLayoutProps) => (
+    <LinearLayout layoutName="row" {...props} />
+);
+export const Column = (props: LinearLayoutProps) => (
+    <LinearLayout layoutName="column" {...props} />
+);
+export const RowOrColumn = LinearLayout;

@@ -22,6 +22,7 @@ import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { EmbeddedHCard } from "ts/data/types/h-card";
 import { asArray, zipOrNull } from "ts/data/util/arrays";
 import { DateTime } from "ts/ui/time";
+import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
 
 enum Css {
     Property = "property",
@@ -63,6 +64,7 @@ interface PropertyValueProps {
     hrefMicroformat: Microformat.U | undefined;
     renderString?: ValueRenderer<string> | undefined;
     renderDate?: ValueRenderer<Date> | undefined;
+    layout: LinearLayout;
 }
 
 /**
@@ -99,6 +101,7 @@ interface PropertyLayoutProps {
     icon?: PropertyIconProps | Icons;
     renderString?: ValueRenderer<string>;
     renderDate?: ValueRenderer<Date>;
+    valuesLayout?: LinearLayout;
 }
 
 type LayoutProps = Record<string, any>;
@@ -137,6 +140,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         icon,
         renderString,
         renderDate,
+        valuesLayout = "column",
         allowNullValue = false,
     } = props;
 
@@ -160,6 +164,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
             hrefMicroformat={hrefMicroformat}
             renderString={renderString}
             renderDate={renderDate}
+            layout={valuesLayout}
         />
     );
 
@@ -189,6 +194,9 @@ export const PropertyRow = (props: PropertyLayoutProps) => (
     />
 );
 
+export type CustomPropertyProps = Omit<PropertyLayoutProps, "values"> & {
+    children: ReactNode;
+};
 /**
  * A <Row/> which shares the structure of <PropertyRow /> but has
  * arbitrary content. i.e. a row that starts with the property name and icon.
@@ -381,7 +389,11 @@ const PropertyValue = (props: PropertyValueProps) => {
     } = props;
 
     return (
-        <div className={Css.PropertyValues}>
+        <RowOrColumn
+            className={Css.PropertyValues}
+            layoutName={props.layout}
+            space={Space.Medium}
+        >
             {values?.map((value, index) => (
                 <SinglePropertyValue
                     key={index}
@@ -394,7 +406,7 @@ const PropertyValue = (props: PropertyValueProps) => {
                     renderDate={renderDate}
                 />
             ))}
-        </div>
+        </RowOrColumn>
     );
 };
 
