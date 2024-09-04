@@ -23,6 +23,7 @@ export namespace AppOptions {
     export enum PopupSection {
         "h-card" = "h-card",
         "h-feed" = "h-feed",
+        "h-adr" = "h-adr",
         "relme" = "relme",
     }
 
@@ -83,6 +84,7 @@ const defaultOptions = (): AppOptions => ({
         AppOptions.PopupSection["h-card"],
         AppOptions.PopupSection["h-feed"],
         AppOptions.PopupSection.relme,
+        AppOptions.PopupSection["h-adr"],
     ],
     mapsProvider: AppOptions.MapProvider.OpenStreetMap,
 });

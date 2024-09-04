@@ -162,14 +162,20 @@ const addressSummary = (location: LocationData): string | null => {
 const summaryFromHAddr = (location: HAdrData): string | null => {
     const { countryName, locality, region } = location;
 
+    if (location.value != null) return location.value;
+
     return (
         [locality?.[0], region?.[0], countryName?.[0]]
             .nullIfEmpty()
-            ?.join(", ") ?? null
+            ?.join(", ") ??
+        location?.geo?.[0]?.let(summaryFromHGeo) ??
+        null
     );
 };
-const summaryFromHGeo = (location: HGeoData): string | null =>
-    formatLatLong(location.latitude, location.longitude);
+const summaryFromHGeo = (location: HGeoData | string): string | null => {
+    if (isString(location)) return location;
+    return formatLatLong(location.latitude, location.longitude);
+};
 
 const LinkToMap = (props: HAdrData) => {
     const options = useContext(OptionsContext);

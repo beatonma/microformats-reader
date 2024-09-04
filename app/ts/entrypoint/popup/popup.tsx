@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+    MouseEvent,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { _, compatBrowser } from "ts/compat";
 import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
@@ -11,7 +17,7 @@ import {
     RelmeLinks,
     WebmentionEndpoint,
 } from "ts/ui/microformats/rel";
-import { HCard, HFeed } from "ts/ui/microformats";
+import { HAdr, HCard, HFeed } from "ts/ui/microformats";
 import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import { Loading } from "ts/ui/loading";
@@ -20,9 +26,11 @@ import { AppOptions, OptionsContext, useOptions } from "ts/options";
 import { MicroformatData, parse } from "ts/data/parsing";
 import { onlyIf } from "ts/data/util/object";
 import "./popup.scss";
+import { copyToClipboard } from "ts/ui/actions/clipboard";
+import { Microformat } from "ts/data/microformats";
 
 export const PopupUI = (props: MicroformatData) => {
-    const { relLinks, hcards, feeds } = props;
+    const { relLinks, hcards, feeds, locations } = props;
     const isEmpty = noneOf([relLinks, hcards, feeds]);
     const options = useContext(OptionsContext);
     const sections = options.popupContents;
@@ -33,7 +41,15 @@ export const PopupUI = (props: MicroformatData) => {
 
     return (
         <ScrimLayout>
-            <main>
+            <main
+                onContextMenu={(e: MouseEvent) => {
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        copyToClipboard(JSON.stringify(props, null, 2));
+                    }
+                }}
+            >
                 <section id="quick_links">
                     <QuickLinks data={relLinks} />
                 </section>
@@ -55,6 +71,29 @@ export const PopupUI = (props: MicroformatData) => {
                         <section id="h_feeds">
                             {feeds?.map((feed, index) => (
                                 <HFeed data={feed} key={index} />
+                            ))}
+                        </section>
+                    ),
+                )}
+
+                {onlyIf(
+                    sections.includes(AppOptions.PopupSection["h-adr"]),
+                    () => (
+                        <section id="locations">
+                            {locations.adrs?.map((location, index) => (
+                                <HAdr
+                                    microformat={Microformat.H.Adr}
+                                    location={location}
+                                    key={index}
+                                />
+                            ))}
+
+                            {locations.geos?.map((location, index) => (
+                                <HAdr
+                                    microformat={Microformat.H.Geo}
+                                    location={location}
+                                    key={index}
+                                />
                             ))}
                         </section>
                     ),

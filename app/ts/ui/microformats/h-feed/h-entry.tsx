@@ -13,7 +13,7 @@ import {
     PropertyRow,
 } from "ts/ui/microformats/common/properties";
 import { Icons } from "ts/ui/icon";
-import { LocationSummary } from "ts/ui/microformats/h-card/location";
+import { LocationSummary } from "ts/ui/microformats/h-adr/location";
 import { NullablePropsOf } from "ts/ui/props";
 import { HEntryInteractions } from "ts/data/types/h-entry";
 import { withNotNull } from "ts/data/util/object";

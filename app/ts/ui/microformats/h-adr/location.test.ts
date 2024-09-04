@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { _private } from "ts/ui/microformats/h-card/location";
+import { _private } from "ts/ui/microformats/h-adr/location";
 
 describe("Location UI", () => {
     test("getMapsUrl", () => {

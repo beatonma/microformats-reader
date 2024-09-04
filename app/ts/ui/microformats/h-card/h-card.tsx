@@ -20,7 +20,10 @@ import {
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
 import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
-import { LocationPropertiesTable, LocationSummary } from "./location";
+import {
+    LocationPropertiesTable,
+    LocationSummary,
+} from "ts/ui/microformats/h-adr/location";
 import { Name, NamePropertiesTable } from "./name";
 import { Microformat } from "ts/data/microformats";
 import {
