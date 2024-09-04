@@ -1,5 +1,5 @@
 import React, {
-    HTMLProps,
+    ComponentProps,
     ReactNode,
     useContext,
     useEffect,
@@ -9,9 +9,10 @@ import React, {
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
 import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
-import { Alignment, Row, Space } from "ts/ui/layout";
+import { Alignment, Space } from "ts/ui/layout";
 import { classes } from "ts/ui/util";
 import { OptionsContext } from "ts/options";
+import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     contentDescription: string;
@@ -21,7 +22,9 @@ interface ExpandableCardProps extends ExpandableDefaultProps {
 }
 
 export const ExpandableCard = (
-    props: ExpandableCardProps & HTMLProps<HTMLDivElement>,
+    props: ExpandableCardProps & {
+        bannerLayout?: LinearLayout;
+    } & ComponentProps<"div">,
 ) => {
     const {
         contentDescription,
@@ -30,6 +33,7 @@ export const ExpandableCard = (
         summaryContent,
         detailContent,
         className,
+        bannerLayout = "row",
         ...rest
     } = props;
 
@@ -67,7 +71,8 @@ export const ExpandableCard = (
                 data-collapsing={isCollapsing}
                 aria-expanded={isExpanded}
             >
-                <Row
+                <RowOrColumn
+                    layoutName={bannerLayout}
                     className="banner"
                     vertical={Alignment.Start}
                     space={Space.Large}
@@ -82,7 +87,7 @@ export const ExpandableCard = (
                     >
                         {summaryContent}
                     </div>
-                </Row>
+                </RowOrColumn>
 
                 <DropdownButton
                     className="expandable-card--toggle"
