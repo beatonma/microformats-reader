@@ -436,7 +436,6 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         renderString,
         renderDate,
     } = props;
-    const classParts: (string | null | undefined)[] = [];
     const titleParts: (string | null | undefined)[] = [microformat];
 
     const buildTitle = () => titles(...titleParts, title);
@@ -485,7 +484,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         resolvedOnClick: resolvedOnClick,
         resolvedDisplayValue: resolvedDisplayValue,
         resolvedTitle: buildTitle(),
-        resolvedClassName: classes(Css.PropertyValue, className, ...classParts),
+        resolvedClassName: classes(Css.PropertyValue, microformat, className),
     };
 };
 
