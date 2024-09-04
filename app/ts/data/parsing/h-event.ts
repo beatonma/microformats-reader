@@ -4,9 +4,9 @@ import { Microformat } from "ts/data/microformats";
 import { Parse } from "ts/data/parsing/parse";
 import { DateOrString } from "ts/data/types/common";
 import { formatTimeDelta, isDate } from "ts/ui/formatting/time";
-import { zip } from "ts/data/util/arrays";
 import { parsePLocation } from "ts/data/parsing/location";
 import { parseEmbeddedHCards } from "ts/data/parsing/h-card";
+import { nullable } from "ts/data/util/object";
 
 export const parseHEvents = async (
     microformats: ParsedDocument,
@@ -25,10 +25,10 @@ const parseHEvent = (root: MicroformatRoot): HEventData | null => {
         Parse.getEmbeddedValue(event, Microformat.E.Content);
     const url = Parse.get<string>(event, Microformat.U.Url);
     const category = Parse.get<string>(event, Microformat.P.Category);
-    const dateStart = Parse.getDates(event, Microformat.Dt.Start);
-    const dateEnd = Parse.getDates(event, Microformat.Dt.End);
+    const dateStart = Parse.getDates(event, Microformat.Dt.Start)?.[0] ?? null;
+    const dateEnd = Parse.getDates(event, Microformat.Dt.End)?.[0] ?? null;
     const dateDuration =
-        Parse.get<string>(event, Microformat.Dt.Duration) ??
+        Parse.single<string>(event, Microformat.Dt.Duration) ??
         getDuration(dateStart, dateEnd);
 
     const location = parsePLocation(root);
@@ -46,27 +46,18 @@ const parseHEvent = (root: MicroformatRoot): HEventData | null => {
         dateStart: dateStart,
         dateDuration: dateDuration,
         location: location,
-        organizer: organizer,
-        attendee: attendee,
+        people: nullable({
+            organizer: organizer,
+            attendee: attendee,
+        }),
     };
 };
 
 const getDuration = (
-    start: DateOrString[] | null,
-    end: DateOrString[] | null,
-): string[] | null => {
+    start: DateOrString | null,
+    end: DateOrString | null,
+): string | null => {
     if (!start || !end) return null;
-    if (start.length !== end.length) return null;
-
-    const results: string[] | null =
-        zip(start, end)
-            ?.map(([a, b]) => {
-                if (!isDate(a) || !isDate(b)) return null;
-
-                return formatTimeDelta(a, b);
-            })
-            .nullIfEmpty() ?? null;
-
-    if (results?.length !== start.length) return null;
-    return results ?? null;
+    if (!isDate(start) || !isDate(end)) return null;
+    return formatTimeDelta(start, end);
 };

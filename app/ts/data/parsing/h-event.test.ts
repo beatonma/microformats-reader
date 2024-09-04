@@ -27,10 +27,11 @@ describe("HEvent parsing", () => {
         expect((event.location as HAdrData[])[0].value).toBe("Some bar in SF");
         expect(event.category).toEqual(["General meeting"]);
 
-        assertDatesEqual(event.dateStart as Date[], [
-            new Date(2013, 5, 30, 12),
-        ]);
-        assertDatesEqual(event.dateEnd as Date[], [new Date(2013, 5, 30, 18)]);
-        expect(event.dateDuration).toEqual(["6 hours"]);
+        assertDatesEqual(
+            [event.dateStart as Date],
+            [new Date(2013, 5, 30, 12)],
+        );
+        assertDatesEqual([event.dateEnd as Date], [new Date(2013, 5, 30, 18)]);
+        expect(event.dateDuration).toBe("6 hours");
     });
 });

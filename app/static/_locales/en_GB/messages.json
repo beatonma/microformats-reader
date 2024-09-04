@@ -216,6 +216,24 @@
   "hfeed_dropdown_content_description": {
     "message": "h-feed contents"
   },
+  "hevent_location_detail": {
+    "message": "Location"
+  },
+  "hevent_people": {
+    "message": "People"
+  },
+  "hevent_organizer": {
+    "message": "Organizer"
+  },
+  "hevent_organizers": {
+    "message": "Organizers"
+  },
+  "hevent_attendee": {
+    "message": "Attendee"
+  },
+  "hevent_attendees": {
+    "message": "Attendees"
+  },
   "direction_cardinal_north": {
     "message": "N"
   },

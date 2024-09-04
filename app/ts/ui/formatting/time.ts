@@ -20,7 +20,7 @@ const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 const MILLIS_IN_HOUR = 1000 * 60 * 60;
 const MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
 
-const isSameDay = (then: Date, now: Date): boolean =>
+export const isSameDay = (then: Date, now: Date): boolean =>
     then.getFullYear() === now.getFullYear() &&
     then.getMonth() === now.getMonth() &&
     then.getDate() === now.getDate();

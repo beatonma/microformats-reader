@@ -68,7 +68,7 @@ export namespace Parse {
                     const d = new Date(it);
                     return isNaN(d.valueOf()) ? it : d;
                 })
-                .filter(Boolean) ?? null
+                ?.nullIfEmpty() ?? null
         );
     };
 
@@ -81,7 +81,7 @@ export namespace Parse {
     ): string[] | null =>
         get(container, key)
             ?.map((it: Html) => it["value"])
-            .nullIfEmpty() ?? null;
+            ?.nullIfEmpty() ?? null;
 
     /**
      * Try to read 'key' or 'x-key' values for non-standardised properties.

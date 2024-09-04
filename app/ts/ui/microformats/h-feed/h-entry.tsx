@@ -3,6 +3,7 @@ import { _ } from "ts/compat";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Microformat } from "ts/data/microformats";
 import {
+    CategoryPropertyRow,
     displayValueProperties,
     linkedValueProperties,
     onClickValueProperties,
@@ -19,7 +20,6 @@ import { HEntryInteractions } from "ts/data/types/h-entry";
 import { withNotNull } from "ts/data/util/object";
 import { Tooltip } from "ts/ui/layout/tooltip";
 import React, { ReactNode } from "react";
-import { isEmptyOrNull, joinNotEmpty } from "ts/data/util/arrays";
 import { HCiteData } from "ts/data/types/h-cite";
 import { Author } from "ts/data/types/common";
 import { Image } from "@microformats-parser";
@@ -83,7 +83,7 @@ export const HEntry = (props: HEntryProps) => {
                         microformat={Microformat.P.Location}
                         locations={location}
                     />
-                    <CategoriesRow data={category} />
+                    <CategoryPropertyRow data={category} />
                     <PropertyRow
                         microformat={Microformat.U.Uid}
                         values={onClickValueProperties(uid)}
@@ -148,20 +148,6 @@ const NameSummaryContentLink = (props: {
         <PropertyRow
             microformat={Microformat.U.Url}
             values={onClickValueProperties(url)}
-        />
-    );
-};
-
-const CategoriesRow = (props: NullablePropsOf<string[]>) => {
-    const { data: categories } = props;
-
-    if (isEmptyOrNull(categories)) return null;
-
-    return (
-        <PropertyRow
-            microformat={Microformat.P.Category}
-            icon={Icons.Tag}
-            values={{ displayValue: joinNotEmpty(", ", categories) }}
         />
     );
 };

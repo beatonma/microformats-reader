@@ -1,0 +1,22 @@
+@use "styles";
+
+.h-event {
+    .event--meta {
+        font-size: var(--fs-caption);
+
+        .event--dates-start + .event--dates-end::before {
+            content: " › ";
+            margin-inline: var(--space-char);
+        }
+
+        .event--dates-end + .event--dates-duration {
+            &::before {
+                content: "(";
+                margin-left: var(--space-char);
+            }
+            &::after {
+                content: ")";
+            }
+        }
+    }
+}

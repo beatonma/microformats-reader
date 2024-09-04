@@ -2,14 +2,6 @@
 @use "./hcard-avatar";
 
 .h-card {
-    .dropdown-header {
-        font-size: var(--fs-caption);
-    }
-
-    .detail-section--no-dropdown {
-        margin-block: var(--space);
-    }
-
     .property-value.p-note {
         @extend %text-block;
 

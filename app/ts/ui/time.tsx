@@ -1,6 +1,5 @@
 import React, { ComponentProps } from "react";
 import {
-    formatDate,
     formatDateTime,
     formatShortDateTime,
     isDate,
@@ -10,16 +9,14 @@ import { DateOrString } from "ts/data/types/common";
 
 export interface DateTimeProps {
     datetime: DateOrString | null;
-    showTime?: boolean;
+    formatter?: (dt: DateOrString | null | undefined) => string | null;
 }
 export const DateTime = (props: DateTimeProps & ComponentProps<"time">) => {
-    const { datetime, title, showTime = false } = props;
+    const { datetime, title, formatter = formatShortDateTime } = props;
 
     if (!datetime) return null;
 
-    const displayValue = (showTime ? formatShortDateTime : formatDate)(
-        datetime,
-    );
+    const displayValue = formatter(datetime);
     const metaValue = isDate(datetime)
         ? datetime.toISOString()
         : formatDateTime(datetime);

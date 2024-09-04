@@ -8,12 +8,14 @@ export interface HEventData extends HData {
     name: string[] | null;
     summary: string[] | null;
     description: string[] | null;
-    dateStart: DateOrString[] | null;
-    dateEnd: DateOrString[] | null;
-    dateDuration: string[] | null;
+    dateStart: DateOrString | null;
+    dateEnd: DateOrString | null;
+    dateDuration: string | null;
     url: string[] | null;
     category: string[] | null;
     location: LocationData[] | null;
-    organizer: EmbeddedHCard[] | null;
-    attendee: EmbeddedHCard[] | null;
+    people: {
+        organizer: EmbeddedHCard[] | null;
+        attendee: EmbeddedHCard[] | null;
+    } | null;
 }

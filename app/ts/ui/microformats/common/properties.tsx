@@ -53,7 +53,10 @@ interface PropertyValue {
     displayValue?: DisplayValue | null | undefined;
     onClick?: HRefOrOnClick | null | undefined;
 }
-type ValueRenderer<T extends DisplayValue> = (value: T) => ReactElement;
+type ValueRenderer<T extends DisplayValue> = (
+    value: T,
+    title: string | undefined,
+) => ReactElement;
 interface PropertyValueProps {
     title: string | null | undefined;
     values: PropertyValue[] | null;
@@ -436,6 +439,8 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     const classParts: (string | null | undefined)[] = [];
     const titleParts: (string | null | undefined)[] = [microformat];
 
+    const buildTitle = () => titles(...titleParts, title);
+
     const resolvedOnClick = typeof onClick === "function" ? onClick : undefined;
 
     const resolvedHref = (() => {
@@ -453,8 +458,8 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         let resolved;
 
         if (isDate(displayValue)) {
-            resolved = renderDate?.(displayValue) ?? (
-                <DateTime datetime={displayValue} />
+            resolved = renderDate?.(displayValue, buildTitle()) ?? (
+                <DateTime datetime={displayValue} title={buildTitle()} />
             );
             titleParts.push(formatDateTime(displayValue));
         } else if (isString(displayValue) && isUri(displayValue)) {
@@ -465,7 +470,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         }
 
         if (isString(resolved)) {
-            resolved = renderString?.(resolved) ?? resolved;
+            resolved = renderString?.(resolved, buildTitle()) ?? resolved;
         }
 
         if (!resolved) {
@@ -479,7 +484,7 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
         resolvedHref: resolvedHref,
         resolvedOnClick: resolvedOnClick,
         resolvedDisplayValue: resolvedDisplayValue,
-        resolvedTitle: titles(...titleParts, title),
+        resolvedTitle: buildTitle(),
         resolvedClassName: classes(Css.PropertyValue, className, ...classParts),
     };
 };

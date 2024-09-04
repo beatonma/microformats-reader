@@ -28,9 +28,10 @@ import { onlyIf } from "ts/data/util/object";
 import "./popup.scss";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Microformat } from "ts/data/microformats";
+import HEvent from "ts/ui/microformats/h-event";
 
 export const PopupUI = (props: MicroformatData) => {
-    const { relLinks, hcards, feeds, locations } = props;
+    const { relLinks, hcards, feeds, locations, events } = props;
     const isEmpty = noneOf([relLinks, hcards, feeds]);
     const options = useContext(OptionsContext);
     const sections = options.popupContents;
@@ -71,6 +72,17 @@ export const PopupUI = (props: MicroformatData) => {
                         <section id="h_feeds">
                             {feeds?.map((feed, index) => (
                                 <HFeed data={feed} key={index} />
+                            ))}
+                        </section>
+                    ),
+                )}
+
+                {onlyIf(
+                    sections.includes(AppOptions.PopupSection["h-event"]),
+                    () => (
+                        <section id="h_events">
+                            {events?.map((event, index) => (
+                                <HEvent data={event} key={index} />
                             ))}
                         </section>
                     ),

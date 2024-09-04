@@ -12,3 +12,4 @@ export {
 export { EmbeddedHCardProperty } from "./embedded-hcard";
 export { LocationProperty, LocationPropertiesTable } from "./location";
 export { DetailSection } from "./section";
+export { CategoryPropertyRow } from "./categories";
