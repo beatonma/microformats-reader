@@ -63,6 +63,7 @@ describe("Location parsing", () => {
             ),
         ).toEqual([
             {
+                type: "h-adr",
                 streetAddress: ["17 Austerstræti"],
                 locality: ["Reykjavík"],
                 countryName: ["Iceland"],

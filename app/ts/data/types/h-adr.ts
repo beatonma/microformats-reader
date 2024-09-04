@@ -1,7 +1,10 @@
 import { HGeoData } from "ts/data/types/h-geo";
 import { EmbeddedHCard } from "ts/data/types/h-card";
+import { HData } from "ts/data/types/common";
+import { Microformat } from "ts/data/microformats";
 
-export interface HAdrData {
+export interface HAdrData extends HData {
+    type: Microformat.H.Adr;
     locality: string[] | null;
     region: string[] | null;
     countryName: string[] | null;

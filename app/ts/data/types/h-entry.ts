@@ -1,14 +1,16 @@
 import { HCiteData } from "ts/data/types/h-cite";
-import { Author, DateOrString } from "ts/data/types/common";
+import { Author, DateOrString, HData } from "ts/data/types/common";
 import { LocationData } from "ts/data/types/h-adr";
 import { Image } from "@microformats-parser";
+import { Microformat } from "ts/data/microformats";
 
 /**
  * https://microformats.org/wiki/h-entry
  *
  * Lots of proposed and experimental properties which we'll hopefully deal with later.
  */
-export interface HEntryData {
+export interface HEntryData extends HData {
+    type: Microformat.H.Entry;
     name: string[] | null;
     author: Author[] | null;
     summary: string[] | null;

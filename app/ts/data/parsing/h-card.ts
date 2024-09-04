@@ -53,6 +53,7 @@ const parseHCard = (hcard: MicroformatRoot): HCardData | null => {
 
     return nullable(
         {
+            type: Microformat.H.Card,
             id: generateId(),
             name: name,
             notes: notes,
@@ -65,7 +66,7 @@ const parseHCard = (hcard: MicroformatRoot): HCardData | null => {
             images: images,
             extras: extras,
         },
-        { ignoredKeys: ["id"] },
+        { ignoredKeys: ["id", "type"] },
     );
 };
 

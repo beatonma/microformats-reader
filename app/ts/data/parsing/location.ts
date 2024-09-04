@@ -33,6 +33,7 @@ export const parseLocation = (
 
     if (isString(obj)) {
         return {
+            type: Microformat.H.Adr,
             value: obj,
             locality: null,
             region: null,
@@ -49,6 +50,7 @@ export const parseLocation = (
     const properties = obj.properties;
 
     return nullable({
+        type: Microformat.H.Adr,
         locality: Parse.get<string>(properties, Microformat.P.Locality),
         region: Parse.get<string>(properties, Microformat.P.Region),
         countryName: Parse.get<string>(properties, Microformat.P.CountryName),
@@ -80,6 +82,7 @@ const parseGeo = (
 ): (HGeoData | string)[] | null => {
     const _parse = (value: MicroformatProperties): HGeoData | null =>
         nullable({
+            type: Microformat.H.Geo,
             latitude: Parse.single(value, Microformat.P.Latitude),
             longitude: Parse.single(value, Microformat.P.Longitude),
             altitude: Parse.single(value, Microformat.P.Altitude),

@@ -36,6 +36,7 @@ const parseHEvent = (root: MicroformatRoot): HEventData | null => {
     const attendee = parseEmbeddedHCards(event, Microformat.X.Event.Attendee);
 
     return {
+        type: Microformat.H.Event,
         name: name,
         url: url,
         summary: summary,

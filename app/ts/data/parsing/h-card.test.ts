@@ -108,6 +108,7 @@ describe("HCard parsing", () => {
             expect(location.countryName).toEqual(["U.S.A"]);
             expect(location.geo).toEqual([
                 {
+                    type: "h-geo",
                     latitude: "34.06648088793238",
                     longitude: "-118.22042689866892",
                     altitude: null,
@@ -160,6 +161,7 @@ describe("HCard parsing", () => {
                     latitude: "34.06648088793238",
                     longitude: "-118.22042689866892",
                     altitude: null,
+                    type: "h-geo",
                 },
             ]);
         });

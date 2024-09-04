@@ -3,6 +3,7 @@ import { HCardData } from "./h-card";
 import { HEntryData } from "./h-entry";
 import { HFeedData } from "./h-feed";
 import { HGeoData } from "./h-geo";
+import { Microformat } from "ts/data/microformats";
 
 export type { HCardData } from "./h-card";
 export type { HFeedData } from "./h-feed";
@@ -18,16 +19,16 @@ export const isUri = (obj: string | null | undefined): obj is string =>
     obj?.match(/^(tel|mailto):(?!\/\/)\S+$/) != null;
 
 export const isHCardData = (obj: any | null | undefined): obj is HCardData =>
-    obj?.hasOwnProperty("nameDetail");
+    obj?.type === Microformat.H.Card;
 
 export const isHFeedData = (obj: any | null | undefined): obj is HFeedData =>
-    obj?.hasOwnProperty("entries");
+    obj?.type === Microformat.H.Feed;
 
 export const isHEntryData = (obj: any | null | undefined): obj is HEntryData =>
-    obj?.hasOwnProperty("content");
+    obj?.type === Microformat.H.Entry;
 
 export const isHAdrData = (obj: any | null | undefined): obj is HAdrData =>
-    obj?.hasOwnProperty("locality");
+    obj?.type === Microformat.H.Adr;
 
 export const isHGeoData = (obj: any | null | undefined): obj is HGeoData =>
-    obj?.hasOwnProperty("latitude");
+    obj?.type === Microformat.H.Geo;

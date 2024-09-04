@@ -20,7 +20,11 @@ export const nullable = <T extends Record<string, any | null>>(
         requireAnyKey?: (keyof T)[];
     },
 ): T | null => {
-    const { ignoredKeys, requiredKeys, requireAnyKey } = options ?? {};
+    const {
+        ignoredKeys = ["type"],
+        requiredKeys,
+        requireAnyKey,
+    } = options ?? {};
 
     if (obj == null) return null;
 

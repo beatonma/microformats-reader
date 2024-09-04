@@ -32,6 +32,7 @@ export const parseHEntry = (entry: MicroformatRoot): HEntryData | null => {
 
     return nullable(
         {
+            type: Microformat.H.Entry,
             name: name,
             summary: summary,
             url: url,

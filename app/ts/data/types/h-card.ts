@@ -1,8 +1,10 @@
 import { HAdrData } from "ts/data/types/h-adr";
 import { Image } from "@microformats-parser";
-import { DateOrString } from "ts/data/types/common";
+import { DateOrString, HData } from "ts/data/types/common";
+import { Microformat } from "ts/data/microformats";
 
-export interface HCardData {
+export interface HCardData extends HData {
+    type: Microformat.H.Card;
     id: string;
     name: string[] | null;
     notes: string[] | null;

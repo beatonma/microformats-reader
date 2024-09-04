@@ -36,6 +36,7 @@ const parseHFeed = (hfeed: MicroformatRoot): HFeedData | null => {
     const about = parseAbout(hfeed.properties);
 
     return {
+        type: Microformat.H.Feed,
         about: about,
         entries: entries,
     };
@@ -45,6 +46,7 @@ const wrapWithHFeed = (entries: MicroformatRoot[]): HFeedData | null => {
     if (entries.length === 0) return null;
 
     return {
+        type: Microformat.H.Feed,
         about: null,
         entries: entries.map(parseHEntry).nullIfEmpty(),
     };
