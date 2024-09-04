@@ -20,6 +20,7 @@ import { nullable } from "ts/data/util/object";
 import { asArray, zipOrNull } from "ts/data/util/arrays";
 import { DateTime } from "ts/ui/time";
 import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
+import { IconWithText } from "ts/ui/icon/icons";
 
 enum Css {
     Property = "property",
@@ -49,6 +50,7 @@ type DisplayValue = DateOrString;
 type HRef = string;
 type HRefOrOnClick = (() => void) | HRef;
 interface PropertyValue {
+    icon?: Icons | undefined;
     title?: string | null | undefined;
     displayValue?: DisplayValue | null | undefined;
     onClick?: HRefOrOnClick | null | undefined;
@@ -357,6 +359,7 @@ const PropertyValue = (props: PropertyValueProps) => {
             {values?.map((value, index) => (
                 <SinglePropertyValue
                     key={index}
+                    icon={value.icon}
                     title={titles(title, value.title)}
                     displayValue={value.displayValue}
                     microformat={microformat}
@@ -371,6 +374,7 @@ const PropertyValue = (props: PropertyValueProps) => {
 };
 
 interface SingleValuePropertyProps {
+    icon: Icons | undefined;
     title: string | null | undefined;
     displayValue: DisplayValue | null | undefined;
     onClick: HRefOrOnClick | null | undefined;
@@ -427,6 +431,7 @@ interface ResolvedProperties {
 
 const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     const {
+        icon,
         displayValue,
         onClick,
         microformat,
@@ -474,6 +479,10 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
 
         if (!resolved) {
             resolved = "__UNRESOLVED_DISPLAY_VALUE__";
+        }
+
+        if (icon) {
+            resolved = <IconWithText icon={icon} text={resolved} />;
         }
 
         return resolved;

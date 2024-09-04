@@ -1,23 +1,23 @@
 @use "./animation";
-%hover {
+
+@mixin hover($-color: var(--hover)) {
     transition:
         background-color animation.$duration-short,
         borderr-radius animation.$duration-short;
 
     &:hover {
-        background-color: var(--hover);
+        background-color: $-color;
     }
+}
+
+%hover {
+    @include hover;
 }
 
 %hover-children {
     background: none;
-    > * {
-        transition:
-            background-color animation.$duration-short,
-            borderr-radius animation.$duration-short;
-    }
 
-    &:hover > * {
-        background-color: var(--hover);
+    > * {
+        @include hover;
     }
 }

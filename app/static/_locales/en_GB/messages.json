@@ -153,6 +153,9 @@
   "hcard_link_to_org_hcard": {
     "message": "View organisation h-card"
   },
+  "hcard_view_embedded_hcard": {
+    "message": "Click to view h-card"
+  },
   "hcard_extras_detail": {
     "message": "Other stuff"
   },

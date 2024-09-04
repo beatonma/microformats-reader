@@ -29,6 +29,7 @@ import {
     isSameDay,
 } from "ts/ui/formatting/time";
 import { Error } from "ts/ui/error";
+import { Icons } from "ts/ui/icon";
 
 interface HEventProps extends NullablePropsOf<HEventData> {}
 export const HEvent = (props: HEventProps) => {
@@ -110,6 +111,7 @@ const Detail = (props: HEventData) => {
                 render={({ organizer, attendee }) => (
                     <>
                         <EmbeddedHCardProperty
+                            icon={Icons.Person}
                             microformat={Microformat.X.Event.Organizer}
                             property={{
                                 displayName: _pluralize(
@@ -120,6 +122,7 @@ const Detail = (props: HEventData) => {
                             embeddedHCards={organizer}
                         />
                         <EmbeddedHCardProperty
+                            icon={Icons.Person}
                             microformat={Microformat.X.Event.Attendee}
                             property={{
                                 displayName: _pluralize(

@@ -1,0 +1,11 @@
+@use "./hover";
+
+@mixin chip {
+    background-color: var(--muted);
+    color: var(--on-muted);
+    font-size: smaller;
+    border-radius: var(--border-radius-small);
+    padding: 0.15em 0.75ch;
+
+    @include hover.hover(var(--muted-hover));
+}

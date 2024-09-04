@@ -8,6 +8,7 @@
 
 @mixin buttonStyle {
     @extend %hover;
+    font-size: inherit;
     cursor: pointer;
     background: none;
     border: none;

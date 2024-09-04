@@ -1,4 +1,5 @@
 @use "styles/borders";
+@use "styles/chip";
 @use "styles/element";
 @use "styles/size";
 @use "styles/typography";
@@ -47,15 +48,13 @@
         @include size.fixedSize(1em);
     }
 
-    .property-value {
-        display: block;
-        width: fit-content;
-    }
-
     button.property-value {
         @include element.buttonStyle;
         font-size: inherit;
-        color: var(--text-primary);
-        @include borders.border-clickable;
+        @include chip.chip;
+
+        .icon {
+            cursor: inherit;
+        }
     }
 }
