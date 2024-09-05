@@ -25,7 +25,7 @@ export namespace AppOptions {
         "h-feed" = "h-feed",
         "h-event" = "h-event",
         "h-adr" = "h-adr",
-        "relme" = "relme",
+        "rel=me" = "rel=me",
     }
 
     export const MapProvider = {
@@ -73,21 +73,21 @@ export interface AppOptions {
      */
     groupByType: boolean;
 
-    popupContents: AppOptions.PopupSection[];
+    popupContents: Record<keyof typeof AppOptions.PopupSection, boolean>;
 
     mapsProvider: MapsProvider;
 }
 
-const defaultOptions = (): AppOptions => ({
+export const defaultOptions = (): AppOptions => ({
     dropdownExpandByDefault: true,
     groupByType: true,
-    popupContents: [
-        AppOptions.PopupSection["h-card"],
-        AppOptions.PopupSection["h-feed"],
-        AppOptions.PopupSection["h-event"],
-        AppOptions.PopupSection["h-adr"],
-        AppOptions.PopupSection.relme,
-    ],
+    popupContents: {
+        "h-card": true,
+        "h-feed": true,
+        "h-event": true,
+        "h-adr": true,
+        "rel=me": true,
+    },
     mapsProvider: AppOptions.MapProvider.OpenStreetMap,
 });
 

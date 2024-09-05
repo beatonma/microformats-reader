@@ -1,13 +1,14 @@
 import React, { useId } from "react";
 import { _ } from "ts/compat";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
-import { AppConfig, AppOptions, useOptions } from "ts/options";
+import { AppConfig, AppOptions, defaultOptions, useOptions } from "ts/options";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
 import { Loading } from "ts/ui/loading";
 import "./options.scss";
 
 const Options = () => {
     const [options, setOptions] = useOptions();
+    const defaults = defaultOptions();
 
     if (!options) return <Loading />;
 
@@ -25,24 +26,17 @@ const Options = () => {
                             })
                         }
                     />
-                    <Checkbox
-                        label={_("options_group_by_type")}
-                        checked={options.groupByType}
-                        onChange={checked =>
-                            setOptions({ ...options, groupByType: checked })
-                        }
-                    />
 
                     <MultipleChoice
                         title={_("options_popup_sections")}
-                        values={Object.keys(AppOptions.PopupSection).map(
-                            it => ({ uiName: it, apiName: it }),
-                        )}
-                        selected={options.popupContents}
+                        values={{
+                            ...defaults.popupContents,
+                            ...options.popupContents,
+                        }}
                         setSelected={it =>
                             setOptions({
                                 ...options,
-                                popupContents: it as AppOptions.PopupSection[],
+                                popupContents: it,
                             })
                         }
                     />
@@ -88,13 +82,16 @@ const Version = () => {
     );
 };
 
+interface InputProps {
+    label: string;
+    title?: string;
+}
 interface BooleanInputValue {
     uiName: string;
     apiName: string;
 }
-interface BooleanInputProps {
+interface BooleanInputProps extends InputProps {
     group?: string;
-    label: string;
     checked: boolean;
     onChange: (value: boolean) => void;
 }
@@ -104,9 +101,9 @@ const BooleanInput = (
     } & BooleanInputProps,
 ) => {
     const id = useId();
-    const { type, group, label, checked, onChange } = props;
+    const { type, group, label, title, checked, onChange } = props;
     return (
-        <Row space={Space.Small} vertical={Alignment.Baseline}>
+        <Row space={Space.Small} vertical={Alignment.Baseline} title={title}>
             <input
                 name={group}
                 id={id}
@@ -128,31 +125,25 @@ const RadioButton = (props: BooleanInputProps) => (
 
 const MultipleChoice = (props: {
     title: string;
-    values: BooleanInputValue[];
-    selected: string[];
-    setSelected: (selection: string[]) => void;
+    values: Record<string, boolean>;
+    setSelected: (selection: Record<string, boolean>) => void;
 }) => {
-    const { title, values, selected, setSelected } = props;
+    const { title, values, setSelected } = props;
     const groupName = useId();
+
     return (
         <fieldset>
             <legend>{title}</legend>
             <Column>
-                {values.map(value => (
+                {Object.entries(values).map(([key, value]) => (
                     <Checkbox
                         group={groupName}
-                        key={value.apiName}
-                        label={value.uiName}
-                        checked={selected.includes(value.apiName)}
-                        onChange={checked =>
-                            setSelected(
-                                checked
-                                    ? [...selected, value.apiName]
-                                    : selected.filter(
-                                          it => it !== value.apiName,
-                                      ),
-                            )
-                        }
+                        key={key}
+                        label={key}
+                        checked={value}
+                        onChange={checked => {
+                            setSelected({ ...values, [key]: checked });
+                        }}
                     />
                 ))}
             </Column>

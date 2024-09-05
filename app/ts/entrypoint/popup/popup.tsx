@@ -22,13 +22,13 @@ import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
-import { AppOptions, OptionsContext, useOptions } from "ts/options";
+import { OptionsContext, useOptions } from "ts/options";
 import { MicroformatData, parse } from "ts/data/parsing";
-import { onlyIf } from "ts/data/util/object";
 import "./popup.scss";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Microformat } from "ts/data/microformats";
 import HEvent from "ts/ui/microformats/h-event";
+import { ConditionalContent } from "ts/ui/layout/conditional";
 
 export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds, locations, events } = props;
@@ -55,70 +55,55 @@ export const PopupUI = (props: MicroformatData) => {
                     <QuickLinks data={relLinks} />
                 </section>
 
-                {onlyIf(
-                    sections.includes(AppOptions.PopupSection["h-card"]),
-                    () => (
-                        <section id="h_cards">
-                            {hcards?.map(hcard => (
-                                <HCard {...hcard} key={hcard.id} />
-                            ))}
-                        </section>
-                    ),
-                )}
+                <ConditionalContent condition={sections["h-card"]}>
+                    <section id="h_cards">
+                        {hcards?.map(hcard => (
+                            <HCard {...hcard} key={hcard.id} />
+                        ))}
+                    </section>
+                </ConditionalContent>
 
-                {onlyIf(
-                    sections.includes(AppOptions.PopupSection["h-feed"]),
-                    () => (
-                        <section id="h_feeds">
-                            {feeds?.map((feed, index) => (
-                                <HFeed data={feed} key={index} />
-                            ))}
-                        </section>
-                    ),
-                )}
+                <ConditionalContent condition={sections["h-feed"]}>
+                    <section id="h_feeds">
+                        {feeds?.map((feed, index) => (
+                            <HFeed data={feed} key={index} />
+                        ))}
+                    </section>
+                </ConditionalContent>
 
-                {onlyIf(
-                    sections.includes(AppOptions.PopupSection["h-event"]),
-                    () => (
-                        <section id="h_events">
-                            {events?.map((event, index) => (
-                                <HEvent data={event} key={index} />
-                            ))}
-                        </section>
-                    ),
-                )}
+                <ConditionalContent condition={sections["h-event"]}>
+                    <section id="h_events">
+                        {events?.map((event, index) => (
+                            <HEvent data={event} key={index} />
+                        ))}
+                    </section>
+                </ConditionalContent>
 
-                {onlyIf(
-                    sections.includes(AppOptions.PopupSection["h-adr"]),
-                    () => (
-                        <section id="locations">
-                            {locations.adrs?.map((location, index) => (
-                                <HAdr
-                                    microformat={Microformat.H.Adr}
-                                    location={location}
-                                    key={index}
-                                />
-                            ))}
+                <ConditionalContent condition={sections["h-adr"]}>
+                    <section id="locations">
+                        {locations.adrs?.map((location, index) => (
+                            <HAdr
+                                microformat={Microformat.H.Adr}
+                                location={location}
+                                key={index}
+                            />
+                        ))}
 
-                            {locations.geos?.map((location, index) => (
-                                <HAdr
-                                    microformat={Microformat.H.Geo}
-                                    location={location}
-                                    key={index}
-                                />
-                            ))}
-                        </section>
-                    ),
-                )}
+                        {locations.geos?.map((location, index) => (
+                            <HAdr
+                                microformat={Microformat.H.Geo}
+                                location={location}
+                                key={index}
+                            />
+                        ))}
+                    </section>
+                </ConditionalContent>
 
-                {onlyIf(
-                    sections.includes(AppOptions.PopupSection["relme"]),
-                    () => (
-                        <section id="rel_me">
-                            <RelmeLinks links={relLinks?.relme} />
-                        </section>
-                    ),
-                )}
+                <ConditionalContent condition={sections["rel=me"]}>
+                    <section id="rel_me">
+                        <RelmeLinks links={relLinks?.relme} />
+                    </section>
+                </ConditionalContent>
             </main>
         </ScrimLayout>
     );

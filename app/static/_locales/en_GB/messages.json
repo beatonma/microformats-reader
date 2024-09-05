@@ -378,9 +378,6 @@
   "options_dropdown_expanded_by_default": {
     "message": "Expand dropdowns by default"
   },
-  "options_group_by_type": {
-    "message": "Group h-card content by type"
-  },
 
   "options_maps_provider": {
     "message": "Open maps with:"
