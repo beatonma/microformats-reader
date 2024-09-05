@@ -17,7 +17,11 @@
 %hover-children {
     background: none;
 
-    > * {
-        @include hover;
+    transition:
+        background-color animation.$duration-short,
+        borderr-radius animation.$duration-short;
+
+    &:hover > * {
+        background-color: var(--hover);
     }
 }

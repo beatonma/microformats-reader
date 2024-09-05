@@ -8,17 +8,14 @@
 .expandable-card {
     button.expandable-card--toggle {
         display: block;
-        width: stretch;
         font-size: var(--fs-large);
-        background: none;
+        float: right;
+        border-radius: var(--border-radius-small);
+        position: relative;
+        z-index: var(--elevation-clickable);
 
-        .dropdown-button--content {
-            @extend %hover-children;
-
-            .dropdown-icon {
-                border-radius: var(--border-radius-small);
-                padding: var(--space);
-            }
+        .dropdown-icon {
+            padding: var(--space);
         }
     }
 
@@ -39,10 +36,6 @@
 
         &[data-closing="true"] {
             animation-name: collapseDetail;
-        }
-
-        .property:has(.p-name) {
-            justify-content: center;
         }
     }
 
@@ -67,7 +60,6 @@
     }
     100% {
         @include animation.transparent;
-        @include animation.zero-width;
         @include animation.zero-height;
     }
 }
@@ -75,7 +67,6 @@
 @keyframes expandSummary {
     0% {
         @include animation.transparent;
-        @include animation.zero-width;
         @include animation.zero-height;
     }
     60% {

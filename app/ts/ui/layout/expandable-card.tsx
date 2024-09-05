@@ -4,6 +4,7 @@ import React, {
     useContext,
     useEffect,
     useId,
+    useRef,
     useState,
 } from "react";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
@@ -52,8 +53,8 @@ export const ExpandableCard = (
     const [isExpanding, setIsExpanding] = useState(false);
 
     const cardContentID = useId();
-    const summaryID = useId();
-    const detailID = useId();
+    const summaryRef = useRef<HTMLDivElement>(null);
+    const detailRef = useRef<HTMLDivElement>(null);
 
     const toggleState = () => {
         const target = !isExpanded;
@@ -62,13 +63,13 @@ export const ExpandableCard = (
         setIsCollapsing(!target);
     };
 
-    const endAnimation = () => {
+    const onEndAnimation = () => {
         setIsExpanding(false);
         setIsCollapsing(false);
     };
 
-    addAnimationEndListener(summaryID, isExpanding, endAnimation);
-    addAnimationEndListener(detailID, isCollapsing, endAnimation);
+    addAnimationEndListener(summaryRef.current, isExpanding, onEndAnimation);
+    addAnimationEndListener(detailRef.current, isExpanding, onEndAnimation);
 
     return (
         <>
@@ -84,16 +85,28 @@ export const ExpandableCard = (
                     data-collapsing={isCollapsing}
                     aria-expanded={isExpanded}
                 >
+                    <ConditionalContent condition={expandable}>
+                        <DropdownButton
+                            className="expandable-card--toggle"
+                            isExpanded={isExpanded}
+                            onClick={toggleState}
+                            dropdownButtonTitle={contentDescription}
+                            aria-controls={cardContentID}
+                        />
+                    </ConditionalContent>
+
                     <RowOrColumn
                         layoutName={bannerLayout}
                         className="banner"
                         vertical={Alignment.Start}
-                        space={Space.Large}
+                        space={
+                            bannerLayout === "row" ? Space.Large : Space.None
+                        }
                     >
                         {sharedContent}
 
                         <div
-                            id={summaryID}
+                            ref={summaryRef}
                             className="summary"
                             data-visible={!isExpanded}
                             data-closing={isExpanding}
@@ -103,16 +116,8 @@ export const ExpandableCard = (
                     </RowOrColumn>
 
                     <ConditionalContent condition={expandable}>
-                        <DropdownButton
-                            className="expandable-card--toggle"
-                            isExpanded={isExpanded}
-                            onClick={toggleState}
-                            dropdownButtonTitle={contentDescription}
-                            aria-controls={cardContentID}
-                        />
-
                         <div
-                            id={detailID}
+                            ref={detailRef}
                             className="detail"
                             data-visible={isExpanded}
                             data-closing={isCollapsing}
@@ -127,21 +132,16 @@ export const ExpandableCard = (
 };
 
 const addAnimationEndListener = (
-    id: string,
-    isCollapsing: boolean,
-    reset: () => void,
+    element: HTMLElement | null,
+    flag: boolean,
+    onAnimationEnd: () => void,
 ) => {
     useEffect(() => {
-        if (isCollapsing) {
-            document.getElementById(id)?.addEventListener(
-                "animationend",
-                () => {
-                    reset();
-                },
-                {
-                    once: true,
-                },
-            );
-        }
-    }, [isCollapsing]);
+        element?.addEventListener("animationend", onAnimationEnd, {
+            once: true,
+        });
+
+        return () =>
+            element?.removeEventListener("animationend", onAnimationEnd);
+    }, [element, flag]);
 };

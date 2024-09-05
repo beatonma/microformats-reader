@@ -213,12 +213,14 @@ const LinkToMap = (props: HAdrData) => {
     if (!url) return null;
 
     return (
-        <LinkTo href={url} className="maps">
-            <IconWithText
-                icon={Icons.Map}
-                text={`Open in ${mapsProvider.uiName}`}
-            />
-        </LinkTo>
+        <span>
+            <LinkTo href={url} className="maps">
+                <IconWithText
+                    icon={Icons.Map}
+                    text={`Open in ${mapsProvider.uiName}`}
+                />
+            </LinkTo>
+        </span>
     );
 };
 
