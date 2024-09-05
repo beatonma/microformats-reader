@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { anyOf, noneOf, partition, zip } from "ts/data/util/arrays";
+import { allOf, anyOf, noneOf, partition, zip } from "ts/data/util/arrays";
+import "ts/test";
 
 describe("Array functions", () => {
     describe("noneOf", () => {
@@ -30,6 +31,13 @@ describe("Array functions", () => {
                 anyOf([null, null, null, null, undefined, null, [0]]),
             ).toBeTruthy();
         });
+    });
+
+    describe("allOf", () => {
+        expect(allOf([])).toBeFalsy();
+        expect(allOf([null, undefined, []])).toBeFalsy();
+        expect(allOf([1, 2, 3])).toBeTruthy();
+        expect(allOf([1, null, 3])).toBeFalsy();
     });
 
     describe("zip", () => {

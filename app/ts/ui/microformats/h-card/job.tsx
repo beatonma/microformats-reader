@@ -27,7 +27,7 @@ export const JobSummary = (props: NullablePropsOf<HCardJobData>) => {
                 values={displayValueProperties(jobTitle)}
             />
 
-            <ConditionalContent condition={() => jobTitle == null}>
+            <ConditionalContent condition={jobTitle == null}>
                 <PropertyRow
                     microformat={Microformat.P.Role}
                     icon={Icons.Work}
@@ -36,7 +36,7 @@ export const JobSummary = (props: NullablePropsOf<HCardJobData>) => {
             </ConditionalContent>
 
             <ConditionalContent
-                condition={() => anyOf([jobTitle, role]) && !!organisation}
+                condition={anyOf([jobTitle, role]) && !!organisation}
             >
                 <span>@</span>
             </ConditionalContent>

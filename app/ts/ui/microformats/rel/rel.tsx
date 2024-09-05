@@ -1,7 +1,6 @@
 import React, { HTMLProps } from "react";
 import { _ } from "ts/compat";
 import { FeedLinks, RelLink } from "ts/data/types/rel";
-import { isEmptyOrNull } from "ts/data/util/arrays";
 import { Icon, Icons } from "ts/ui/icon";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
@@ -13,7 +12,7 @@ interface RelLinkProps {
 export const RelmeLinks = (props: RelLinkProps) => {
     const { links } = props;
 
-    if (isEmptyOrNull(links)) return null;
+    if (links == null) return null;
     const title = 'rel="me"';
 
     return (

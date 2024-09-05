@@ -32,6 +32,7 @@ import {
     PropertyColumn,
 } from "ts/ui/microformats/common";
 import { OptionsContext } from "ts/options";
+import { allOf, anyOf } from "ts/data/util/arrays";
 
 export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     const { defaultIsExpanded, images } = props;
@@ -39,6 +40,7 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
     return (
         <ExpandableCard
             microformat={Microformat.H.Card}
+            expandable={shouldShowDetail(props)}
             defaultIsExpanded={defaultIsExpanded}
             sharedContent={
                 <Avatar name={props.name?.[0] ?? "?"} images={images} />
@@ -47,6 +49,20 @@ export const HCard = (props: HCardData & ExpandableDefaultProps) => {
             detailContent={<HCardTextDetail {...props} />}
         />
     );
+};
+
+const shouldShowDetail = (data: HCardData): boolean => {
+    const { contact, location, job, nameDetail, gender, extras, dates } = data;
+
+    return anyOf([
+        contact,
+        location,
+        allOf([job?.jobTitle, job?.role]) ? true : null,
+        nameDetail,
+        gender,
+        extras,
+        dates,
+    ]);
 };
 
 export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
@@ -79,21 +95,9 @@ export const EmbeddedHCardDialog = (props: EmbeddedHCardData & DialogProps) => {
 };
 
 const HCardTextSummary = (props: HCardData) => {
-    const {
-        name,
-        notes,
-        nameDetail,
-        gender,
-        contact,
-        location,
-        images,
-        job,
-        dates,
-        extras,
-        ...rest
-    } = props;
+    const { name, notes, gender, contact, location, job } = props;
     return (
-        <div className="hcard-summary" {...rest}>
+        <div className="hcard-summary">
             <Name name={name} />
 
             <Row wrap space={Space.Small}>
@@ -125,13 +129,12 @@ const HCardTextDetail = (props: HCardData) => {
         job,
         dates,
         extras,
-        ...rest
     } = props;
 
     const options = useContext(OptionsContext);
 
     return (
-        <div className="hcard-detail" {...rest}>
+        <div className="hcard-detail">
             <Column space={Space.Medium} spaceAround>
                 <Name name={name} />
                 <Notes notes={notes} />

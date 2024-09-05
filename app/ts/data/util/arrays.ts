@@ -1,7 +1,7 @@
 /**
- * Return true if value is not null, undefined, or an empty array.
+ * Return true if value is not null, undefined, an empty string, or an empty array.
  */
-const notNullishOrEmpty = <T>(value: T | null | undefined): value is T => {
+const isUseful = <T>(value: T | null | undefined): value is T => {
     if (Array.isArray(value)) {
         return value.length > 0;
     }
@@ -9,25 +9,22 @@ const notNullishOrEmpty = <T>(value: T | null | undefined): value is T => {
 };
 
 /**
- * @returns true if the given array has at least one value that is not null or undefined.
+ * @returns true if the given array has at least one value that is [useful]{@link isUseful}.
  */
-export const anyOf = <T>(values: T[]): values is T[] =>
-    values.some(notNullishOrEmpty);
+export const anyOf = <T>(values: (T | null | undefined)[]): values is T[] =>
+    values.some(isUseful);
 
 /**
- * @returns true if the given array contains only null or undefined values.
+ * @returns true if every value in the array is [useful]{@link isUseful}.
+ */
+export const allOf = <T>(values: (T | null | undefined)[]): values is T[] =>
+    values.every(isUseful) && values.length > 0;
+
+/**
+ * @returns true if the given array contains no [useful]{@link isUseful} values..
  */
 export const noneOf = (values: any[]): values is (null | undefined)[] =>
-    !values.some(notNullishOrEmpty);
-
-export const isEmptyOrNull = <T>(
-    value: T[] | null | undefined,
-): value is null | undefined => value == null || value.length === 0;
-
-/**
- * @returns true if the given array has no contents.
- */
-export const isEmpty = <T>(value: T[]): boolean => value.length === 0;
+    !values.some(isUseful);
 
 /**
  * Wrap the given value in an array, if it is not already an array.
@@ -41,10 +38,7 @@ export const asArray = <T>(value: T | T[]): T[] =>
 export const joinNotEmpty = (
     joiner: string,
     values: (string | null | undefined)[],
-): string | undefined => {
-    const result = values.filter(Boolean).join(joiner);
-    if (result) return result;
-};
+): string | undefined => nullIfEmpty(values)?.join(joiner);
 
 /**
  * @returns a new array of the same length as a, b, where the value at each
@@ -63,11 +57,13 @@ export const zip = <A, B>(
 };
 
 /**
- * Like `zip`, returns a new array by combing values from the given arrays.
- * Unlike `zip`, the given arrays do not need to be equal in length.
+ * Like {@link zip}, returns a new array by combing values from the given arrays.
+ * Unlike {@link zip}, the given arrays do not need to be equal in length.
  * The returned array will have the same length as the longest given array
  * with null values inserted when a value cannot be retrieved from either of
  * the source arrays.
+ *
+ * e.g. `zipOrNull([1, 2, 3], [4])` will return `[[1, 4], [2, null], [3, null]]`.
  */
 export const zipOrNull = <A, B>(
     a: A[] | null | undefined,
@@ -76,15 +72,16 @@ export const zipOrNull = <A, B>(
     if (a == null && b == null) return null;
 
     const len = Math.max(a?.length ?? 0, b?.length ?? 0);
-    return [...Array(len).keys()].map(index => {
-        return [a?.[index] ?? null, b?.[index] ?? null];
-    });
+    return [...Array(len).keys()].map(index => [
+        a?.[index] ?? null,
+        b?.[index] ?? null,
+    ]);
 };
 
 /**
  * Split the given list into two lists:
- * - first, the values for which predicate(value) returns true
- * - last, the values for which predicate(value) returns false
+ * - first, the values for which `predicate(value)` returns true
+ * - last, the values for which `predicate(value)` returns false
  */
 export const partition = <T>(
     values: T[],
@@ -104,14 +101,18 @@ export const partition = <T>(
     return [positive, negative];
 };
 
+const nullIfEmpty = <T>(values: (T | null | undefined)[]): T[] | null => {
+    const filtered = values.filter(isUseful);
+    if (!isUseful(filtered)) return null;
+    return filtered;
+};
+
 export const registerArrayExtensions = () => {
     const addExtension = <T>(name: string, func: (...args: any) => T) => {
         Object.defineProperty(Array.prototype, name, { value: func });
     };
 
     addExtension("nullIfEmpty", function () {
-        const filtered = this.filter(notNullishOrEmpty);
-        if (isEmptyOrNull(filtered)) return null;
-        return filtered;
+        return nullIfEmpty(this);
     });
 };

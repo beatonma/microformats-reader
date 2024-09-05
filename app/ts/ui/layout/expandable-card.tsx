@@ -14,9 +14,11 @@ import { classes, titles } from "ts/ui/util";
 import { OptionsContext } from "ts/options";
 import { LinearLayout, RowOrColumn } from "ts/ui/layout/linear";
 import { Microformat } from "ts/data/microformats";
+import { ConditionalContent } from "ts/ui/layout/conditional";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
     microformat: Microformat.H;
+    expandable?: boolean;
     contentDescription?: string;
     sharedContent: ReactNode | null;
     summaryContent: ReactNode | null;
@@ -28,10 +30,12 @@ export const ExpandableCard = (
         bannerLayout?: LinearLayout;
     } & ComponentProps<"div">,
 ) => {
+    const options = useContext(OptionsContext);
     const {
         microformat,
+        expandable = true,
         contentDescription = microformat,
-        defaultIsExpanded,
+        defaultIsExpanded = options.dropdownExpandByDefault,
         sharedContent,
         summaryContent,
         detailContent,
@@ -41,9 +45,8 @@ export const ExpandableCard = (
         ...rest
     } = props;
 
-    const options = useContext(OptionsContext);
     const [isExpanded, setExpanded] = useState(
-        defaultIsExpanded ?? options.dropdownExpandByDefault,
+        expandable ? defaultIsExpanded : false,
     );
     const [isCollapsing, setIsCollapsing] = useState(false);
     const [isExpanding, setIsExpanding] = useState(false);
@@ -99,22 +102,24 @@ export const ExpandableCard = (
                         </div>
                     </RowOrColumn>
 
-                    <DropdownButton
-                        className="expandable-card--toggle"
-                        isExpanded={isExpanded}
-                        onClick={toggleState}
-                        dropdownButtonTitle={contentDescription}
-                        aria-controls={cardContentID}
-                    />
+                    <ConditionalContent condition={expandable}>
+                        <DropdownButton
+                            className="expandable-card--toggle"
+                            isExpanded={isExpanded}
+                            onClick={toggleState}
+                            dropdownButtonTitle={contentDescription}
+                            aria-controls={cardContentID}
+                        />
 
-                    <div
-                        id={detailID}
-                        className="detail"
-                        data-visible={isExpanded}
-                        data-closing={isCollapsing}
-                    >
-                        {detailContent}
-                    </div>
+                        <div
+                            id={detailID}
+                            className="detail"
+                            data-visible={isExpanded}
+                            data-closing={isCollapsing}
+                        >
+                            {detailContent}
+                        </div>
+                    </ConditionalContent>
                 </CardContent>
             </CardLayout>
         </>
