@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { _private, nullable } from "ts/data/util/object";
+import { _testOnly, nullable } from "ts/data/util/object";
 
 describe("nullable", () => {
     test("No ignored keys, no required keys", () => {
@@ -102,15 +102,15 @@ test("hasRequiredKeys", () => {
     };
 
     expect(
-        _private.hasRequiredKeys(data, ["age", "hobbies", "pet"], undefined),
+        _testOnly.hasRequiredKeys(data, ["age", "hobbies", "pet"], undefined),
     ).toBeTruthy();
-    expect(_private.hasRequiredKeys(data, ["friends"], undefined)).toBeFalsy();
+    expect(_testOnly.hasRequiredKeys(data, ["friends"], undefined)).toBeFalsy();
     expect(
-        _private.hasRequiredKeys(data, ["name", "job"], undefined),
+        _testOnly.hasRequiredKeys(data, ["name", "job"], undefined),
     ).toBeFalsy();
     expect(
-        _private.hasRequiredKeys(data, undefined, ["name", "job"]),
+        _testOnly.hasRequiredKeys(data, undefined, ["name", "job"]),
     ).toBeTruthy();
 
-    expect(_private.hasRequiredKeys(data, undefined, undefined)).toBeTruthy();
+    expect(_testOnly.hasRequiredKeys(data, undefined, undefined)).toBeTruthy();
 });

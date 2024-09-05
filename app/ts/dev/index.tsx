@@ -1,6 +1,6 @@
 import React from "react";
 
-import { notNullish } from "ts/data/util/object";
+import { joinNotEmpty } from "ts/data/util/arrays";
 
 export const TODO = (message?: string) => {
     console.debug(`[TODO]: ${message}`);
@@ -28,9 +28,7 @@ export const timeIt = (
 };
 
 export const dump = <T extends any>(obj: T, label?: string): T => {
-    const msg = [label, JSON.stringify(obj, null, 2)]
-        .filter(notNullish)
-        .join(": ");
+    const msg = joinNotEmpty(": ", [label, JSON.stringify(obj, null, 2)]);
     console.debug(msg);
     return obj;
 };

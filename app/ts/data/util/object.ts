@@ -1,10 +1,4 @@
 /**
- * Return true if value is not null or undefined.
- */
-export const notNullish = <T>(value: T | null | undefined): value is T =>
-    value != null;
-
-/**
  * Returns null if all properties of the given object are null or empty.
  * Otherwise, returns the given object.
  *
@@ -72,23 +66,18 @@ const hasRequiredKeys = <T extends Record<string, unknown | null>>(
     return true;
 };
 
-const isNotEmpty = (obj: unknown) => !isEmpty(obj);
-
 const isEmpty = (obj: unknown): obj is null | undefined => {
     if (obj == null) return true;
     if (Array.isArray(obj)) return obj.length === 0;
     return false;
 };
+const isNotEmpty = (obj: unknown) => !isEmpty(obj);
 
 /**
- * @returns `undefined` if condition is falsy. Otherwise return `value`, or the result of calling `value()` if it is a function.
+ * @returns `value` if condition is true, otherwise `undefined`.
  */
-export const onlyIf = <T>(condition: boolean, value: T) => {
-    if (typeof value === "function") {
-        return condition ? value() : undefined;
-    }
-    return condition ? value : undefined;
-};
+export const onlyIf = <T>(condition: boolean, value: T) =>
+    condition ? value : undefined;
 
 /**
  * @returns the result of calling `block(obj)`, or `undefined` if `obj` is falsy.
@@ -116,6 +105,6 @@ export const registerObjectExtensions = () => {
     });
 };
 
-export const _private = {
+export const _testOnly = {
     hasRequiredKeys: hasRequiredKeys,
 };
