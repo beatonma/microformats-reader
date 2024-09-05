@@ -18,7 +18,7 @@ import {
     Gender,
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
-import { Job, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
+import { JobSummary, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
 import {
     LocationPropertiesTable,
     LocationProperty,
@@ -106,7 +106,7 @@ const HCardTextSummary = (props: HCardData) => {
                     microformat={Microformat.P.Adr}
                     locations={location}
                 />
-                <Job data={job} />
+                <JobSummary data={job} />
             </Row>
 
             <Notes notes={notes} />

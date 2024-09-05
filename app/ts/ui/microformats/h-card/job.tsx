@@ -12,11 +12,12 @@ import {
     EmbeddedHCardProperty,
 } from "ts/ui/microformats/common";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
+import { anyOf } from "ts/data/util/arrays";
 
-export const Job = (props: NullablePropsOf<HCardJobData>) => {
+export const JobSummary = (props: NullablePropsOf<HCardJobData>) => {
     const job = props.data;
     if (!job) return null;
-    const { jobTitle, organisation } = job;
+    const { jobTitle, role, organisation } = job;
 
     return (
         <Row space={Space.Char}>
@@ -25,10 +26,27 @@ export const Job = (props: NullablePropsOf<HCardJobData>) => {
                 icon={Icons.Work}
                 values={displayValueProperties(jobTitle)}
             />
-            <ConditionalContent condition={() => !!jobTitle && !!organisation}>
+
+            <ConditionalContent condition={() => jobTitle == null}>
+                <PropertyRow
+                    microformat={Microformat.P.Role}
+                    icon={Icons.Work}
+                    values={displayValueProperties(role)}
+                />
+            </ConditionalContent>
+
+            <ConditionalContent
+                condition={() => anyOf([jobTitle, role]) && !!organisation}
+            >
                 <span>@</span>
             </ConditionalContent>
-            <LinkToOrganisation {...job} />
+
+            <EmbeddedHCardProperty
+                icon={jobTitle ? null : Icons.Work}
+                microformat={Microformat.P.Org}
+                property={{ title: _("hcard_link_to_org_hcard") }}
+                embeddedHCards={organisation}
+            />
         </Row>
     );
 };
@@ -57,21 +75,5 @@ export const JobPropertiesTable = (props: PropsOf<HCardJobData>) => {
                 }}
             />
         </PropertiesTable>
-    );
-};
-
-const LinkToOrganisation = (props: HCardJobData) => {
-    const { jobTitle, organisation } = props;
-
-    if (organisation == null) return null;
-    const icon = jobTitle ? null : Icons.Work;
-
-    return (
-        <EmbeddedHCardProperty
-            icon={icon}
-            microformat={Microformat.P.Org}
-            property={{ title: _("hcard_link_to_org_hcard") }}
-            embeddedHCards={organisation}
-        />
     );
 };
