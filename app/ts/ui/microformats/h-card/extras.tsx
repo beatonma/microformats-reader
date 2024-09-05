@@ -1,5 +1,5 @@
 import React from "react";
-import { _ } from "ts/compat";
+import { _, _pluralize } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardExtras } from "ts/data/types/h-card";
 import {
@@ -16,7 +16,13 @@ export const ExtrasPropertiesTable = (props: PropsOf<HCardExtras>) => {
         <PropertiesTable>
             <PropertyRow
                 microformat={Microformat.P.Category}
-                property={{ displayName: _("hcard_extras_category") }}
+                property={{
+                    displayName: _pluralize(
+                        category,
+                        "hcard_extras_category",
+                        "hcard_extras_categories",
+                    ),
+                }}
                 values={displayValueProperties(category)}
             />
             <PropertyRow

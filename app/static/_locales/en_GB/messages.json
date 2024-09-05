@@ -168,6 +168,9 @@
   "hcard_extras_category": {
     "message": "Category"
   },
+  "hcard_extras_categories": {
+    "message": "Categories"
+  },
   "hcard_extras_dietary_preferences": {
     "message": "Dietary preferences"
   },
