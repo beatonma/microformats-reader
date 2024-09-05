@@ -17,7 +17,7 @@ import {
     HCardJobData,
     HCardNameDetail,
 } from "ts/data/types/h-card";
-import { nullable } from "ts/data/util/object";
+import { nullable, usefulKeysOf } from "ts/data/util/object";
 import {
     parseLocation,
     parseLocationFromProperties,
@@ -251,11 +251,21 @@ export const parseEmbeddedHCards = (
 
             const hcard = parseHCard(it);
             if (!hcard) return null;
-            return {
-                id: generateId(),
-                name: hcard.name ?? null,
-                hcard: hcard,
-            };
+
+            const hasUsefulHcard = usefulKeysOf(hcard, {
+                ignore: ["id", "type"],
+            }).some(it => it !== "name");
+
+            return nullable(
+                {
+                    id: generateId(),
+                    name: hcard.name,
+
+                    // Discard any card that only has a name.
+                    hcard: hasUsefulHcard ? hcard : null,
+                },
+                { ignoredKeys: ["id"] },
+            );
         })
         .nullIfEmpty();
 };

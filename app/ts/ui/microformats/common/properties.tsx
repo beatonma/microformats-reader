@@ -112,6 +112,7 @@ interface PropertyLayoutBuildProps {
     propertyIcon: ReactNode;
     propertyName: ReactNode;
     propertyValue: ReactNode;
+    valueLayout: LinearLayout;
     isMultiValue: boolean;
 }
 
@@ -176,6 +177,7 @@ const PropertyLayout = (props: PropertyLayoutProps & LayoutBuilder) => {
         propertyName: propertyName,
         propertyValue: propertyValue,
         isMultiValue: isMultiValue,
+        valueLayout: valuesLayout,
     });
 };
 
@@ -221,12 +223,15 @@ const PropertyRowLayout = (props: PropertyLayoutBuildProps) => {
         propertyName,
         propertyValue,
         isMultiValue,
+        valueLayout,
     } = props;
     return (
         <Row
             {...layoutProps}
             space={Space.Char}
-            vertical={isMultiValue ? Alignment.Baseline : Alignment.Center}
+            vertical={
+                valueLayout === "column" ? Alignment.Baseline : Alignment.Center
+            }
         >
             <Row space={Space.Char}>
                 {propertyIcon}

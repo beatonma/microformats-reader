@@ -1,4 +1,14 @@
 /**
+ * Return true if value is not null, undefined, an empty string, or an empty array.
+ */
+export const isUseful = <T>(value: T | null | undefined): value is T => {
+    if (Array.isArray(value)) {
+        return value.length > 0;
+    }
+    return value != null && value !== "";
+};
+
+/**
  * Returns null if all properties of the given object are null or empty.
  * Otherwise, returns the given object.
  *
@@ -89,6 +99,25 @@ export const withNotNull = <T, R>(
     if (obj) {
         return block(obj);
     }
+};
+
+export const usefulKeysOf = <T extends object>(
+    obj: T,
+    options?: {
+        ignore: (keyof T)[];
+    },
+): (keyof T)[] => {
+    const keys: (keyof T)[] = [];
+    Object.entries(obj).forEach(([key, value]) => {
+        const k = key as keyof T;
+        if (isUseful(value)) {
+            if (!options?.ignore?.includes(k)) {
+                keys.push(k);
+            }
+        }
+    });
+
+    return keys;
 };
 
 export const registerObjectExtensions = () => {

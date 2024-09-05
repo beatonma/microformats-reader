@@ -12,6 +12,7 @@ const Empty = {
     className: undefined,
     renderString: undefined,
     renderDate: undefined,
+    icon: undefined,
 };
 describe("properties.resolveValues", () => {
     test("Basic text", () => {

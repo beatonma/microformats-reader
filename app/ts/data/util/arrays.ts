@@ -1,12 +1,4 @@
-/**
- * Return true if value is not null, undefined, an empty string, or an empty array.
- */
-const isUseful = <T>(value: T | null | undefined): value is T => {
-    if (Array.isArray(value)) {
-        return value.length > 0;
-    }
-    return value != null && value !== "";
-};
+import { isUseful } from "ts/data/util/object";
 
 /**
  * @returns true if the given array has at least one value that is [useful]{@link isUseful}.
