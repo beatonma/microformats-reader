@@ -32,7 +32,8 @@ export const yearsSince = (
     datetime: DateOrString,
     __now?: Date,
 ): number | null => {
-    const date = isString(datetime) ? new Date(datetime) : datetime;
+    const date = toDate(datetime);
+    if (date == null) return null;
     const now = __now ?? new Date();
 
     const dateHasPassed =
