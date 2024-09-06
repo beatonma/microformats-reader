@@ -1,5 +1,5 @@
 import { AppOptions } from "ts/options";
-import React, { HTMLProps, ReactElement } from "react";
+import React, { ComponentProps, ReactElement } from "react";
 import { Dropdown } from "ts/ui/layout/dropdown";
 import { classes } from "ts/ui/util";
 
@@ -10,7 +10,7 @@ interface RequiredObjectProps<T> {
     render: (data: T) => ReactElement;
 }
 export const DetailSection = <T extends any>(
-    props: Omit<HTMLProps<HTMLDivElement>, "children"> & RequiredObjectProps<T>,
+    props: Omit<ComponentProps<"div">, "children"> & RequiredObjectProps<T>,
 ) => {
     const { options, render, sectionTitle, dependsOn, className, ...rest } =
         props;

@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { ComponentProps } from "react";
 import { _ } from "ts/compat";
 import { FeedLinks, RelLink } from "ts/data/types/rel";
 import { Icon, Icons } from "ts/ui/icon";
@@ -39,7 +39,7 @@ interface IconRelLinkProps {
 }
 
 const QuickLinks = (
-    props: IconRelLinkProps & RelLinkProps & HTMLProps<HTMLDivElement>,
+    props: IconRelLinkProps & RelLinkProps & ComponentProps<"div">,
 ) => {
     const { links, displayTitle, title, icon, ...rest } = props;
 
@@ -67,7 +67,7 @@ interface QuickLinkProps {
     title?: string;
     displayTitle: string;
 }
-const QuickLink = (props: HTMLProps<HTMLDivElement> & QuickLinkProps) => {
+const QuickLink = (props: ComponentProps<"div"> & QuickLinkProps) => {
     const { link, displayTitle, title, icon, ...rest } = props;
     return (
         <div className="quick-link" {...rest} key={link.href}>

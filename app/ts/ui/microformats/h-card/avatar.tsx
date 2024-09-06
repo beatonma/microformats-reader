@@ -1,4 +1,4 @@
-import React, { HTMLProps, useState } from "react";
+import React, { ComponentProps, useState } from "react";
 import { Image } from "@microformats-parser";
 import { Microformat } from "ts/data/microformats";
 import { Named } from "ts/data/types/common";
@@ -9,9 +9,7 @@ interface AvatarProps {
     images: HCardImages | null;
 }
 
-export const Avatar = (
-    props: HTMLProps<HTMLDivElement> & Named & AvatarProps,
-) => {
+export const Avatar = (props: ComponentProps<"div"> & Named & AvatarProps) => {
     const { name, images, ...rest } = props;
     const [hasLoadingError, setLoadingError] = useState(false);
 
@@ -55,7 +53,7 @@ interface SingleImageAvatarProps {
     onError: () => void;
 }
 const SingleImageAvatar = (
-    props: HTMLProps<HTMLDivElement> & SingleImageAvatarProps,
+    props: ComponentProps<"div"> & SingleImageAvatarProps,
 ) => {
     const { image, imageClassName, onError, ...rest } = props;
 
@@ -71,10 +69,8 @@ interface PhotoWithLogoProps {
     logo: Image;
     onError: () => void;
 }
-const PhotoWithLogo = (
-    props: HTMLProps<HTMLDivElement> & PhotoWithLogoProps,
-) => {
-    const { name, photo, logo, onError, ...rest } = props;
+const PhotoWithLogo = (props: ComponentProps<"div"> & PhotoWithLogoProps) => {
+    const { photo, logo, onError, ...rest } = props;
     return (
         <div className="avatar" {...rest}>
             <Img
@@ -92,7 +88,7 @@ const PhotoWithLogo = (
     );
 };
 
-const TextAvatar = (props: HTMLProps<HTMLDivElement> & Named) => {
+const TextAvatar = (props: ComponentProps<"div"> & Named) => {
     const { name, ...rest } = props;
     const trimmedName = name?.trim();
     if (!trimmedName) return null;

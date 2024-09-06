@@ -1,9 +1,4 @@
-import React, {
-    ComponentProps,
-    HTMLProps,
-    ReactElement,
-    ReactNode,
-} from "react";
+import React, { ComponentProps, ReactElement, ReactNode } from "react";
 // @ts-ignore
 import AnniversarySvg from "./svg/outline-400/celebration.svg";
 // @ts-ignore
@@ -62,7 +57,7 @@ export const Icon = (props: IconProps) => {
     if (!icon) return null;
 
     const InlineSvg = icon as unknown as (
-        _props: HTMLProps<SVGElement>,
+        _props: ComponentProps<"svg">,
     ) => ReactElement;
 
     return (

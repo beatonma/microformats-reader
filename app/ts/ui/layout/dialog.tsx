@@ -1,12 +1,12 @@
 import React, {
     Dispatch,
-    HTMLProps,
     ReactNode,
     SetStateAction,
     createContext,
     useContext,
     useEffect,
     useState,
+    ComponentProps,
 } from "react";
 
 const ScrimId = "dialog_scrim";
@@ -36,7 +36,7 @@ export interface DialogProps {
     open: boolean;
     onClose: () => void;
 }
-export const Dialog = (props: HTMLProps<HTMLDialogElement> & DialogProps) => {
+export const Dialog = (props: ComponentProps<"dialog"> & DialogProps) => {
     const { open, onClose, ...rest } = props;
     const [_, setDialog] = useContext(DialogContext);
 

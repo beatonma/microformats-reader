@@ -1,8 +1,8 @@
-import React, { HTMLProps } from "react";
+import React, { ComponentProps } from "react";
 import { Image } from "@microformats-parser";
 
 interface ImgProps
-    extends Omit<HTMLProps<HTMLImageElement>, "src" | "alt" | "loading"> {
+    extends Omit<ComponentProps<"img">, "src" | "alt" | "loading"> {
     image: Image | null | undefined;
 }
 export const Img = (props: ImgProps) => {

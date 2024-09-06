@@ -1,4 +1,4 @@
-import React, { ComponentProps, HTMLProps, ReactNode, useContext } from "react";
+import React, { ComponentProps, ReactNode, useContext } from "react";
 import { _ } from "ts/compat";
 import { OptionsContext } from "ts/options";
 import { Icon, Icons } from "ts/ui/icon";
@@ -11,7 +11,7 @@ import { classes } from "ts/ui/util";
 import { Row } from "ts/ui/layout/linear";
 import { Alignment } from "ts/ui/layout/alignment";
 
-export interface DropdownProps extends HTMLProps<HTMLDivElement> {
+export interface DropdownProps extends ComponentProps<"div"> {
     header: ReactNode;
     headerClassName?: string;
     dropdownButtonTitle: string;
@@ -30,7 +30,7 @@ export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
 };
 
 const DropdownLayout = (
-    props: DropdownProps & HTMLProps<HTMLDivElement> & ExpandCollapseProps,
+    props: DropdownProps & ComponentProps<"div"> & ExpandCollapseProps,
 ) => {
     const {
         className,
