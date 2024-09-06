@@ -97,7 +97,7 @@ const getStaticMessage = (name: string, ...substitutions: any): string => {
     const MessagesJson = require("static/_locales/en_GB/messages.json");
     const translation: TranslationMessage | null = MessagesJson[name];
 
-    if (!translation) return `__nostr__:${name}`;
+    if (!translation) return `__CANARY__nostr__:${name}`;
 
     const placeholders = translation.placeholders;
     let message = translation.message;

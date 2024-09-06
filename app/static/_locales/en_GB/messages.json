@@ -63,6 +63,27 @@
   "quicklink_pgp": {
     "message": "PGP"
   },
+  "rellinks": {
+    "message": "Related links"
+  },
+  "rellinks_me": {
+    "message": "Me"
+  },
+  "rellinks_alternate": {
+    "message": "Alternate"
+  },
+  "rellinks_search": {
+    "message": "Search"
+  },
+  "rellinks_pgp": {
+    "message": "PGP"
+  },
+  "rellinks_webmention": {
+    "message": "Webmentions"
+  },
+  "rellinks_feeds": {
+    "message": "Feeds"
+  },
   "hcard_age": {
     "message": "$AGE$ years",
     "placeholders": {
@@ -279,7 +300,7 @@
       }
     }
   },
-  "datetime_duration_second":{
+  "datetime_duration_second": {
     "message": "$SECONDS$ second",
     "placeholders": {
       "seconds": {
@@ -288,7 +309,7 @@
       }
     }
   },
-  "datetime_duration_seconds":{
+  "datetime_duration_seconds": {
     "message": "$SECONDS$ seconds",
     "placeholders": {
       "seconds": {
@@ -297,7 +318,7 @@
       }
     }
   },
-  "datetime_duration_minute":{
+  "datetime_duration_minute": {
     "message": "$MINUTES$ minute",
     "placeholders": {
       "minutes": {
@@ -306,7 +327,7 @@
       }
     }
   },
-  "datetime_duration_minutes":{
+  "datetime_duration_minutes": {
     "message": "$MINUTES$ minutes",
     "placeholders": {
       "minutes": {
@@ -315,7 +336,7 @@
       }
     }
   },
-  "datetime_duration_hour":{
+  "datetime_duration_hour": {
     "message": "$HOURS$ hour",
     "placeholders": {
       "hours": {
@@ -324,7 +345,7 @@
       }
     }
   },
-  "datetime_duration_hours":{
+  "datetime_duration_hours": {
     "message": "$HOURS$ hours",
     "placeholders": {
       "hours": {
@@ -333,7 +354,7 @@
       }
     }
   },
-  "datetime_duration_day":{
+  "datetime_duration_day": {
     "message": "$DAYS$ day",
     "placeholders": {
       "days": {
@@ -342,7 +363,7 @@
       }
     }
   },
-  "datetime_duration_days":{
+  "datetime_duration_days": {
     "message": "$DAYS$ days",
     "placeholders": {
       "days": {
@@ -351,7 +372,7 @@
       }
     }
   },
-  "datetime_duration_year":{
+  "datetime_duration_year": {
     "message": "$YEARS$ year",
     "placeholders": {
       "years": {
@@ -360,7 +381,7 @@
       }
     }
   },
-  "datetime_duration_years":{
+  "datetime_duration_years": {
     "message": "$YEARS$ years",
     "placeholders": {
       "years": {
@@ -378,7 +399,6 @@
   "options_dropdown_expanded_by_default": {
     "message": "Expand dropdowns by default"
   },
-
   "options_maps_provider": {
     "message": "Open maps with:"
   },

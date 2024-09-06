@@ -16,6 +16,12 @@
 %text-block {
     white-space: pre-line;
     line-height: 1.2;
+    letter-spacing: 0.05ch;
+}
+%single_line {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 @mixin line-clamp($lines) {

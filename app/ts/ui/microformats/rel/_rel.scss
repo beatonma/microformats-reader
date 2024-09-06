@@ -14,20 +14,29 @@
         cursor: pointer;
     }
 
-    .link-title {
+    .quick-link--title,
+    .quick-link--subtitle {
         @extend %caption;
         text-align: center;
         max-lines: 1;
         max-width: 13ch;
-        overflow: clip;
+        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+
+    .quick-link--subtitle {
+        font-size: smaller;
+    }
 }
 
-.relme-links {
+.related-link {
     a {
-        display: block;
-        width: fit-content;
+        @extend %single_line;
+        max-width: 40ch;
+    }
+
+    .related-link--meta {
+        font-size: var(--fs-caption);
     }
 }

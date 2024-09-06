@@ -6,29 +6,21 @@ import React, {
     useState,
 } from "react";
 import { _, compatBrowser } from "ts/compat";
-import { RelatedLinks } from "ts/data/types/rel";
 import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
-import { Alignment, Row } from "ts/ui/layout";
 import { ScrimLayout } from "ts/ui/layout/dialog";
-import {
-    Feeds,
-    PgpKey,
-    RelmeLinks,
-    WebmentionEndpoint,
-} from "ts/ui/microformats/rel";
 import { HAdr, HCard, HFeed } from "ts/ui/microformats";
-import { NullablePropsOf } from "ts/ui/props";
 import { injectTheme } from "ts/ui/theme";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { OptionsContext, useOptions } from "ts/options";
 import { MicroformatData, parse } from "ts/data/parsing";
-import "./popup.scss";
 import { copyToClipboard } from "ts/ui/actions/clipboard";
 import { Microformat } from "ts/data/microformats";
 import HEvent from "ts/ui/microformats/h-event";
 import { ConditionalContent } from "ts/ui/layout/conditional";
+import { QuickLinks, RelatedLinks } from "ts/ui/microformats/rel";
+import "./popup.scss";
 
 export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds, locations, events } = props;
@@ -101,7 +93,7 @@ export const PopupUI = (props: MicroformatData) => {
 
                 <ConditionalContent condition={sections["rel=me"]}>
                     <section id="rel_me">
-                        <RelmeLinks links={relLinks?.relme} />
+                        <RelatedLinks data={relLinks} />
                     </section>
                 </ConditionalContent>
             </main>
@@ -130,20 +122,6 @@ export const Popup = () => {
         <OptionsContext.Provider value={options}>
             <PopupUI {...microformats} />
         </OptionsContext.Provider>
-    );
-};
-
-const QuickLinks = (props: NullablePropsOf<RelatedLinks>) => {
-    const { data } = props;
-
-    if (!data) return null;
-
-    return (
-        <Row horizontal={Alignment.Center}>
-            <Feeds feeds={data.feeds} />
-            <WebmentionEndpoint links={data.webmention} />
-            <PgpKey links={data.pgp} />
-        </Row>
     );
 };
 

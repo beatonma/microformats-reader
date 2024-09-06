@@ -4,19 +4,32 @@
 .expandable-card--label {
     font-size: var(--fs-caption);
     font-family: monospace;
+
+    &:empty {
+        display: none;
+    }
+
+    &::after {
+        content: ":";
+    }
 }
 .expandable-card {
+    $button-font-size: var(--fs-large);
+    $button-padding: var(--space);
+    $button-size: calc($button-font-size + (2 * $button-padding));
+
+    .card-content {
+        min-height: $button-size;
+    }
+
     button.expandable-card--toggle {
         display: block;
-        font-size: var(--fs-large);
+        font-size: $button-font-size;
+        padding: $button-padding;
         float: right;
         border-radius: var(--border-radius-small);
         position: relative;
         z-index: var(--elevation-clickable);
-
-        .dropdown-icon {
-            padding: var(--space);
-        }
     }
 
     .summary {

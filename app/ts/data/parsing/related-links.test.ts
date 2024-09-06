@@ -1,6 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { parseRelatedLinks } from "ts/data/parsing/related-links";
 import { RelLink } from "ts/data/types/rel";
+import "ts/test";
 
 const sampleRelsDocument = {
     rels: {

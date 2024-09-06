@@ -1,6 +1,7 @@
 import { ParsedDocument } from "@microformats-parser";
 import { RelLink, RelatedLinks } from "ts/data/types/rel";
 import { anyOf, noneOf } from "ts/data/util/arrays";
+import { nullable } from "ts/data/util/object";
 
 export const parseRelatedLinks = async (
     microformats: ParsedDocument,
@@ -18,22 +19,22 @@ export const parseRelatedLinks = async (
 
     const consumedUrls = [...(rss ?? []), ...(atom ?? [])].map(it => it.href);
     const alternate =
-        build(microformats, rels.alternate)?.filter(
-            it => !consumedUrls?.includes(it.href),
-        ) ?? null;
+        build(microformats, rels.alternate)
+            ?.filter(it => !consumedUrls?.includes(it.href))
+            ?.nullIfEmpty() ?? null;
 
     if (noneOf([relme, pgp, rss, atom, alternate, webmention, search])) {
         return null;
     } else {
         const feeds = anyOf([rss, atom]) ? { rss: rss, atom: atom } : null;
-        return {
+        return nullable({
             alternate: alternate,
             feeds: feeds,
             pgp: pgp,
             relme: relme,
             search: search,
             webmention: webmention,
-        };
+        });
     }
 };
 
@@ -56,10 +57,14 @@ const build = (
         .filter(it => (typeFilter ? it.type === typeFilter : true))
         .map(rel => ({
             href: rel.url,
-            text: rel.text ?? rel.title ?? rel.url,
-            title: rel.title ?? rel.url,
-            type: rel.type ?? null,
-            lang: rel.hreflang ?? null,
+            text: rel.text || null,
+            title: rel.title || null,
+            type: rel.type || null,
+            lang: rel.hreflang || null,
         }))
-        .sort((a: RelLink, b: RelLink) => a.text.localeCompare(b.text));
+        .sort(
+            (a: RelLink, b: RelLink) =>
+                (a?.text ?? "").localeCompare(b.text ?? "") ?? 0,
+        )
+        .nullIfEmpty();
 };

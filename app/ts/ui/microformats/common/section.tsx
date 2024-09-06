@@ -6,7 +6,7 @@ import { classes } from "ts/ui/util";
 interface RequiredObjectProps<T> {
     options: AppOptions;
     sectionTitle: string;
-    dependsOn: T | null;
+    dependsOn: T | null | undefined;
     render: (data: T) => ReactElement;
 }
 export const DetailSection = <T extends any>(
@@ -28,7 +28,7 @@ export const DetailSection = <T extends any>(
                 {...rest}
             />
         );
-    } else {
-        return <>{renderedContent}</>;
     }
+
+    return renderedContent;
 };

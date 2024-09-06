@@ -1,125 +1,106 @@
-import React, { ComponentProps } from "react";
+import React, { useContext } from "react";
 import { _ } from "ts/compat";
-import { FeedLinks, RelLink } from "ts/data/types/rel";
-import { Icon, Icons } from "ts/ui/icon";
-import { Dropdown } from "ts/ui/layout/dropdown";
+import { RelatedLinks as RelatedLinksData, RelLink } from "ts/data/types/rel";
+import { withNotNull } from "ts/data/util/object";
+import { OptionsContext } from "ts/options";
+import { formatUri } from "ts/ui/formatting";
+import { Column, Row, Space } from "ts/ui/layout";
+import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { LinkTo } from "ts/ui/link-to";
-import { Alignment, Column, Space } from "ts/ui/layout";
+import { DetailSection } from "ts/ui/microformats/common";
+import { NullablePropsOf } from "ts/ui/props";
+import { titles } from "ts/ui/util";
 
-interface RelLinkProps {
-    links: RelLink[] | null | undefined;
-}
-export const RelmeLinks = (props: RelLinkProps) => {
-    const { links } = props;
+export const RelatedLinks = (props: NullablePropsOf<RelatedLinksData>) => {
+    if (props.data == null) return null;
 
-    if (links == null) return null;
-    const title = 'rel="me"';
+    const { feeds, search, pgp, relme, webmention, alternate } = props.data;
 
     return (
-        <Dropdown
-            header={title}
-            title={title}
-            dropdownButtonTitle={title}
-            className="relme-links"
-        >
-            <Column>
-                {links.map(link => (
-                    <LinkTo href={link.href} title={link.title} key={link.href}>
-                        {link.text}
-                    </LinkTo>
-                ))}
-            </Column>
-        </Dropdown>
-    );
-};
+        <ExpandableCard
+            className="related-links"
+            microformat={null}
+            sharedContent={<h1>{_("rellinks")}</h1>}
+            summaryContent={null}
+            detailContent={
+                <Column>
+                    <LinksGroup title={_("rellinks_me")} links={relme} />
 
-interface IconRelLinkProps {
-    icon: Icons;
-    displayTitle: string;
-}
+                    <LinksGroup
+                        title={_("rellinks_alternate")}
+                        links={alternate}
+                    />
+                    <LinksGroup title={_("rellinks_search")} links={search} />
+                    <LinksGroup title={_("rellinks_pgp")} links={pgp} />
 
-const QuickLinks = (
-    props: IconRelLinkProps & RelLinkProps & ComponentProps<"div">,
-) => {
-    const { links, displayTitle, title, icon, ...rest } = props;
+                    <LinksGroup
+                        title={_("rellinks_webmention")}
+                        links={webmention}
+                    />
 
-    if (!links) return null;
-
-    return (
-        <>
-            {links.map((link, index) => (
-                <QuickLink
-                    key={index}
-                    link={link}
-                    icon={icon}
-                    displayTitle={displayTitle}
-                    title={title}
-                    {...rest}
-                />
-            ))}
-        </>
-    );
-};
-
-interface QuickLinkProps {
-    link: RelLink;
-    icon: Icons;
-    title?: string;
-    displayTitle: string;
-}
-const QuickLink = (props: ComponentProps<"div"> & QuickLinkProps) => {
-    const { link, displayTitle, title, icon, ...rest } = props;
-    return (
-        <div className="quick-link" {...rest} key={link.href}>
-            <LinkTo
-                title={link.title ?? title ?? displayTitle}
-                href={link.href}
-            >
-                <Column horizontal={Alignment.Center} space={Space.Medium}>
-                    <Icon icon={icon} />
-                    <div className="link-title">{displayTitle}</div>
+                    <LinksGroup
+                        title={_("rellinks_feeds")}
+                        links={[
+                            ...(feeds?.rss ?? []),
+                            ...(feeds?.atom ?? []),
+                        ].nullIfEmpty()}
+                    />
                 </Column>
-            </LinkTo>
-        </div>
-    );
-};
-
-export const WebmentionEndpoint = (props: RelLinkProps) => {
-    return (
-        <QuickLinks
-            links={props.links}
-            icon={Icons.WebmentionEndpoint}
-            title={_("quicklink_webmentions_endpoint_hover")}
-            displayTitle={_("quicklink_webmentions_endpoint")}
+            }
         />
     );
 };
 
-export const PgpKey = (props: RelLinkProps) => {
+const LinksGroup = (props: {
+    title: string;
+    links: RelLink[] | null | undefined;
+}) => {
+    const options = useContext(OptionsContext);
     return (
-        <QuickLinks
-            links={props.links}
-            icon={Icons.PgpKey}
-            displayTitle={_("quicklink_pgp")}
+        <DetailSection
+            options={options}
+            sectionTitle={props.title}
+            dependsOn={props.links}
+            render={links => (
+                <Column>
+                    {links.map(link => (
+                        <Row className="related-link" space={Space.Medium} wrap>
+                            <LinkTo
+                                href={link.href}
+                                title={link.title ?? undefined}
+                                key={link.href}
+                            >
+                                {link.text ??
+                                    link.title ??
+                                    formatUri(link.href)}
+                            </LinkTo>
+
+                            <Row className="related-link--meta" wrap>
+                                {withNotNull(link.type, type => (
+                                    <span title={titles(type, "type")}>
+                                        {formatContentType(type)}
+                                    </span>
+                                ))}
+
+                                {withNotNull(link.lang, lang => (
+                                    <span title="lang">{lang}</span>
+                                ))}
+                            </Row>
+                        </Row>
+                    ))}
+                </Column>
+            )}
         />
     );
 };
 
-export const Feeds = (props: { feeds: FeedLinks | null }) => {
-    if (!props?.feeds) return null;
-
+const formatContentType = (contentType: string): string => {
     return (
-        <>
-            <QuickLinks
-                icon={Icons.AtomFeed}
-                displayTitle={_("quicklink_atom")}
-                links={props.feeds.atom}
-            />
-            <QuickLinks
-                icon={Icons.RssFeed}
-                displayTitle={_("quicklink_rss")}
-                links={props.feeds.rss}
-            />
-        </>
+        {
+            "application/rss+xml": "RSS",
+            "application/atom+xml": "Atom",
+            "application/opensearchdescription+xml": "OpenSearch",
+            "application/pagefind": "Pagefind",
+        }[contentType] ?? contentType
     );
 };

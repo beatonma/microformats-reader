@@ -18,7 +18,7 @@ import { Microformat } from "ts/data/microformats";
 import { ConditionalContent } from "ts/ui/layout/conditional";
 
 interface ExpandableCardProps extends ExpandableDefaultProps {
-    microformat: Microformat.H;
+    microformat: Microformat.H | null;
     expandable?: boolean;
     contentDescription?: string;
     sharedContent: ReactNode | null;
@@ -35,7 +35,8 @@ export const ExpandableCard = (
     const {
         microformat,
         expandable = true,
-        contentDescription = microformat,
+        contentDescription = microformat ??
+            "__CANARY__missing_contentDescription",
         defaultIsExpanded = options.dropdownExpandByDefault,
         sharedContent,
         summaryContent,
@@ -73,7 +74,7 @@ export const ExpandableCard = (
 
     return (
         <>
-            <div className="expandable-card--label">{microformat}:</div>
+            <div className="expandable-card--label">{microformat}</div>
             <CardLayout
                 className={classes("expandable-card", microformat, className)}
                 title={titles(microformat, title)}

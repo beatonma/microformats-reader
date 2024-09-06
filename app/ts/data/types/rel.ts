@@ -1,9 +1,9 @@
 export interface RelLink {
     href: string;
-    text: string;
-    title: string;
-    type: string | null;
     lang: string | null;
+    text: string | null;
+    title: string | null;
+    type: string | null;
 }
 
 export interface FeedLinks {
