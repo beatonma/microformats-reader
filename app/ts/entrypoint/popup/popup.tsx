@@ -91,8 +91,8 @@ export const PopupUI = (props: MicroformatData) => {
                     </section>
                 </ConditionalContent>
 
-                <ConditionalContent condition={sections["rel=me"]}>
-                    <section id="rel_me">
+                <ConditionalContent condition={sections["rel"]}>
+                    <section id="related_links">
                         <RelatedLinks data={relLinks} />
                     </section>
                 </ConditionalContent>

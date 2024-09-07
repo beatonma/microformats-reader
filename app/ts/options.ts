@@ -25,7 +25,7 @@ export namespace AppOptions {
         "h-feed" = "h-feed",
         "h-event" = "h-event",
         "h-adr" = "h-adr",
-        "rel=me" = "rel=me",
+        "rel" = "rel",
     }
 
     export const MapProvider = {
@@ -86,7 +86,7 @@ export const defaultOptions = (): AppOptions => ({
         "h-feed": true,
         "h-event": true,
         "h-adr": true,
-        "rel=me": true,
+        rel: true,
     },
     mapsProvider: AppOptions.MapProvider.OpenStreetMap,
 });
