@@ -63,6 +63,20 @@
   "quicklink_pgp": {
     "message": "PGP"
   },
+  "quicklink_multiplier": {
+    "message": "$SECTION$ × $amount$",
+    "placeholders": {
+      "section": {
+        "content": "$1",
+        "example": "RSS"
+      },
+      "amount": {
+        "content": "$2",
+        "example": "3"
+      }
+    },
+    "description": "Describe a set of links e.g. RSS × 3"
+  },
   "rellinks": {
     "message": "Related links"
   },

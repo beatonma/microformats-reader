@@ -42,6 +42,7 @@ const DropdownLayout = (
         isExpanded,
         collapsibleControllerProps,
         collapsibleContentProps,
+        ...rest
     } = props;
 
     return (
@@ -49,6 +50,7 @@ const DropdownLayout = (
             className={classes("dropdown", className)}
             data-expanded={isExpanded}
             title={title}
+            {...rest}
         >
             <DropdownButton
                 dropdownButtonTitle={dropdownButtonTitle}

@@ -11,6 +11,18 @@ import { DetailSection } from "ts/ui/microformats/common";
 import { NullablePropsOf } from "ts/ui/props";
 import { titles } from "ts/ui/util";
 
+/**
+ * Used to retrieve translation strings
+ * AND as element #ids for internal links.
+ */
+export type RelatedLinkId =
+    | "rellinks_me"
+    | "rellinks_alternate"
+    | "rellinks_search"
+    | "rellinks_pgp"
+    | "rellinks_webmention"
+    | "rellinks_feeds";
+
 export const RelatedLinks = (props: NullablePropsOf<RelatedLinksData>) => {
     if (props.data == null) return null;
 
@@ -24,22 +36,25 @@ export const RelatedLinks = (props: NullablePropsOf<RelatedLinksData>) => {
             summaryContent={null}
             detailContent={
                 <Column>
-                    <LinksGroup title={_("rellinks_me")} links={relme} />
+                    <LinksGroup relatedLinkId={"rellinks_me"} links={relme} />
 
                     <LinksGroup
-                        title={_("rellinks_alternate")}
+                        relatedLinkId={"rellinks_alternate"}
                         links={alternate}
                     />
-                    <LinksGroup title={_("rellinks_search")} links={search} />
-                    <LinksGroup title={_("rellinks_pgp")} links={pgp} />
+                    <LinksGroup
+                        relatedLinkId={"rellinks_search"}
+                        links={search}
+                    />
+                    <LinksGroup relatedLinkId={"rellinks_pgp"} links={pgp} />
 
                     <LinksGroup
-                        title={_("rellinks_webmention")}
+                        relatedLinkId={"rellinks_webmention"}
                         links={webmention}
                     />
 
                     <LinksGroup
-                        title={_("rellinks_feeds")}
+                        relatedLinkId={"rellinks_feeds"}
                         links={[
                             ...(feeds?.rss ?? []),
                             ...(feeds?.atom ?? []),
@@ -52,14 +67,15 @@ export const RelatedLinks = (props: NullablePropsOf<RelatedLinksData>) => {
 };
 
 const LinksGroup = (props: {
-    title: string;
+    relatedLinkId: RelatedLinkId;
     links: RelLink[] | null | undefined;
 }) => {
     const options = useContext(OptionsContext);
     return (
         <DetailSection
+            id={props.relatedLinkId}
             options={options}
-            sectionTitle={props.title}
+            sectionTitle={_(props.relatedLinkId)}
             dependsOn={props.links}
             render={links => (
                 <Column>
@@ -94,13 +110,10 @@ const LinksGroup = (props: {
     );
 };
 
-const formatContentType = (contentType: string): string => {
-    return (
-        {
-            "application/rss+xml": "RSS",
-            "application/atom+xml": "Atom",
-            "application/opensearchdescription+xml": "OpenSearch",
-            "application/pagefind": "Pagefind",
-        }[contentType] ?? contentType
-    );
-};
+const formatContentType = (contentType: string): string =>
+    ({
+        "application/rss+xml": "RSS",
+        "application/atom+xml": "Atom",
+        "application/opensearchdescription+xml": "OpenSearch",
+        "application/pagefind": "Pagefind",
+    })[contentType] ?? contentType;
