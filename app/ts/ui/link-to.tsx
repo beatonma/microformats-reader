@@ -15,7 +15,13 @@ export const LinkTo = (props: LinkProps) => {
 
     if (href.startsWith("#")) {
         return (
-            <a href={href} title={titleWithURL} children={children} {...rest} />
+            <a
+                href={href}
+                title={titleWithURL}
+                onClick={highlightElement(href.replace("#", ""))}
+                children={children}
+                {...rest}
+            />
         );
     }
 
@@ -35,4 +41,16 @@ export const LinkTo = (props: LinkProps) => {
             {...rest}
         />
     );
+};
+
+const highlightElement = (id: string): (() => void) => {
+    return () => {
+        const element = document.getElementById(id);
+        element?.setAttribute("data-highlight-linked", "true");
+        element?.addEventListener(
+            "animationend",
+            () => element?.removeAttribute("data-highlight-linked"),
+            { once: true },
+        );
+    };
 };
