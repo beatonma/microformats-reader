@@ -30,7 +30,7 @@ export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
 };
 
 const DropdownLayout = (
-    props: DropdownProps & ComponentProps<"div"> & ExpandCollapseProps,
+    props: DropdownProps & ExpandCollapseProps & ComponentProps<"div">,
 ) => {
     const {
         className,

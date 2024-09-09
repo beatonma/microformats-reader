@@ -1,33 +1,20 @@
-@use "styles";
+@use "styles/hover";
+@use "styles/borders";
+@use "styles/animation";
 
-button .dropdown-icon {
-    cursor: pointer;
-    transition: all 200ms;
-
-    &:first-child {
-        margin-left: 0;
-    }
+.dropdown-icon {
+    transition: rotate animation.$duration-short;
 
     &[data-expanded="true"] {
-        transform: rotate(180deg);
+        rotate: 180deg;
     }
-}
-
-@mixin dropdownContentHidden {
-    opacity: styles.$opacity-zero;
-    max-height: 0;
-}
-@mixin dropdownContentVisible {
-    @include styles.border-left;
-    opacity: 1;
-    max-height: styles.$max-height;
 }
 
 .dropdown {
     width: stretch;
     transition:
-        margin styles.$duration-long,
-        padding styles.$duration-long;
+        margin animation.$duration-long,
+        padding animation.$duration-long;
 
     .dropdown-header {
         display: flex;
@@ -48,34 +35,30 @@ button .dropdown-icon {
         @extend %hover-children;
     }
 
+    .dropdown-button--content {
+        overflow: hidden;
+    }
+
     &[data-expanded="true"] {
         margin-block: var(--space);
     }
 
     .dropdown-content {
-        overflow-y: hidden;
+        @include borders.border-left;
+
+        overflow: hidden;
         margin-block: var(--space-half);
+        transition:
+            opacity animation.$duration-long,
+            height animation.$duration-short ease-in-out;
 
-        &[data-expanded="true"] {
-            animation: showContent styles.$duration-long both;
-        }
-
-        &[data-closing="true"] {
-            animation: hideContent styles.$duration-long both;
-        }
-
-        &[data-expanded="false"][data-closing="false"] {
-            @include dropdownContentHidden;
-            display: none;
+        &[data-expanded="false"] {
+            opacity: 0;
         }
 
         &:empty {
             display: none;
         }
-    }
-
-    .dropdown-icon {
-        cursor: pointer;
     }
 
     &:has(.dropdown-content:empty) {
@@ -85,32 +68,5 @@ button .dropdown-icon {
         .dropdown-icon {
             display: none;
         }
-    }
-}
-
-@keyframes showContent {
-    0% {
-        @include dropdownContentHidden;
-    }
-    30% {
-        opacity: styles.$opacity-zero;
-    }
-    60% {
-        max-height: styles.$max-height;
-    }
-    100% {
-        @include dropdownContentVisible;
-    }
-}
-
-@keyframes hideContent {
-    0% {
-        @include dropdownContentVisible;
-    }
-    30% {
-        opacity: styles.$opacity-zero;
-    }
-    100% {
-        @include dropdownContentHidden;
     }
 }

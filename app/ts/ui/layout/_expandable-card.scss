@@ -13,6 +13,7 @@
         content: ":";
     }
 }
+
 .expandable-card {
     $button-font-size: var(--fs-large);
     $button-padding: var(--space);
@@ -32,85 +33,28 @@
         z-index: var(--elevation-clickable);
     }
 
-    .summary {
-        &[data-visible="true"] {
-            animation-name: expandSummary;
-        }
-
-        &[data-closing="true"] {
-            animation-name: collapseSummary;
-        }
-    }
-
-    .detail {
-        &[data-visible="true"] {
-            animation-name: expandDetail;
-        }
-
-        &[data-closing="true"] {
-            animation-name: collapseDetail;
-        }
-    }
-
     .summary,
     .detail {
-        animation-duration: animation.$duration-long;
-        animation-fill-mode: both;
-        animation-timing-function: ease-in-out;
-
-        &[data-closing="false"][data-visible="false"] {
-            display: none;
+        &[data-expanded="true"] {
+            transition:
+                opacity animation.$duration-short animation.$duration-short,
+                height animation.$duration-short ease-in-out;
         }
-    }
-}
+        &[data-expanded="false"] {
+            transition:
+                opacity animation.$duration-short,
+                height animation.$duration-short animation.$duration-short
+                    ease-in-out;
+            opacity: 0;
+        }
 
-@keyframes collapseSummary {
-    0% {
-        @include animation.opaque;
-    }
-    40% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-}
+        &:not([data-expansion-state="expanded"]) {
+            overflow: hidden;
+        }
 
-@keyframes expandSummary {
-    0% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-    60% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.opaque;
-    }
-}
-
-@keyframes collapseDetail {
-    0% {
-        @include animation.opaque;
-    }
-    40% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-}
-@keyframes expandDetail {
-    0% {
-        @include animation.transparent;
-        @include animation.zero-height;
-    }
-    60% {
-        @include animation.transparent;
-    }
-    100% {
-        @include animation.opaque;
+        &[data-expanded="true"][data-expanded-previous="true"],
+        &[data-expanded="false"][data-expanded-previous="false"] {
+            transition: none;
+        }
     }
 }

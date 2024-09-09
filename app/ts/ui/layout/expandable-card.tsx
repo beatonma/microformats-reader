@@ -4,12 +4,15 @@ import React, {
     useContext,
     useEffect,
     useId,
-    useRef,
-    useState,
 } from "react";
 import { CardContent, CardLayout } from "ts/ui/layout/card";
 import { DropdownButton } from "ts/ui/layout/dropdown";
-import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
+import {
+    animateExpandCollapse,
+    ExpandableDefaultProps,
+    ExpandCollapseLayout,
+    invertExpansionState,
+} from "ts/ui/layout/expand-collapse";
 import { Alignment, Space } from "ts/ui/layout";
 import { classes, titles } from "ts/ui/util";
 import { OptionsContext } from "ts/options";
@@ -47,102 +50,97 @@ export const ExpandableCard = (
         ...rest
     } = props;
 
-    const [isExpanded, setExpanded] = useState(
-        expandable ? defaultIsExpanded : false,
-    );
-    const [isCollapsing, setIsCollapsing] = useState(false);
-    const [isExpanding, setIsExpanding] = useState(false);
-
     const cardContentID = useId();
-    const summaryRef = useRef<HTMLDivElement>(null);
-    const detailRef = useRef<HTMLDivElement>(null);
-
-    const toggleState = () => {
-        const target = !isExpanded;
-        setExpanded(target);
-        setIsExpanding(target);
-        setIsCollapsing(!target);
-    };
-
-    const onEndAnimation = () => {
-        setIsExpanding(false);
-        setIsCollapsing(false);
-    };
-
-    addAnimationEndListener(summaryRef.current, isExpanding, onEndAnimation);
-    addAnimationEndListener(detailRef.current, isExpanding, onEndAnimation);
+    const summaryId = useId();
 
     return (
-        <>
-            <div className="expandable-card--label">{microformat}</div>
-            <CardLayout
-                className={classes("expandable-card", microformat, className)}
-                title={titles(microformat, title)}
-                {...rest}
-            >
-                <CardContent
-                    id={cardContentID}
-                    data-expanding={isExpanding}
-                    data-collapsing={isCollapsing}
-                    aria-expanded={isExpanded}
-                >
-                    <ConditionalContent condition={expandable}>
-                        <DropdownButton
-                            className="expandable-card--toggle"
-                            isExpanded={isExpanded}
-                            onClick={toggleState}
-                            dropdownButtonTitle={contentDescription}
-                            aria-controls={cardContentID}
-                        />
-                    </ConditionalContent>
+        <ExpandCollapseLayout
+            layout={({
+                isExpanded,
+                collapsibleControllerProps,
+                collapsibleContentProps,
+            }) => {
+                const dataExpansionState =
+                    collapsibleContentProps["data-expansion-state"];
 
-                    <RowOrColumn
-                        layoutName={bannerLayout}
-                        className="banner"
-                        vertical={Alignment.Start}
-                        space={
-                            bannerLayout === "row" ? Space.Large : Space.None
-                        }
-                    >
-                        {sharedContent}
+                useEffect(() => {
+                    animateExpandCollapse(summaryId, !isExpanded, () => {
+                        /* Use inverted value of isExpanded, no need for separate state */
+                    });
+                }, [isExpanded]);
 
-                        <div
-                            ref={summaryRef}
-                            className="summary"
-                            data-visible={!isExpanded}
-                            data-closing={isExpanding}
-                        >
-                            {summaryContent}
+                return (
+                    <>
+                        <div className="expandable-card--label">
+                            {microformat}
                         </div>
-                    </RowOrColumn>
-
-                    <ConditionalContent condition={expandable}>
-                        <div
-                            ref={detailRef}
-                            className="detail"
-                            data-visible={isExpanded}
-                            data-closing={isCollapsing}
+                        <CardLayout
+                            className={classes(
+                                "expandable-card",
+                                microformat,
+                                className,
+                            )}
+                            title={titles(microformat, title)}
+                            {...rest}
                         >
-                            {detailContent}
-                        </div>
-                    </ConditionalContent>
-                </CardContent>
-            </CardLayout>
-        </>
+                            <CardContent
+                                id={cardContentID}
+                                data-expansion-state={dataExpansionState}
+                                data-expanded={isExpanded}
+                                data-expanded-previous={
+                                    collapsibleContentProps[
+                                        "data-expanded-previous"
+                                    ]
+                                }
+                                aria-expanded={isExpanded}
+                            >
+                                <ConditionalContent condition={expandable}>
+                                    <DropdownButton
+                                        className="expandable-card--toggle"
+                                        isExpanded={isExpanded}
+                                        dropdownButtonTitle={contentDescription}
+                                        {...collapsibleControllerProps}
+                                        aria-controls={cardContentID}
+                                    />
+                                </ConditionalContent>
+
+                                <RowOrColumn
+                                    layoutName={bannerLayout}
+                                    className="banner"
+                                    vertical={Alignment.Start}
+                                    space={
+                                        bannerLayout === "row"
+                                            ? Space.Large
+                                            : Space.None
+                                    }
+                                >
+                                    {sharedContent}
+
+                                    <div
+                                        id={summaryId}
+                                        className="summary"
+                                        data-expanded={!isExpanded}
+                                        data-expansion-state={invertExpansionState(
+                                            dataExpansionState,
+                                        )}
+                                    >
+                                        {summaryContent}
+                                    </div>
+                                </RowOrColumn>
+
+                                <ConditionalContent condition={expandable}>
+                                    <div
+                                        className="detail"
+                                        {...collapsibleContentProps}
+                                    >
+                                        {detailContent}
+                                    </div>
+                                </ConditionalContent>
+                            </CardContent>
+                        </CardLayout>
+                    </>
+                );
+            }}
+        />
     );
-};
-
-const addAnimationEndListener = (
-    element: HTMLElement | null,
-    flag: boolean,
-    onAnimationEnd: () => void,
-) => {
-    useEffect(() => {
-        element?.addEventListener("animationend", onAnimationEnd, {
-            once: true,
-        });
-
-        return () =>
-            element?.removeEventListener("animationend", onAnimationEnd);
-    }, [element, flag]);
 };
