@@ -27,8 +27,19 @@ export const formatLatLong = (
     return `${latString}, ${longString}`;
 };
 
-export const formatUri = (uri: string | null | undefined): string | null => {
+const RecognisedUrlPatterns = [/.*\.wiktionary\.org\/wiki\/(\w+)(?:#\w+)?/];
+export const formatUri = (
+    uri: string | null | undefined,
+    options?: { parse?: boolean },
+): string | null => {
     if (!uri) return null;
+
+    if (options?.parse) {
+        for (const pattern of RecognisedUrlPatterns) {
+            const result = pattern.exec(uri)?.[1];
+            if (result) return result;
+        }
+    }
 
     return uri?.replace(/^(https|mailto|tel):(\/\/)?/g, "") ?? null;
 };
