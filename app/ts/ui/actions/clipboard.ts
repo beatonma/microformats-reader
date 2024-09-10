@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { formatDateTime } from "ts/ui/formatting/time";
 
 export const copyToClipboard = (content: any): Promise<void> | null => {
@@ -16,6 +16,16 @@ export const copyToClipboard = (content: any): Promise<void> | null => {
     }
 
     return copyText(JSON.stringify(content, null, 2));
+};
+
+export const copyToClipboardMouseEvent = (content: any) => {
+    return (e: MouseEvent) => {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            copyToClipboard(JSON.stringify(content, null, 2));
+        }
+    };
 };
 
 const copyText = (content: string | null): Promise<void> | null => {

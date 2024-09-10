@@ -15,7 +15,7 @@ import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { OptionsContext, useOptions } from "ts/options";
 import { MicroformatData, parse } from "ts/data/parsing";
-import { copyToClipboard } from "ts/ui/actions/clipboard";
+import { copyToClipboardMouseEvent } from "ts/ui/actions/clipboard";
 import { Microformat } from "ts/data/microformats";
 import HEvent from "ts/ui/microformats/h-event";
 import { ConditionalContent } from "ts/ui/layout/conditional";
@@ -43,6 +43,7 @@ export const PopupUI = (props: MicroformatData) => {
                     }
                 }}
             >
+            <main onContextMenu={copyToClipboardMouseEvent(props)}>
                 <section id="quick_links">
                     <QuickLinks data={relLinks} />
                 </section>

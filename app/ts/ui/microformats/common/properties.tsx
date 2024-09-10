@@ -1,15 +1,10 @@
-import React, {
-    ComponentProps,
-    MouseEvent,
-    ReactElement,
-    ReactNode,
-} from "react";
+import React, { ComponentProps, ReactElement, ReactNode } from "react";
 import { Image } from "@microformats-parser";
 import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
-import { copyToClipboard } from "ts/ui/actions/clipboard";
+import { copyToClipboardMouseEvent } from "ts/ui/actions/clipboard";
 import { formatUri } from "ts/ui/formatting";
 import { formatDateTime, isDate } from "ts/ui/formatting/time";
 import { Icon, Icons } from "ts/ui/icon";
@@ -402,13 +397,9 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
     const commonProps = {
         className: resolvedClassName ?? undefined,
         title: resolvedTitle ?? undefined,
-        onContextMenu: (e: MouseEvent) => {
-            if (e.ctrlKey) {
-                e.preventDefault();
-                e.stopPropagation();
-                copyToClipboard(resolvedHref ?? resolvedDisplayValue);
-            }
-        },
+        onContextMenu: copyToClipboardMouseEvent(
+            resolvedHref ?? resolvedDisplayValue,
+        ),
         children: resolvedDisplayValue,
     };
 
