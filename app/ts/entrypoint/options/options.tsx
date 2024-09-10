@@ -26,6 +26,16 @@ const Options = () => {
                             })
                         }
                     />
+                    <Checkbox
+                        label={_("options_card_expanded_by_default")}
+                        checked={options.cardExpandByDefault}
+                        onChange={checked =>
+                            setOptions({
+                                ...options,
+                                cardExpandByDefault: checked,
+                            })
+                        }
+                    />
 
                     <MultipleChoice
                         title={_("options_popup_sections")}

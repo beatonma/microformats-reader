@@ -416,6 +416,9 @@
   "options_dropdown_expanded_by_default": {
     "message": "Expand dropdowns by default"
   },
+  "options_card_expanded_by_default": {
+    "message": "Expand cards by default"
+  },
   "options_maps_provider": {
     "message": "Open maps with:"
   },

@@ -40,7 +40,7 @@ export const ExpandableCard = (
         expandable = true,
         contentDescription = microformat ??
             "__CANARY__missing_contentDescription",
-        defaultIsExpanded = options.dropdownExpandByDefault,
+        defaultIsExpanded = options.cardExpandByDefault && expandable,
         sharedContent,
         summaryContent,
         detailContent,
@@ -55,6 +55,7 @@ export const ExpandableCard = (
 
     return (
         <ExpandCollapseLayout
+            defaultIsExpanded={defaultIsExpanded}
             layout={({
                 isExpanded,
                 collapsibleControllerProps,

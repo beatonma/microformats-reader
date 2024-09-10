@@ -58,9 +58,14 @@ export const AppConfig = {
 
 export interface AppOptions {
     /**
-     * Default state of dropdown widgets: expanded (true) or collapsed (false).
+     * Default state of Dropdown components: expanded (true) or collapsed (false).
      */
     dropdownExpandByDefault: boolean;
+
+    /**
+     * Default state of ExpandableCard components.
+     */
+    cardExpandByDefault: boolean;
 
     /**
      * Data are always grouped near similar content, but this
@@ -79,6 +84,7 @@ export interface AppOptions {
 }
 
 export const defaultOptions = (): AppOptions => ({
+    cardExpandByDefault: false,
     dropdownExpandByDefault: true,
     groupByType: true,
     popupContents: {
