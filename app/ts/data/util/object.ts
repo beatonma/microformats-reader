@@ -125,11 +125,11 @@ export const registerObjectExtensions = () => {
         Object.defineProperty(Object.prototype, name, { value: func });
     };
 
-    addExtension("let", function <T, R>(block: (self: T) => R) {
+    addExtension("let", function <T, R>(block: (self: T) => R): R {
         return block(this);
     });
 
-    addExtension("toJson", function () {
+    addExtension("toJson", function (): string {
         return JSON.stringify(this, null, 2);
     });
 };

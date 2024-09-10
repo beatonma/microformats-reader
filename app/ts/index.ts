@@ -1,10 +1,8 @@
-import { registerArrayExtensions } from "ts/data/util/arrays";
-import { registerObjectExtensions } from "ts/data/util/object";
+import { registerTypeExtensions } from "ts/data/util";
 
 /**
  * Register prototype extension functions so they can be used in code.
  */
 export const init = () => {
-    registerObjectExtensions();
-    registerArrayExtensions();
+    registerTypeExtensions();
 };
