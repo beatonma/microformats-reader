@@ -14,9 +14,11 @@ export type { HAdrData } from ".//h-adr";
 export const isString = (obj: unknown): obj is string =>
     typeof obj === "string";
 
-export const isUri = (obj: string | null | undefined): obj is string =>
-    obj?.match(/^(https?|irc[s6]?):\/\/\S+$/) != null ||
-    obj?.match(/^(tel|mailto):(?!\/\/)\S+$/) != null;
+export const isUri = (obj: unknown | null | undefined): obj is string =>
+    isString(obj) &&
+    (obj?.match(/^(https?|irc[s6]?):\/\/\S+$/) != null ||
+        obj?.match(/^(tel|mailto):(?!\/\/)\S+$/) != null ||
+        obj?.match(/^#\w+$/) != null);
 
 export const isHCardData = (obj: any | null | undefined): obj is HCardData =>
     obj?.type === Microformat.H.Card;
