@@ -53,6 +53,7 @@ export const LocationProperty = (props: {
                         displayValue: addressSummary(it),
                         onClick: getMapsUrl(it, options.mapsProvider),
                     }))}
+                    valuesLayout="row"
                 />
             </Column>
             <Row>

@@ -1,5 +1,5 @@
 import { EmbeddedHCard } from "ts/data/types/h-card";
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 import { EmbeddedHCardDialog } from "ts/ui/microformats/h-card/h-card";
 import { PropertyRow, PropertyLayoutProps } from "./properties";
 import { Icons } from "ts/ui/icon";
@@ -41,10 +41,13 @@ export const EmbeddedHCardProperty = (props: EmbeddedHCardPropertyProps) => {
             />
             {embeddedHCards
                 ?.find(it => it.id === focussedHCardId)
-                ?.let<
-                    EmbeddedHCard,
-                    ReactElement
-                >((card: EmbeddedHCard) => <EmbeddedHCardDialog {...card} open={!!card} onClose={() => setFocussedHCardId(undefined)} />)}
+                ?.let((card: EmbeddedHCard) => (
+                    <EmbeddedHCardDialog
+                        {...card}
+                        open={!!card}
+                        onClose={() => setFocussedHCardId(undefined)}
+                    />
+                ))}
         </>
     );
 };

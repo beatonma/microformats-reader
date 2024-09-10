@@ -10,17 +10,17 @@ $-secondary-size-large: 32px;
 @mixin avatarCollapsed {
     @include styles.fixedSize($primary-size-small);
     left: 0;
-    transform: translateX(0);
+    translate: 0;
 }
 @mixin avatarMidpoint {
     @include styles.fixedSize($-primary-size-large);
     left: 0;
-    transform: translateX(0);
+    translate: 0;
 }
 @mixin avatarExpanded {
     @include styles.fixedSize($-primary-size-large);
     left: 50%;
-    transform: translateX(-50%);
+    translate: -50%;
     padding: var(--space-3x);
 }
 
@@ -39,12 +39,9 @@ $-secondary-size-large: 32px;
         animation-duration: animation.$duration-long;
         animation-fill-mode: both;
         animation-timing-function: ease-in-out;
-
-        @include avatarCollapsed;
-        @include avatarSize($primary-size-small, $-secondary-size-small);
     }
 
-    [aria-expanded="true"] {
+    [data-expanded="true"] {
         .avatar {
             animation-name: avatarGrow;
 
@@ -53,9 +50,19 @@ $-secondary-size-large: 32px;
         }
     }
 
-    [data-collapsing="true"] {
+    [data-expanded="false"] {
         .avatar {
             animation-name: avatarShrink;
+
+            @include avatarCollapsed;
+            @include avatarSize($primary-size-small, $-secondary-size-small);
+        }
+    }
+
+    [data-expanded="true"][data-expanded-previous="true"],
+    [data-expanded="false"][data-expanded-previous="false"] {
+        .avatar {
+            animation-duration: 1ms;
         }
     }
 }

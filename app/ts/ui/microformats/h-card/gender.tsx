@@ -2,6 +2,8 @@ import React from "react";
 import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { HCardGenderIdentity } from "ts/data/types/h-card";
+import { anyOf } from "ts/data/util/arrays";
+import { Row } from "ts/ui/layout";
 import {
     displayValueProperties,
     PropertiesTable,
@@ -9,11 +11,35 @@ import {
 } from "ts/ui/microformats/common";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Gender = (props: NullablePropsOf<HCardGenderIdentity>) => {
-    const identity = props.data;
-    if (!identity) return null;
+export const GenderSummary = (props: NullablePropsOf<HCardGenderIdentity>) => {
+    if (props.data == null) return null;
+    const { genderIdentity, pronouns, sex } = props.data;
 
-    return <GenderSummary {...identity} />;
+    if (anyOf([genderIdentity, pronouns])) {
+        return (
+            <Row>
+                <PropertyRow
+                    microformat={Microformat.P.GenderIdentity}
+                    values={displayValueProperties(genderIdentity)}
+                    valuesLayout="row"
+                />
+                <PropertyRow
+                    microformat={Microformat.P.Pronoun}
+                    hrefMicroformat={Microformat.U.Pronoun}
+                    values={displayValueProperties(pronouns)}
+                    valuesLayout="row"
+                />
+            </Row>
+        );
+    }
+
+    return (
+        <PropertyRow
+            microformat={Microformat.P.Sex}
+            values={displayValueProperties(sex)}
+            valuesLayout="row"
+        />
+    );
 };
 
 export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
@@ -27,7 +53,8 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
                 values={displayValueProperties(genderIdentity)}
             />
             <PropertyRow
-                microformat={Microformat.P.Pronouns}
+                microformat={Microformat.P.Pronoun}
+                hrefMicroformat={Microformat.U.Pronoun}
                 property={{ displayName: _("hcard_pronouns") }}
                 values={displayValueProperties(pronouns)}
             />
@@ -37,31 +64,5 @@ export const GenderPropertiesTable = (props: PropsOf<HCardGenderIdentity>) => {
                 values={displayValueProperties(sex)}
             />
         </PropertiesTable>
-    );
-};
-
-const GenderSummary = (props: HCardGenderIdentity) => {
-    const { genderIdentity, pronouns, sex } = props;
-
-    if ([genderIdentity, pronouns].nullIfEmpty()) {
-        return (
-            <>
-                <PropertyRow
-                    microformat={Microformat.P.GenderIdentity}
-                    values={displayValueProperties(genderIdentity)}
-                />
-                <PropertyRow
-                    microformat={Microformat.P.Pronouns}
-                    values={displayValueProperties(pronouns)}
-                />
-            </>
-        );
-    }
-
-    return (
-        <PropertyRow
-            microformat={Microformat.P.Sex}
-            values={displayValueProperties(sex)}
-        />
     );
 };

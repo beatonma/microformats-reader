@@ -11,6 +11,7 @@ import {
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
 export const Contact = (props: NullablePropsOf<HCardContactData>) => {
+export const ContactSummary = (props: NullablePropsOf<HCardContactData>) => {
     const url = props.data?.url;
     if (!url) return null;
 
@@ -19,6 +20,7 @@ export const Contact = (props: NullablePropsOf<HCardContactData>) => {
             icon={Icons.Link}
             microformat={Microformat.U.Url}
             values={onClickValueProperties(url)}
+            valuesLayout="row"
         />
     );
 };

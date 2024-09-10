@@ -25,6 +25,7 @@ export const JobSummary = (props: NullablePropsOf<HCardJobData>) => {
                 microformat={Microformat.P.JobTitle}
                 icon={Icons.Work}
                 values={displayValueProperties(jobTitle)}
+                valuesLayout="row"
             />
 
             <ConditionalContent condition={jobTitle == null}>
@@ -32,6 +33,7 @@ export const JobSummary = (props: NullablePropsOf<HCardJobData>) => {
                     microformat={Microformat.P.Role}
                     icon={Icons.Work}
                     values={displayValueProperties(role)}
+                    valuesLayout="row"
                 />
             </ConditionalContent>
 

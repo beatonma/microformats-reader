@@ -9,13 +9,13 @@ import { ExpandableDefaultProps } from "ts/ui/layout/expand-collapse";
 import { ExpandableCard } from "ts/ui/layout/expandable-card";
 import { Avatar } from "ts/ui/microformats/h-card/avatar";
 import {
-    Contact,
+    ContactSummary,
     ContactPropertiesTable,
 } from "ts/ui/microformats/h-card/contact";
 import { DatesPropertiesTable } from "ts/ui/microformats/h-card/dates";
 import { ExtrasPropertiesTable } from "ts/ui/microformats/h-card/extras";
 import {
-    Gender,
+    GenderSummary,
     GenderPropertiesTable,
 } from "ts/ui/microformats/h-card/gender";
 import { JobSummary, JobPropertiesTable } from "ts/ui/microformats/h-card/job";
@@ -100,12 +100,12 @@ const HCardTextSummary = (props: HCardData) => {
         <div className="hcard-summary">
             <Name name={name} />
 
-            <Row wrap space={Space.Small}>
-                <Gender data={gender} />
-                <Contact data={contact} />
+            <Row wrap space={Space.Medium}>
+                <GenderSummary data={gender} />
+                <ContactSummary data={contact} />
             </Row>
 
-            <Row wrap space={Space.Small}>
+            <Row wrap space={Space.Medium}>
                 <LocationProperty
                     microformat={Microformat.P.Adr}
                     locations={location}
