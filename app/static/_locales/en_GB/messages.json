@@ -39,6 +39,9 @@
       }
     }
   },
+  "unresolved_value": {
+    "message": "Unresolved value"
+  },
   "quicklink_webmentions_endpoint_hover": {
     "message": "Webmention endpoint"
   },
@@ -64,7 +67,7 @@
     "message": "PGP"
   },
   "quicklink_multiplier": {
-    "message": "$SECTION$ × $amount$",
+    "message": "$SECTION$ × $AMOUNT$",
     "placeholders": {
       "section": {
         "content": "$1",

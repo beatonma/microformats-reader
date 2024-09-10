@@ -10,7 +10,7 @@ import {
     PropertyRow,
 } from "ts/ui/microformats/common";
 import { PropsOf } from "ts/ui/props";
-import { DateTime, DateTimeProps } from "ts/ui/time";
+import { DateTimeProps } from "ts/ui/time";
 import { Row, Space } from "ts/ui/layout";
 
 export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
@@ -40,7 +40,10 @@ const Birthday = (props: DateTimeProps) => {
 
     return (
         <Row space={Space.Char}>
-            <DateTime title={Microformat.Dt.Bday} datetime={birthday} />
+            <PropertyRow
+                microformat={Microformat.Dt.Bday}
+                values={displayValueProperties([birthday])}
+            />
             <Age datetime={birthday} />
         </Row>
     );
@@ -54,5 +57,5 @@ const Age = (props: DateTimeProps) => {
     if (!age) return null;
 
     const ageMessage = _("hcard_age", age.toString());
-    return <span>{`(${ageMessage})`}</span>;
+    return <span className="hcard-age">{`(${ageMessage})`}</span>;
 };

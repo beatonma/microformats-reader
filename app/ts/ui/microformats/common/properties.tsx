@@ -5,6 +5,7 @@ import React, {
     ReactNode,
 } from "react";
 import { Image } from "@microformats-parser";
+import { _ } from "ts/compat";
 import { Microformat } from "ts/data/microformats";
 import { isString, isUri } from "ts/data/types";
 import { DateOrString, Named } from "ts/data/types/common";
@@ -425,6 +426,11 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
 
     return <span {...commonProps} />;
 };
+const UnresolvedValue = (props: { value: any }) => {
+    return (
+        <span title={JSON.stringify(props.value)}>{_("unresolved_value")}</span>
+    );
+};
 
 interface ResolvedProperties {
     resolvedClassName: string | undefined;
@@ -454,8 +460,8 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
 
     const resolvedHref = (() => {
         let href: string | undefined = undefined;
-        if (isString(onClick) && isUri(onClick)) href = onClick;
-        if (isString(displayValue) && isUri(displayValue)) href = displayValue;
+        if (isUri(onClick)) href = onClick;
+        else if (isUri(displayValue)) href = displayValue;
         if (href) {
             titleParts.push(hrefMicroformat);
             titleParts.push(href);
@@ -464,26 +470,26 @@ const resolveValues = (props: SingleValuePropertyProps): ResolvedProperties => {
     })();
 
     const resolvedDisplayValue = (() => {
-        let resolved;
+        let resolved: string | ReactElement | undefined | null;
 
-        if (isDate(displayValue)) {
+        if (displayValue == null) {
+            resolved = resolvedHref?.let(it => formatUri(it, { parse: true }));
+        } else if (isDate(displayValue)) {
             resolved = renderDate?.(displayValue, buildTitle()) ?? (
                 <DateTime datetime={displayValue} title={buildTitle()} />
             );
             titleParts.push(formatDateTime(displayValue));
-        } else if (isString(displayValue) && isUri(displayValue)) {
-            resolved = formatUri(displayValue);
-            titleParts.push(displayValue);
-        } else {
-            resolved = displayValue ?? resolvedHref?.let(formatUri);
+        } else if (isUri(displayValue)) {
+            resolved = formatUri(displayValue, { parse: true });
+        } else if (isString(displayValue)) {
+            resolved = displayValue;
+        }
+        if (!resolved) {
+            resolved = <UnresolvedValue value={displayValue} />;
         }
 
         if (isString(resolved)) {
             resolved = renderString?.(resolved, buildTitle()) ?? resolved;
-        }
-
-        if (!resolved) {
-            resolved = "__UNRESOLVED_DISPLAY_VALUE__";
         }
 
         if (icon) {
