@@ -52,7 +52,8 @@
         @include size.fixedSize(1em);
     }
 
-    button.property-value {
+    button.property-value,
+    a[href^="#"] {
         @include element.buttonStyle;
         font-size: inherit;
         @include chip.chip;

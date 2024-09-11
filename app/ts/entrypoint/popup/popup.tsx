@@ -1,5 +1,5 @@
 import React, {
-    MouseEvent,
+    ReactNode,
     useContext,
     useEffect,
     useRef,
@@ -9,6 +9,7 @@ import { _, compatBrowser } from "ts/compat";
 import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
 import { ScrimLayout } from "ts/ui/layout/dialog";
+import { ExpandCollapseContextLayout } from "ts/ui/layout/expand-collapse";
 import { HAdr, HCard, HFeed } from "ts/ui/microformats";
 import { injectTheme } from "ts/ui/theme";
 import { Loading } from "ts/ui/loading";
@@ -33,16 +34,7 @@ export const PopupUI = (props: MicroformatData) => {
     }
 
     return (
-        <ScrimLayout>
-            <main
-                onContextMenu={(e: MouseEvent) => {
-                    if (e.ctrlKey) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        copyToClipboard(JSON.stringify(props, null, 2));
-                    }
-                }}
-            >
+        <ContextProviders>
             <main onContextMenu={copyToClipboardMouseEvent(props)}>
                 <section id="quick_links">
                     <QuickLinks data={relLinks} />
@@ -98,9 +90,15 @@ export const PopupUI = (props: MicroformatData) => {
                     </section>
                 </ConditionalContent>
             </main>
-        </ScrimLayout>
+        </ContextProviders>
     );
 };
+
+const ContextProviders = (props: { children: ReactNode }) => (
+    <ExpandCollapseContextLayout>
+        <ScrimLayout>{props.children}</ScrimLayout>
+    </ExpandCollapseContextLayout>
+);
 
 const NoContent = () => (
     <div id="no_content">

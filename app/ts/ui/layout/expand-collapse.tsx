@@ -1,4 +1,33 @@
-import React, { ReactNode, useEffect, useId, useState } from "react";
+import React, {
+    createContext,
+    ReactNode,
+    useContext,
+    useEffect,
+    useId,
+    useState,
+} from "react";
+
+export const ExpandCollapseFlagContext = createContext<[boolean, () => void]>([
+    false,
+    () => {},
+]);
+
+export const ExpandCollapseContextLayout = (props: { children: ReactNode }) => {
+    const [flag, setFlag] = useState(false);
+
+    const touchFlag = () => {
+        setFlag(true);
+        setTimeout(() => {
+            setFlag(false);
+        }, 1);
+    };
+
+    return (
+        <ExpandCollapseFlagContext.Provider value={[flag, touchFlag]}>
+            {props.children}
+        </ExpandCollapseFlagContext.Provider>
+    );
+};
 
 export interface ExpandableDefaultProps {
     defaultIsExpanded?: boolean;
@@ -52,11 +81,21 @@ export const ExpandCollapseLayout = (
         isExpanded ? "expanded" : "collapsed",
     );
     const contentID = useId();
+    const [expandCollapseContextFlag] = useContext(ExpandCollapseFlagContext);
 
     useEffect(
         () => animateExpandCollapse(contentID, isExpanded, setExpansionState),
         [isExpanded],
     );
+
+    useEffect(() => {
+        if (expandCollapseContextFlag) {
+            setExpanded(previous => {
+                setPreviousWasExpanded(previous);
+                return true;
+            });
+        }
+    }, [expandCollapseContextFlag]);
 
     const canExpand = props.children
         ? React.Children.count(props.children) > 0
@@ -102,25 +141,6 @@ export const animateExpandCollapse = (
     const element = document.getElementById(elementId);
     if (!element) return;
 
-    if (isExpanded) {
-        resize(element, 0, element.scrollHeight);
-    } else {
-        resize(element, element.scrollHeight, 0);
-    }
-
-    // const transition = element.style.transition;
-    // element.style.transition = "";
-    // requestAnimationFrame(() => {
-    //     element.style.transition = transition;
-    //     element.style.height = `${element.scrollHeight}px`;
-    //
-    //     if (!isExpanded) {
-    //         requestAnimationFrame(() => {
-    //             element.style.height = "0";
-    //         });
-    //     }
-    // });
-
     const _onTransitionEnd = () => {
         if (isExpanded) {
             setExpansionState("expanded");
@@ -129,6 +149,12 @@ export const animateExpandCollapse = (
             setExpansionState("collapsed");
         }
     };
+
+    if (isExpanded) {
+        resize(element, 0, element.scrollHeight);
+    } else {
+        resize(element, element.scrollHeight, 0);
+    }
 
     element.addEventListener("transitionend", _onTransitionEnd, {
         once: true,

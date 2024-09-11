@@ -1,5 +1,6 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, useContext } from "react";
 import { compatBrowser } from "ts/compat";
+import { ExpandCollapseFlagContext } from "ts/ui/layout/expand-collapse";
 import { titles } from "ts/ui/util";
 import { formatUri } from "ts/ui/formatting";
 
@@ -15,10 +16,9 @@ export const LinkTo = (props: LinkProps) => {
 
     if (href.startsWith("#")) {
         return (
-            <a
+            <InternalLink
                 href={href}
                 title={titleWithURL}
-                onClick={highlightElement(href.replace("#", ""))}
                 children={children}
                 {...rest}
             />
@@ -43,14 +43,78 @@ export const LinkTo = (props: LinkProps) => {
     );
 };
 
+const InternalLink = (props: LinkProps & { href: string }) => {
+    const { href, ...rest } = props;
+
+    const [_, expandAll] = useContext(ExpandCollapseFlagContext);
+    return (
+        <a
+            href={href}
+            onClick={() => {
+                awaitComponentsExpanded(expandAll, () => {
+                    // Highlight the targeted content once any expandable elements
+                    // it might be hidden within are in their fully expanded state.
+                    highlightElement(href.replace("#", ""))();
+                });
+            }}
+            {...rest}
+        />
+    );
+};
+
 const highlightElement = (id: string): (() => void) => {
     return () => {
         const element = document.getElementById(id);
-        element?.setAttribute("data-highlight-linked", "true");
-        element?.addEventListener(
+        if (!element) return;
+
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        element.setAttribute("data-highlight-linked", "true");
+        element.addEventListener(
             "animationend",
-            () => element?.removeAttribute("data-highlight-linked"),
+            () => element.removeAttribute("data-highlight-linked"),
             { once: true },
         );
     };
+};
+
+/**
+ *
+ *
+ * @param init The action which triggers state changes, called as soon as observer setup is complete
+ * @param callback The action which triggers once all observed components have reached their `expanded` state.
+ */
+const awaitComponentsExpanded = (init: () => void, callback: () => void) => {
+    const attributeName = "data-expansion-state";
+
+    const expanders = document.querySelectorAll(
+        `[${attributeName}="expanding"],[${attributeName}="collapsing"],[${attributeName}="collapsed"]`,
+    );
+
+    const elementCount = expanders.length;
+    if (elementCount === 0) {
+        callback();
+        return;
+    }
+
+    let elementsFinished = 0;
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (
+                (mutation.target as HTMLElement).getAttribute(attributeName) ===
+                "expanded"
+            ) {
+                elementsFinished += 1;
+            }
+        });
+
+        if (elementsFinished === elementCount) {
+            callback();
+            observer.disconnect();
+        }
+    });
+    expanders.forEach(el => {
+        observer.observe(el, { attributes: true });
+    });
+
+    init();
 };

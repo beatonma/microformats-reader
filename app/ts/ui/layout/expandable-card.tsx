@@ -11,7 +11,6 @@ import {
     animateExpandCollapse,
     ExpandableDefaultProps,
     ExpandCollapseLayout,
-    invertExpansionState,
 } from "ts/ui/layout/expand-collapse";
 import { Alignment, Space } from "ts/ui/layout";
 import { classes, titles } from "ts/ui/util";
@@ -61,9 +60,6 @@ export const ExpandableCard = (
                 collapsibleControllerProps,
                 collapsibleContentProps,
             }) => {
-                const dataExpansionState =
-                    collapsibleContentProps["data-expansion-state"];
-
                 useEffect(() => {
                     animateExpandCollapse(summaryId, !isExpanded, () => {
                         /* Use inverted value of isExpanded, no need for separate state */
@@ -86,7 +82,6 @@ export const ExpandableCard = (
                         >
                             <CardContent
                                 id={cardContentID}
-                                data-expansion-state={dataExpansionState}
                                 data-expanded={isExpanded}
                                 data-expanded-previous={
                                     collapsibleContentProps[
@@ -121,9 +116,6 @@ export const ExpandableCard = (
                                         id={summaryId}
                                         className="summary"
                                         data-expanded={!isExpanded}
-                                        data-expansion-state={invertExpansionState(
-                                            dataExpansionState,
-                                        )}
                                     >
                                         {summaryContent}
                                     </div>
