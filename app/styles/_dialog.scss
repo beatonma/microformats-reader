@@ -2,7 +2,7 @@
     transition: background-color 200ms;
 
     &[data-visible="true"] {
-        position: absolute;
+        position: fixed;
         inset: 0;
 
         background-color: var(--scrim);
@@ -15,6 +15,7 @@
     inset: 0;
 
     dialog {
+        position: fixed;
         min-width: 80vw;
         inset: 0;
         z-index: var(--elevation-dialog);
