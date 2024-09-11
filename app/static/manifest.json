@@ -8,7 +8,10 @@
     "author": "Michael Beaton",
 
     "icons": {
-
+        "16": "icon/muted-16.png",
+        "32": "icon/muted-32.png",
+        "48": "icon/muted-48.png",
+        "128": "icon/muted-128.png"
     },
     
     "default_locale": "en_GB",

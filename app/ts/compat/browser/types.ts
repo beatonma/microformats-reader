@@ -86,9 +86,16 @@ export interface SetBadgeTextDetails {
     tabId: number | undefined;
     text?: string;
 }
+export interface SetIconDetails {
+    imageData?: ImageData | object;
+    path?: string | object;
+    tabId?: number;
+    windowId?: number;
+}
 export interface BrowserAction {
     setBadgeText: (details: SetBadgeTextDetails) => Promise<ErrorString>;
     setBadgeColors: (details: SetBadgeColorDetails) => Promise<ErrorString>;
+    setIcon: (details: SetIconDetails) => Promise<ErrorString>;
 }
 
 //

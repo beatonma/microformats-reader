@@ -8,6 +8,7 @@ import {
     BrowserTabs,
     SetBadgeColorDetails,
     SetBadgeTextDetails,
+    SetIconDetails,
 } from "ts/compat/browser/types";
 
 declare const chrome: any;
@@ -63,6 +64,11 @@ export class ChromeBrowserProxy implements BrowserProxy {
                         color: details.background,
                     }),
                 );
+        },
+        setIcon: (details: SetIconDetails) => {
+            if (chrome.action == null)
+                return browserProxyError("chrome.action.setIcon");
+            return chrome.action.setIcon(details);
         },
     };
 
