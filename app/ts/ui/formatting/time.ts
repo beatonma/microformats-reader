@@ -36,13 +36,8 @@ export const yearsSince = (
     if (date == null) return null;
     const now = __now ?? new Date();
 
-    const dateHasPassed =
-        now.getMonth() >= date.getMonth() && now.getDate() >= date.getDate();
-    const yearDifference = now.getFullYear() - date.getFullYear();
-    return Math.max(
-        0,
-        Math.floor(dateHasPassed ? yearDifference : yearDifference - 1),
-    );
+    const year = 1000 * 60 * 60 * 24 * 365;
+    return Math.floor((now.valueOf() - date.valueOf()) / year.valueOf());
 };
 
 export const isDate = (obj: any): obj is Date => obj instanceof Date;
