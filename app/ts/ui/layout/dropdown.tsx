@@ -20,7 +20,9 @@ export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     const options = useContext(OptionsContext);
     return (
         <ExpandCollapseLayout
-            defaultIsExpanded={options.dropdownExpandByDefault}
+            defaultIsExpanded={
+                props.defaultIsExpanded ?? options.dropdownExpandByDefault
+            }
             layout={expandCollapseProps => (
                 <DropdownLayout {...props} {...expandCollapseProps} />
             )}

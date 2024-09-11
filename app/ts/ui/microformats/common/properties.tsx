@@ -9,6 +9,7 @@ import { formatUri } from "ts/ui/formatting";
 import { formatDateTime, isDate } from "ts/ui/formatting/time";
 import { Icon, Icons } from "ts/ui/icon";
 import { Img } from "ts/ui/image";
+import { Dropdown } from "ts/ui/layout/dropdown";
 import { LinkTo } from "ts/ui/link-to";
 import { classes, titles } from "ts/ui/util";
 import { Alignment, Column, Row, Space } from "ts/ui/layout";
@@ -417,11 +418,17 @@ const SinglePropertyValue = (props: SingleValuePropertyProps) => {
 
     return <span {...commonProps} />;
 };
-const UnresolvedValue = (props: { value: any }) => {
-    return (
-        <span title={JSON.stringify(props.value)}>{_("unresolved_value")}</span>
-    );
-};
+const UnresolvedValue = (props: { value: any }) => (
+    <Dropdown
+        header={_("unresolved_value")}
+        dropdownButtonTitle={_("unresolved_value")}
+        defaultIsExpanded={false}
+    >
+        <pre>
+            <code>{JSON.stringify(props.value, null, 2)}</code>
+        </pre>
+    </Dropdown>
+);
 
 interface ResolvedProperties {
     resolvedClassName: string | undefined;
