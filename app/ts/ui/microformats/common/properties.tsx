@@ -84,8 +84,8 @@ export const onClickValueProperties = (
     values?.map(it => ({ onClick: it }))?.nullIfEmpty() ?? null;
 
 export const linkedValueProperties = (
-    displayValues: DateOrString[] | null | undefined,
-    links: HRef[] | null,
+    displayValues: (DateOrString | null)[] | null | undefined,
+    links: (HRef | null)[] | null,
 ): PropertyValue[] | null =>
     zipOrNull(displayValues, links)
         ?.map(([display, link]) => ({ displayValue: display, onClick: link }))

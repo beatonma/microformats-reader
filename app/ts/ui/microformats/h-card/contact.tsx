@@ -4,16 +4,32 @@ import { Microformat } from "ts/data/microformats";
 import { HCardContactData } from "ts/data/types/h-card";
 import { Icons } from "ts/ui/icon";
 import {
+    linkedValueProperties,
     onClickValueProperties,
     PropertiesTable,
     PropertyRow,
 } from "ts/ui/microformats/common";
 import { NullablePropsOf, PropsOf } from "ts/ui/props";
 
-export const Contact = (props: NullablePropsOf<HCardContactData>) => {
+const ContactTableId = "hcard_contact";
+
 export const ContactSummary = (props: NullablePropsOf<HCardContactData>) => {
     const url = props.data?.url;
     if (!url) return null;
+
+    if (url.length > 2) {
+        return (
+            <PropertyRow
+                icon={Icons.Link}
+                microformat={Microformat.U.Url}
+                values={linkedValueProperties(
+                    [null, _("n_other_values", `${url.length - 1}`)],
+                    [url[0], `#${ContactTableId}`],
+                )}
+                valuesLayout="row"
+            />
+        );
+    }
 
     return (
         <PropertyRow
@@ -29,7 +45,7 @@ export const ContactPropertiesTable = (props: PropsOf<HCardContactData>) => {
     const { url, email, phone, impp, publicKey } = props.data;
 
     return (
-        <PropertiesTable>
+        <PropertiesTable id={ContactTableId}>
             <PropertyRow
                 microformat={Microformat.U.Url}
                 property={{ displayName: _("hcard_contact_url") }}

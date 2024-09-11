@@ -39,6 +39,16 @@
       }
     }
   },
+  "n_other_values": {
+    "message": "and $AMOUNT$ others",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "3"
+      }
+    },
+    "description": "A sentence suffix, rendered in place as something like '<first_value> and 3 others"
+  },
   "unresolved_value": {
     "message": "Unresolved value"
   },
