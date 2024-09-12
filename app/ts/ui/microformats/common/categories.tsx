@@ -15,6 +15,7 @@ export const CategoryPropertyRow = (props: NullablePropsOf<string[]>) => {
             microformat={Microformat.P.Category}
             icon={Icons.Tag}
             values={{ displayValue: joinNotEmpty(", ", categories) }}
+            valuesLayout="row"
         />
     );
 };
