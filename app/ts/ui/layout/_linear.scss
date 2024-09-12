@@ -1,34 +1,53 @@
 %-linear {
     display: flex;
-    gap: var(--gap);
+    column-gap: var(--column-gap);
+    row-gap: var(--row-gap);
 
     &:empty {
         display: none;
     }
 
-    &.wrapped {
+    &.wrap {
         flex-wrap: wrap;
     }
 
     &.space {
-        &-none {
-            --gap: 0;
+        // Horizontal
+        &-h {
+            &-none {
+                --column-gap: 0;
+            }
+            &-char {
+                --column-gap: var(--space-char);
+            }
+            &-small {
+                --column-gap: var(--space-half);
+            }
+            &-medium {
+                --column-gap: var(--space);
+            }
+            &-large {
+                --column-gap: var(--space-2x);
+            }
         }
 
-        &-char {
-            --gap: var(--space-char);
-        }
-
-        &-small {
-            --gap: var(--space-half);
-        }
-
-        &-medium {
-            --gap: var(--space);
-        }
-
-        &-large {
-            --gap: var(--space-2x);
+        // Vertical
+        &-v {
+            &-none {
+                --row-gap: 0;
+            }
+            &-char {
+                --row-gap: var(--space-char);
+            }
+            &-small {
+                --row-gap: var(--space-half);
+            }
+            &-medium {
+                --row-gap: var(--space);
+            }
+            &-large {
+                --row-gap: var(--space-2x);
+            }
         }
     }
 }
@@ -41,7 +60,8 @@
         overflow-x: auto;
     }
 
-    &.horizontal {
+    // Horizontal
+    &.h {
         &-start {
             justify-content: start;
         }
@@ -61,7 +81,8 @@
             justify-content: space-evenly;
         }
     }
-    &.vertical {
+    // Vertical
+    &.v {
         &-start {
             align-items: start;
             align-content: start;
@@ -80,7 +101,7 @@
     }
 
     &.space-around {
-        margin-inline: var(--gap);
+        margin-inline: var(--row-gap);
     }
 
     &.fill-available {
@@ -96,7 +117,7 @@
         overflow-y: auto;
     }
 
-    &.horizontal {
+    &.h {
         &-start {
             align-items: start;
         }
@@ -107,7 +128,7 @@
             align-items: end;
         }
     }
-    &.vertical {
+    &.v {
         &-start {
             justify-content: start;
         }
@@ -129,7 +150,7 @@
     }
 
     &.space-around {
-        margin-block: var(--gap);
+        margin-block: var(--column-gap);
     }
 
     &.fill-available {

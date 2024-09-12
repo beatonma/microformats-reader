@@ -56,7 +56,7 @@ const Shared = (props: HEventData) => {
     const { name, url, location, category } = props;
 
     return (
-        <Column>
+        <Column space={Space.None}>
             <PropertyRow
                 microformat={Microformat.P.Name}
                 hrefMicroformat={Microformat.U.Url}

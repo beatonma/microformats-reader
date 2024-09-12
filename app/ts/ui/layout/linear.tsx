@@ -1,8 +1,8 @@
 import React, { ComponentProps, ReactNode } from "react";
-import { classes } from "ts/ui/util";
+import { onlyIf } from "ts/data/util/object";
 import { Alignment } from "ts/ui/layout/alignment";
 import { Space } from "ts/ui/layout/space";
-import { onlyIf } from "ts/data/util/object";
+import { classes } from "ts/ui/util";
 
 interface LinearLayoutProps extends ComponentProps<"div"> {
     className?: string;
@@ -11,6 +11,8 @@ interface LinearLayoutProps extends ComponentProps<"div"> {
     vertical?: Alignment;
     horizontal?: Alignment;
     space?: Space;
+    horizontalSpace?: Space;
+    verticalSpace?: Space;
     spaceAround?: boolean;
     stretch?: boolean;
     children: ReactNode | ReactNode[];
@@ -29,6 +31,8 @@ const LinearLayout = (
         vertical = layoutName === "row" ? Alignment.Center : Alignment.Start,
         horizontal = Alignment.Start,
         space = Space.Small,
+        horizontalSpace = layoutName === "row" ? space : Space.None,
+        verticalSpace = layoutName === "column" ? space : Space.None,
         spaceAround = false,
         stretch = false,
         ...rest
@@ -37,11 +41,12 @@ const LinearLayout = (
     const cls = classes(
         layoutName,
         className,
-        onlyIf(wrap, "wrapped"),
+        onlyIf(wrap, "wrap"),
         onlyIf(scroll, "scrollable"),
-        `vertical-${vertical}`,
-        `horizontal-${horizontal}`,
-        `space-${space}`,
+        `v-${vertical}`,
+        `h-${horizontal}`,
+        `space-v-${verticalSpace}`,
+        `space-h-${horizontalSpace}`,
         onlyIf(spaceAround, `space-around`),
         onlyIf(stretch, "fill-available"),
     );

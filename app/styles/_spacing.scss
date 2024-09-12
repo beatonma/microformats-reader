@@ -9,5 +9,6 @@ $space: 8px;
     --space-3x: #{calc($space * 3)};
     --space-4x: #{calc($space * 4)};
 
-    --gap: var(--space);
+    --row-gap: var(--space);
+    --column-gap: var(--space);
 }

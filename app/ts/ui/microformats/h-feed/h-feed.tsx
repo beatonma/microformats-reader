@@ -52,7 +52,7 @@ const AboutHFeed = (props: NullablePropsOf<HFeedAbout>) => {
 
     const { name, author, summary, url, photo } = about;
     return (
-        <Column className="hfeed-about">
+        <Column className="hfeed-about" space={Space.None}>
             <Row vertical={Alignment.Baseline} space={Space.Large} wrap>
                 <PropertyRow
                     icon={{

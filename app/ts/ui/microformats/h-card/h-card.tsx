@@ -89,12 +89,12 @@ const HCardTextSummary = (props: HCardData) => {
         <div className="hcard-summary">
             <Name name={name} />
 
-            <Row wrap space={Space.Medium}>
+            <Row wrap space={Space.Medium} verticalSpace={Space.None}>
                 <GenderSummary data={gender} />
                 <ContactSummary data={contact} />
             </Row>
 
-            <Row wrap space={Space.Medium}>
+            <Row wrap space={Space.Medium} verticalSpace={Space.None}>
                 <LocationProperty
                     microformat={Microformat.P.Adr}
                     locations={location}
