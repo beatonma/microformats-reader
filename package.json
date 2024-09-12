@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Reader for microformat-compliant content",
   "scripts": {
-    "dev": "webpack --watch --config webpack.dev.js --env DEBUG=true",
-    "build": "webpack --config webpack.production.js",
-    "watch": "webpack --watch --config webpack.production.js",
+    "buildChrome": "webpack --config webpack.config.ts --mode production --env browser=chrome",
+    "buildFirefox": "webpack --config webpack.config.ts --mode production --env browser=firefox",
+    "devChrome": "webpack --watch --config webpack.config.ts --mode development --env browser=chrome",
+    "devFirefox": "webpack --watch --config webpack.config.ts --mode development --env browser=firefox",
+    "watchChrome": "webpack --watch --config webpack.config.ts --mode production --env browser=chrome",
+    "watchFirefox": "webpack --watch --config webpack.config.ts --mode production --env browser=firefox",
     "test": "jest --watchAll --config jest.config.js"
   },
   "keywords": [
@@ -44,6 +47,7 @@
     "style-loader": "^4.0.0",
     "swc-loader": "^0.2.6",
     "webpack": "^5.93.0",
+    "ts-node": "^10.9.2",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^6.0.1"
   },

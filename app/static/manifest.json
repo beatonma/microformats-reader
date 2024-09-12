@@ -20,9 +20,6 @@
         "tabs",
         "storage"
     ],
-    "web_accessible_resources": [
-
-    ],
 
     "action": {
         "default_title": "__MSG_popup_title__",
