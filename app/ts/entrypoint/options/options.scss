@@ -4,3 +4,16 @@
     text-align: center;
     font-size: var(--fs-caption);
 }
+
+fieldset {
+    margin-block: var(--space);
+    border: none;
+    padding: 0.5em 0;
+}
+legend {
+    @extend %caption;
+
+    &:after {
+        content: ":";
+    }
+}
