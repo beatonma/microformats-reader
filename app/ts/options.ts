@@ -20,13 +20,12 @@ export interface MapsProvider {
 }
 
 export namespace AppOptions {
-    export enum PopupSection {
-        "h-card" = "h-card",
-        "h-feed" = "h-feed",
-        "h-event" = "h-event",
-        "h-adr" = "h-adr",
-        "rel" = "rel",
-    }
+    export type PopupSection =
+        | "h-card"
+        | "h-feed"
+        | "h-event"
+        | "h-adr"
+        | "rel";
 
     export const MapProvider = {
         GoogleEarth: {
@@ -76,7 +75,7 @@ export interface AppOptions {
      */
     groupByType: boolean;
 
-    popupContents: Record<keyof typeof AppOptions.PopupSection, boolean>;
+    popupContents: Record<AppOptions.PopupSection, boolean>;
 
     mapsProvider: MapsProvider;
 }
