@@ -12,8 +12,14 @@
     "message": "View microformat content",
     "description": "Hover text for browser toolbar icon."
   },
-  "no_microformat_content": {
-    "message": "No microformat content found."
+  "no_content_available": {
+    "message": "No content available."
+  },
+  "no_content_displayable": {
+    "message": "No displayable content."
+  },
+  "open_extension_options": {
+    "message": "Options"
   },
   "dropdown_collapse": {
     "message": "Show less"

@@ -1,15 +1,11 @@
 @use "styles/app";
 
-#quick_links {
-    margin-block: var(--space-1x);
-}
-
 #no_content {
     font-size: var(--fs-large);
     text-align: center;
     padding: var(--space-2x);
 
-    a {
-        font-size: var(--fs-caption);
+    button {
+        @include app.chip;
     }
 }

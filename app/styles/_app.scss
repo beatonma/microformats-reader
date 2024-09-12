@@ -36,7 +36,7 @@ body {
 }
 
 main {
-    padding: 1ch;
+    padding: 1em 1ch;
     overflow: hidden;
 
     @for $i from 1 through 10 {

@@ -21,6 +21,7 @@ export interface MapsProvider {
 
 export namespace AppOptions {
     export type PopupSection =
+        | "quick-links"
         | "h-card"
         | "h-feed"
         | "h-event"
@@ -85,6 +86,7 @@ export const defaultOptions = (): AppOptions => ({
     dropdownExpandByDefault: true,
     groupByType: true,
     popupContents: {
+        "quick-links": true,
         "h-card": true,
         "h-feed": true,
         "h-event": true,

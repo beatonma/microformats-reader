@@ -64,6 +64,7 @@ export interface BrowserRuntime {
         message: T,
         options?: object,
     ) => Promise<unknown | ErrorString>;
+    openOptionsPage: () => Promise<void>;
 }
 
 //

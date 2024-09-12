@@ -8,6 +8,7 @@ import { HAdrData, HCardData, HFeedData } from "ts/data/types";
 import { parseHEvents } from "ts/data/parsing/h-event";
 import { HEventData } from "ts/data/types/h-event";
 import { parseHAdrs, parseHGeos } from "ts/data/parsing/h-adr";
+import { nullable } from "ts/data/util/object";
 
 export interface MicroformatData {
     microformats: ParsedDocument;
@@ -18,7 +19,7 @@ export interface MicroformatData {
     locations: {
         adrs: HAdrData[] | null;
         geos: HAdrData[] | null;
-    };
+    } | null;
 }
 
 export const parse = (
@@ -51,9 +52,9 @@ const parseDocument = async (
         hcards: hCards,
         feeds: hFeeds,
         events: hEvents,
-        locations: {
+        locations: nullable({
             adrs: adrs,
             geos: geos,
-        },
+        }),
     };
 };

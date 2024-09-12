@@ -25,20 +25,31 @@ import "./popup.scss";
 
 export const PopupUI = (props: MicroformatData) => {
     const { relLinks, hcards, feeds, locations, events } = props;
-    const isEmpty = noneOf([relLinks, hcards, feeds]);
     const options = useContext(OptionsContext);
     const sections = options.popupContents;
 
-    if (isEmpty) {
-        return <NoContent />;
-    }
+    const isEmpty = noneOf([relLinks, hcards, feeds, locations, events]);
+    if (isEmpty) return <NoContent reason="nothing" />;
+
+    // Check if user options will result in nothing being displayed.
+    const hasDisplayableContent: boolean = [
+        [sections["quick-links"], relLinks],
+        [sections["h-card"], hcards],
+        [sections["h-feed"], feeds],
+        [sections["h-event"], events],
+        [sections["h-adr"], locations],
+        [sections.rel, relLinks],
+    ].some(([enabled, data]) => enabled && data != null);
+    if (!hasDisplayableContent) return <NoContent reason="settings" />;
 
     return (
         <ContextProviders>
             <main onContextMenu={copyToClipboardMouseEvent(props)}>
-                <section id="quick_links">
-                    <QuickLinks data={relLinks} />
-                </section>
+                <ConditionalContent condition={sections["quick-links"]}>
+                    <section id="quick_links">
+                        <QuickLinks data={relLinks} />
+                    </section>
+                </ConditionalContent>
 
                 <ConditionalContent condition={sections["h-card"]}>
                     <section id="h_cards">
@@ -66,7 +77,7 @@ export const PopupUI = (props: MicroformatData) => {
 
                 <ConditionalContent condition={sections["h-adr"]}>
                     <section id="locations">
-                        {locations.adrs?.map((location, index) => (
+                        {locations?.adrs?.map((location, index) => (
                             <HAdr
                                 microformat={Microformat.H.Adr}
                                 location={location}
@@ -74,7 +85,7 @@ export const PopupUI = (props: MicroformatData) => {
                             />
                         ))}
 
-                        {locations.geos?.map((location, index) => (
+                        {locations?.geos?.map((location, index) => (
                             <HAdr
                                 microformat={Microformat.H.Geo}
                                 location={location}
@@ -100,11 +111,29 @@ const ContextProviders = (props: { children: ReactNode }) => (
     </ExpandCollapseContextLayout>
 );
 
-const NoContent = () => (
-    <div id="no_content">
-        <p>{_("no_microformat_content")}</p>
-    </div>
-);
+/**
+ * Reason:
+ * - `settings` means there is content available but user options prevent it from being shown.
+ * - `nothing` means there is no content to show regardless of user options.
+ */
+const NoContent = (props: { reason: "settings" | "nothing" }) => {
+    if (props.reason === "nothing") {
+        return (
+            <div id="no_content">
+                <p>{_("no_content_available")}</p>
+            </div>
+        );
+    }
+
+    return (
+        <div id="no_content">
+            <p>{_("no_content_displayable")}</p>
+            <button onClick={() => compatBrowser.runtime.openOptionsPage()}>
+                {_("open_extension_options")}
+            </button>
+        </div>
+    );
+};
 
 export const Popup = () => {
     const microformats = getMicroformatsFromCurrentTab();

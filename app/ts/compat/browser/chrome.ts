@@ -38,6 +38,7 @@ export class ChromeBrowserProxy implements BrowserProxy {
             },
         },
         sendMessage: chrome.runtime?.sendMessage,
+        openOptionsPage: chrome.runtime?.openOptionsPage,
     };
 
     i18n: BrowserI18n = chrome.i18n;
