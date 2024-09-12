@@ -1,11 +1,9 @@
 :root {
-    --fs-h1: 30px;
-    --fs-h2: 28px;
-    --fs-h3: 26px;
+    --fs-h1: xx-large;
 
-    --fs-large: 24px;
-    --fs-default: 20px;
-    --fs-caption: 16px;
+    --fs-large: large;
+    --fs-default: medium;
+    --fs-caption: small;
 }
 
 %caption {
@@ -35,12 +33,4 @@
 
 h1 {
     font-size: var(--fs-h1);
-}
-
-h2 {
-    font-size: var(--fs-h2);
-}
-
-h3 {
-    font-size: var(--fs-h3);
 }
