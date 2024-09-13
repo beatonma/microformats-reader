@@ -1,7 +1,6 @@
 @forward "./index";
 @forward "ts/ui";
 @use "./element";
-@use "./animation";
 
 /**
  * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
@@ -41,7 +40,7 @@ main {
 
     @for $i from 1 through 10 {
         > :nth-child(#{$i}) {
-            animation: fadeIn animation.$duration-long;
+            animation: fadeIn var(--duration-long);
             animation-fill-mode: backwards;
             animation-delay: calc(#{$i} * 40ms);
         }

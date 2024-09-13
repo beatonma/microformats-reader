@@ -1,9 +1,7 @@
-@use "./animation";
-
 @mixin hover($-color: var(--hover)) {
     transition:
-        background-color animation.$duration-short,
-        borderr-radius animation.$duration-short;
+        background-color var(--duration-short),
+        borderr-radius var(--duration-short);
 
     &:hover {
         background-color: $-color;
@@ -18,8 +16,8 @@
     background: none;
 
     transition:
-        background-color animation.$duration-short,
-        borderr-radius animation.$duration-short;
+        background-color var(--duration-short),
+        borderr-radius var(--duration-short);
 
     &:hover > * {
         background-color: var(--hover);

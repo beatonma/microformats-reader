@@ -11,7 +11,7 @@
     &--interactions {
         font-stretch: extra-condensed;
         color: var(--text-secondary);
-        transition: color styles.$duration-short;
+        transition: color var(--duration-short);
 
         > *:hover {
             color: var(--text-primary);

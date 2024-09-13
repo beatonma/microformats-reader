@@ -1,8 +1,7 @@
-@use "styles/animation";
 @use "./card";
 
 .tooltip-root {
-    $animation-duration: animation.$duration-short;
+    $animation-duration: var(--duration-short);
     $max-width: 100ch;
     $max-height: $max-width;
     position: relative;

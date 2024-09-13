@@ -1,9 +1,8 @@
 @use "styles/hover";
 @use "styles/borders";
-@use "styles/animation";
 
 .dropdown-icon {
-    transition: rotate animation.$duration-short;
+    transition: rotate var(--duration-short);
 
     &[data-expanded="true"] {
         rotate: 180deg;
@@ -13,8 +12,8 @@
 .dropdown {
     width: stretch;
     transition:
-        margin animation.$duration-long,
-        padding animation.$duration-long;
+        margin var(--duration-long),
+        padding var(--duration-long);
 
     .dropdown-header {
         display: flex;
@@ -49,8 +48,8 @@
         overflow: hidden;
         margin-block: var(--space-half);
         transition:
-            opacity animation.$duration-long,
-            height animation.$duration-short ease-in-out;
+            opacity var(--duration-long),
+            height var(--duration-short) ease-in-out;
 
         &[data-expanded="false"] {
             opacity: 0;

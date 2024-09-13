@@ -1,39 +1,14 @@
-$duration-debug: 1500ms;
-$duration-short: 200ms;
-$duration-long: 300ms;
-
-$max-height: 100vh;
-$max-width: 100vw;
-$slide-distance: 0.5em;
-
-$opacity-zero: 0;
-
-@mixin opaque {
-    opacity: 1;
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration-short: 0;
+        --duration-long: 0;
+    }
 }
-
-@mixin transparent {
-    opacity: $opacity-zero;
-}
-
-@mixin zero-width {
-    max-width: 0;
-}
-
-@mixin full-width {
-    max-width: $max-width;
-}
-
-@mixin zero-height {
-    max-height: 0;
-}
-
-@mixin full-height {
-    max-height: $max-height;
-}
-
-@mixin slide-up {
-    transform: translateY($slide-distance);
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        --duration-short: 200ms;
+        --duration-long: 300ms;
+    }
 }
 
 @keyframes fadeIn {

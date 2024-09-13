@@ -1,5 +1,4 @@
 @use "styles";
-@use "styles/animation";
 
 $primary-size-small: 128px;
 $-secondary-size-small: 24px;
@@ -36,7 +35,7 @@ $-secondary-size-large: 32px;
 
 .h-card {
     .avatar {
-        animation-duration: animation.$duration-long;
+        animation-duration: var(--duration-long);
         animation-fill-mode: both;
         animation-timing-function: ease-in-out;
     }

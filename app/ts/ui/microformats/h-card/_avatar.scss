@@ -1,14 +1,14 @@
-@use "styles/animation";
-
 .avatar {
     display: flex;
     position: relative;
     border-radius: var(--border-radius-medium);
-    transition: margin 300ms, left 200ms;
+    transition:
+        margin 300ms,
+        left 200ms;
 
     > img {
         object-fit: cover;
-        transition: all animation.$duration-short ease;
+        transition: all var(--duration-short) ease;
     }
 
     > :first-child {

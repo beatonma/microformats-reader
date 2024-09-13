@@ -1,5 +1,4 @@
 @use "styles";
-@use "styles/animation";
 
 .expandable-card--label {
     font-size: var(--fs-caption);
@@ -37,14 +36,13 @@
     .detail {
         &[data-expanded="true"] {
             transition:
-                opacity animation.$duration-short animation.$duration-short,
-                height animation.$duration-short ease-in-out;
+                opacity var(--duration-short) var(--duration-short),
+                height var(--duration-short) ease-in-out;
         }
         &[data-expanded="false"] {
             transition:
-                opacity animation.$duration-short,
-                height animation.$duration-short animation.$duration-short
-                    ease-in-out;
+                opacity var(--duration-short),
+                height var(--duration-short) var(--duration-short) ease-in-out;
             opacity: 0;
         }
 
