@@ -157,8 +157,11 @@ const HCardTextDetail = (props: HCardData) => {
                     render={data => {
                         return (
                             <>
-                                {data.map(it => (
-                                    <LocationPropertiesTable data={it} />
+                                {data.map((it, index) => (
+                                    <LocationPropertiesTable
+                                        key={index}
+                                        data={it}
+                                    />
                                 ))}
                             </>
                         );

@@ -80,7 +80,12 @@ const LinksGroup = (props: {
             render={links => (
                 <Column>
                     {links.map(link => (
-                        <Row className="related-link" space={Space.Medium} wrap>
+                        <Row
+                            key={link.href}
+                            className="related-link"
+                            space={Space.Medium}
+                            wrap
+                        >
                             <LinkTo
                                 href={link.href}
                                 title={link.title ?? undefined}

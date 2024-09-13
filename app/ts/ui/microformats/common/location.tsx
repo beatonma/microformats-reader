@@ -127,7 +127,7 @@ export const LocationPropertiesTable = (props: NullablePropsOf<HAdrData>) => {
                 property={{ displayName: _("hadr_postal_code") }}
                 values={displayValueProperties(postalCode)}
             />
-            {geo?.map((it, index) => <Geo geo={it} key={`geo_${index}`} />)}
+            {geo?.map((it, index) => <Geo geo={it} key={index} />)}
         </PropertiesTable>
     );
 };

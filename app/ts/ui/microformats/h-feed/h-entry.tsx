@@ -235,8 +235,8 @@ const CitationTooltip = (props: {
                     microformat={microformat}
                     property={{ displayName: name }}
                 >
-                    {cite.map(item => (
-                        <Citation {...item} />
+                    {cite.map((item, index) => (
+                        <Citation key={index} {...item} />
                     ))}
                 </CustomPropertyColumn>
             )}

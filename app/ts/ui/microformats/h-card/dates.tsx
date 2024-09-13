@@ -22,7 +22,9 @@ export const DatesPropertiesTable = (props: PropsOf<HCardDates>) => {
                 microformat={Microformat.Dt.Bday}
                 property={{ displayName: _("hcard_dates_birthday") }}
             >
-                {birthday?.map(date => <Birthday datetime={date} />)}
+                {birthday?.map(date => (
+                    <Birthday datetime={date} key={date.toString()} />
+                ))}
             </CustomPropertyRow>
 
             <PropertyRow

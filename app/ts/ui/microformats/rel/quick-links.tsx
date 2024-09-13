@@ -55,6 +55,7 @@ const _QuickLinks = (
             {links.map(link => {
                 return (
                     <QuickLink
+                        key={link.href}
                         href={link.href}
                         title={titles(title, link.title)}
                         icon={icon}

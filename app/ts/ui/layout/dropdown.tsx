@@ -18,15 +18,16 @@ export interface DropdownProps extends ComponentProps<"div"> {
 }
 export const Dropdown = (props: DropdownProps & ExpandableDefaultProps) => {
     const options = useContext(OptionsContext);
+    const { defaultIsExpanded, ...rest } = props;
+
     return (
         <ExpandCollapseLayout
             defaultIsExpanded={
-                props.defaultIsExpanded ?? options.dropdownExpandByDefault
+                defaultIsExpanded ?? options.dropdownExpandByDefault
             }
             layout={expandCollapseProps => (
-                <DropdownLayout {...props} {...expandCollapseProps} />
+                <DropdownLayout {...rest} {...expandCollapseProps} />
             )}
-            children={props.children}
         />
     );
 };
