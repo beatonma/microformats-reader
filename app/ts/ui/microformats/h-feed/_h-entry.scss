@@ -1,0 +1,49 @@
+@use "styles";
+
+.h-entry {
+    @extend %border-left;
+
+    &--metadata,
+    &--interactions {
+        font-size: var(--fs-caption);
+    }
+
+    &--interactions {
+        font-stretch: extra-condensed;
+        color: var(--text-secondary);
+        transition: color var(--duration-short);
+
+        > *:hover {
+            color: var(--text-primary);
+        }
+    }
+
+    .h-entry--main > .property {
+        margin-block: 0;
+
+        .property-value {
+            &.p-name,
+            &.p-summary,
+            &.e-content {
+                @include styles.line-clamp(2);
+            }
+
+            &.p-name {
+                font-size: var(--fs-large);
+            }
+        }
+    }
+
+    .u-photo {
+        height: 3em;
+        aspect-ratio: 1;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+.h-cite {
+    .by-line {
+        font-size: var(--fs-caption);
+    }
+}

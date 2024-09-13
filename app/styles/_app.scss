@@ -1,0 +1,125 @@
+@forward "./index";
+@forward "ts/ui";
+@use "./element";
+
+/**
+ * https://developer.chrome.com/docs/extensions/reference/browserAction/#popup
+ */
+$popup-min-width: 600px;
+$popup-min-height: 600px;
+$popup-max-width: 800px;
+$popup-max-height: 600px;
+
+html {
+    max-width: $popup-max-width;
+    max-height: $popup-max-height;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    color: var(--on-background);
+    background-color: var(--background);
+}
+
+body {
+    min-width: $popup-min-width;
+    max-width: $popup-max-width;
+    max-height: $popup-max-height;
+    width: 64ch;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    color: var(--on-background);
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-default);
+    font-family: "Roboto", "Arial", sans-serif;
+}
+
+main {
+    padding: 1em 1ch;
+    overflow: hidden;
+
+    @for $i from 1 through 10 {
+        > :nth-child(#{$i}) {
+            animation: fadeIn var(--duration-long);
+            animation-fill-mode: backwards;
+            animation-delay: calc(#{$i} * 40ms);
+        }
+    }
+}
+
+a,
+a:visited {
+    @include element.anchorStyle;
+}
+
+p {
+    margin-block: 0.5em;
+}
+
+section {
+    margin-bottom: 2rem;
+
+    &:empty {
+        display: none;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: var(--text-secondary);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+}
+
+::selection {
+    background-color: var(--on-surface);
+    color: var(--surface);
+}
+
+button {
+    @include element.buttonStyle;
+}
+
+option {
+    padding: var(--space-half);
+}
+
+img {
+    border-radius: var(--border-radius-small);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block: 0;
+    font-weight: normal;
+}
+
+/**
+ * Briefly bring attention to an element.
+ */
+[data-highlight-linked="true"] {
+    $outline-thickness: 0.5rch;
+
+    animation-name: highlight;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+
+    @keyframes highlight {
+        0%,
+        100% {
+            outline: solid transparent;
+            outline-offset: $outline-thickness;
+        }
+        25%,
+        75% {
+            outline: $outline-thickness solid var(--vibrant);
+            outline-offset: $outline-thickness;
+        }
+    }
+}

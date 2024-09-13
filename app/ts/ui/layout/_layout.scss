@@ -1,0 +1,9 @@
+@use "styles";
+
+.caption {
+    @extend %caption;
+
+    &.light {
+        font-weight: normal;
+    }
+}

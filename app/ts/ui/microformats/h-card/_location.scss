@@ -1,0 +1,6 @@
+@use "styles/typography";
+
+a.maps {
+    @extend %caption;
+    margin-block: var(--space);
+}

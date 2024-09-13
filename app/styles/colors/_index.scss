@@ -1,0 +1,60 @@
+@use "dark";
+@use "light";
+
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --red: #ee4545;
+    --blue: #0e70b8;
+    --green: #16b06b;
+    --purple: #823dae;
+    --pink: #e13255;
+    --yellow: #fdf472;
+    --orange: #d86900;
+    --grey: #636363;
+
+    --text-light-primary: rgba(255, 255, 255, 0.83);
+    --text-light-secondary: rgba(255, 255, 255, 0.54);
+    --text-light-tertiary: rgba(255, 255, 255, 0.25);
+    --text-dark-primary: rgba(0, 0, 0, 0.83);
+    --text-dark-secondary: rgba(0, 0, 0, 0.54);
+    --text-dark-tertiary: rgba(0, 0, 0, 0.25);
+    --text-light: var(--text-light-primary);
+    --text-dark: var(--text-dark-primary);
+
+    --scrim: rgba(0, 0, 0, 0.64);
+
+    --on-background: var(--text-primary);
+    --on-surface: var(--text-primary);
+    --on-warn: var(--text-light);
+
+    --on-muted: var(--text-light);
+    --on-vibrant: var(--text-light);
+
+    --tooltip-surface: var(--background);
+    --on-tooltip-surface: var(--on-background);
+
+    accent-color: var(--vibrant);
+}
+
+:root {
+    @media (prefers-color-scheme: no-preference) {
+        @include light.light();
+    }
+
+    @media (prefers-color-scheme: dark) {
+        @include dark.dark();
+
+        &.light {
+            @include light.light();
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        @include light.light();
+
+        &.dark {
+            @include dark.dark();
+        }
+    }
+}

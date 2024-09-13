@@ -1,0 +1,39 @@
+@use "./card";
+
+.tooltip-root {
+    $animation-duration: var(--duration-short);
+    $max-width: 100ch;
+    $max-height: $max-width;
+    position: relative;
+    cursor: default;
+
+    .tooltip {
+        @include card.card(var(--tooltip-surface), var(--on-tooltip-surface));
+        cursor: default;
+        margin-block: 0;
+        border-radius: var(--border-radius-small);
+        position: absolute;
+        transform-origin: top center;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: $max-width;
+        max-height: 0;
+        opacity: 0;
+        width: max-content;
+        z-index: var(--elevation-tooltip);
+        transition:
+            opacity $animation-duration,
+            scale $animation-duration;
+    }
+
+    &:hover,
+    &:active,
+    &:focus-within {
+        .tooltip {
+            max-height: $max-height;
+            opacity: 1;
+            padding: var(--space);
+        }
+    }
+}

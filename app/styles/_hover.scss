@@ -1,0 +1,25 @@
+@mixin hover($-color: var(--hover)) {
+    transition:
+        background-color var(--duration-short),
+        borderr-radius var(--duration-short);
+
+    &:hover {
+        background-color: $-color;
+    }
+}
+
+%hover {
+    @include hover;
+}
+
+%hover-children {
+    background: none;
+
+    transition:
+        background-color var(--duration-short),
+        borderr-radius var(--duration-short);
+
+    &:hover > * {
+        background-color: var(--hover);
+    }
+}

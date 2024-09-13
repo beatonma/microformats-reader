@@ -1,0 +1,65 @@
+@use "styles/borders";
+@use "styles/chip";
+@use "styles/element";
+@use "styles/size";
+@use "styles/typography";
+
+.properties {
+    display: grid;
+    width: stretch;
+    grid-template-columns: 12ch 1fr;
+
+    > * {
+        grid-column: 1 / -1;
+    }
+
+    > .properties {
+        margin-block: var(--space);
+    }
+
+    .property {
+        display: grid;
+        grid-template-columns: subgrid;
+
+        .property {
+            display: block;
+        }
+    }
+}
+
+.property {
+    margin-block: var(--space-half);
+    overflow: visible;
+
+    .property-name {
+        @extend %caption;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+
+        &::after {
+            content: ":";
+        }
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    svg.property-icon {
+        opacity: 0.6;
+    }
+    img.property-icon {
+        @include size.fixedSize(1em);
+    }
+
+    button.property-value,
+    a[href^="#"] {
+        @include element.buttonStyle;
+        font-size: inherit;
+        @include chip.chip;
+
+        .icon {
+            cursor: inherit;
+        }
+    }
+}

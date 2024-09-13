@@ -1,0 +1,14 @@
+@use "styles";
+
+svg.icon {
+    @include styles.fixedSize(1em);
+    display: inline-flex;
+    stroke: currentColor;
+    fill: currentColor;
+    cursor: default;
+    user-select: none;
+}
+
+button .icon {
+    cursor: pointer;
+}

@@ -1,0 +1,21 @@
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration-short: 0;
+        --duration-long: 0;
+    }
+}
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        --duration-short: 200ms;
+        --duration-long: 300ms;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

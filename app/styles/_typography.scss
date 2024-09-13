@@ -1,0 +1,36 @@
+:root {
+    --fs-h1: xx-large;
+
+    --fs-large: large;
+    --fs-default: medium;
+    --fs-caption: small;
+}
+
+%caption {
+    font-size: var(--fs-caption);
+    letter-spacing: 0.1ch;
+    font-weight: bold;
+}
+%text-block {
+    white-space: pre-line;
+    line-height: 1.2;
+    letter-spacing: 0.05ch;
+}
+%single_line {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin line-clamp($lines) {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+h1 {
+    font-size: var(--fs-h1);
+}

@@ -1,0 +1,14 @@
+$space: 8px;
+:root {
+    --space-char: 0.5ch; // Approximately equivalent to width of space character.
+    --space-half: #{calc($space * 0.5)};
+    --space: #{$space};
+    --space-1x: #{$space};
+    --space-1-5x: #{calc($space * 1.5)};
+    --space-2x: #{calc($space * 2)};
+    --space-3x: #{calc($space * 3)};
+    --space-4x: #{calc($space * 4)};
+
+    --row-gap: var(--space);
+    --column-gap: var(--space);
+}

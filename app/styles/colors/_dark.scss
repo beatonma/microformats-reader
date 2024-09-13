@@ -1,0 +1,20 @@
+@mixin dark {
+    --text-primary: var(--text-light-primary);
+    --text-secondary: var(--text-light-secondary);
+    --text-tertiary: var(--text-light-tertiary);
+
+    --text-primary-invert: var(--text-dark-primary);
+    --text-secondary-invert: var(--text-dark-secondary);
+    --text-tertiary-invert: var(--text-dark-tertiary);
+
+    --hover: rgba(255, 255, 255, 0.08);
+
+    --background: #252225;
+    --surface: #31303a;
+    --warn: #be0000;
+
+    --muted: #5c6d7a;
+    --muted-hover: #4d5e6b;
+    --vibrant: #5a9ace;
+    --vibrant-hover: #67a8dd;
+}

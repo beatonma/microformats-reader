@@ -1,0 +1,12 @@
+@use "styles/typography";
+@use "./hcard-avatar";
+
+.h-card {
+    .property-value.p-note {
+        @extend %text-block;
+
+        &:not(:last-child) {
+            margin-bottom: var(--space);
+        }
+    }
+}

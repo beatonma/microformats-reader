@@ -1,0 +1,78 @@
+@use "styles/accessibility";
+
+.loading-spinner {
+    $-duration: 1800ms;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block: 2rem;
+
+    %-anim {
+        animation-iteration-count: infinite;
+        animation-direction: normal;
+    }
+
+    .spinner-wrapper {
+        @extend %-anim;
+        $-item-size: 12px;
+        $-total-size: 5 * $-item-size;
+        $-item-delay: calc($-duration / 5);
+        $-center: calc(($-total-size - $-item-size) / 2);
+        $-item-offset: $-center - calc($-item-size / 2);
+
+        position: relative;
+        width: $-total-size;
+        height: $-total-size;
+        animation-timing-function: linear;
+        animation-name: loading-spinner;
+        animation-duration: $-duration;
+
+        --loading-spinner-animation-factor: 0.7;
+
+        @include accessibility.reduced-motion {
+            --loading-spinner-animation-factor: 0.9;
+            animation-name: none;
+        }
+
+        > div {
+            @extend %-anim;
+            position: absolute;
+            background-color: var(--on-surface);
+            animation-name: loading-item;
+            animation-duration: $-duration * 0.6;
+            animation-timing-function: ease-out;
+            border-radius: #{$-item-size} / 4;
+            width: $-item-size;
+            height: $-item-size;
+            left: $-center;
+            top: $-center;
+            transform-origin: center;
+        }
+
+        @for $index from 0 through 2 {
+            :nth-child(#{$index + 1}) {
+                animation-name: loading-item-#{$index};
+                transform: rotate($index * 120deg) translateY(-$-item-offset);
+            }
+
+            @keyframes loading-item-#{$index} {
+                50% {
+                    transform: rotate($index * 120deg)
+                        translateY(
+                            calc(
+                                -#{$-item-offset} *
+                                    var(--loading-spinner-animation-factor)
+                            )
+                        );
+                }
+            }
+        }
+
+        @keyframes loading-spinner {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+}

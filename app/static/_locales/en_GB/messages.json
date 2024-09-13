@@ -1,0 +1,477 @@
+{
+  "extension_name": {
+    "message": "Microformats Reader"
+  },
+  "extension_version": {
+    "message": "Version"
+  },
+  "extension_description": {
+    "message": "Displays microformat data from the active page."
+  },
+  "popup_title": {
+    "message": "View microformat content",
+    "description": "Hover text for browser toolbar icon."
+  },
+  "no_content_available": {
+    "message": "No content available."
+  },
+  "no_content_displayable": {
+    "message": "No displayable content."
+  },
+  "open_extension_options": {
+    "message": "Options"
+  },
+  "dropdown_collapse": {
+    "message": "Show less"
+  },
+  "dropdown_expand": {
+    "message": "Show more"
+  },
+  "dropdown_collapse_label": {
+    "message": "$TITLE$: Show less",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Section title"
+      }
+    }
+  },
+  "dropdown_expand_label": {
+    "message": "$TITLE$: Show more",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Section title"
+      }
+    }
+  },
+  "n_other_values": {
+    "message": "and $AMOUNT$ others",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "3"
+      }
+    },
+    "description": "A sentence suffix, rendered in place as something like '<first_value> and 3 others"
+  },
+  "unresolved_value": {
+    "message": "Unresolved value"
+  },
+  "quicklink_webmentions_endpoint_hover": {
+    "message": "Webmention endpoint"
+  },
+  "quicklink_webmentions_endpoint": {
+    "message": "Webmentions"
+  },
+  "quicklink_atom": {
+    "message": "Atom"
+  },
+  "quicklink_atom_hover": {
+    "message": "Atom feed"
+  },
+  "quicklink_rss": {
+    "message": "RSS"
+  },
+  "quicklink_rss_hover": {
+    "message": "RSS feed"
+  },
+  "quicklink_pgp_hover": {
+    "message": "PGP public key"
+  },
+  "quicklink_pgp": {
+    "message": "PGP"
+  },
+  "quicklink_multiplier": {
+    "message": "$SECTION$ × $AMOUNT$",
+    "placeholders": {
+      "section": {
+        "content": "$1",
+        "example": "RSS"
+      },
+      "amount": {
+        "content": "$2",
+        "example": "3"
+      }
+    },
+    "description": "Describe a set of links e.g. RSS × 3"
+  },
+  "rellinks": {
+    "message": "Related links"
+  },
+  "rellinks_me": {
+    "message": "Me"
+  },
+  "rellinks_alternate": {
+    "message": "Alternate"
+  },
+  "rellinks_search": {
+    "message": "Search"
+  },
+  "rellinks_pgp": {
+    "message": "PGP"
+  },
+  "rellinks_webmention": {
+    "message": "Webmentions"
+  },
+  "rellinks_feeds": {
+    "message": "Feeds"
+  },
+  "hcard_age": {
+    "message": "$AGE$ years",
+    "placeholders": {
+      "age": {
+        "content": "$1",
+        "example": "35"
+      }
+    }
+  },
+  "hcard_name_details": {
+    "message": "Name"
+  },
+  "hcard_name_sound": {
+    "message": "Sound"
+  },
+  "hcard_name_honorific_prefix": {
+    "message": "Honorific prefix"
+  },
+  "hcard_name_honorific_suffix": {
+    "message": "Honorific suffix"
+  },
+  "hcard_name_given": {
+    "message": "Given name"
+  },
+  "hcard_name_additional": {
+    "message": "Additional name(s)"
+  },
+  "hcard_name_family": {
+    "message": "Family name"
+  },
+  "hcard_name_nickname": {
+    "message": "Nickname"
+  },
+  "hcard_name_sortby": {
+    "message": "Sort by"
+  },
+  "hcard_gender_details": {
+    "message": "Gender"
+  },
+  "hcard_gender_identity": {
+    "message": "Gender"
+  },
+  "hcard_sex": {
+    "message": "Sex"
+  },
+  "hcard_pronouns": {
+    "message": "Pronouns"
+  },
+  "hcard_dates_detail": {
+    "message": "Important dates"
+  },
+  "hcard_dates_birthday": {
+    "message": "Date of birth"
+  },
+  "hcard_dates_anniversary": {
+    "message": "Anniversary"
+  },
+  "hcard_contact_detail": {
+    "message": "Contact"
+  },
+  "hcard_contact_url": {
+    "message": "URL"
+  },
+  "hcard_contact_phone": {
+    "message": "Phone"
+  },
+  "hcard_contact_impp": {
+    "message": "IMPP"
+  },
+  "hcard_contact_email": {
+    "message": "Email"
+  },
+  "hcard_contact_key": {
+    "message": "Public key"
+  },
+  "hcard_job_detail": {
+    "message": "Work"
+  },
+  "hcard_job_title": {
+    "message": "Title"
+  },
+  "hcard_job_role": {
+    "message": "Role"
+  },
+  "hcard_job_organisation": {
+    "message": "Organisation"
+  },
+  "hcard_link_to_org_hcard": {
+    "message": "View organisation h-card"
+  },
+  "hcard_view_embedded_hcard": {
+    "message": "Click to view h-card"
+  },
+  "hcard_extras_detail": {
+    "message": "Other stuff"
+  },
+  "hcard_extras_notes": {
+    "message": "Note"
+  },
+  "hcard_extras_uid": {
+    "message": "UID"
+  },
+  "hcard_extras_category": {
+    "message": "Category"
+  },
+  "hcard_extras_categories": {
+    "message": "Categories"
+  },
+  "hcard_extras_dietary_preferences": {
+    "message": "Dietary preferences"
+  },
+  "hcard_extras_sexual_orientation": {
+    "message": "Sexual orientation"
+  },
+  "hcard_location_detail": {
+    "message": "Location"
+  },
+  "hadr_post_office_box": {
+    "message": "PO Box"
+  },
+  "hadr_extended_address": {
+    "message": "Extended"
+  },
+  "hadr_street_address": {
+    "message": "Street"
+  },
+  "hadr_locality": {
+    "message": "Locality"
+  },
+  "hadr_region": {
+    "message": "Region"
+  },
+  "hadr_postal_code": {
+    "message": "Postcode"
+  },
+  "hadr_country_name": {
+    "message": "Country"
+  },
+  "hgeo": {
+    "message": "Position"
+  },
+  "hgeo_latitude": {
+    "message": "Latitude"
+  },
+  "hgeo_longitude": {
+    "message": "Longitude"
+  },
+  "hgeo_altitude": {
+    "message": "Altitude"
+  },
+  "hadr_label": {
+    "message": "Label"
+  },
+  "hfeed_unnamed": {
+    "message": "h-feed"
+  },
+  "hfeed_dropdown_content_description": {
+    "message": "h-feed contents"
+  },
+  "hevent_location_detail": {
+    "message": "Location"
+  },
+  "hevent_people": {
+    "message": "People"
+  },
+  "hevent_organizer": {
+    "message": "Organizer"
+  },
+  "hevent_organizers": {
+    "message": "Organizers"
+  },
+  "hevent_attendee": {
+    "message": "Attendee"
+  },
+  "hevent_attendees": {
+    "message": "Attendees"
+  },
+  "direction_cardinal_north": {
+    "message": "N"
+  },
+  "direction_cardinal_east": {
+    "message": "E"
+  },
+  "direction_cardinal_south": {
+    "message": "S"
+  },
+  "direction_cardinal_west": {
+    "message": "W"
+  },
+  "date_updated": {
+    "message": "Updated $WHEN$",
+    "placeholders": {
+      "when": {
+        "content": "$1",
+        "example": "yesterday"
+      }
+    }
+  },
+  "datetime_time_today": {
+    "message": "$TIME$ today",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "15:32"
+      }
+    }
+  },
+  "datetime_time_yesterday": {
+    "message": "$TIME$ yesterday",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "15:32"
+      }
+    }
+  },
+  "datetime_duration_second": {
+    "message": "$SECONDS$ second",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_seconds": {
+    "message": "$SECONDS$ seconds",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_minute": {
+    "message": "$MINUTES$ minute",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_minutes": {
+    "message": "$MINUTES$ minutes",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_hour": {
+    "message": "$HOURS$ hour",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_hours": {
+    "message": "$HOURS$ hours",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_day": {
+    "message": "$DAYS$ day",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_days": {
+    "message": "$DAYS$ days",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_year": {
+    "message": "$YEARS$ year",
+    "placeholders": {
+      "years": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "datetime_duration_years": {
+    "message": "$YEARS$ years",
+    "placeholders": {
+      "years": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "error_loading_failed": {
+    "message": "Failed to load content."
+  },
+  "options_popup_sections": {
+    "message": "Sections"
+  },
+  "options_dropdown_expanded_by_default": {
+    "message": "Expand dropdowns by default"
+  },
+  "options_card_expanded_by_default": {
+    "message": "Expand cards by default"
+  },
+  "options_maps_provider": {
+    "message": "Open maps with"
+  },
+  "options_maps_provider_googleearth": {
+    "message": "Google Earth"
+  },
+  "options_maps_provider_googlemaps": {
+    "message": "Google Maps"
+  },
+  "options_maps_provider_openstreetmap": {
+    "message": "OpenStreetMap"
+  },
+  "interaction_rsvp": {
+    "message": "RSVP"
+  },
+  "interaction_rsvp_yes": {
+    "message": "Yes"
+  },
+  "interaction_rsvp_no": {
+    "message": "No"
+  },
+  "interaction_rsvp_maybe": {
+    "message": "Maybe"
+  },
+  "interaction_rsvp_interested": {
+    "message": "Interested"
+  },
+  "interaction_syndication": {
+    "message": "Syndication"
+  },
+  "interaction_like_of": {
+    "message": "Like"
+  },
+  "interaction_repost_of": {
+    "message": "Repost"
+  },
+  "interaction_reply_to": {
+    "message": "Response"
+  }
+}

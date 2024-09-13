@@ -1,0 +1,58 @@
+@use "styles";
+
+.expandable-card--label {
+    font-size: var(--fs-caption);
+    font-family: monospace;
+
+    &:empty {
+        display: none;
+    }
+
+    &::after {
+        content: ":";
+    }
+}
+
+.expandable-card {
+    $button-font-size: var(--fs-large);
+    $button-padding: var(--space);
+    $button-size: calc($button-font-size + (2 * $button-padding));
+
+    .card-content {
+        min-height: $button-size;
+    }
+
+    button.expandable-card--toggle {
+        display: block;
+        font-size: $button-font-size;
+        padding: $button-padding;
+        float: right;
+        border-radius: var(--border-radius-small);
+        position: relative;
+        z-index: var(--elevation-clickable);
+    }
+
+    .summary,
+    .detail {
+        &[data-expanded="true"] {
+            transition:
+                opacity var(--duration-short) var(--duration-short),
+                height var(--duration-short) ease-in-out;
+        }
+        &[data-expanded="false"] {
+            transition:
+                opacity var(--duration-short),
+                height var(--duration-short) var(--duration-short) ease-in-out;
+            opacity: 0;
+        }
+
+        &:not([data-expansion-state="expanded"]) {
+            overflow: hidden;
+        }
+
+        &[data-expanded="true"][data-expanded-previous="true"],
+        &[data-expanded="false"][data-expanded-previous="false"] {
+            transition: none;
+        }
+    }
+}

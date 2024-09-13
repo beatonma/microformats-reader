@@ -2,39 +2,66 @@
   "name": "microformats",
   "version": "1.0.0",
   "description": "Reader for microformat-compliant content",
-  "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "buildChrome": "webpack --config webpack.config.ts --mode production --env browser=chrome",
+    "buildFirefox": "webpack --config webpack.config.ts --mode production --env browser=firefox",
+    "devChrome": "webpack --watch --config webpack.config.ts --mode development --env browser=chrome",
+    "devFirefox": "webpack --watch --config webpack.config.ts --mode development --env browser=firefox",
+    "watchChrome": "webpack --watch --config webpack.config.ts --mode production --env browser=chrome",
+    "watchFirefox": "webpack --watch --config webpack.config.ts --mode production --env browser=firefox",
+    "test": "jest --watchAll --config jest.config.js"
   },
   "keywords": [
     "chrome",
     "extension",
-    "microformat"
+    "indieweb",
+    "microformat",
+    "webmention"
   ],
   "author": "Michael Beaton",
   "license": "MIT",
-  "devDependencies": {
-    "bower": "^1.8.4",
-    "del": "^2.2.2",
-    "fs": "0.0.1-security",
-    "gulp": "^3.9.1",
-    "gulp-babel-minify": "^0.1.12",
-    "gulp-bower-files": "^0.2.7",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.3",
-    "gulp-if": "^2.0.2",
-    "gulp-json-editor": "^2.4.2",
-    "gulp-rename": "^1.4.0",
-    "gulp-replace": "^0.5.4",
-    "gulp-sass": "^3.2.1",
-    "gulp-shell": "^0.6.5",
-    "gulp-svg2png": "^2.0.2",
-    "gulp-useref": "^3.1.6",
-    "gulp-zip": "^4.2.0",
-    "pump": "^1.0.3",
-    "run-sequence": "^1.2.2"
-  },
   "dependencies": {
-    "main-bower-files": "^2.13.1"
+    "microformats-parser": "^2.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@swc/cli": "^0.4.0",
+    "@swc/core": "^1.7.26",
+    "@swc/jest": "^0.2.36",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "chrome-types": "^0.1.303",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "jest": "^29.7.0",
+    "postcss": "^8.4.45",
+    "postcss-loader": "^8.1.1",
+    "prettier": "^3.3.3",
+    "process": "^0.11.10",
+    "sass": "^1.78.0",
+    "sass-loader": "^16.0.1",
+    "style-loader": "^4.0.0",
+    "swc-loader": "^0.2.6",
+    "ts-node": "^10.9.2",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-merge": "^6.0.1"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "tabWidth": 4,
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true,
+    "importOrder": [
+      "^react.*",
+      "<THIRD_PARTY_MODULES>",
+      "^ts/",
+      "^(./)[^.]+$",
+      "^./.*.scss$"
+    ]
   }
 }

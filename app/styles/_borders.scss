@@ -1,0 +1,63 @@
+:root {
+    --border-radius-small: 6px;
+    --border-radius-medium: 10px;
+}
+
+$border-width: 2px;
+$border-style: #{$border-width} solid var(--vibrant);
+
+@mixin border-left {
+    border-left: $border-style;
+    padding-left: var(--space-1x);
+}
+%border-left {
+    @include border-left;
+}
+
+@mixin -border-clickable-transition {
+    transition: scale 220ms;
+    transform-origin: left bottom;
+}
+@mixin border-clickable {
+    @include -border-clickable-transition;
+    position: relative;
+    padding-left: var(--space);
+
+    &::before {
+        @include -border-clickable-transition;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: $border-width;
+        height: 100%;
+        background-color: var(--vibrant);
+        scale: 1 1;
+    }
+
+    &::after {
+        @include -border-clickable-transition;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--vibrant);
+        width: 100%;
+        height: $border-width;
+        scale: 0 1;
+        translate: 0 var(--space-half);
+    }
+
+    &:hover {
+        &::before {
+            scale: 1 0;
+        }
+
+        &::after {
+            scale: 1 1;
+            translate: 0 var(--space-half);
+        }
+    }
+}

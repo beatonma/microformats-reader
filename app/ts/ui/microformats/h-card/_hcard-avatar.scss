@@ -1,0 +1,95 @@
+@use "styles";
+
+$primary-size-small: 128px;
+$-secondary-size-small: 24px;
+
+$-primary-size-large: 150px;
+$-secondary-size-large: 32px;
+
+@mixin avatarCollapsed {
+    @include styles.fixedSize($primary-size-small);
+    left: 0;
+    translate: 0;
+}
+@mixin avatarMidpoint {
+    @include styles.fixedSize($-primary-size-large);
+    left: 0;
+    translate: 0;
+}
+@mixin avatarExpanded {
+    @include styles.fixedSize($-primary-size-large);
+    left: 50%;
+    translate: -50%;
+    padding: var(--space-3x);
+}
+
+@mixin avatarSize($primary, $secondary) {
+    > img:first-child {
+        @include styles.fixedSize($primary);
+    }
+
+    > img:nth-child(2) {
+        @include styles.fixedSize($secondary);
+    }
+}
+
+.h-card {
+    .avatar {
+        animation-duration: var(--duration-long);
+        animation-fill-mode: both;
+        animation-timing-function: ease-in-out;
+    }
+
+    [data-expanded="true"] {
+        .avatar {
+            animation-name: avatarGrow;
+
+            @include styles.fixedSize($-primary-size-large);
+            @include avatarSize($-primary-size-large, $-secondary-size-large);
+        }
+    }
+
+    [data-expanded="false"] {
+        .avatar {
+            animation-name: avatarShrink;
+
+            @include avatarCollapsed;
+            @include avatarSize($primary-size-small, $-secondary-size-small);
+        }
+    }
+
+    [data-expanded="true"][data-expanded-previous="true"],
+    [data-expanded="false"][data-expanded-previous="false"] {
+        .avatar {
+            animation-duration: 1ms;
+        }
+    }
+}
+
+@keyframes avatarGrow {
+    0% {
+        @include avatarCollapsed;
+    }
+
+    33% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarExpanded;
+    }
+}
+
+@keyframes avatarShrink {
+    0% {
+        @include avatarExpanded;
+    }
+
+    66% {
+        @include avatarMidpoint;
+    }
+
+    100% {
+        @include avatarCollapsed;
+    }
+}
