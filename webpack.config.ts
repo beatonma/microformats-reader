@@ -10,6 +10,7 @@ const git = (command: string) =>
     child_process.execSync(`git ${command}`, { encoding: "utf8" }).trim();
 
 const gitVersionCode = git("rev-list HEAD --count");
+const manifestVersionCode = `1.0.${gitVersionCode}`;
 
 const common: Configuration = {
     entry: {
@@ -131,7 +132,7 @@ namespace Browser {
             from: "./app/static/manifest.json",
             transform(content: Buffer, absoluteFilename: string) {
                 const manifest = JSON.parse(content.toString());
-                manifest.version = gitVersionCode;
+                manifest.version = manifestVersionCode;
                 return JSON.stringify(transform?.(manifest) ?? manifest);
             },
         };
