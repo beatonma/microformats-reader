@@ -4,4 +4,6 @@ declare interface Array<T> {
      * or null if there are no values left in the array.
      */
     nullIfEmpty: <R extends NonNullable<T>>() => R[] | null;
+
+    let: <R>(block: (self: NonNullable<T[]>) => R) => R;
 }

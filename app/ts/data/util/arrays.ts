@@ -107,4 +107,8 @@ export const registerArrayExtensions = () => {
     addExtension("nullIfEmpty", function () {
         return nullIfEmpty(this);
     });
+
+    addExtension("let", function <T, R>(block: (self: T) => R) {
+        return block(this);
+    });
 };
