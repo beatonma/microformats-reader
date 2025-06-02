@@ -1,8 +1,9 @@
 import { compatBrowser } from "ts/compat";
+import { MicroformatData } from "ts/data/types";
 import { Message, MessageRequest, MessageResponse } from "ts/message";
 import { noneOf } from "ts/data/util/arrays";
 import { ActiveState, EmptyState } from "ts/ui/browser/toolbar";
-import { parse, MicroformatData } from "ts/data/parsing";
+import { parse } from "ts/data/parsing";
 import { init } from "ts/index";
 
 init();

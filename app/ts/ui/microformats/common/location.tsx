@@ -254,5 +254,5 @@ const getMapsUrl = (
 };
 
 export const _private = {
-    getMapsUrl: getMapsUrl,
+    getMapsUrl,
 };

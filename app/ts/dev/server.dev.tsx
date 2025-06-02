@@ -1,8 +1,9 @@
+import { MicroformatData } from "ts/data/types";
 import { initEntrypointUi } from "ts/entrypoint/init-entrypoint-ui";
 import React, { useEffect, useState } from "react";
 import { PopupUI } from "ts/entrypoint/popup/popup";
 import { Loading } from "ts/ui/loading";
-import { parse, MicroformatData } from "ts/data/parsing";
+import { parse } from "ts/data/parsing";
 
 const sourceUrl = "http://localhost:3000/";
 

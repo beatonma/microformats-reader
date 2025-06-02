@@ -6,6 +6,7 @@ import React, {
     useState,
 } from "react";
 import { _, compatBrowser } from "ts/compat";
+import { MicroformatData } from "ts/data/types";
 import { noneOf } from "ts/data/util/arrays";
 import { Message, MessageResponse } from "ts/message";
 import { ScrimLayout } from "ts/ui/layout/dialog";
@@ -15,7 +16,7 @@ import { injectTheme } from "ts/ui/theme";
 import { Loading } from "ts/ui/loading";
 import { Error } from "ts/ui/error";
 import { OptionsContext, useOptions } from "ts/options";
-import { MicroformatData, parse } from "ts/data/parsing";
+import { parse } from "ts/data/parsing";
 import { copyToClipboardMouseEvent } from "ts/ui/actions/clipboard";
 import { Microformat } from "ts/data/microformats";
 import HEvent from "ts/ui/microformats/h-event";

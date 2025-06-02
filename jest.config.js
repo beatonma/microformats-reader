@@ -16,6 +16,7 @@ module.exports = {
 
     modulePathIgnorePatterns: ["dist/", "env/", "node_modules/"],
 
+    testEnvironment: "jsdom",
     // A map from regular expressions to paths to transformers
     // transform: undefined,
     transform: {

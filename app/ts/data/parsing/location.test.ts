@@ -5,7 +5,6 @@ import {
 } from "ts/data/parsing/location";
 import "ts/test";
 import { Microformat } from "ts/data/microformats";
-import { dump } from "ts/dev";
 import { HGeoData } from "ts/data/types";
 
 describe("Location parsing", () => {
@@ -29,8 +28,6 @@ describe("Location parsing", () => {
             },
             value: "Inverness | Scotland | UK",
         })!;
-
-        dump(loc);
 
         expect(loc.locality).toEqual(["Inverness"]);
         expect(loc.region).toEqual(["Scotland"]);

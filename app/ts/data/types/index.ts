@@ -1,3 +1,6 @@
+import { ParsedDocument } from "@microformats-parser";
+import { HEventData } from "ts/data/types/h-event";
+import { RelatedLinks } from "ts/data/types/rel";
 import { HAdrData } from ".//h-adr";
 import { HCardData } from "./h-card";
 import { HEntryData } from "./h-entry";
@@ -10,6 +13,18 @@ export type { HFeedData } from "./h-feed";
 export type { HEntryData } from "./h-entry";
 export type { HGeoData } from "./h-geo";
 export type { HAdrData } from ".//h-adr";
+
+export interface MicroformatData {
+    microformats: ParsedDocument;
+    relLinks: RelatedLinks | null;
+    hcards: HCardData[] | null;
+    feeds: HFeedData[] | null;
+    events: HEventData[] | null;
+    locations: {
+        adrs: HAdrData[] | null;
+        geos: HAdrData[] | null;
+    } | null;
+}
 
 export const isString = (obj: unknown): obj is string =>
     typeof obj === "string";
