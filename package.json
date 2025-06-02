@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Reader for microformat-compliant content",
   "scripts": {
-    "buildChrome": "webpack --config webpack.config.ts --mode production --env browser=chrome",
-    "buildFirefox": "webpack --config webpack.config.ts --mode production --env browser=firefox",
-    "devChrome": "webpack --watch --config webpack.config.ts --mode development --env browser=chrome",
-    "devFirefox": "webpack --watch --config webpack.config.ts --mode development --env browser=firefox",
-    "watchChrome": "webpack --watch --config webpack.config.ts --mode production --env browser=chrome",
-    "watchFirefox": "webpack --watch --config webpack.config.ts --mode production --env browser=firefox",
+    "build-chrome": "webpack --config webpack.config.ts --mode production --env browser=chrome",
+    "build-firefox": "webpack --config webpack.config.ts --mode production --env browser=firefox",
+    "dev-chrome": "webpack --watch --config webpack.config.ts --mode development --env browser=chrome",
+    "dev-firefox": "webpack --watch --config webpack.config.ts --mode development --env browser=firefox",
+    "watch-chrome": "webpack --watch --config webpack.config.ts --mode production --env browser=chrome",
+    "watch-firefox": "webpack --watch --config webpack.config.ts --mode production --env browser=firefox",
     "test": "jest --watchAll --config jest.config.js"
   },
   "keywords": [
