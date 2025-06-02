@@ -1,17 +1,18 @@
-# microformats-reader
-A browser extension that brings the Indieweb to the surface!
+# Microformats Reader brings the Indieweb to the surface!
 
-This extension parses the webpages you visit to find specially tagged data such as h-cards, rel=me links, and webmention endpoints, then displays that content in a consistent format.
+Install: [Chrome](https://chrome.google.com/webstore/detail/microformats-reader/phphllmalbniljekjimmalackdppmoif) | [Firefox](https://addons.mozilla.org/en-GB/firefox/addon/microformats-reader/)
+
+This extension parses the webpages you visit to find specially tagged data such as `h-card`s, `rel` links, and webmention endpoints, then displays that content in a readable, consistent format.
 
 Currently supported data:
-- Webmention endpoints
-- `rel` links: Webmention endpoints, RSS feeds, public keys, etc.
-- `h-card`s
-- `h-feed`s and `h-entry`s
-...and more coming soon!
+- `rel` links: Webmention endpoints, RSS/Atom feeds, public keys, search, alternate.
+- `h-card`
+- `h-feed` and `h-entry`
+- `h-event`
+- `h-adr` and `h-geo`
 
-Hints and tips:
+Most standard fields for these containers are supported. However, you may find that some sites use non-standard tags, or use tags in non-standard ways. These may not be displayed at all, or you may be able to view their raw data as JSON objects. If you find cases which you think should be supported please open an issue and I will try and include them.
+
+Tips:
 - Hover over any data to view its microformat type.
-- `Control` + `right click` any data to copy it to your clipboard.
-
-Install for Chrome: https://chrome.google.com/webstore/detail/microformats-reader/phphllmalbniljekjimmalackdppmoif
+- `Control + right click` any data to copy it to your clipboard.
